@@ -1,0 +1,9 @@
+{
+  "games": ["wineserver.exe"],
+  "niceness": "-3",
+  "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
+  "scheduler-policy": "SCHED_BATCH",
+  "scheduler-policy-priority": "0",
+  "io-class": "RT",
+  "io-priority": "7"
+}

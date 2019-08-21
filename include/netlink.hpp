@@ -26,8 +26,6 @@ class Netlink {
   void connect();
   void subscribe();
   std::string get_process_name(const int& pid);
-  void process_exec(const int& pid);
-  void process_exit(const int& pid);
 };
 
 #endif

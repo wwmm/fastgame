@@ -25,8 +25,6 @@ int main(int argc, char* argv[]) {
     // std::cout << "exec: " + std::to_string(pid) + "\t" + name << std::endl;
 
     for (auto game : games) {
-      // std::cout << game << "\t" << name << std::endl;
-
       if (game.find(name) != std::string::npos) {
         std::cout << name + " is running. Applying tweaks" << std::endl;
 

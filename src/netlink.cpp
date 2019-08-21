@@ -92,29 +92,25 @@ void Netlink::handle_events() {
   while (listen) {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
 
+    std::string name;
+
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
         // printf("fork: parent tid=%d pid=%d -> child tid=%d pid=%d\n", nlcn_msg.proc_ev.event_data.fork.parent_pid,
         //        nlcn_msg.proc_ev.event_data.fork.parent_tgid, nlcn_msg.proc_ev.event_data.fork.child_pid,
         //        nlcn_msg.proc_ev.event_data.fork.child_tgid);
-        // process_exec(nlcn_msg.proc_ev.event_data.fork.child_tgid);
-
-        // process_exec(nlcn_msg.proc_ev.event_data.fork.child_pid);
-        // process_exec(nlcn_msg.proc_ev.event_data.fork.child_tgid);
-
         break;
       case proc_event::PROC_EVENT_EXEC:
-        process_exec(nlcn_msg.proc_ev.event_data.exec.process_pid);
-        // process_exec(nlcn_msg.proc_ev.event_data.exec.process_tgid);
+        name = get_process_name(nlcn_msg.proc_ev.event_data.exec.process_pid);
+
+        if (name != "") {
+          new_exec(nlcn_msg.proc_ev.event_data.exec.process_pid, name);
+        }
 
         break;
       case proc_event::PROC_EVENT_COMM:
-        // process_exec(nlcn_msg.proc_ev.event_data.comm.process_pid);
-
         break;
       case proc_event::PROC_EVENT_EXIT:
-        // process_exit(nlcn_msg.proc_ev.event_data.exit.process_pid);
-
         break;
       default:
         break;
@@ -144,18 +140,4 @@ std::string Netlink::get_process_name(const int& pid) {
 
     return "";
   }
-}
-
-void Netlink::process_exec(const int& pid) {
-  auto name = get_process_name(pid);
-
-  if (name != "") {
-    new_exec(pid, name);
-  }
-}
-
-void Netlink::process_exit(const int& pid) {
-  auto cmdline = get_process_name(pid);
-
-  std::cout << log_tag + "exit: " + std::to_string(pid) + cmdline << std::endl;
 }

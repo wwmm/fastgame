@@ -30,9 +30,9 @@ int main(int argc, char* argv[]) {
 
       auto game_sub_str = game.substr(0, name.size());
 
-      if (cmdline.find(game) != std::string::npos) {  // Steam games
+      if (cmdline.find(game) != std::string::npos) {  // Game Folder
         apply = true;
-      } else if (game_sub_str == name) {  // Game executable. Only useful if the game is in /usr/bin
+      } else if (game_sub_str == name) {  // Game executable. Only useful for native games or games under is in /usr/bin
         apply = true;
       }
 
@@ -64,6 +64,8 @@ int main(int argc, char* argv[]) {
 
       if (pid_list.size() == 0) {
         std::cout << "No games running." << std::endl;
+
+        tweaks->remove();
       }
     }
   });

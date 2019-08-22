@@ -20,19 +20,17 @@ int main(int argc, char* argv[]) {
   std::vector<int> pid_list;
 
   nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
-    // std::cout << "exec: " + std::to_string(pid) + "\t" + name << std::endl;
+    // std::cout << "exec: " + std::to_string(pid) + "\t" + name + "\t" + cmdline << std::endl;
 
     for (auto game : cfg->get_games()) {
       bool apply_policies = false;
 
-      if (game == name) {
-        apply_policies = true;
-      } else if (cmdline.find(game) != std::string::npos) {
+      if (cmdline.find(game) != std::string::npos) {
         apply_policies = true;
       }
 
       if (apply_policies) {
-        std::cout << "(" + name + ", " + std::to_string(pid) + ")" + " is running. Applying tweaks" << std::endl;
+        std::cout << "(" + name + ", " + std::to_string(pid) + ", " + cmdline + ")" << std::endl;
 
         pid_list.push_back(pid);
 

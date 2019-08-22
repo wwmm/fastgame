@@ -90,7 +90,8 @@
 			"memory_resource": "cpp",
 			"random": "cpp",
 			"cfenv": "cpp",
-			"cinttypes": "cpp"
+			"cinttypes": "cpp",
+			"scoped_allocator": "cpp"
 		}
 	}
 }

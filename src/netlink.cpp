@@ -112,12 +112,7 @@ void Netlink::handle_events() {
       case proc_event::PROC_EVENT_COMM:
         break;
       case proc_event::PROC_EVENT_EXIT:
-        name = get_process_name(nlcn_msg.proc_ev.event_data.exit.process_pid);
-        cmdline = get_cmdline(nlcn_msg.proc_ev.event_data.exit.process_pid);
-
-        if (name != "" && cmdline != "") {
-          new_exit(nlcn_msg.proc_ev.event_data.exit.process_pid, name, cmdline);
-        }
+        new_exit(nlcn_msg.proc_ev.event_data.exit.process_pid);
 
         break;
       default:

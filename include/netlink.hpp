@@ -15,7 +15,7 @@ class Netlink {
   bool listen = true;
 
   boost::signals2::signal<void(int, std::string, std::string)> new_exec;
-  boost::signals2::signal<void(int, std::string, std::string)> new_exit;
+  boost::signals2::signal<void(int)> new_exit;
 
   void handle_events();
 

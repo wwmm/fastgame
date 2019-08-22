@@ -21,11 +21,19 @@ int main(int argc, char* argv[]) {
   auto io_class = cfg->get_key<std::string>("io-class", "BE");
   auto io_priority = cfg->get_key("io-priority", 7);
 
-  nl->new_exec.connect([&](int pid, std::string name) {
+  nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
     // std::cout << "exec: " + std::to_string(pid) + "\t" + name << std::endl;
 
     for (auto game : games) {
-      if (game.find(name) != std::string::npos) {
+      bool apply_policies = false;
+
+      if (game == name) {
+        apply_policies = true;
+      } else if (cmdline.find(game) != std::string::npos) {
+        apply_policies = true;
+      }
+
+      if (apply_policies) {
         std::cout << name + " is running. Applying tweaks" << std::endl;
 
         scheduler->set_affinity(pid);
@@ -44,6 +52,10 @@ int main(int argc, char* argv[]) {
         }
       }
     }
+  });
+
+  nl->new_exit.connect([&](int pid, std::string name, std::string cmdline) {
+    std::cout << "exit: " + std::to_string(pid) + "\t" + name + "\t" + cmdline << std::endl;
   });
 
   // This is a blocking call. It has to be estart at the end

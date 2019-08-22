@@ -25,7 +25,9 @@ int main(int argc, char* argv[]) {
     for (auto game : cfg->get_games()) {
       bool apply_policies = false;
 
-      if (cmdline.find(game) != std::string::npos) {
+      if (game == name) {
+        apply_policies = true;
+      } else if (cmdline.find(game) != std::string::npos) {
         apply_policies = true;
       }
 
@@ -76,7 +78,7 @@ int main(int argc, char* argv[]) {
       pid_list.erase(std::remove(pid_list.begin(), pid_list.end(), pid), pid_list.end());
 
       if (pid_list.size() == 0) {
-        std::cout << "No games running. Reverting tweaks." << std::endl;
+        std::cout << "No games running." << std::endl;
       }
     }
   });

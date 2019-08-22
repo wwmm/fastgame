@@ -97,11 +97,11 @@ void Netlink::handle_events() {
 
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
-        // pid = nlcn_msg.proc_ev.event_data.fork.child_pid;
-        // name = get_process_name(pid);
-        // cmdline = get_cmdline(pid);
+        pid = nlcn_msg.proc_ev.event_data.fork.child_pid;
+        name = get_process_name(pid);
+        cmdline = get_cmdline(pid);
 
-        // new_exec(pid, name, cmdline);
+        new_exec(pid, name, cmdline);
 
         break;
       case proc_event::PROC_EVENT_EXEC:

@@ -26,4 +26,6 @@ void Tweaks::apply(const std::string& game, const int& pid) {
   if (r != 0) {
     std::cout << log_tag + "could not set process " + std::to_string(pid) + " io class and priority" << std::endl;
   }
+
+  // std::cout << log_tag + "applied tweaks for (" + game + ", " + std::to_string(pid) + ")" << std::endl;
 }

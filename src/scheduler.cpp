@@ -17,7 +17,7 @@ void Scheduler::set_affinity(const int& pid, const std::vector<int>& cores) {
 
     int res = sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
 
-    if (res == -1) {
+    if (res < 0) {
       std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
     }
   }

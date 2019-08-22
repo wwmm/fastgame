@@ -1,3 +1,4 @@
+#include <string.h>
 #include <memory>
 #include "cmdline_options.hpp"
 #include "config.h"
@@ -29,7 +30,9 @@ int main(int argc, char* argv[]) {
 
       auto game_sub_str = game.substr(0, name.size());
 
-      if (game_sub_str == name) {
+      if (cmdline.find(game) != std::string::npos) {  // Steam games
+        apply = true;
+      } else if (game_sub_str == name) {  // Game executable. Only useful if the game is in /usr/bin
         apply = true;
       }
 

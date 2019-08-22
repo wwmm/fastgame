@@ -28,6 +28,7 @@ class Netlink {
   void subscribe();
   std::string get_process_name(const int& pid);
   std::string get_cmdline(const int& pid);
+  void process_event(const int pid);
 };
 
 #endif

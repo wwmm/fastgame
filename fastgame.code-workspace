@@ -91,7 +91,8 @@
 			"random": "cpp",
 			"cfenv": "cpp",
 			"cinttypes": "cpp",
-			"scoped_allocator": "cpp"
+			"scoped_allocator": "cpp",
+			"filesystem": "cpp"
 		}
 	}
 }

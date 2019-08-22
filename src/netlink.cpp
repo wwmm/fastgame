@@ -1,11 +1,9 @@
 #include "netlink.hpp"
 #include <linux/cn_proc.h>
-#include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <filesystem>
 #include <fstream>
-#include <sstream>
 
 namespace fs = std::filesystem;
 
@@ -92,35 +90,16 @@ void Netlink::handle_events() {
   while (listen) {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
 
-    int pid;
     std::string name, cmdline;
 
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
-        // pid = nlcn_msg.proc_ev.event_data.fork.child_pid;
-        // name = get_process_name(pid);
-        // cmdline = get_cmdline(pid);
-
-        // new_exec(pid, name, cmdline);
-
         break;
       case proc_event::PROC_EVENT_EXEC:
-        pid = nlcn_msg.proc_ev.event_data.exec.process_pid;
-        name = get_process_name(pid);
-        cmdline = get_cmdline(pid);
-
-        if (name != "" && cmdline != "") {
-          new_exec(pid, name, cmdline);
-        }
+        process_event(nlcn_msg.proc_ev.event_data.exec.process_pid);
 
         break;
       case proc_event::PROC_EVENT_COMM:
-        pid = nlcn_msg.proc_ev.event_data.comm.process_pid;
-        name = get_process_name(pid);
-        cmdline = get_cmdline(pid);
-
-        new_exec(pid, name, cmdline);
-
         break;
       case proc_event::PROC_EVENT_EXIT:
         new_exit(nlcn_msg.proc_ev.event_data.exit.process_pid);
@@ -177,5 +156,14 @@ std::string Netlink::get_cmdline(const int& pid) {
     // std::cout << log_tag + e.what() << std::endl;
 
     return "";
+  }
+}
+
+void Netlink::process_event(const int pid) {
+  auto name = get_process_name(pid);
+  auto cmdline = get_cmdline(pid);
+
+  if (name != "" && cmdline != "") {
+    new_exec(pid, name, cmdline);
   }
 }

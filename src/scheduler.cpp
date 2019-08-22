@@ -3,17 +3,31 @@
 #include <iostream>
 #include <string>
 
-Scheduler::Scheduler(Config* config) : cfg(config) {
-  auto affinity_cores = cfg->get_key_array<int>("affinity-cores");
+Scheduler::Scheduler() {}
 
-  CPU_ZERO(&mask); /* Initialize it all to 0, i.e. no CPUs selected. */
+void Scheduler::set_affinity(const int& pid, const std::vector<int>& cores) {
+  if (cores.size() > 0) {
+    cpu_set_t mask;
 
-  for (auto& core : affinity_cores) {
-    CPU_SET(core, &mask); /* set the bit that represents core 7. */
+    CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+
+    for (auto& core : cores) {
+      CPU_SET(core, &mask);  // set the bit that represents the core.
+    }
+
+    int res = sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
+
+    if (res == -1) {
+      std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
+    }
   }
+}
 
-  std::string policy = cfg->get_key<std::string>("scheduler-policy", "SCHED_OTHER");
-  policy_params.sched_priority = cfg->get_key("scheduler-policy-priority", 0);
+void Scheduler::set_policy(const int& pid, const std::string& policy, const int& priority) {
+  int policy_index;
+  sched_param policy_params;
+
+  policy_params.sched_priority = priority;
 
   if (policy == "SCHED_BATCH") {
     policy_index = SCHED_BATCH;
@@ -26,17 +40,7 @@ Scheduler::Scheduler(Config* config) : cfg(config) {
   } else {
     policy_index = SCHED_OTHER;
   }
-}
 
-void Scheduler::set_affinity(const int& pid) {
-  int res = sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
-
-  if (res == -1) {
-    std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
-  }
-}
-
-void Scheduler::set_policy(const int& pid) {
   int res = sched_setscheduler(pid, policy_index, &policy_params);
 
   if (res == -1) {

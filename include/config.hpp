@@ -9,6 +9,8 @@ class Config {
  public:
   Config(const std::string& cfg_path);
 
+  std::vector<std::string> get_games();
+
   template <typename T>
   T get_key(const std::string& key, T default_value) {
     return root.get<T>(key, default_value);
@@ -30,6 +32,8 @@ class Config {
 
  private:
   boost::property_tree::ptree root;
+
+  std::vector<std::string> games;
 };
 
 #endif

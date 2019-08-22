@@ -13,25 +13,16 @@ int main(int argc, char* argv[]) {
 
   auto cfg = std::make_unique<Config>(cmd_options->get_config_file_path());
 
-  auto scheduler = std::make_unique<Scheduler>(cfg.get());
+  auto scheduler = std::make_unique<Scheduler>();
 
   auto nl = std::make_unique<Netlink>();
-
-  // Reading config
-
-  auto games = cfg->get_key_array<std::string>("games");
-  auto niceness = cfg->get_key("niceness", 0);
-  auto io_class = cfg->get_key<std::string>("io-class", "BE");
-  auto io_priority = cfg->get_key("io-priority", 7);
-
-  // game pid list
 
   std::vector<int> pid_list;
 
   nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
     // std::cout << "exec: " + std::to_string(pid) + "\t" + name << std::endl;
 
-    for (auto game : games) {
+    for (auto game : cfg->get_games()) {
       bool apply_policies = false;
 
       if (game == name) {
@@ -45,8 +36,15 @@ int main(int argc, char* argv[]) {
 
         pid_list.push_back(pid);
 
-        scheduler->set_affinity(pid);
-        scheduler->set_policy(pid);
+        auto affinity_cores = cfg->get_key_array<int>(game + ".affinity-cores");
+        auto sched_policy = cfg->get_key<std::string>(game + ".scheduler-policy", "SCHED_OTHER");
+        auto sched_priority = cfg->get_key(game + ".scheduler-policy-priority", 0);
+        auto niceness = cfg->get_key(game + ".niceness", 0);
+        auto io_class = cfg->get_key<std::string>(game + ".io-class", "BE");
+        auto io_priority = cfg->get_key(game + ".io-priority", 7);
+
+        scheduler->set_affinity(pid, affinity_cores);
+        scheduler->set_policy(pid, sched_policy, sched_priority);
 
         int r = setpriority(PRIO_PROCESS, pid, niceness);
 

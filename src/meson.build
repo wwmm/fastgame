@@ -3,7 +3,8 @@ fastgame_sources = [
 	'netlink.cpp',
 	'cmdline_options.cpp',
 	'config.cpp',
-	'scheduler.cpp'
+	'scheduler.cpp',
+	'tweaks.cpp'
 ]
 
 fastgame_deps = [

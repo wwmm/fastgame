@@ -44,7 +44,20 @@ int main(int argc, char* argv[]) {
 
         pid_list.push_back(pid);
 
-        tweaks->apply(game, pid);
+        try {
+          auto task_dir = "/proc/" + std::to_string(pid) + "/task";
+
+          if (fs::exists(task_dir)) {
+            if (fs::is_directory(task_dir)) {
+              for (const auto& entry : fs::directory_iterator(task_dir)) {
+                const auto task_pid = entry.path().filename().string();
+
+                tweaks->apply(game, std::stoi(task_pid));
+              }
+            }
+          }
+        } catch (std::exception& e) {
+        }
       }
     }
   });

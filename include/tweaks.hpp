@@ -20,10 +20,12 @@ class Tweaks {
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
 
-  void change_governor(const std::string& name);
+  void change_cpu_governor(const std::string& name);
+  void change_disk_scheduler(const std::string& name);
+  void change_disk_read_ahead(const int& value);
   void change_iopriority(const std::string& game, const int& pid);
   void change_niceness(const std::string& game, const int& pid);
-  void change_scheduler_affinity_and_policy(const std::string& game, const int& pid);
+  void change_cpu_scheduler_affinity_and_policy(const std::string& game, const int& pid);
 };
 
 #endif

@@ -1,10 +1,13 @@
 #include <string.h>
+#include <filesystem>
 #include <memory>
 #include "cmdline_options.hpp"
 #include "config.h"
 #include "config.hpp"
 #include "netlink.hpp"
 #include "tweaks.hpp"
+
+namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
   auto cmd_options = std::make_unique<CmdlineOptions>(argc, argv);
@@ -30,9 +33,9 @@ int main(int argc, char* argv[]) {
 
       auto game_sub_str = game.substr(0, name.size());
 
-      if (cmdline.find(game) != std::string::npos) {  // Game Folder
+      if (cmdline.find(game) != std::string::npos) {
         apply = true;
-      } else if (game_sub_str == name) {  // Game executable. Only useful for native games or games under is in /usr/bin
+      } else if (game_sub_str == name) {
         apply = true;
       }
 
@@ -58,7 +61,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (remove_element) {
-      std::cout << "exit: " + std::to_string(pid) << std::endl;
+      // std::cout << "exit: " + std::to_string(pid) << std::endl;
 
       pid_list.erase(std::remove(pid_list.begin(), pid_list.end(), pid), pid_list.end());
 

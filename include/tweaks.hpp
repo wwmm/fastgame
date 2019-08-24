@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include "config.hpp"
+#include "nvidia.hpp"
 #include "scheduler.hpp"
 
 class Tweaks {
@@ -19,6 +20,7 @@ class Tweaks {
 
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
+  std::unique_ptr<Nvidia> nvidia;
 
   void change_cpu_governor(const std::string& name);
   void change_disk_scheduler(const std::string& name);

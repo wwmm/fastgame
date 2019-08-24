@@ -53,6 +53,11 @@ int main(int argc, char* argv[]) {
       if (tgid == p.second) {
         // std::cout << "new thread: (" + p.first + ", " + std::to_string(pid) + ")" << std::endl;
 
+        /*
+          The loop below is probably unnecessary for native games. But wine games needs it because by the time wine
+          updates /proc/pid/comm with the game process name a few child threads may have been already started.
+        */
+
         try {
           auto task_dir = "/proc/" + std::to_string(pid) + "/task";
 

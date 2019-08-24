@@ -5,7 +5,8 @@
 
 namespace fs = std::filesystem;
 
-Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Scheduler>()) {}
+Tweaks::Tweaks(Config* config)
+    : cfg(config), scheduler(std::make_unique<Scheduler>()), nvidia(std::make_unique<Nvidia>()) {}
 
 void Tweaks::apply(const std::string& game, const int& pid) {
   auto governor = cfg->get_key<std::string>("general.cpu.game-governor", "performance");

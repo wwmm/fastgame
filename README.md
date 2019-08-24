@@ -28,11 +28,11 @@ service like this running when we are not playing.
       "default-scheduler": "bfq",
       "game-scheduler": "mq-deadline",
       "default-read-ahead": "256",
-      "game-read-ahead": "4096"
+      "game-read-ahead": "2048"
     }
   },
   "games": {
-    "Shadow of the Tomb Raider": {
+    "SOTTR": {
       "niceness": "-4",
       "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",
@@ -40,14 +40,14 @@ service like this running when we are not playing.
       "io-class": "RT",
       "io-priority": "0"
     },
-    "dota 2 beta": {
+    "dota2": {
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",
       "io-class": "RT",
       "io-priority": "0"
     },
-    "A Plague Tale Innocence": {
+    "APlagueTaleInnocence_x64": {
       "niceness": "-4",
       "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",

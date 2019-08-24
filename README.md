@@ -19,8 +19,17 @@ service like this running when we are not playing.
 ```
 {
   "general": {
-    "default-governor": "schedutil",
-    "game-governor": "performance"
+    "cpu": {
+      "default-governor": "schedutil",
+      "game-governor": "performance"
+    },
+    "disk": {
+      "device": "sdc",
+      "default-scheduler": "bfq",
+      "game-scheduler": "mq-deadline",
+      "default-read-ahead": "256",
+      "game-read-ahead": "4096"
+    }
   },
   "games": {
     "Shadow of the Tomb Raider": {

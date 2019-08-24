@@ -8,8 +8,7 @@ fastgame_sources = [
 ]
 
 fastgame_deps = [
-	dependency('boost', version: '>=1.65', modules:['program_options']),
-	dependency('threads')
+	dependency('boost', version: '>=1.65', modules:['program_options'])
 ]
 
 executable(

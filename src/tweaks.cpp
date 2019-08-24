@@ -82,10 +82,8 @@ void Tweaks::change_disk_read_ahead(const int& value) {
 void Tweaks::change_niceness(const std::string& game, const int& pid) {
   auto niceness = cfg->get_key("games." + game + ".niceness", 0);
 
-  int r = setpriority(PRIO_PROCESS, pid, niceness);
-
-  if (r != 0) {
-    std::cout << log_tag + "could not set process " + std::to_string(pid) + " niceness" << std::endl;
+  if (setpriority(PRIO_PROCESS, pid, niceness) < 0) {
+    // std::cout << log_tag + "could not set process " + std::to_string(pid) + " niceness" << std::endl;
   }
 }
 
@@ -102,10 +100,8 @@ void Tweaks::change_iopriority(const std::string& game, const int& pid) {
   auto io_class = cfg->get_key<std::string>("games." + game + ".io-class", "BE");
   auto io_priority = cfg->get_key("games." + game + ".io-priority", 7);
 
-  int r = ioprio_set(pid, io_class, io_priority);
-
-  if (r != 0) {
-    std::cout << log_tag + "could not set process " + std::to_string(pid) + " io class and priority" << std::endl;
+  if (ioprio_set(pid, io_class, io_priority) != 0) {
+    // std::cout << log_tag + "could not set process " + std::to_string(pid) + " io class and priority" << std::endl;
   }
 }
 

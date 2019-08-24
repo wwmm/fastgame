@@ -18,75 +18,70 @@ int main(int argc, char* argv[]) {
 
   auto nl = std::make_unique<Netlink>();
 
-  std::vector<int> pid_list;
+  int game_pid = -1;
+  std::string game_name;
 
   nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
-    // std::cout << "exec: " + std::to_string(pid) + "\t" + name + "\t" + cmdline << std::endl;
+    if (game_pid != -1) {
+      return;
+    }
 
     for (auto game : cfg->get_games()) {
       bool apply = false;
 
-      /*
-        name can be shorter than the real process name because the kernel limits the number of characters in
-        /proc/pid/comm
-      */
+      if (game.size() > name.size()) {
+        auto sub_str = game.substr(0, name.size());
 
-      auto game_sub_str = game.substr(0, name.size());
+        if (sub_str == name) {
+          apply = true;
+        }
+      } else {
+        auto sub_str = name.substr(0, game.size());
 
-      if (cmdline.find(game) != std::string::npos) {
-        apply = true;
-      } else if (game_sub_str == name) {
-        apply = true;
+        if (sub_str == game) {
+          apply = true;
+        }
       }
 
       if (apply) {
         std::cout << "(" + name + ", " + std::to_string(pid) + ", " + cmdline + ")" << std::endl;
 
-        pid_list.push_back(pid);
+        game_name = game;
+        game_pid = pid;
 
-        try {
-          auto task_dir = "/proc/" + std::to_string(pid) + "/task";
+        tweaks->apply(game, pid);
+      }
+    }
+  });
 
-          if (fs::exists(task_dir)) {
-            if (fs::is_directory(task_dir)) {
-              for (const auto& entry : fs::directory_iterator(task_dir)) {
-                const auto task_pid = entry.path().filename().string();
+  nl->new_fork.connect([&](int tgid, int pid) {
+    if (tgid == game_pid) {
+      // std::cout << "new thread: (" + game_name + ", " + std::to_string(pid) + ")" << std::endl;
 
-                tweaks->apply(game, std::stoi(task_pid));
-              }
-            }
-          }
-        } catch (std::exception& e) {
+      try {
+        auto task_dir = "/proc/" + std::to_string(pid) + "/task";
+
+        for (const auto& entry : fs::directory_iterator(task_dir)) {
+          const auto task_pid = entry.path().filename().string();
+
+          tweaks->apply(game_name, std::stoi(task_pid));
         }
+      } catch (std::exception& e) {
       }
     }
   });
 
   nl->new_exit.connect([&](int pid) {
-    bool remove_element = false;
+    if (pid == game_pid) {
+      std::cout << "No games running." << std::endl;
 
-    for (auto& p : pid_list) {
-      if (p == pid) {
-        remove_element = true;
+      game_pid = -1;
 
-        break;
-      }
-    }
-
-    if (remove_element) {
-      // std::cout << "exit: " + std::to_string(pid) << std::endl;
-
-      pid_list.erase(std::remove(pid_list.begin(), pid_list.end(), pid), pid_list.end());
-
-      if (pid_list.size() == 0) {
-        std::cout << "No games running." << std::endl;
-
-        tweaks->remove();
-      }
+      tweaks->remove();
     }
   });
 
-  // This is a blocking call. It has to be estart at the end
+  // This is a blocking call. It has to be started at the end
 
   if (nl->listen) {
     nl->handle_events();

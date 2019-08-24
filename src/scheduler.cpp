@@ -15,10 +15,8 @@ void Scheduler::set_affinity(const int& pid, const std::vector<int>& cores) {
       CPU_SET(core, &mask);  // set the bit that represents the core.
     }
 
-    int res = sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
-
-    if (res < 0) {
-      std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
+    if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
+      // std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
     }
   }
 }
@@ -41,9 +39,7 @@ void Scheduler::set_policy(const int& pid, const std::string& policy, const int&
     policy_index = SCHED_OTHER;
   }
 
-  int res = sched_setscheduler(pid, policy_index, &policy_params);
-
-  if (res == -1) {
-    std::cout << "could not set process " + std::to_string(pid) + " scheduler policy" << std::endl;
+  if (sched_setscheduler(pid, policy_index, &policy_params) == -1) {
+    // std::cout << "could not set process " + std::to_string(pid) + " scheduler policy" << std::endl;
   }
 }

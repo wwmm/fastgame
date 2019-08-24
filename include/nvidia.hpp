@@ -9,13 +9,15 @@ class Nvidia {
  public:
   Nvidia();
 
-  void set_offeset(const int& core, const int& memory);
+  void set_clock_offset(const int& gpu_index, const int& gpu_offset, const int& memory_offset);
 
  private:
   std::string log_tag = "nvidia: ";
 
   Display* dpy;
-  int screen;
+  int screen, max_performance_mode = 3;
+
+  void get_max_performance_mode(const int& gpu_index);
 };
 
 #endif

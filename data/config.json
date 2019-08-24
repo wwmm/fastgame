@@ -29,7 +29,7 @@
       "io-class": "RT",
       "io-priority": "0"
     },
-    "TheEvilWithin2": {
+    "TEW2": {
       "niceness": "-4",
       "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",
@@ -52,7 +52,7 @@
       "io-class": "RT",
       "io-priority": "0"
     },
-    "XCOM 2": {
+    "XCOM2WotC": {
       "niceness": "-4",
       "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",

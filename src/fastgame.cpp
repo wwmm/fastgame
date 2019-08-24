@@ -18,14 +18,9 @@ int main(int argc, char* argv[]) {
 
   auto nl = std::make_unique<Netlink>();
 
-  int game_pid = -1;
-  std::string game_name;
+  std::vector<std::pair<std::string, int>> pid_list;
 
   nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
-    if (game_pid != -1) {
-      return;
-    }
-
     for (auto game : cfg->get_games()) {
       bool apply = false;
 
@@ -44,40 +39,56 @@ int main(int argc, char* argv[]) {
       }
 
       if (apply) {
-        std::cout << "(" + name + ", " + std::to_string(pid) + ", " + cmdline + ")" << std::endl;
-
-        game_name = game;
-        game_pid = pid;
-
         tweaks->apply(game, pid);
+
+        pid_list.push_back(std::pair(game, pid));
+
+        std::cout << "(" + name + ", " + std::to_string(pid) + ", " + cmdline + ")" << std::endl;
       }
     }
   });
 
   nl->new_fork.connect([&](int tgid, int pid) {
-    if (tgid == game_pid) {
-      // std::cout << "new thread: (" + game_name + ", " + std::to_string(pid) + ")" << std::endl;
+    for (auto& p : pid_list) {
+      if (tgid == p.second) {
+        // std::cout << "new thread: (" + p.first + ", " + std::to_string(pid) + ")" << std::endl;
 
-      try {
-        auto task_dir = "/proc/" + std::to_string(pid) + "/task";
+        try {
+          auto task_dir = "/proc/" + std::to_string(pid) + "/task";
 
-        for (const auto& entry : fs::directory_iterator(task_dir)) {
-          const auto task_pid = entry.path().filename().string();
+          for (const auto& entry : fs::directory_iterator(task_dir)) {
+            const auto task_pid = entry.path().filename().string();
 
-          tweaks->apply(game_name, std::stoi(task_pid));
+            tweaks->apply(p.first, std::stoi(task_pid));
+          }
+        } catch (std::exception& e) {
         }
-      } catch (std::exception& e) {
       }
     }
   });
 
   nl->new_exit.connect([&](int pid) {
-    if (pid == game_pid) {
-      std::cout << "No games running." << std::endl;
+    bool remove_element = false;
 
-      game_pid = -1;
+    for (auto& p : pid_list) {
+      if (p.second == pid) {
+        remove_element = true;
 
-      tweaks->remove();
+        break;
+      }
+    }
+
+    if (remove_element) {
+      // std::cout << "exit: " + std::to_string(pid) << std::endl;
+
+      pid_list.erase(std::remove_if(pid_list.begin(), pid_list.end(), [=](auto p) { return p.second == pid; }),
+                     pid_list.end());
+
+      if (pid_list.size() == 0) {
+        std::cout << "No games running." << std::endl;
+
+        tweaks->remove();
+      }
     }
   });
 

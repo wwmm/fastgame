@@ -6,10 +6,10 @@ Config::Config(const std::string& cfg_path) {
 
   auto games_section = root.get_child("games");
 
-  std::cout << "games process names in our config:" << std::endl;
+  // std::cout << "games process names in our config:" << std::endl;
 
   for (auto& it : games_section) {
-    std::cout << it.first << std::endl;
+    // std::cout << it.first << std::endl;
 
     games.push_back(it.first);
   }

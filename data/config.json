@@ -9,9 +9,9 @@
       "default-scheduler": "mq-deadline",
       "game-scheduler": "bfq",
       "default-read-ahead": "256",
-      "game-read-ahead": "2048",
+      "game-read-ahead": "1024",
       "default-nr-requests": "64",
-      "game-nr-requests": "32",
+      "game-nr-requests": "1024",
       "default-rq-affinity": "2",
       "game-rq-affinity": "1"
     },

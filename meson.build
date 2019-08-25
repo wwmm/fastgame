@@ -24,7 +24,6 @@ conf = configuration_data()
 
 conf.set_quoted('VERSION', meson.project_version())
 
-configure_file(output: 'config.h', configuration: conf)
-
 subdir('src')
 
+configure_file(output: 'config.h', configuration: conf)

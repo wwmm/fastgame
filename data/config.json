@@ -10,6 +10,12 @@
       "game-scheduler": "mq-deadline",
       "default-read-ahead": "256",
       "game-read-ahead": "2048"
+    },
+    "nvidia": {
+      "default-gpu-clock-offset": "0",
+      "game-gpu-clock-offset": "150",
+      "default-memory-clock-offset": "0",
+      "game-memory-clock-offset": "500"
     }
   },
   "games": {

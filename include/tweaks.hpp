@@ -3,9 +3,13 @@
 
 #include <iostream>
 #include <memory>
+#include "config.h"
 #include "config.hpp"
-#include "nvidia.hpp"
 #include "scheduler.hpp"
+
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
 
 class Tweaks {
  public:
@@ -20,7 +24,10 @@ class Tweaks {
 
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
+
+#ifdef USE_NVIDIA
   std::unique_ptr<Nvidia> nvidia;
+#endif
 
   void change_cpu_governor(const std::string& name);
   void change_disk_scheduler(const std::string& name);

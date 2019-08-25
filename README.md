@@ -1,9 +1,9 @@
 # Fast Game
 
-This is a project I started for fun and for learning purposes. It applies small performance tweaks that should be good
-for games. The kernel Process Events Connector is used to monitor creation and destruction of processes. When a process
-related to one of the games in our config file is detected the tweaks are applied. Global tweaks like frequency governor
-changes are removed once no game process is running.
+This is a project I started for fun and for learning purposes. It allows the user to apply small system configuration
+tweaks that may increase gaming performance. The kernel Process Events Connector is used to monitor creation and
+destruction of processes. When a process related to one of the games in our config file is detected the tweaks are
+applied. Global tweaks like frequency governor changes are removed once no game process is running.
 
 I start it manually before launching a game `sudo fastgame --config config.json`. At least for now no advantage in
 keeping a service like this running when we are not playing.

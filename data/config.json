@@ -12,8 +12,8 @@
       "game-read-ahead": "2048"
     },
     "nvidia": {
-      "default-powermize-mode": "adaptive",
-      "game-powermize-mode": "maximum-performance",
+      "default-powermizer-mode": "adaptive",
+      "game-powermizer-mode": "maximum-performance",
       "default-gpu-clock-offset": "0",
       "game-gpu-clock-offset": "150",
       "default-memory-clock-offset": "0",

@@ -13,7 +13,7 @@ keeping a service like this running when we are not playing.
 - Change cpu frequency governor
 - Change process niceness
 - Change process cpu affinity and scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
-- Change disk scheduler(bfq, mq-dealine,...) and read ahead values.
+- Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values.
 - Nvidia overclocking, power limit and powermize control
 
 # Configuration File Example
@@ -27,10 +27,14 @@ keeping a service like this running when we are not playing.
     },
     "disk": {
       "device": "sdc",
-      "default-scheduler": "bfq",
-      "game-scheduler": "mq-deadline",
+      "default-scheduler": "mq-deadline",
+      "game-scheduler": "bfq",
       "default-read-ahead": "256",
-      "game-read-ahead": "2048"
+      "game-read-ahead": "2048",
+      "default-nr-requests": "64",
+      "game-nr-requests": "32",
+      "default-rq-affinity": "2",
+      "game-rq-affinity": "1"
     },
     "nvidia": {
       "default-powermizer-mode": "adaptive",

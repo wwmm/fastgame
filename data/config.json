@@ -6,10 +6,14 @@
     },
     "disk": {
       "device": "sdc",
-      "default-scheduler": "bfq",
-      "game-scheduler": "mq-deadline",
+      "default-scheduler": "mq-deadline",
+      "game-scheduler": "bfq",
       "default-read-ahead": "256",
-      "game-read-ahead": "2048"
+      "game-read-ahead": "2048",
+      "default-nr-requests": "64",
+      "game-nr-requests": "32",
+      "default-rq-affinity": "2",
+      "game-rq-affinity": "1"
     },
     "nvidia": {
       "default-powermizer-mode": "adaptive",

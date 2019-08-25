@@ -17,7 +17,9 @@
       "default-gpu-clock-offset": "0",
       "game-gpu-clock-offset": "150",
       "default-memory-clock-offset": "0",
-      "game-memory-clock-offset": "500"
+      "game-memory-clock-offset": "500",
+      "default-power-limit": "180",
+      "game-power-limit": "200"
     }
   },
   "games": {

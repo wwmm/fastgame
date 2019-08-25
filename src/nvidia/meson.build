@@ -1,13 +1,16 @@
 cxx = meson.get_compiler('cpp')
 
 libxnvctrl = cxx.find_library('libXNVCtrl', required: false)
+libdl = cxx.find_library('dl', required: false)
 
 nvidia_sources = [
-	'nvidia.cpp'
+	'nvidia.cpp',
+	'nvml.cpp'
 ]
 
 nvidia_deps = [
 	libxnvctrl,
+	libdl,
 	dependency('x11')
 ]
 

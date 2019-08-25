@@ -14,7 +14,7 @@ service like this running when we are not playing.
 - Change process niceness
 - Change process cpu affinity and scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...) and read ahead values.
-- Nvidia overclocking and powermize control(maximum-performance, adaptive and auto)
+- Nvidia overclocking, power limit and powermize control
 - Where possible the tweaks can have different settings for each game. For example:
 
 ```
@@ -37,7 +37,9 @@ service like this running when we are not playing.
       "default-gpu-clock-offset": "0",
       "game-gpu-clock-offset": "150",
       "default-memory-clock-offset": "0",
-      "game-memory-clock-offset": "500"
+      "game-memory-clock-offset": "500",
+      "default-power-limit": "180",
+      "game-power-limit": "200"
     }
   },
   "games": {

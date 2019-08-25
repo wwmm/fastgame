@@ -21,6 +21,8 @@ Nvidia::Nvidia() {
 
   get_max_performance_mode(0);
   get_valid_clock_offset_values(0);
+
+  nvml = std::make_unique<Nvml>();
 }
 
 void Nvidia::get_max_performance_mode(const int& gpu_index) {

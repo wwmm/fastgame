@@ -39,7 +39,11 @@ int main(int argc, char* argv[]) {
       }
 
       if (apply) {
-        tweaks->apply(game, pid);
+        tweaks->apply_process(game, pid);
+
+        if (pid_list.size() == 0) {
+          tweaks->apply_global();
+        }
 
         pid_list.push_back(std::pair(game, pid));
 
@@ -64,7 +68,7 @@ int main(int argc, char* argv[]) {
           for (const auto& entry : fs::directory_iterator(task_dir)) {
             const auto task_pid = entry.path().filename().string();
 
-            tweaks->apply(p.first, std::stoi(task_pid));
+            tweaks->apply_process(p.first, std::stoi(task_pid));
           }
         } catch (std::exception& e) {
         }

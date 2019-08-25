@@ -11,7 +11,7 @@ Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Schedul
 #endif
 }
 
-void Tweaks::apply(const std::string& game, const int& pid) {
+void Tweaks::apply_global() {
   auto governor = cfg->get_key<std::string>("general.cpu.game-governor", "performance");
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.game-scheduler", "");
   auto disk_read_ahead = cfg->get_key("general.disk.game-read-ahead", 256);
@@ -19,9 +19,6 @@ void Tweaks::apply(const std::string& game, const int& pid) {
   change_cpu_governor(governor);
   change_disk_scheduler(disk_scheduler);
   change_disk_read_ahead(disk_read_ahead);
-  change_niceness(game, pid);
-  change_cpu_scheduler_affinity_and_policy(game, pid);
-  change_iopriority(game, pid);
 
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.game-gpu-clock-offset", 0);
@@ -29,6 +26,12 @@ void Tweaks::apply(const std::string& game, const int& pid) {
 
   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
 #endif
+}
+
+void Tweaks::apply_process(const std::string& game, const int& pid) {
+  change_niceness(game, pid);
+  change_cpu_scheduler_affinity_and_policy(game, pid);
+  change_iopriority(game, pid);
 }
 
 void Tweaks::change_cpu_governor(const std::string& name) {

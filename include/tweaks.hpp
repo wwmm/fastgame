@@ -15,7 +15,8 @@ class Tweaks {
  public:
   Tweaks(Config* config);
 
-  void apply(const std::string& game, const int& pid);
+  void apply_global();
+  void apply_process(const std::string& game, const int& pid);
 
   void remove();
 

@@ -15,9 +15,11 @@ class Nvidia {
   std::string log_tag = "nvidia: ";
 
   Display* dpy;
-  int screen, max_performance_mode = 3;
+  int screen, max_performance_mode = 3, min_gpu_clock_offset, max_gpu_clock_offset, min_memory_clock_offset,
+              max_memory_clock_offset;
 
   void get_max_performance_mode(const int& gpu_index);
+  void get_valid_clock_offset_values(const int& gpu_index);
 };
 
 #endif

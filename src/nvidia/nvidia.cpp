@@ -102,3 +102,26 @@ void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const
     }
   }
 }
+
+void Nvidia::set_powermizer_mode(const int& gpu_index, const std::string& mode_name) {
+  int mode;
+
+  if (mode_name == "maximum-performance") {
+    mode = NV_CTRL_GPU_POWER_MIZER_MODE_PREFER_MAXIMUM_PERFORMANCE;
+  } else if (mode_name == "adaptive") {
+    mode = NV_CTRL_GPU_POWER_MIZER_MODE_ADAPTIVE;
+  } else if (mode_name == "auto") {
+    mode = NV_CTRL_GPU_POWER_MIZER_MODE_AUTO;
+  } else {
+    mode = NV_CTRL_GPU_POWER_MIZER_MODE_AUTO;
+  }
+
+  bool s = XNVCTRLSetTargetAttributeAndGetStatus(dpy, NV_CTRL_TARGET_TYPE_GPU, gpu_index, max_performance_mode,
+                                                 NV_CTRL_GPU_POWER_MIZER_MODE, mode);
+
+  if (s) {
+    std::cout << log_tag + "setting powermizer to mode " << mode_name << std::endl;
+  } else {
+    std::cout << log_tag + "failed to set powermizer to mode " << mode_name << std::endl;
+  }
+}

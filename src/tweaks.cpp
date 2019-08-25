@@ -23,7 +23,9 @@ void Tweaks::apply_global() {
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.game-gpu-clock-offset", 0);
   auto memory_offset = cfg->get_key("general.nvidia.game-memory-clock-offset", 0);
+  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.game-powermizer-mode", "auto");
 
+  nvidia->set_powermizer_mode(0, powermizer_mode);
   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
 #endif
 }
@@ -131,7 +133,9 @@ void Tweaks::remove() {
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.default-gpu-clock-offset", 0);
   auto memory_offset = cfg->get_key("general.nvidia.default-memory-clock-offset", 0);
+  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.default-powermizer-mode", "auto");
 
+  nvidia->set_powermizer_mode(0, powermizer_mode);
   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
 #endif
 }

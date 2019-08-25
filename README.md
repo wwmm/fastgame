@@ -5,8 +5,8 @@ for games. The kernel Process Events Connector is used to monitor creation and d
 related to one of the games in our config file is detected the tweaks are applied. Global tweaks like frequency governor
 changes are removed once no game process is running.
 
-I start it manually before starting a game `sudo fastgame --config config.json`. There is no advantage in keeping a
-service like this running when we are not playing.
+I start it manually before launching a game `sudo fastgame --config config.json`. At least for now no advantage in
+keeping a service like this running when we are not playing.
 
 # Features
 

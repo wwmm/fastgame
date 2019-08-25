@@ -61,6 +61,8 @@ void Tweaks::change_cpu_governor(const std::string& name) {
 
     f.close();
   }
+
+  std::cout << log_tag + "changed cpu frequency governor to: " << name << std::endl;
 }
 
 void Tweaks::change_disk_scheduler(const std::string& name) {
@@ -76,6 +78,8 @@ void Tweaks::change_disk_scheduler(const std::string& name) {
       f << name;
 
       f.close();
+
+      std::cout << log_tag + "changed /dev/" + device + " scheduler to: " << name << std::endl;
     }
   }
 }
@@ -93,6 +97,8 @@ void Tweaks::change_disk_read_ahead(const int& value) {
       f << value;
 
       f.close();
+
+      std::cout << log_tag + "changed /dev/" + device + " read_ahead value to: " << value << std::endl;
     }
   }
 }

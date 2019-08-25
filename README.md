@@ -15,7 +15,8 @@ service like this running when we are not playing.
 - Change process cpu affinity and scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...) and read ahead values.
 - Nvidia overclocking, power limit and powermize control
-- Where possible the tweaks can have different settings for each game. For example:
+
+# Configuration File Example
 
 ```
 {

@@ -27,8 +27,8 @@ keeping a service like this running when we are not playing.
     },
     "disk": {
       "device": "sdc",
-      "default-scheduler": "bfq",
-      "game-scheduler": "mq-deadline",
+      "default-scheduler": "mq-deadline",
+      "game-scheduler": "bfq",
       "default-read-ahead": "256",
       "game-read-ahead": "2048"
     },

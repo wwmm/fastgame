@@ -71,3 +71,12 @@ keeping a service like this running when we are not playing.
 }
 
 ```
+
+# Compilation
+
+```
+cd fastgame
+meson build
+cd build
+ninja
+```

@@ -12,7 +12,7 @@ keeping a service like this running when we are not playing.
 
 - Change cpu frequency governor
 - Change process niceness
-- Change process cpu affinity and scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
+- Change process cpu scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values.
 - Nvidia overclocking, power limit and powermize control
 
@@ -50,7 +50,6 @@ keeping a service like this running when we are not playing.
   "games": {
     "SOTTR": {
       "niceness": "-4",
-      "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",
       "io-class": "RT",
@@ -65,7 +64,6 @@ keeping a service like this running when we are not playing.
     },
     "APlagueTaleInnocence_x64": {
       "niceness": "-4",
-      "affinity-cores": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",
       "io-class": "RT",

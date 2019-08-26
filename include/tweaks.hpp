@@ -37,7 +37,7 @@ class Tweaks {
   void change_disk_rq_affinity(const int& value);
   void change_iopriority(const std::string& game, const int& pid);
   void change_niceness(const std::string& game, const int& pid);
-  void change_cpu_scheduler_affinity_and_policy(const std::string& game, const int& pid);
+  void change_scheduler_policy(const std::string& game, const int& pid);
 };
 
 #endif

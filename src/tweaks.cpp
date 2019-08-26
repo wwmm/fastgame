@@ -38,7 +38,7 @@ void Tweaks::apply_global() {
 
 void Tweaks::apply_process(const std::string& game, const int& pid) {
   change_niceness(game, pid);
-  change_cpu_scheduler_affinity_and_policy(game, pid);
+  change_scheduler_policy(game, pid);
   change_iopriority(game, pid);
 }
 
@@ -190,12 +190,10 @@ void Tweaks::change_niceness(const std::string& game, const int& pid) {
   }
 }
 
-void Tweaks::change_cpu_scheduler_affinity_and_policy(const std::string& game, const int& pid) {
-  // auto affinity_cores = cfg->get_key_array<int>("games." + game + ".affinity-cores");
+void Tweaks::change_scheduler_policy(const std::string& game, const int& pid) {
   auto sched_policy = cfg->get_key<std::string>("games." + game + ".scheduler-policy", "SCHED_OTHER");
   auto sched_priority = cfg->get_key("games." + game + ".scheduler-policy-priority", 0);
 
-  // scheduler->set_affinity(pid, affinity_cores);
   scheduler->set_policy(pid, sched_policy, sched_priority);
 }
 

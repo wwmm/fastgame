@@ -13,6 +13,8 @@ class CmdlineOptions {
   std::string get_config_file_path();
 
  private:
+  std::string log_tag = "cmdline_options: ";
+
   std::string config_file_path;
 
   boost::program_options::options_description desc;

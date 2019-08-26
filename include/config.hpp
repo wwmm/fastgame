@@ -31,6 +31,8 @@ class Config {
   }
 
  private:
+  std::string log_tag = "config: ";
+
   boost::property_tree::ptree root;
 
   std::vector<std::string> games;

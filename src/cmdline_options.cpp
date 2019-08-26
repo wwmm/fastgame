@@ -1,4 +1,5 @@
 #include "cmdline_options.hpp"
+#include "config.h"
 
 CmdlineOptions::CmdlineOptions(int argc, char* argv[]) : desc("Allowed options") {
   desc.add_options()("help", "Print this help message")(
@@ -16,6 +17,7 @@ CmdlineOptions::CmdlineOptions(int argc, char* argv[]) : desc("Allowed options")
   config_file_path = vm["config"].as<std::string>();
 
   if (config_file_path.empty()) {
+    // config_file_path =
     std::cout << "no config file!" << std::endl;
   }
 }

@@ -16,7 +16,7 @@ In other to set cpu affinity and environmental variables it is necessary to use 
 the game. On Steam you would do something like this `fastgame --game APlagueTaleInnocence_x64 --run %command%`. In this
 case `APlagueTaleInnocence_x64` is the name of the game section in our `config.json` file. There is an configuration
 example below. If a game does not need cpu affinity o environmental variables settings there is no need to modify its
-laucnh command. Just start `fastgame_server` before launching the game.
+launch command. Just start `fastgame_server` before launching the game.
 
 # Features
 

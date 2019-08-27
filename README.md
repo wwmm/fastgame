@@ -1,4 +1,4 @@
-# Fast Game
+# FastGame
 
 This is a project I started for fun and for learning purposes. It allows the user to apply small system configuration
 tweaks that may increase gaming performance. The kernel Process Events Connector is used to monitor creation and
@@ -17,8 +17,11 @@ example below.
 
 - Change cpu frequency governor
 - Change process niceness
+- Change cpu affinity
+- Set Environmental variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
 - Change process cpu scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
-- Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values.
+- Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
+- Change io priority (as far as I know only bfq and cfq schedulers use this information)
 - Nvidia overclocking, power limit and powermize control
 
 # Configuration File Example
@@ -94,6 +97,11 @@ A few settings can have different values for each game. When creating a new game
 }
 
 ```
+
+When you install FastGame a config file will be copied to `/etc/fastgame/config.json`. Do not take the values there
+as good values for everybody. They are just values I have been playing with in my computer. At least for now the
+FastGame's main objective is giving the user the ability to customize system settings on demand. Customize your config
+file!
 
 # Compilation
 

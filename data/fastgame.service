@@ -2,7 +2,7 @@
 Description=FastGame
 
 [Service]
-ExecStart=/usr/bin/fastgame_service
+ExecStart=/usr/bin/fastgame_server
 
 [Install]
 WantedBy=multi-user.target

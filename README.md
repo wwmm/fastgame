@@ -2,16 +2,21 @@
 
 This is a project I started for fun and for learning purposes. It allows the user to apply small system configuration
 tweaks that may increase gaming performance. The kernel Process Events Connector is used to monitor creation and
-destruction of processes. When a process related to one of the games in our config file is detected the tweaks are
-applied. Global tweaks like frequency governor changes are removed once no game process is running.
+destruction of processes. When the kernel sends us the PID value of a recently created process we read the file
+`/proc/PID/comm` and if the process name(without extension) matches one of the section names in the `games` section
+of our config file the tweaks specified in this file are applied. Through its Process Events Connector the kernel also
+notifies us about the PID value of finished processes. When one the the sent PID values matches the PID of the game
+that was previously started FastGame will revert settings back to default values specfied in our config file.
 
-I start it manually before launching a game `sudo fastgame_server --config config.json`. At least for now no advantage
-in keeping a service like this running when we are not playing.
+You can start FastGame's service manually by executing `sudo fastgame_server` or you can use the provided Systemd unit
+file `systemctl start fastgame.service`. Personally I start the service before launching a game and I stop it after
+I am done playing. There is no advantage in keeping it running when we have no intention to play something.
 
 In other to set cpu affinity and environmental variables it is necessary to use the executable `fastgame` to launch
 the game. On Steam you would do something like this `fastgame --game APlagueTaleInnocence_x64 --run %command%`. In this
 case `APlagueTaleInnocence_x64` is the name of the game section in our `config.json` file. There is an configuration
-example below.
+example below. If a game does not need cpu affinity o environmental variables settings there is no need to modify its
+laucnh command. Just start `fastgame_server` before launching the game.
 
 # Features
 
@@ -42,9 +47,9 @@ A few settings can have different values for each game. When creating a new game
       "default-scheduler": "mq-deadline",
       "game-scheduler": "bfq",
       "default-read-ahead": "256",
-      "game-read-ahead": "2048",
+      "game-read-ahead": "1024",
       "default-nr-requests": "64",
-      "game-nr-requests": "32",
+      "game-nr-requests": "1024",
       "default-rq-affinity": "2",
       "game-rq-affinity": "1"
     },
@@ -99,9 +104,8 @@ A few settings can have different values for each game. When creating a new game
 ```
 
 When you install FastGame a config file will be copied to `/etc/fastgame/config.json`. Do not take the values there
-as good values for everybody. They are just values I have been playing with in my computer. At least for now the
-FastGame's main objective is giving the user the ability to customize system settings on demand. Customize your config
-file!
+as good values for everybody. They are just values I have been playing with in my computer. At least for now FastGame's
+main objective is giving the user the ability to change system settings on demand. Customize your config file!
 
 # Compilation
 

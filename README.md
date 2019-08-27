@@ -68,8 +68,7 @@ A few settings can have different values for each game. When creating a new game
     "SOTTR": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
@@ -88,8 +87,7 @@ A few settings can have different values for each game. When creating a new game
     "APlagueTaleInnocence_x64": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",

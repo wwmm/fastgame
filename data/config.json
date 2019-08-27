@@ -30,8 +30,7 @@
     "SOTTR": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
@@ -43,8 +42,7 @@
     "APlagueTaleInnocence_x64": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
@@ -56,8 +54,7 @@
     "TEW2": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
@@ -68,8 +65,7 @@
     "ShadowOfWar": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "__GL_MaxFramesAllowed=1"
       ],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",

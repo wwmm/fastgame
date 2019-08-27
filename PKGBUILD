@@ -1,9 +1,9 @@
 # Maintainer: Wellington <wellingtonwallace@gmail.com>
 
 pkgname=fastgame-git
-pkgver=r47.8ab7850
-pkgrel=1
-pkgdesc='Optimize system performance for games on demand'
+pkgver=0.0.1.r0.g5d1da8a
+pkgrel=2
+pkgdesc='Optimize system performance for games'
 arch=(x86_64 i686)
 url='https://github.com/wwmm/fastgame'
 license=('GPL3')
@@ -16,9 +16,8 @@ provides=(fastgame)
 sha512sums=('SKIP')
 
 pkgver() {
-    cd fastgame
-#   git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  cd fastgame
+  git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {

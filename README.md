@@ -8,9 +8,9 @@ of our config file the tweaks specified in this file are applied. Through its Pr
 notifies us about the PID value of finished processes. When one the the sent PID values matches the PID of the game
 that was previously started FastGame will revert settings back to default values specfied in our config file.
 
-You can start FastGame's service manually by executing `sudo fastgame_server` or you can use the provided Systemd unit
-file `systemctl start fastgame.service`. Personally I start the service before launching a game and I stop it after
-I am done playing. There is no advantage in keeping it running when we have no intention to play something.
+You can start FastGame's service manually by executing `sudo fastgame_server`. On systems where FastGame was compiled
+with Nvidia support the server has to be started after the login is done because Nvidia API needs to know the DISPLAY
+value among other Xorg properties.
 
 In other to set cpu affinity and environmental variables it is necessary to use the executable `fastgame` to launch
 the game. On Steam you would do something like this `fastgame --game APlagueTaleInnocence_x64 --run %command%`. In this

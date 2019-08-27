@@ -28,6 +28,11 @@
   },
   "games": {
     "SOTTR": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",

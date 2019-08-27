@@ -8,6 +8,11 @@ applied. Global tweaks like frequency governor changes are removed once no game 
 I start it manually before launching a game `sudo fastgame_server --config config.json`. At least for now no advantage
 in keeping a service like this running when we are not playing.
 
+In other to set cpu affinity and environmental variables it is necessary to use the executable `fastgame` to launch
+the game. On Steam you would do something like this `fastgame --game APlagueTaleInnocence_x64 --run %command%`. In this
+case `APlagueTaleInnocence_x64` is the name of the game section in our `config.json` file. There is an configuration
+example below.
+
 # Features
 
 - Change cpu frequency governor
@@ -17,6 +22,10 @@ in keeping a service like this running when we are not playing.
 - Nvidia overclocking, power limit and powermize control
 
 # Configuration File Example
+
+A few settings can have different values for each game. When creating a new game section use the name of its executable
+(without extension) as the section name. For example the executable of the game Shadow of the Tomb Raider is named
+`SOTTR.exe`. When creating this game section name it `SOTTR`.
 
 ```
 {
@@ -49,6 +58,12 @@ in keeping a service like this running when we are not playing.
   },
   "games": {
     "SOTTR": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1",
+        "WINEFSYNC_SPINCOUNT=100"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",
@@ -63,6 +78,12 @@ in keeping a service like this running when we are not playing.
       "io-priority": "0"
     },
     "APlagueTaleInnocence_x64": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1",
+        "WINEFSYNC_SPINCOUNT=100"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",

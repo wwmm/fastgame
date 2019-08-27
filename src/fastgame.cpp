@@ -31,10 +31,26 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  char* args[] = {const_cast<char*>(game_exe.c_str()), 0};
+  /*
+    Assuming that the game option comes first like in fastgame --game SOTTR --run game_executable
+  */
+
+  std::vector<char*> arguments;
+
+  for (int n = 0; n < argc; n++) {
+    if (n > 3) {
+      // std::cout << argv[n] << std::endl;
+
+      arguments.push_back(argv[n]);
+    }
+  }
+
+  arguments.push_back(0);
+
+  // char* args[] = {const_cast<char*>(game_exe.c_str()), 0};
   extern char** environ;
 
-  execvpe(game_exe.c_str(), args, environ);
+  execvpe(game_exe.c_str(), &arguments.front(), environ);
 
   return 0;
 }

@@ -1,25 +1,30 @@
 #include "cmdline_options.hpp"
 #include "config.h"
 
+namespace po = boost::program_options;
+
 CmdlineOptions::CmdlineOptions(int argc, char* argv[]) : desc("Allowed options") {
-  desc.add_options()("help", "Print this help message")(
-      "config", boost::program_options::value<std::string>()->default_value(""), "Configuration File Path")(
-      "game", boost::program_options::value<std::string>()->default_value(""),
-      "Game name as written in our config file")("run", boost::program_options::value<std::string>()->default_value(""),
-                                                 "Execute game exe given as argument");
+  try {
+    desc.add_options()("help", "Print this help message")("config,c", po::value<std::string>()->default_value(""),
+                                                          "Configuration File Path")(
+        "game,g", po::value<std::string>()->default_value(""), "Game name as written in our config file")(
+        "run", po::value<std::string>()->default_value(""), "Execute the executable given as argument");
 
-  boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+    po::store(po::command_line_parser(argc, argv).options(desc).allow_unregistered().run(), vm);
 
-  boost::program_options::notify(vm);
+    po::notify(vm);
 
-  if (vm.count("help")) {
-    std::cout << desc << std::endl;
-    exit(1);
+    if (vm.count("help")) {
+      std::cout << desc << std::endl;
+      exit(1);
+    }
+
+    config_file_path = vm["config"].as<std::string>();
+    game = vm["game"].as<std::string>();
+    game_exe = vm["run"].as<std::string>();
+  } catch (const boost::program_options::error& ex) {
+    std::cerr << ex.what() << '\n';
   }
-
-  config_file_path = vm["config"].as<std::string>();
-  game = vm["game"].as<std::string>();
-  game_exe = vm["run"].as<std::string>();
 
   if (config_file_path.empty()) {
     config_file_path = std::string(CONFIGDIR) + "/config.json";

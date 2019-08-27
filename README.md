@@ -15,7 +15,7 @@ value among other Xorg properties.
 In other to set cpu affinity and environmental variables it is necessary to use the executable `fastgame` to launch
 the game. On Steam you would do something like this `fastgame --game APlagueTaleInnocence_x64 --run %command%`. In this
 case `APlagueTaleInnocence_x64` is the name of the game section in our `config.json` file. There is a configuration
-example below. If a game does not need cpu affinity o environmental variables settings there is no need to modify its
+example below. If a game does not need cpu affinity or environmental variables settings there is no need to modify its
 launch command. Just start `fastgame_server` before launching the game.
 
 # Features

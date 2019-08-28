@@ -23,7 +23,7 @@ launch command. Just start `fastgame_server` before launching the game.
 - Change cpu frequency governor
 - Change process niceness
 - Change cpu affinity
-- Set Environmental variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
+- Set Environment variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
 - Change process cpu scheduler policy(SCHED_NORMAL, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
 - Change io priority (as far as I know only bfq and cfq schedulers use this information)

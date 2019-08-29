@@ -84,6 +84,22 @@ A few settings can have different values for each game. When creating a new game
       "io-class": "RT",
       "io-priority": "0"
     },
+    "RememberMe": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=2",
+        "__GL_FSAA_MODE=11",
+        "__GL_LOG_MAX_ANISO=4",
+        "PROTON_USE_D9VK=1",
+        "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
     "APlagueTaleInnocence_x64": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",

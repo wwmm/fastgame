@@ -93,7 +93,7 @@ A few settings can have different values for each game. When creating a new game
         "PROTON_USE_D9VK=1",
         "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "cpu-affinity": ["0", "1", "2", "3"],
       "niceness": "-4",
       "scheduler-policy": "SCHED_BATCH",
       "scheduler-policy-priority": "0",

@@ -12,12 +12,15 @@ Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Schedul
 
 void Tweaks::apply_global() {
   auto governor = cfg->get_key<std::string>("general.cpu.governor.game", "performance");
+  auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.game", -1);
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.game", -1);
   auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.game", -1);
 
   change_cpu_governor(governor);
+  change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -43,12 +46,15 @@ void Tweaks::apply_process(const std::string& game, const int& pid) {
 
 void Tweaks::remove() {
   auto governor = cfg->get_key<std::string>("general.cpu.governor.default", "schedutil");
+  auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.default", -1);
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.default", -1);
   auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.default", -1);
 
   change_cpu_governor(governor);
+  change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -91,6 +97,24 @@ void Tweaks::change_cpu_governor(const std::string& name) {
   }
 
   std::cout << log_tag + "changed cpu frequency governor to: " << name << std::endl;
+}
+
+void Tweaks::change_cfs_parameter(const std::string& name, const int& value) {
+  if (value == -1) {
+    return;
+  }
+
+  auto path = fs::path("/proc/sys/kernel/" + name);
+
+  std::ofstream f;
+
+  f.open(path);
+
+  f << value;
+
+  f.close();
+
+  std::cout << log_tag + "changed cfs parameter " + name + " to: " << value << std::endl;
 }
 
 void Tweaks::change_niceness(const std::string& game, const int& pid) {

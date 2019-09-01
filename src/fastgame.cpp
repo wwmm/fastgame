@@ -47,7 +47,6 @@ int main(int argc, char* argv[]) {
 
   arguments.push_back(0);
 
-  // char* args[] = {const_cast<char*>(game_exe.c_str()), 0};
   extern char** environ;
 
   execvpe(game_exe.c_str(), &arguments.front(), environ);

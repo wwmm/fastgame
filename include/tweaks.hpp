@@ -51,6 +51,7 @@ class Tweaks {
 #endif
 
   void change_cpu_governor(const std::string& name);
+  void change_cfs_parameter(const std::string& name, const int& value);
   void change_iopriority(const std::string& game, const int& pid);
   void change_niceness(const std::string& game, const int& pid);
   void change_scheduler_policy(const std::string& game, const int& pid);

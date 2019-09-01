@@ -12,11 +12,11 @@ Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Schedul
 }
 
 void Tweaks::apply_global() {
-  auto governor = cfg->get_key<std::string>("general.cpu.game-governor", "performance");
-  auto disk_scheduler = cfg->get_key<std::string>("general.disk.game-scheduler", "");
-  auto disk_read_ahead = cfg->get_key("general.disk.game-read-ahead", -1);
-  auto disk_nr_requests = cfg->get_key("general.disk.game-nr-requests", -1);
-  auto disk_rq_affinity = cfg->get_key("general.disk.game-rq-affinity", -1);
+  auto governor = cfg->get_key<std::string>("general.cpu.governor.game", "performance");
+  auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
+  auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
+  auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.game", -1);
+  auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.game", -1);
 
   change_cpu_governor(governor);
   change_disk_scheduler(disk_scheduler);
@@ -25,10 +25,10 @@ void Tweaks::apply_global() {
   change_disk_rq_affinity(disk_rq_affinity);
 
 #ifdef USE_NVIDIA
-  auto gpu_offset = cfg->get_key("general.nvidia.game-gpu-clock-offset", 0);
-  auto memory_offset = cfg->get_key("general.nvidia.game-memory-clock-offset", 0);
-  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.game-powermizer-mode", "auto");
-  auto power_limit = cfg->get_key("general.nvidia.game-power-limit", -1);
+  auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.game", 0);
+  auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.game", 0);
+  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.game", "auto");
+  auto power_limit = cfg->get_key("general.nvidia.power-limit.game", -1);
 
   nvidia->set_powermizer_mode(0, powermizer_mode);
   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
@@ -43,11 +43,11 @@ void Tweaks::apply_process(const std::string& game, const int& pid) {
 }
 
 void Tweaks::remove() {
-  auto governor = cfg->get_key<std::string>("general.cpu.default-governor", "schedutil");
-  auto disk_scheduler = cfg->get_key<std::string>("general.disk.default-scheduler", "");
-  auto disk_read_ahead = cfg->get_key("general.disk.default-read-ahead", -1);
-  auto disk_nr_requests = cfg->get_key("general.disk.default-nr-requests", -1);
-  auto disk_rq_affinity = cfg->get_key("general.disk.default-rq-affinity", -1);
+  auto governor = cfg->get_key<std::string>("general.cpu.governor.default", "schedutil");
+  auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
+  auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
+  auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.default", -1);
+  auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.default", -1);
 
   change_cpu_governor(governor);
   change_disk_scheduler(disk_scheduler);
@@ -56,10 +56,10 @@ void Tweaks::remove() {
   change_disk_rq_affinity(disk_rq_affinity);
 
 #ifdef USE_NVIDIA
-  auto gpu_offset = cfg->get_key("general.nvidia.default-gpu-clock-offset", 0);
-  auto memory_offset = cfg->get_key("general.nvidia.default-memory-clock-offset", 0);
-  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.default-powermizer-mode", "auto");
-  auto power_limit = cfg->get_key("general.nvidia.default-power-limit", -1);
+  auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
+  auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
+  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.default", "auto");
+  auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
 
   nvidia->set_powermizer_mode(0, powermizer_mode);
   nvidia->set_clock_offset(0, gpu_offset, memory_offset);

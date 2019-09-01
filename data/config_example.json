@@ -1,0 +1,158 @@
+{
+  "general": {
+    "cpu": {
+      "governor": {
+        "default": "schedutil",
+        "game": "performance"
+      },
+      "scheduler": {
+        "sched_child_runs_first": {
+          "default": "0",
+          "game": "1"
+        }
+      }
+    },
+    "disk": {
+      "device": "sdc",
+      "scheduler": {
+        "default": "mq-deadline",
+        "game": "bfq"
+      },
+      "read-ahead": {
+        "default": "256",
+        "game": "1024"
+      },
+      "nr-requests": {
+        "default": "64",
+        "game": "1024"
+      },
+      "rq-affinity": {
+        "default": "2",
+        "game": "1"
+      }
+    },
+    "nvidia": {
+      "powermizer-mode": {
+        "default": "adaptive",
+        "game": "maximum-performance"
+      },
+      "power-limit": {
+        "default": "180",
+        "game": "200"
+      },
+      "clock-offset": {
+        "gpu": {
+          "default": "0",
+          "game": "150"
+        },
+        "memory": {
+          "default": "0",
+          "game": "500"
+        }
+      }
+    }
+  },
+  "games": {
+    "SOTTR": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "APlagueTaleInnocence_x64": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "QuantumBreak": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "TEW2": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "ShadowOfWar": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=1"
+      ],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "BE",
+      "io-priority": "0"
+    },
+    "RememberMe": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=1",
+        "__GL_MaxFramesAllowed=2",
+        "__GL_FSAA_MODE=11",
+        "__GL_LOG_MAX_ANISO=4",
+        "PROTON_USE_D9VK=0",
+        "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "dota2": {
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "XCOM2WotC": {
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    },
+    "Civ6": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=1",
+        "__GL_MaxFramesAllowed=1",
+        "LD_PRELOAD=/usr/lib/libfreetype.so"
+      ],
+      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "niceness": "-4",
+      "scheduler-policy": "SCHED_BATCH",
+      "scheduler-policy-priority": "0",
+      "io-class": "RT",
+      "io-priority": "0"
+    }
+  }
+}

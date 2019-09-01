@@ -1,6 +1,7 @@
 #ifndef TWEAKS_HPP
 #define TWEAKS_HPP
 
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include "config.h"
@@ -17,8 +18,27 @@ class Tweaks {
 
   void apply_global();
   void apply_process(const std::string& game, const int& pid);
-
   void remove();
+
+  template <typename T>
+  void change_disk_parameter(const std::string& name, const T& value) {
+    auto device = cfg->get_key<std::string>("general.disk.device", "");
+
+    if (device != "") {
+      if (std::filesystem::exists("/dev/" + device)) {
+        auto f_path = "/sys/block/" + device + "/queue/" + name;
+        std::ofstream f;
+
+        f.open(f_path);
+
+        f << value;
+
+        f.close();
+
+        std::cout << log_tag + "changed /dev/" + device + " " + name + " to: " << value << std::endl;
+      }
+    }
+  }
 
  private:
   std::string log_tag = "tweaks: ";
@@ -31,10 +51,6 @@ class Tweaks {
 #endif
 
   void change_cpu_governor(const std::string& name);
-  void change_disk_scheduler(const std::string& name);
-  void change_disk_read_ahead(const int& value);
-  void change_disk_nr_requests(const int& value);
-  void change_disk_rq_affinity(const int& value);
   void change_iopriority(const std::string& game, const int& pid);
   void change_niceness(const std::string& game, const int& pid);
   void change_scheduler_policy(const std::string& game, const int& pid);

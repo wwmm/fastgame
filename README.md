@@ -39,29 +39,55 @@ A few settings can have different values for each game. When creating a new game
 {
   "general": {
     "cpu": {
-      "default-governor": "schedutil",
-      "game-governor": "performance"
+      "governor": {
+        "default": "schedutil",
+        "game": "performance"
+      },
+      "scheduler": {
+        "sched_child_runs_first": {
+          "default": "0",
+          "game": "1"
+        }
+      }
     },
     "disk": {
       "device": "sdc",
-      "default-scheduler": "mq-deadline",
-      "game-scheduler": "bfq",
-      "default-read-ahead": "256",
-      "game-read-ahead": "1024",
-      "default-nr-requests": "64",
-      "game-nr-requests": "1024",
-      "default-rq-affinity": "2",
-      "game-rq-affinity": "1"
+      "scheduler": {
+        "default": "mq-deadline",
+        "game": "bfq"
+      },
+      "read-ahead": {
+        "default": "256",
+        "game": "1024"
+      },
+      "nr-requests": {
+        "default": "64",
+        "game": "1024"
+      },
+      "rq-affinity": {
+        "default": "2",
+        "game": "1"
+      }
     },
     "nvidia": {
-      "default-powermizer-mode": "adaptive",
-      "game-powermizer-mode": "maximum-performance",
-      "default-gpu-clock-offset": "0",
-      "game-gpu-clock-offset": "150",
-      "default-memory-clock-offset": "0",
-      "game-memory-clock-offset": "500",
-      "default-power-limit": "180",
-      "game-power-limit": "200"
+      "powermizer-mode": {
+        "default": "adaptive",
+        "game": "maximum-performance"
+      },
+      "power-limit": {
+        "default": "180",
+        "game": "200"
+      },
+      "clock-offset": {
+        "gpu": {
+          "default": "0",
+          "game": "150"
+        },
+        "memory": {
+          "default": "0",
+          "game": "500"
+        }
+      }
     }
   },
   "games": {

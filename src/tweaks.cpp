@@ -1,6 +1,5 @@
 #include "tweaks.hpp"
 #include <sys/resource.h>
-#include <filesystem>
 #include "ioprio.hpp"
 
 namespace fs = std::filesystem;
@@ -19,10 +18,10 @@ void Tweaks::apply_global() {
   auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.game", -1);
 
   change_cpu_governor(governor);
-  change_disk_scheduler(disk_scheduler);
-  change_disk_read_ahead(disk_read_ahead);
-  change_disk_nr_requests(disk_nr_requests);
-  change_disk_rq_affinity(disk_rq_affinity);
+  change_disk_parameter("scheduler", disk_scheduler);
+  change_disk_parameter("read_ahead_kb", disk_read_ahead);
+  change_disk_parameter("nr_requests", disk_nr_requests);
+  change_disk_parameter("rq_affinity", disk_rq_affinity);
 
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.game", 0);
@@ -50,10 +49,10 @@ void Tweaks::remove() {
   auto disk_rq_affinity = cfg->get_key("general.disk.rq-affinity.default", -1);
 
   change_cpu_governor(governor);
-  change_disk_scheduler(disk_scheduler);
-  change_disk_read_ahead(disk_read_ahead);
-  change_disk_nr_requests(disk_nr_requests);
-  change_disk_rq_affinity(disk_rq_affinity);
+  change_disk_parameter("scheduler", disk_scheduler);
+  change_disk_parameter("read_ahead_kb", disk_read_ahead);
+  change_disk_parameter("nr_requests", disk_nr_requests);
+  change_disk_parameter("rq_affinity", disk_rq_affinity);
 
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
@@ -92,94 +91,6 @@ void Tweaks::change_cpu_governor(const std::string& name) {
   }
 
   std::cout << log_tag + "changed cpu frequency governor to: " << name << std::endl;
-}
-
-void Tweaks::change_disk_scheduler(const std::string& name) {
-  auto device = cfg->get_key<std::string>("general.disk.device", "");
-
-  if (device != "") {
-    if (fs::exists("/dev/" + device)) {
-      auto f_path = "/sys/block/" + device + "/queue/scheduler";
-      std::ofstream f;
-
-      f.open(f_path);
-
-      f << name;
-
-      f.close();
-
-      std::cout << log_tag + "changed /dev/" + device + " scheduler to: " << name << std::endl;
-    }
-  }
-}
-
-void Tweaks::change_disk_read_ahead(const int& value) {
-  if (value == -1) {
-    return;
-  }
-
-  auto device = cfg->get_key<std::string>("general.disk.device", "");
-
-  if (device != "") {
-    if (fs::exists("/dev/" + device)) {
-      auto f_path = "/sys/block/" + device + "/queue/read_ahead_kb";
-      std::ofstream f;
-
-      f.open(f_path);
-
-      f << value;
-
-      f.close();
-
-      std::cout << log_tag + "changed /dev/" + device + " read_ahead value to: " << value << std::endl;
-    }
-  }
-}
-
-void Tweaks::change_disk_nr_requests(const int& value) {
-  if (value == -1) {
-    return;
-  }
-
-  auto device = cfg->get_key<std::string>("general.disk.device", "");
-
-  if (device != "") {
-    if (fs::exists("/dev/" + device)) {
-      auto f_path = "/sys/block/" + device + "/queue/nr_requests";
-      std::ofstream f;
-
-      f.open(f_path);
-
-      f << value;
-
-      f.close();
-
-      std::cout << log_tag + "changed /dev/" + device + " nr_requests value to: " << value << std::endl;
-    }
-  }
-}
-
-void Tweaks::change_disk_rq_affinity(const int& value) {
-  if (value == -1) {
-    return;
-  }
-
-  auto device = cfg->get_key<std::string>("general.disk.device", "");
-
-  if (device != "") {
-    if (fs::exists("/dev/" + device)) {
-      auto f_path = "/sys/block/" + device + "/queue/rq_affinity";
-      std::ofstream f;
-
-      f.open(f_path);
-
-      f << value;
-
-      f.close();
-
-      std::cout << log_tag + "changed /dev/" + device + " rq_affinity value to: " << value << std::endl;
-    }
-  }
 }
 
 void Tweaks::change_niceness(const std::string& game, const int& pid) {

@@ -24,19 +24,20 @@ int main(int argc, char* argv[]) {
     for (auto game : cfg->get_games()) {
       bool apply = false;
 
-      if (game.size() > name.size()) {
+      if (game.size() >= name.size()) {
         auto sub_str = game.substr(0, name.size());
 
         if (sub_str == name) {
           apply = true;
         }
-      } else {
-        auto sub_str = name.substr(0, game.size());
-
-        if (sub_str == game) {
-          apply = true;
-        }
       }
+      // else {
+      //   auto sub_str = name.substr(0, game.size());
+
+      //   if (sub_str == game) {
+      //     apply = true;
+      //   }
+      // }
 
       if (apply) {
         tweaks->apply_process(game, pid);

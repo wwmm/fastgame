@@ -143,10 +143,10 @@ A few settings can have different values for each game. When creating a new game
 
 ```
 
-When you install FastGame a configuration file will be created at `/etc/fastgame/config.json` and an exampple will be
-copied to `/etc/fastgame/config.json`. Do not take the values there as good values for everybody. They are just values
-I have been playing with in my computer. At least for now FastGame's main objective is giving the user the ability to
-change system settings on demand. Customize your config file!
+When you install FastGame an empty configuration file will be created at `/etc/fastgame/config.json` and an exampple
+will be copied to `/etc/fastgame/config.json`. Do not take the values there as good values for everybody. They are just
+values I have been playing with in my computer. At least for now FastGame's main objective is giving the user the
+ability to change system settings on demand. Customize your config file!
 
 # Compilation
 

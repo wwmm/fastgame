@@ -6,6 +6,7 @@ fastgame_server_sources = [
 	'cmdline_options.cpp',
 	'config.cpp',
 	'scheduler.cpp',
+	'cgroups.cpp',
 	'tweaks.cpp'
 ]
 

@@ -24,23 +24,24 @@ int main(int argc, char* argv[]) {
     for (auto game : cfg->get_games()) {
       bool apply = false;
 
-      if (game.size() >= name.size()) {
+      if (game == name) {
+        apply = true;
+      } else if (game.size() < name.size()) {
+        auto sub_str = name.substr(0, game.size());
+
+        if (sub_str == game) {
+          apply = true;
+        }
+      } else {
         auto sub_str = game.substr(0, name.size());
 
         if (sub_str == name) {
           apply = true;
         }
       }
-      // else {
-      //   auto sub_str = name.substr(0, game.size());
-
-      //   if (sub_str == game) {
-      //     apply = true;
-      //   }
-      // }
 
       if (apply) {
-        tweaks->apply_process(game, pid);
+        tweaks->apply_process(game, pid, true);
 
         if (pid_list.size() == 0) {
           tweaks->apply_global();
@@ -69,7 +70,7 @@ int main(int argc, char* argv[]) {
           for (const auto& entry : fs::directory_iterator(task_dir)) {
             const auto task_pid = entry.path().filename().string();
 
-            tweaks->apply_process(p.first, std::stoi(task_pid));
+            tweaks->apply_process(p.first, std::stoi(task_pid), false);
           }
         } catch (std::exception& e) {
         }

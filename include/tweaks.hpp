@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include "cgroups.hpp"
 #include "config.h"
 #include "config.hpp"
 #include "scheduler.hpp"
@@ -17,7 +18,7 @@ class Tweaks {
   Tweaks(Config* config);
 
   void apply_global();
-  void apply_process(const std::string& game, const int& pid);
+  void apply_process(const std::string& game, const int& pid, const bool& is_parent);
   void remove();
 
   template <typename T>
@@ -45,6 +46,7 @@ class Tweaks {
 
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
+  std::unique_ptr<Cgroups> cgroups;
 
 #ifdef USE_NVIDIA
   std::unique_ptr<Nvidia> nvidia;

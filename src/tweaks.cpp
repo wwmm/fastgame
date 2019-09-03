@@ -4,8 +4,7 @@
 
 namespace fs = std::filesystem;
 
-Tweaks::Tweaks(Config* config)
-    : cfg(config), scheduler(std::make_unique<Scheduler>()), cgroups(std::make_unique<Cgroups>(cfg)) {
+Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Scheduler>()) {
 #ifdef USE_NVIDIA
   nvidia = std::make_unique<Nvidia>();
 #endif
@@ -43,9 +42,6 @@ void Tweaks::apply_process(const std::string& game, const int& pid, const bool& 
   change_niceness(game, pid);
   change_scheduler_policy(game, pid);
   change_iopriority(game, pid);
-
-  // cgroups->set(game, pid, is_parent);
-  cgroups->config_cpuset(game, pid, is_parent);
 }
 
 void Tweaks::remove() {

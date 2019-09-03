@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
-#include "cgroups.hpp"
 #include "config.h"
 #include "config.hpp"
 #include "scheduler.hpp"
@@ -46,7 +45,6 @@ class Tweaks {
 
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
-  std::unique_ptr<Cgroups> cgroups;
 
 #ifdef USE_NVIDIA
   std::unique_ptr<Nvidia> nvidia;

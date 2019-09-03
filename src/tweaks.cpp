@@ -44,7 +44,8 @@ void Tweaks::apply_process(const std::string& game, const int& pid, const bool& 
   change_scheduler_policy(game, pid);
   change_iopriority(game, pid);
 
-  cgroups->set(game, pid, is_parent);
+  // cgroups->set(game, pid, is_parent);
+  cgroups->config_cpuset(game, pid, is_parent);
 }
 
 void Tweaks::remove() {

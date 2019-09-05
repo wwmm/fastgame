@@ -20,24 +20,16 @@ int main(int argc, char* argv[]) {
 
   std::vector<std::pair<std::string, int>> pid_list;
 
-  nl->new_exec.connect([&](int pid, std::string name, std::string cmdline) {
+  nl->new_exec.connect([&](int pid, std::string comm, std::string cmdline, std::string exe_path) {
     for (auto game : cfg->get_games()) {
-      bool apply = false;
+      auto apply = false;
+      auto path_comm = fs::path(comm);
+      auto path_exe = fs::path(exe_path);
 
-      if (game == name) {
+      if (game == comm || game == path_comm.stem().string()) {
         apply = true;
-      } else if (game.size() < name.size()) {
-        auto sub_str = name.substr(0, game.size());
-
-        if (sub_str == game) {
-          apply = true;
-        }
-      } else {
-        auto sub_str = game.substr(0, name.size());
-
-        if (sub_str == name) {
-          apply = true;
-        }
+      } else if (game == path_exe.stem().string()) {
+        apply = true;
       }
 
       if (apply) {
@@ -49,7 +41,7 @@ int main(int argc, char* argv[]) {
 
         pid_list.push_back(std::pair(game, pid));
 
-        std::cout << "(" + name + ", " + std::to_string(pid) + ", " + cmdline + ")" << std::endl;
+        std::cout << "(" + std::to_string(pid) + ", " + comm + ", " + exe_path + ", " + cmdline + ")" << std::endl;
       }
     }
   });

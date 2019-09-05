@@ -91,7 +91,7 @@ void Netlink::handle_events() {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
 
     int pid;
-    std::string name, cmdline;
+    std::string comm, cmdline, exe_path;
 
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
@@ -101,22 +101,24 @@ void Netlink::handle_events() {
       case proc_event::PROC_EVENT_EXEC:
         pid = nlcn_msg.proc_ev.event_data.exec.process_pid;
 
-        name = get_process_name(pid);
+        comm = get_comm(pid);
         cmdline = get_cmdline(pid);
+        exe_path = get_exe_path(pid);
 
-        if (name != "" && cmdline != "") {
-          new_exec(pid, name, cmdline);
+        if (comm != "" && cmdline != "") {
+          new_exec(pid, comm, cmdline, exe_path);
         }
 
         break;
       case proc_event::PROC_EVENT_COMM:
         pid = nlcn_msg.proc_ev.event_data.comm.process_pid;
 
-        name = get_process_name(pid);
+        comm = get_comm(pid);
         cmdline = get_cmdline(pid);
+        exe_path = get_exe_path(pid);
 
-        if (name != "" && cmdline != "") {
-          new_exec(pid, name, cmdline);
+        if (comm != "" && cmdline != "") {
+          new_exec(pid, comm, cmdline, exe_path);
         }
 
         break;
@@ -130,7 +132,7 @@ void Netlink::handle_events() {
   }
 }
 
-std::string Netlink::get_process_name(const int& pid) {
+std::string Netlink::get_comm(const int& pid) {
   auto path = fs::path("/proc/" + std::to_string(pid) + "/comm");
 
   try {
@@ -174,6 +176,21 @@ std::string Netlink::get_cmdline(const int& pid) {
   } catch (std::exception& e) {
     // std::cout << log_tag + e.what() << std::endl;
 
+    return "";
+  }
+}
+
+std::string Netlink::get_exe_path(const int& pid) {
+  char buff[PATH_MAX];
+  auto path = fs::path("/proc/" + std::to_string(pid) + "/exe");
+
+  ssize_t len = ::readlink(path.c_str(), buff, sizeof(buff) - 1);
+
+  if (len != -1) {
+    buff[len] = '\0';
+
+    return std::string(buff);
+  } else {
     return "";
   }
 }

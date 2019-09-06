@@ -24,12 +24,15 @@ int main(int argc, char* argv[]) {
     for (auto game : cfg->get_games()) {
       auto apply = false;
       auto path_comm = fs::path(comm);
-      auto path_exe = fs::path(exe_path);
 
       if (game == comm || game == path_comm.stem().string()) {
         apply = true;
-      } else if (game == path_exe.stem().string()) {
-        apply = true;
+      } else if (comm.size() == 15) {  // comm is larger than 15 characters and was truncated by the kernel
+        auto sub_str = game.substr(0, 15);
+
+        if (comm == sub_str) {
+          apply = true;
+        }
       }
 
       if (apply) {

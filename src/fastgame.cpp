@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
   auto game_exe = cmd_options->get_game_exe();
   auto environment = cfg->get_key_array<std::string>("games." + game + ".environment");
 
-  scheduler->set_affinity(0, cfg->get_key_array<int>("games." + game + ".cpu-affinity"));
+  scheduler->set_affinity(0, cfg->get_key_array<int>("games." + game + ".threads.parent.cpu-affinity"));
 
   for (auto& env : environment) {
     std::vector<std::string> results;

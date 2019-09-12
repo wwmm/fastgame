@@ -19,12 +19,12 @@
         "game": "bfq"
       },
       "read-ahead": {
-        "default": "256",
-        "game": "1024"
+        "default": "128",
+        "game": "0"
       },
       "nr-requests": {
         "default": "64",
-        "game": "1024"
+        "game": "32"
       },
       "rq-affinity": {
         "default": "2",
@@ -60,12 +60,24 @@
         "STAGING_SHARED_MEMORY=1",
         "STAGING_WRITECOPY=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "APlagueTaleInnocence_x64": {
       "environment": [
@@ -74,12 +86,24 @@
         "STAGING_SHARED_MEMORY=1",
         "STAGING_WRITECOPY=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "QuantumBreak": {
       "environment": [
@@ -87,12 +111,24 @@
         "__GL_MaxFramesAllowed=2",
         "STAGING_SHARED_MEMORY=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "TEW2": {
       "environment": [
@@ -100,11 +136,22 @@
         "__GL_MaxFramesAllowed=2",
         "STAGING_SHARED_MEMORY=1"
       ],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "ShadowOfWar": {
       "environment": [
@@ -112,11 +159,22 @@
         "__GL_MaxFramesAllowed=2",
         "STAGING_SHARED_MEMORY=1"
       ],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "BE",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "RememberMe": {
       "environment": [
@@ -128,26 +186,92 @@
         "PROTON_FORCE_LARGE_ADDRESS_AWARE=1",
         "STAGING_SHARED_MEMORY=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
+    },
+    "Draugen": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=2",
+        "STAGING_SHARED_MEMORY=1",
+        "STAGING_WRITECOPY=1"
+      ],
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "dota2": {
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "XCOM2WotC": {
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=1",
+        "__GL_MaxFramesAllowed=2"
+      ],
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "Civ6": {
       "environment": [
@@ -155,12 +279,24 @@
         "__GL_MaxFramesAllowed=2",
         "LD_PRELOAD=/usr/lib/libfreetype.so"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     }
   }
 }

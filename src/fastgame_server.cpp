@@ -63,9 +63,11 @@ int main(int argc, char* argv[]) {
           auto task_dir = "/proc/" + std::to_string(pid) + "/task";
 
           for (const auto& entry : fs::directory_iterator(task_dir)) {
-            const auto task_pid = entry.path().filename().string();
+            const auto task_pid = std::stoi(entry.path().filename().string());
 
-            tweaks->apply_process(p.first, std::stoi(task_pid), false);
+            if (task_pid != p.second) {
+              tweaks->apply_process(p.first, task_pid, false);
+            }
           }
         } catch (std::exception& e) {
         }

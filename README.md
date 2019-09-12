@@ -57,12 +57,12 @@ A few settings can have different values for each game. When creating a new game
         "game": "bfq"
       },
       "read-ahead": {
-        "default": "256",
-        "game": "1024"
+        "default": "128",
+        "game": "0"
       },
       "nr-requests": {
         "default": "64",
-        "game": "1024"
+        "game": "32"
       },
       "rq-affinity": {
         "default": "2",
@@ -94,14 +94,28 @@ A few settings can have different values for each game. When creating a new game
     "SOTTR": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1"
+        "__GL_MaxFramesAllowed=2",
+        "STAGING_SHARED_MEMORY=1",
+        "STAGING_WRITECOPY=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "dota2": {
       "niceness": "-4",
@@ -119,24 +133,48 @@ A few settings can have different values for each game. When creating a new game
         "PROTON_USE_D9VK=1",
         "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "APlagueTaleInnocence_x64": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=1"
       ],
-      "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     }
   }
 }

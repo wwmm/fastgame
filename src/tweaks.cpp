@@ -44,9 +44,19 @@ void Tweaks::apply_process(const std::string& game, const int& pid, const bool& 
   change_iopriority(game, pid, is_parent);
 
   if (is_parent) {
-    scheduler->set_affinity(pid, cfg->get_key_array<int>("games." + game + ".threads.parent.cpu-affinity"));
+    auto cpu_list = cfg->get_key_array<int>("games." + game + ".threads.parent.cpu-affinity");
+
+    if (cpu_list.size() > 0) {
+      scheduler->set_affinity(pid, cpu_list);
+    }
   } else {
-    scheduler->set_affinity(pid, cfg->get_key_array<int>("games." + game + ".threads.children.cpu-affinity"));
+    auto cpu_list = cfg->get_key_array<int>("games." + game + ".threads.children.cpu-affinity");
+
+    if (cpu_list.size() > 0) {
+      scheduler->set_affinity(pid, cpu_list);
+    } else {
+      scheduler->set_affinity(pid, cfg->get_key_array<int>("games." + game + ".threads.initial-cpu-affinity"));
+    }
   }
 }
 

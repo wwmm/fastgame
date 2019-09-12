@@ -99,6 +99,7 @@ A few settings can have different values for each game. When creating a new game
         "STAGING_WRITECOPY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -134,6 +135,7 @@ A few settings can have different values for each game. When creating a new game
         "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -158,6 +160,7 @@ A few settings can have different values for each game. When creating a new game
         "__GL_MaxFramesAllowed=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",

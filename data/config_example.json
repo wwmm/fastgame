@@ -61,6 +61,7 @@
         "STAGING_WRITECOPY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -70,7 +71,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -87,6 +87,7 @@
         "STAGING_WRITECOPY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -96,7 +97,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -112,6 +112,7 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -121,7 +122,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -187,6 +187,7 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -196,7 +197,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -213,6 +213,7 @@
         "STAGING_WRITECOPY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -222,7 +223,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -255,6 +255,7 @@
         "__GL_MaxFramesAllowed=2"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -264,7 +265,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -280,6 +280,7 @@
         "LD_PRELOAD=/usr/lib/libfreetype.so"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -289,7 +290,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",

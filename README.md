@@ -109,7 +109,6 @@ A few settings can have different values for each game. When creating a new game
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -119,11 +118,22 @@ A few settings can have different values for each game. When creating a new game
       }
     },
     "dota2": {
-      "niceness": "-4",
-      "scheduler-policy": "SCHED_BATCH",
-      "scheduler-policy-priority": "0",
-      "io-class": "RT",
-      "io-priority": "0"
+      "threads": {
+        "parent": {
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
     },
     "RememberMe": {
       "environment": [
@@ -145,7 +155,6 @@ A few settings can have different values for each game. When creating a new game
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -170,7 +179,6 @@ A few settings can have different values for each game. When creating a new game
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",

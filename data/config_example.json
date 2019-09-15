@@ -12,6 +12,12 @@
         }
       }
     },
+    "memory": {
+      "hugepage": {
+        "default": "madvise",
+        "game": "always"
+      }
+    },
     "disk": {
       "device": "sdc",
       "scheduler": {
@@ -71,6 +77,7 @@
           "io-priority": "0"
         },
         "children": {
+          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -97,6 +104,7 @@
           "io-priority": "0"
         },
         "children": {
+          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -122,6 +130,7 @@
           "io-priority": "0"
         },
         "children": {
+          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -206,6 +215,32 @@
       }
     },
     "Draugen": {
+      "environment": [
+        "__GL_THREADED_OPTIMIZATIONS=0",
+        "__GL_MaxFramesAllowed=2",
+        "STAGING_SHARED_MEMORY=1",
+        "STAGING_WRITECOPY=1"
+      ],
+      "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+        "parent": {
+          "cpu-affinity": ["8"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "scheduler-policy-priority": "0",
+          "io-class": "BE",
+          "io-priority": "0"
+        },
+        "children": {
+          "niceness": "0",
+          "scheduler-policy": "SCHED_BATCH",
+          "scheduler-policy-priority": "0",
+          "io-class": "RT",
+          "io-priority": "0"
+        }
+      }
+    },
+    "Submerged-Win64-Shipping": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",

@@ -14,6 +14,8 @@ void Tweaks::apply_global() {
   auto governor = cfg->get_key<std::string>("general.cpu.governor.game", "performance");
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.game", -1);
 
+  auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.game", "");
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.game", -1);
@@ -21,6 +23,7 @@ void Tweaks::apply_global() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
+  set_hugepages(hugepage_state);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -64,6 +67,8 @@ void Tweaks::remove() {
   auto governor = cfg->get_key<std::string>("general.cpu.governor.default", "schedutil");
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.default", -1);
 
+  auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.default", "");
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.default", -1);
@@ -71,6 +76,7 @@ void Tweaks::remove() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
+  set_hugepages(hugepage_state);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -172,4 +178,22 @@ void Tweaks::change_iopriority(const std::string& game, const int& pid, const bo
 
     ioprio_set(pid, io_class, io_priority);
   }
+}
+
+void Tweaks::set_hugepages(const std::string& state) {
+  if (state == "") {
+    return;
+  }
+
+  auto path = fs::path("/sys/kernel/mm/transparent_hugepage/enabled");
+
+  std::ofstream f;
+
+  f.open(path);
+
+  f << state;
+
+  std::cout << log_tag + "changed transparent hugepage state to " << state << std::endl;
+
+  f.close();
 }

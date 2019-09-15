@@ -50,6 +50,12 @@ A few settings can have different values for each game. When creating a new game
         }
       }
     },
+    "memory": {
+      "hugepage": {
+        "default": "madvise",
+        "game": "always"
+      }
+    },
     "disk": {
       "device": "sdc",
       "scheduler": {

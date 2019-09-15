@@ -193,7 +193,7 @@ void Tweaks::set_hugepages(const std::string& state) {
 
   f << state;
 
-  std::cout << log_tag + "changed transparent hugepage state to " << state << std::endl;
+  std::cout << log_tag + "changed transparent hugepage state to: " << state << std::endl;
 
   f.close();
 }

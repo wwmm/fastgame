@@ -119,6 +119,7 @@ A few settings can have different values for each game. When creating a new game
           "io-priority": "0"
         },
         "children": {
+          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",
@@ -189,6 +190,7 @@ A few settings can have different values for each game. When creating a new game
           "io-priority": "0"
         },
         "children": {
+          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",

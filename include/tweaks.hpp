@@ -55,7 +55,7 @@ class Tweaks {
   void change_iopriority(const std::string& game, const int& pid, const bool& is_parent);
   void change_niceness(const std::string& game, const int& pid, const bool& is_parent);
   void change_scheduler_policy(const std::string& game, const int& pid, const bool& is_parent);
-  void set_hugepages(const std::string& state);
+  void set_hugepages(const std::string& state, const std::string& defrag);
 };
 
 #endif

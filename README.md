@@ -53,7 +53,11 @@ A few settings can have different values for each game. When creating a new game
     "memory": {
       "hugepage": {
         "default": "madvise",
-        "game": "always"
+        "game": "always",
+        "defrag": {
+          "default": "madvise",
+          "game": "always"
+        }
       }
     },
     "disk": {

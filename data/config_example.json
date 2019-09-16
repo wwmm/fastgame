@@ -15,7 +15,11 @@
     "memory": {
       "hugepage": {
         "default": "madvise",
-        "game": "always"
+        "game": "always",
+        "defrag": {
+          "default": "madvise",
+          "game": "always"
+        }
       }
     },
     "disk": {

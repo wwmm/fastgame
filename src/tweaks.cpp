@@ -15,6 +15,7 @@ void Tweaks::apply_global() {
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.game", -1);
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.game", "");
+  auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.game", "");
 
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
@@ -23,7 +24,7 @@ void Tweaks::apply_global() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
-  set_hugepages(hugepage_state);
+  set_hugepages(hugepage_state, hugepage_defrag);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -68,6 +69,7 @@ void Tweaks::remove() {
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.default", -1);
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.default", "");
+  auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.default", "");
 
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
@@ -76,7 +78,7 @@ void Tweaks::remove() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
-  set_hugepages(hugepage_state);
+  set_hugepages(hugepage_state, hugepage_defrag);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -180,7 +182,7 @@ void Tweaks::change_iopriority(const std::string& game, const int& pid, const bo
   }
 }
 
-void Tweaks::set_hugepages(const std::string& state) {
+void Tweaks::set_hugepages(const std::string& state, const std::string& defrag) {
   if (state == "") {
     return;
   }
@@ -194,6 +196,20 @@ void Tweaks::set_hugepages(const std::string& state) {
   f << state;
 
   std::cout << log_tag + "changed transparent hugepage state to: " << state << std::endl;
+
+  f.close();
+
+  if (defrag == "") {
+    return;
+  }
+
+  path = fs::path("/sys/kernel/mm/transparent_hugepage/defrag");
+
+  f.open(path);
+
+  f << defrag;
+
+  std::cout << log_tag + "changed transparent hugepage defrag method to: " << defrag << std::endl;
 
   f.close();
 }

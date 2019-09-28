@@ -90,12 +90,15 @@ void Netlink::handle_events() {
   while (listen) {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
 
-    int pid;
+    int pid, tgid, child_pid;
     std::string comm, cmdline, exe_path;
 
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
-        new_fork(nlcn_msg.proc_ev.event_data.fork.child_tgid, nlcn_msg.proc_ev.event_data.fork.child_pid);
+        tgid = nlcn_msg.proc_ev.event_data.fork.child_tgid;
+        child_pid = nlcn_msg.proc_ev.event_data.fork.child_pid;
+
+        new_fork(tgid, child_pid);
 
         break;
       case proc_event::PROC_EVENT_EXEC:

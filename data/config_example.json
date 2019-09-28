@@ -281,7 +281,6 @@
         "STAGING_WRITECOPY=1"
       ],
       "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "parent": {
           "cpu-affinity": ["8"],
           "niceness": "-4",
@@ -291,7 +290,6 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
           "niceness": "0",
           "scheduler-policy": "SCHED_BATCH",
           "scheduler-policy-priority": "0",

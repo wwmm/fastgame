@@ -67,8 +67,7 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
@@ -94,8 +93,7 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
@@ -120,8 +118,7 @@
     "QuantumBreak": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
+        "__GL_MaxFramesAllowed=2"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
@@ -223,8 +220,7 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
@@ -250,8 +246,7 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
@@ -277,8 +272,7 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
         "parent": {

@@ -42,26 +42,13 @@ void Tweaks::apply_global() {
 #endif
 }
 
-void Tweaks::apply_process(const std::string& game, const int& pid, const bool& is_parent) {
-  change_niceness(game, pid, is_parent);
-  change_scheduler_policy(game, pid, is_parent);
-  change_iopriority(game, pid, is_parent);
+void Tweaks::apply_process(const std::string& game, const int& pid, const std::string& thread_name) {
+  change_niceness(game, pid, thread_name);
+  change_scheduler_policy(game, pid, thread_name);
+  change_iopriority(game, pid, thread_name);
 
-  if (is_parent) {
-    auto cpu_list = cfg->get_key_array<int>("games." + game + ".threads.parent.cpu-affinity");
-
-    if (cpu_list.size() > 0) {
-      scheduler->set_affinity(pid, cpu_list);
-    }
-  } else {
-    auto cpu_list = cfg->get_key_array<int>("games." + game + ".threads.children.cpu-affinity");
-
-    if (cpu_list.size() > 0) {
-      scheduler->set_affinity(pid, cpu_list);
-    } else {
-      scheduler->set_affinity(pid, cfg->get_key_array<int>("games." + game + ".threads.initial-cpu-affinity"));
-    }
-  }
+  scheduler->set_affinity(pid,
+                          cfg->get_key_array<int>("games." + game + ".threads.names." + thread_name + ".cpu-affinity"));
 }
 
 void Tweaks::remove() {
@@ -141,45 +128,27 @@ void Tweaks::change_cfs_parameter(const std::string& name, const int& value) {
   std::cout << log_tag + "changed cfs parameter " + name + " to: " << value << std::endl;
 }
 
-void Tweaks::change_niceness(const std::string& game, const int& pid, const bool& is_parent) {
-  if (is_parent) {
-    auto niceness = cfg->get_key("games." + game + ".threads.parent.niceness", 0);
+void Tweaks::change_niceness(const std::string& game, const int& pid, const std::string& thread_name) {
+  auto niceness = cfg->get_key("games." + game + ".threads.names." + thread_name + ".niceness", 0);
 
-    setpriority(PRIO_PROCESS, pid, niceness);
-  } else {
-    auto niceness = cfg->get_key("games." + game + ".threads.children.niceness", 0);
-
-    setpriority(PRIO_PROCESS, pid, niceness);
-  }
+  setpriority(PRIO_PROCESS, pid, niceness);
 }
 
-void Tweaks::change_scheduler_policy(const std::string& game, const int& pid, const bool& is_parent) {
-  if (is_parent) {
-    auto sched_policy = cfg->get_key<std::string>("games." + game + ".threads.parent.scheduler-policy", "SCHED_OTHER");
-    auto sched_priority = cfg->get_key("games." + game + ".threads.parent.scheduler-policy-priority", 0);
+void Tweaks::change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name) {
+  auto sched_policy =
+      cfg->get_key<std::string>("games." + game + ".threads.names." + thread_name + ".scheduler-policy", "SCHED_OTHER");
 
-    scheduler->set_policy(pid, sched_policy, sched_priority);
-  } else {
-    auto sched_policy =
-        cfg->get_key<std::string>("games." + game + ".threads.children.scheduler-policy", "SCHED_OTHER");
-    auto sched_priority = cfg->get_key("games." + game + ".threads.children.scheduler-policy-priority", 0);
+  auto sched_priority =
+      cfg->get_key("games." + game + ".threads.names." + thread_name + ".scheduler-policy-priority", 0);
 
-    scheduler->set_policy(pid, sched_policy, sched_priority);
-  }
+  scheduler->set_policy(pid, sched_policy, sched_priority);
 }
 
-void Tweaks::change_iopriority(const std::string& game, const int& pid, const bool& is_parent) {
-  if (is_parent) {
-    auto io_class = cfg->get_key<std::string>("games." + game + ".threads.parent.io-class", "BE");
-    auto io_priority = cfg->get_key("games." + game + ".threads.parent.io-priority", 7);
+void Tweaks::change_iopriority(const std::string& game, const int& pid, const std::string& thread_name) {
+  auto io_class = cfg->get_key<std::string>("games." + game + ".threads.names." + thread_name + ".io-class", "BE");
+  auto io_priority = cfg->get_key("games." + game + ".threads.names." + thread_name + ".io-priority", 7);
 
-    ioprio_set(pid, io_class, io_priority);
-  } else {
-    auto io_class = cfg->get_key<std::string>("games." + game + ".threads.children.io-class", "BE");
-    auto io_priority = cfg->get_key("games." + game + ".threads.children.io-priority", 7);
-
-    ioprio_set(pid, io_class, io_priority);
-  }
+  ioprio_set(pid, io_class, io_priority);
 }
 
 void Tweaks::set_hugepages(const std::string& state, const std::string& defrag) {

@@ -90,16 +90,11 @@ void Netlink::handle_events() {
   while (listen) {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
 
-    int pid, tgid, child_pid;
+    int pid;
     std::string comm, cmdline, exe_path;
 
     switch (nlcn_msg.proc_ev.what) {
       case proc_event::PROC_EVENT_FORK:
-        tgid = nlcn_msg.proc_ev.event_data.fork.child_tgid;
-        child_pid = nlcn_msg.proc_ev.event_data.fork.child_pid;
-
-        new_fork(tgid, child_pid);
-
         break;
       case proc_event::PROC_EVENT_EXEC:
         pid = nlcn_msg.proc_ev.event_data.exec.process_pid;
@@ -137,6 +132,30 @@ void Netlink::handle_events() {
 
 std::string Netlink::get_comm(const int& pid) {
   auto path = fs::path("/proc/" + std::to_string(pid) + "/comm");
+
+  try {
+    if (fs::is_regular_file(path)) {
+      std::ostringstream stream;
+
+      stream << std::ifstream(path).rdbuf();
+
+      auto out = stream.str();
+
+      out.erase(out.length() - 1);  // remove carriage return
+
+      return out;
+    }
+
+    return "";
+  } catch (std::exception& e) {
+    // std::cout << log_tag + e.what() << std::endl;
+
+    return "";
+  }
+}
+
+std::string Netlink::get_child_comm(const int& tgid, const int& child_pid) {
+  auto path = fs::path("/proc/" + std::to_string(tgid) + "/task/" + std::to_string(child_pid) + "/comm");
 
   try {
     if (fs::is_regular_file(path)) {

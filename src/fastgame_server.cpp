@@ -36,7 +36,9 @@ int main(int argc, char* argv[]) {
       }
 
       if (apply) {
-        tweaks->apply_process(game, pid, true);
+        auto thread_name = fs::path(comm).stem().string();
+
+        tweaks->apply_process(game, pid, thread_name);
 
         if (pid_list.size() == 0) {
           tweaks->apply_global();
@@ -44,29 +46,28 @@ int main(int argc, char* argv[]) {
 
         pid_list.push_back(std::pair(game, pid));
 
+        std::cout << game + " parent thread name: " << thread_name << std::endl;
+
         std::cout << "(" + std::to_string(pid) + ", " + comm + ", " + exe_path + ", " + cmdline + ")" << std::endl;
       }
     }
-  });
 
-  nl->new_fork.connect([&](int tgid, int pid) {
     for (auto& p : pid_list) {
-      if (tgid == p.second) {
-        // std::cout << "new thread: (" + p.first + ", " + std::to_string(pid) + ")" << std::endl;
-
-        /*
-          The loop below is probably unnecessary for native games. But wine games needs it because by the time wine
-          updates /proc/pid/comm with the game process name a few child threads may have been already started.
-        */
-
+      if (pid != p.second) {
         try {
-          auto task_dir = "/proc/" + std::to_string(pid) + "/task";
+          auto task_dir = "/proc/" + std::to_string(p.second) + "/task";
 
           for (const auto& entry : fs::directory_iterator(task_dir)) {
             const auto task_pid = std::stoi(entry.path().filename().string());
 
-            if (task_pid != p.second) {
-              tweaks->apply_process(p.first, task_pid, false);
+            if (task_pid != p.second && task_pid == pid) {
+              auto thread_name = fs::path(comm).stem().string();
+
+              tweaks->apply_process(p.first, pid, thread_name);
+
+              std::cout << "new " + p.first + " thread: (" + comm + ", " + std::to_string(pid) + ")" << std::endl;
+
+              break;
             }
           }
         } catch (std::exception& e) {

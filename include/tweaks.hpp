@@ -17,7 +17,7 @@ class Tweaks {
   Tweaks(Config* config);
 
   void apply_global();
-  void apply_process(const std::string& game, const int& pid, const bool& is_parent);
+  void apply_process(const std::string& game, const int& pid, const std::string& thread_name);
   void remove();
 
   template <typename T>
@@ -52,9 +52,9 @@ class Tweaks {
 
   void change_cpu_governor(const std::string& name);
   void change_cfs_parameter(const std::string& name, const int& value);
-  void change_iopriority(const std::string& game, const int& pid, const bool& is_parent);
-  void change_niceness(const std::string& game, const int& pid, const bool& is_parent);
-  void change_scheduler_policy(const std::string& game, const int& pid, const bool& is_parent);
+  void change_iopriority(const std::string& game, const int& pid, const std::string& thread_name);
+  void change_niceness(const std::string& game, const int& pid, const std::string& thread_name);
+  void change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name);
   void set_hugepages(const std::string& state, const std::string& defrag);
 };
 

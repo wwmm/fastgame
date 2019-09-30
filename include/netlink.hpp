@@ -15,7 +15,7 @@ class Netlink {
   bool listen = true;
 
   boost::signals2::signal<void(int, std::string, std::string, std::string)> new_exec;
-  boost::signals2::signal<void(int, int)> new_fork;
+  boost::signals2::signal<void(int, int, std::string)> new_fork;
   boost::signals2::signal<void(int)> new_exit;
 
   void handle_events();
@@ -28,6 +28,7 @@ class Netlink {
   void connect();
   void subscribe();
   std::string get_comm(const int& pid);
+  std::string get_child_comm(const int& tgid, const int& child_pid);
   std::string get_cmdline(const int& pid);
   std::string get_exe_path(const int& pid);
 };

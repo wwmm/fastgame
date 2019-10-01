@@ -22,7 +22,7 @@ launch command. Just start `fastgame_server` before launching the game.
 
 - Change cpu frequency governor
 - Change process niceness
-- Change cpu affinity
+- Use thread name to change its cpu affinity
 - Set Environment variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
 - Change process cpu scheduler policy(SCHED_OTHER, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
@@ -105,44 +105,46 @@ A few settings can have different values for each game. When creating a new game
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "STAGING_WRITECOPY=1"
+        "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "SOTTR": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     },
     "dota2": {
       "threads": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "dota2": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          }
         }
       }
     },
@@ -157,45 +159,30 @@ A few settings can have different values for each game. When creating a new game
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
-        }
-      }
-    },
-    "APlagueTaleInnocence_x64": {
-      "environment": [
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=1"
-      ],
-      "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "RememberMe": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     }

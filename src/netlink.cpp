@@ -154,30 +154,6 @@ std::string Netlink::get_comm(const int& pid) {
   }
 }
 
-std::string Netlink::get_child_comm(const int& tgid, const int& child_pid) {
-  auto path = fs::path("/proc/" + std::to_string(tgid) + "/task/" + std::to_string(child_pid) + "/comm");
-
-  try {
-    if (fs::is_regular_file(path)) {
-      std::ostringstream stream;
-
-      stream << std::ifstream(path).rdbuf();
-
-      auto out = stream.str();
-
-      out.erase(out.length() - 1);  // remove carriage return
-
-      return out;
-    }
-
-    return "";
-  } catch (std::exception& e) {
-    // std::cout << log_tag + e.what() << std::endl;
-
-    return "";
-  }
-}
-
 std::string Netlink::get_cmdline(const int& pid) {
   auto path = fs::path("/proc/" + std::to_string(pid) + "/cmdline");
 

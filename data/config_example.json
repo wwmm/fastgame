@@ -78,18 +78,22 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
+            "niceness": "-4",
             "cpu-affinity": ["8"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
+            "niceness": "-4",
             "cpu-affinity": ["9"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
+            "niceness": "-4",
             "cpu-affinity": ["10"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
+            "niceness": "-4",
             "cpu-affinity": ["11"],
             "scheduler-policy": "SCHED_OTHER"
           }
@@ -105,6 +109,7 @@
       "threads": {
         "names": {
           "APlagueTaleInno": {
+            "niceness": "-4",
             "scheduler-policy": "SCHED_BATCH",
             "scheduler-policy-priority": "0",
             "io-class": "RT",
@@ -132,25 +137,34 @@
     "QuantumBreak": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2"
+        "__GL_MaxFramesAllowed=2",
+        "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "QuantumBreak": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     },
@@ -161,19 +175,30 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "TEW2": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     },
@@ -184,19 +209,29 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "ShadowOfWar": {
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     },
@@ -212,73 +247,29 @@
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
-        }
-      }
-    },
-    "Draugen": {
-      "environment": [
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
-      ],
-      "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
-        }
-      }
-    },
-    "Submerged-Win64-Shipping": {
-      "environment": [
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
-      ],
-      "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "RememberMe": {
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          },
+          "dxvk-cs": {
+            "cpu-affinity": ["8"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["9"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-writer": {
+            "cpu-affinity": ["10"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["11"],
+            "scheduler-policy": "SCHED_OTHER"
+          }
         }
       }
     },
@@ -317,19 +308,14 @@
     },
     "dota2": {
       "threads": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "dota2": {
+            "niceness": "-4",
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          }
         }
       }
     },
@@ -339,22 +325,13 @@
         "__GL_MaxFramesAllowed=2"
       ],
       "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "parent": {
-          "cpu-affinity": ["8"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["9", "10", "11", "12", "13", "14", "15"],
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "XCOM2WotC": {
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          }
         }
       }
     },
@@ -370,19 +347,13 @@
     },
     "Civ6Sub": {
       "threads": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "scheduler-policy-priority": "0",
-          "io-class": "BE",
-          "io-priority": "0"
-        },
-        "children": {
-          "niceness": "0",
-          "scheduler-policy": "SCHED_BATCH",
-          "scheduler-policy-priority": "0",
-          "io-class": "RT",
-          "io-priority": "0"
+        "names": {
+          "Civ6Sub": {
+            "scheduler-policy": "SCHED_BATCH",
+            "scheduler-policy-priority": "0",
+            "io-class": "RT",
+            "io-priority": "0"
+          }
         }
       }
     }

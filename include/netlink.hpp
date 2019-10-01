@@ -28,7 +28,6 @@ class Netlink {
   void connect();
   void subscribe();
   std::string get_comm(const int& pid);
-  std::string get_child_comm(const int& tgid, const int& child_pid);
   std::string get_cmdline(const int& pid);
   std::string get_exe_path(const int& pid);
 };

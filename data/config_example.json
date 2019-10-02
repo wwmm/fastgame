@@ -70,30 +70,28 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "SOTTR": {
+            "niceness": "-4",
             "scheduler-policy": "SCHED_BATCH",
             "scheduler-policy-priority": "0",
             "io-class": "RT",
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "niceness": "-4",
             "cpu-affinity": ["8"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "niceness": "-4",
             "cpu-affinity": ["9"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "niceness": "-4",
             "cpu-affinity": ["10"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "niceness": "-4",
             "cpu-affinity": ["11"],
             "scheduler-policy": "SCHED_OTHER"
           }
@@ -280,6 +278,7 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "GreedFall": {
             "scheduler-policy": "SCHED_BATCH",

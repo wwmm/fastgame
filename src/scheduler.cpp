@@ -31,6 +31,8 @@ void Scheduler::set_policy(const int& pid, const std::string& policy, const int&
     policy_index = SCHED_BATCH;
   } else if (policy == "SCHED_RR") {
     policy_index = SCHED_RR;
+  } else if (policy == "SCHED_FIFO") {
+    policy_index = SCHED_FIFO;
   } else if (policy == "SCHED_ISO") {
     policy_index = SCHED_ISO;
   } else if (policy == "SCHED_DEADLINE") {

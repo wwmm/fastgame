@@ -80,19 +80,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -105,6 +105,7 @@
         "STAGING_SHARED_MEMORY=1"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "APlagueTaleInno": {
             "niceness": "-4",
@@ -114,19 +115,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -139,6 +140,7 @@
         "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
+        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "QuantumBreak": {
             "niceness": "-4",
@@ -148,19 +150,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -275,31 +277,33 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
+        "STAGING_SHARED_MEMORY=1",
+        "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "GreedFall": {
+            "niceness": "-4",
             "scheduler-policy": "SCHED_BATCH",
             "scheduler-policy-priority": "0",
             "io-class": "RT",
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }

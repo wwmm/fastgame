@@ -21,6 +21,10 @@ int main(int argc, char* argv[]) {
   std::vector<std::pair<std::string, int>> pid_list;
 
   nl->new_exec.connect([&](int pid, std::string comm, std::string cmdline, std::string exe_path) {
+    if (comm == "wineserver") {
+      return;
+    }
+
     for (auto game : cfg->get_games()) {
       auto apply = false;
       auto path_comm = fs::path(comm);
@@ -73,6 +77,14 @@ int main(int argc, char* argv[]) {
         } catch (std::exception& e) {
         }
       }
+    }
+  });
+
+  nl->new_fork.connect([&](int child_pid, std::string child_comm) {
+    if (child_comm == "wineserver") {
+      std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
+
+      tweaks->apply_process("wineserver", child_pid, "wineserver");
     }
   });
 

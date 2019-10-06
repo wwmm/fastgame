@@ -63,6 +63,17 @@
     }
   },
   "games": {
+    "wineserver": {
+      "threads": {
+        "names": {
+          "wineserver": {
+            "cpu-affinity": ["0"],
+            "scheduler-policy": "SCHED_RR",
+            "scheduler-policy-priority": "90"
+          }
+        }
+      }
+    },
     "SOTTR": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
@@ -80,19 +91,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-writer": {
+          "dxvk-queue": {
             "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-submit": {
+          "dxvk-writer": {
             "cpu-affinity": ["3"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -115,19 +126,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-writer": {
+          "dxvk-queue": {
             "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-submit": {
+          "dxvk-writer": {
             "cpu-affinity": ["3"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -150,19 +161,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-writer": {
+          "dxvk-queue": {
             "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-submit": {
+          "dxvk-writer": {
             "cpu-affinity": ["3"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -184,19 +195,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -217,19 +228,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -255,19 +266,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -291,19 +302,19 @@
             "io-priority": "0"
           },
           "dxvk-cs": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-writer": {
+          "dxvk-queue": {
             "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-submit": {
+          "dxvk-writer": {
             "cpu-affinity": ["3"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-submit": {
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }

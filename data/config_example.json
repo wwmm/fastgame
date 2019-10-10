@@ -67,9 +67,7 @@
       "threads": {
         "names": {
           "wineserver": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_RR",
-            "scheduler-policy-priority": "1"
+            "cpu-affinity": ["0"]
           }
         }
       }
@@ -90,6 +88,10 @@
             "io-class": "RT",
             "io-priority": "0"
           },
+          "dxvk-shader": {
+            "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
@@ -104,6 +106,14 @@
           },
           "dxvk-submit": {
             "cpu-affinity": ["4"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "SDLAudioP2": {
+            "cpu-affinity": ["5"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "PulseHotplug": {
+            "cpu-affinity": ["6"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -125,6 +135,10 @@
             "io-class": "RT",
             "io-priority": "0"
           },
+          "dxvk-shader": {
+            "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
@@ -139,6 +153,14 @@
           },
           "dxvk-submit": {
             "cpu-affinity": ["4"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "SDLAudioP2": {
+            "cpu-affinity": ["5"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "PulseHotplug": {
+            "cpu-affinity": ["6"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -301,6 +323,10 @@
             "io-class": "RT",
             "io-priority": "0"
           },
+          "dxvk-shader": {
+            "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
@@ -315,6 +341,14 @@
           },
           "dxvk-submit": {
             "cpu-affinity": ["4"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "SDLAudioP2": {
+            "cpu-affinity": ["5"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "PulseHotplug": {
+            "cpu-affinity": ["6"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }

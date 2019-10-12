@@ -98,7 +98,7 @@ void Netlink::handle_events() {
         child_comm = get_comm(nlcn_msg.proc_ev.event_data.fork.child_pid);
 
         if (child_comm != "") {
-          new_fork(nlcn_msg.proc_ev.event_data.fork.child_pid, child_comm);
+          new_fork(nlcn_msg.proc_ev.event_data.fork.child_tgid, nlcn_msg.proc_ev.event_data.fork.child_pid, child_comm);
         }
 
         break;

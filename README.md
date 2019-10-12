@@ -101,35 +101,51 @@ A few settings can have different values for each game. When creating a new game
     }
   },
   "games": {
+    "wineserver": {
+      "threads": {
+        "names": {
+          "wineserver": {
+            "cpu-affinity": ["0"]
+          }
+        }
+      }
+    },
     "SOTTR": {
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
+        "STAGING_SHARED_MEMORY=1",
+        "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
         "names": {
           "SOTTR": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -139,11 +155,15 @@ A few settings can have different values for each game. When creating a new game
       "threads": {
         "names": {
           "dota2": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "scheduler-policy": "SCHED_BATCH"
+            }
           }
         }
       }
@@ -161,26 +181,32 @@ A few settings can have different values for each game. When creating a new game
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "RememberMe": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
-            "cpu-affinity": ["8"],
+            "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["9"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["10"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["11"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }

@@ -42,6 +42,8 @@ int main(int argc, char* argv[]) {
       if (apply) {
         auto thread_name = fs::path(comm).stem().string();
 
+        tweaks->parent_thread_pid = pid;
+
         tweaks->apply_process(game, pid, thread_name);
 
         if (pid_list.size() == 0) {
@@ -69,7 +71,7 @@ int main(int argc, char* argv[]) {
 
               tweaks->apply_process(p.first, pid, thread_name);
 
-              std::cout << "new " + p.first + " thread: (" + comm + ", " + std::to_string(pid) + ")" << std::endl;
+              std::cout << "new " + p.first + " named thread: (" + comm + ", " + std::to_string(pid) + ")" << std::endl;
 
               break;
             }
@@ -80,11 +82,21 @@ int main(int argc, char* argv[]) {
     }
   });
 
-  nl->new_fork.connect([&](int child_pid, std::string child_comm) {
+  nl->new_fork.connect([&](int tgid, int child_pid, std::string child_comm) {
     if (child_comm == "wineserver") {
       std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
 
       tweaks->apply_process("wineserver", child_pid, "wineserver");
+    } else {
+      auto thread_name = fs::path(child_comm).stem().string();
+
+      for (auto& p : pid_list) {
+        if (tgid == p.second && child_pid != tgid) {
+          tweaks->apply_process(p.first, child_pid, thread_name);
+
+          break;
+        }
+      }
     }
   });
 

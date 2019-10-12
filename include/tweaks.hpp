@@ -16,6 +16,8 @@ class Tweaks {
  public:
   Tweaks(Config* config);
 
+  int parent_thread_pid = 0;
+
   void apply_global();
   void apply_process(const std::string& game, const int& pid, const std::string& thread_name);
   void remove();

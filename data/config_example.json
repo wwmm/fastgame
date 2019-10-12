@@ -76,44 +76,51 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
+        "STAGING_SHARED_MEMORY=1",
+        "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "SOTTR": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-shader": {
             "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+            "scheduler-policy": "SCHED_OTHER"
+          },
+          "dxvk-queue": {
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-queue": {
+          "dxvk-writer": {
             "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-writer": {
+          "dxvk-submit": {
             "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "dxvk-submit": {
+          "SDLAudioP2": {
             "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           },
-          "SDLAudioP2": {
-            "cpu-affinity": ["5"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
           "PulseHotplug": {
-            "cpu-affinity": ["6"],
+            "cpu-affinity": ["5"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -123,17 +130,24 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1"
+        "STAGING_SHARED_MEMORY=1",
+        "WINEFSYNC_SPINCOUNT=100"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "APlagueTaleInno": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-shader": {
             "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
@@ -144,23 +158,23 @@
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "SDLAudioP2": {
-            "cpu-affinity": ["5"],
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "PulseHotplug": {
-            "cpu-affinity": ["6"],
+            "cpu-affinity": ["5"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -170,32 +184,38 @@
       "environment": [
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
-        "WINEFSYNC_SPINCOUNT=100"
+        "WINEFSYNC_SPINCOUNT=2"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "QuantumBreak": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -210,26 +230,30 @@
       "threads": {
         "names": {
           "TEW2": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -244,25 +268,30 @@
       "threads": {
         "names": {
           "ShadowOfWar": {
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -282,25 +311,32 @@
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "RememberMe": {
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-cs": {
             "cpu-affinity": ["1"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -311,17 +347,23 @@
         "__GL_THREADED_OPTIMIZATIONS=0",
         "__GL_MaxFramesAllowed=2",
         "STAGING_SHARED_MEMORY=1",
-        "WINEFSYNC_SPINCOUNT=100"
+        "WINEFSYNC_SPINCOUNT=2"
       ],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {
           "GreedFall": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           },
           "dxvk-shader": {
             "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
@@ -332,23 +374,23 @@
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-queue": {
-            "cpu-affinity": ["2"],
+            "cpu-affinity": ["0"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-writer": {
-            "cpu-affinity": ["3"],
+            "cpu-affinity": ["2"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "dxvk-submit": {
-            "cpu-affinity": ["4"],
+            "cpu-affinity": ["3"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "SDLAudioP2": {
-            "cpu-affinity": ["5"],
+            "cpu-affinity": ["4"],
             "scheduler-policy": "SCHED_OTHER"
           },
           "PulseHotplug": {
-            "cpu-affinity": ["6"],
+            "cpu-affinity": ["5"],
             "scheduler-policy": "SCHED_OTHER"
           }
         }
@@ -358,11 +400,15 @@
       "threads": {
         "names": {
           "dota2": {
-            "niceness": "-4",
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "scheduler-policy": "SCHED_BATCH"
+            }
           }
         }
       }
@@ -375,10 +421,15 @@
       "threads": {
         "names": {
           "XCOM2WotC": {
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "scheduler-policy": "SCHED_BATCH"
+            }
           }
         }
       }
@@ -397,10 +448,17 @@
       "threads": {
         "names": {
           "Civ6Sub": {
-            "scheduler-policy": "SCHED_BATCH",
-            "scheduler-policy-priority": "0",
-            "io-class": "RT",
-            "io-priority": "0"
+            "parent": {
+              "cpu-affinity": ["15"],
+              "niceness": "-4",
+              "scheduler-policy": "SCHED_OTHER",
+              "io-class": "RT",
+              "io-priority": "0"
+            },
+            "children": {
+              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+              "scheduler-policy": "SCHED_BATCH"
+            }
           }
         }
       }

@@ -30,6 +30,8 @@ void Tweaks::apply_global() {
   change_disk_parameter("nr_requests", disk_nr_requests);
   change_disk_parameter("rq_affinity", disk_rq_affinity);
 
+  set_cpu_dma_latency(0);
+
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.game", 0);
   auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.game", 0);
@@ -89,6 +91,10 @@ void Tweaks::remove() {
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
   change_disk_parameter("rq_affinity", disk_rq_affinity);
+
+  if (cpu_dma_ofstream.is_open()) {
+    cpu_dma_ofstream.close();
+  }
 
 #ifdef USE_NVIDIA
   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
@@ -287,4 +293,12 @@ void Tweaks::set_hugepages(const std::string& state, const std::string& defrag) 
   std::cout << log_tag + "changed transparent hugepage defrag method to: " << defrag << std::endl;
 
   f.close();
+}
+
+void Tweaks::set_cpu_dma_latency(const int& latency_us = 0) {
+  cpu_dma_ofstream.open("/dev/cpu_dma_latency");
+
+  cpu_dma_ofstream << latency_us;
+
+  std::cout << log_tag + "/dev/cpu_dma_latency latency: " << latency_us << " us" << std::endl;
 }

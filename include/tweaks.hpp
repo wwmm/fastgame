@@ -52,12 +52,15 @@ class Tweaks {
   std::unique_ptr<Nvidia> nvidia;
 #endif
 
+  std::ofstream cpu_dma_ofstream;
+
   void change_cpu_governor(const std::string& name);
   void change_cfs_parameter(const std::string& name, const int& value);
   void change_iopriority(const std::string& game, const int& pid, const std::string& thread_name);
   void change_niceness(const std::string& game, const int& pid, const std::string& thread_name);
   void change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name);
   void set_hugepages(const std::string& state, const std::string& defrag);
+  void set_cpu_dma_latency(const int& latency_us);
 };
 
 #endif

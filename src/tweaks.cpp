@@ -16,6 +16,7 @@ void Tweaks::apply_global() {
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.game", "");
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.game", "");
+  auto hugepage_shmem_enabled = cfg->get_key<std::string>("general.memory.hugepage.shmem_enabled.game", "");
 
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
@@ -24,7 +25,7 @@ void Tweaks::apply_global() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
-  set_hugepages(hugepage_state, hugepage_defrag);
+  set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -78,6 +79,7 @@ void Tweaks::remove() {
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.default", "");
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.default", "");
+  auto hugepage_shmem_enabled = cfg->get_key<std::string>("general.memory.hugepage.shmem_enabled.default", "");
 
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
@@ -86,7 +88,7 @@ void Tweaks::remove() {
 
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
-  set_hugepages(hugepage_state, hugepage_defrag);
+  set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -263,7 +265,7 @@ void Tweaks::change_iopriority(const std::string& game, const int& pid, const st
   }
 }
 
-void Tweaks::set_hugepages(const std::string& state, const std::string& defrag) {
+void Tweaks::set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled) {
   if (state == "") {
     return;
   }
@@ -291,6 +293,20 @@ void Tweaks::set_hugepages(const std::string& state, const std::string& defrag) 
   f << defrag;
 
   std::cout << log_tag + "changed transparent hugepage defrag method to: " << defrag << std::endl;
+
+  f.close();
+
+  if (shmem_enabled == "") {
+    return;
+  }
+
+  path = fs::path("/sys/kernel/mm/transparent_hugepage/shmem_enabled");
+
+  f.open(path);
+
+  f << shmem_enabled;
+
+  std::cout << log_tag + "changed transparent hugepage shmem_enabled method to: " << shmem_enabled << std::endl;
 
   f.close();
 }

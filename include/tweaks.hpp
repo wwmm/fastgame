@@ -59,7 +59,7 @@ class Tweaks {
   void change_iopriority(const std::string& game, const int& pid, const std::string& thread_name);
   void change_niceness(const std::string& game, const int& pid, const std::string& thread_name);
   void change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name);
-  void set_hugepages(const std::string& state, const std::string& defrag);
+  void set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled);
   void set_cpu_dma_latency(const int& latency_us);
 };
 

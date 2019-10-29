@@ -48,7 +48,7 @@
     "radeon": {
       "power_dpm_force_performance_level": {
         "default": "auto",
-        "game": "profile_peak"
+        "game": "high"
       }
     }
   },

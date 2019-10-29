@@ -13,16 +13,24 @@ Nvidia::Nvidia() {
 
   if (!XNVCTRLQueryVersion(dpy, &major, &minor)) {
     std::cout << log_tag + "The NV-CONTROL X extension does not exist " << std::endl;
+
+    found_gpu = false;
   } else {
     std::cout << log_tag + "Using NV-CONTROL extension " + std::to_string(major) + "." + std::to_string(minor) +
                      " on display " + XDisplayName(nullptr)
               << std::endl;
+
+    found_gpu = true;
+
+    get_max_performance_mode(0);
+    get_valid_clock_offset_values(0);
+
+    nvml = std::make_unique<Nvml>();
   }
+}
 
-  get_max_performance_mode(0);
-  get_valid_clock_offset_values(0);
-
-  nvml = std::make_unique<Nvml>();
+bool Nvidia::has_gpu() {
+  return found_gpu;
 }
 
 void Nvidia::get_max_performance_mode(const int& gpu_index) {

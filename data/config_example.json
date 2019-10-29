@@ -45,24 +45,10 @@
         "game": "1"
       }
     },
-    "nvidia": {
-      "powermizer-mode": {
-        "default": "adaptive",
-        "game": "maximum-performance"
-      },
-      "power-limit": {
-        "default": "180",
-        "game": "200"
-      },
-      "clock-offset": {
-        "gpu": {
-          "default": "0",
-          "game": "150"
-        },
-        "memory": {
-          "default": "0",
-          "game": "500"
-        }
+    "radeon": {
+      "power_dpm_force_performance_level": {
+        "default": "auto",
+        "game": "profile_peak"
       }
     }
   },
@@ -349,14 +335,7 @@
       }
     },
     "GreedFall": {
-      "environment": [
-        "__GL_SHADER_DISK_CACHE_PATH=/home/wallace/games/cache/GreedFall",
-        "__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1",
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "WINEFSYNC_SPINCOUNT=2"
-      ],
+      "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
       "threads": {
         "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
         "names": {

@@ -6,7 +6,8 @@ fastgame_server_sources = [
 	'cmdline_options.cpp',
 	'config.cpp',
 	'scheduler.cpp',
-	'tweaks.cpp'
+	'tweaks.cpp',
+	'radeon.cpp'
 ]
 
 fastgame_server_deps = [

@@ -4,7 +4,8 @@
 
 namespace fs = std::filesystem;
 
-Tweaks::Tweaks(Config* config) : cfg(config), scheduler(std::make_unique<Scheduler>()) {
+Tweaks::Tweaks(Config* config)
+    : cfg(config), scheduler(std::make_unique<Scheduler>()), radeon(std::make_unique<Radeon>()) {
 #ifdef USE_NVIDIA
   nvidia = std::make_unique<Nvidia>();
 #endif
@@ -33,15 +34,24 @@ void Tweaks::apply_global() {
 
   set_cpu_dma_latency(0);
 
-#ifdef USE_NVIDIA
-  auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.game", 0);
-  auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.game", 0);
-  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.game", "auto");
-  auto power_limit = cfg->get_key("general.nvidia.power-limit.game", -1);
+  if (radeon->has_gpu()) {
+    auto power_dpm_force_performance_level =
+        cfg->get_key<std::string>("general.radeon.power_dpm_force_performance_level.game", "auto");
 
-  nvidia->set_powermizer_mode(0, powermizer_mode);
-  nvidia->set_clock_offset(0, gpu_offset, memory_offset);
-  nvidia->nvml->set_power_limit(0, power_limit);
+    radeon->set_power_dpm_force_performance_level(power_dpm_force_performance_level);
+  }
+
+#ifdef USE_NVIDIA
+  if (nvidia->has_gpu()) {
+    auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.game", 0);
+    auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.game", 0);
+    auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.game", "auto");
+    auto power_limit = cfg->get_key("general.nvidia.power-limit.game", -1);
+
+    nvidia->set_powermizer_mode(0, powermizer_mode);
+    nvidia->set_clock_offset(0, gpu_offset, memory_offset);
+    nvidia->nvml->set_power_limit(0, power_limit);
+  }
 #endif
 }
 
@@ -98,15 +108,24 @@ void Tweaks::remove() {
     cpu_dma_ofstream.close();
   }
 
-#ifdef USE_NVIDIA
-  auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
-  auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
-  auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.default", "auto");
-  auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
+  if (radeon->has_gpu()) {
+    auto power_dpm_force_performance_level =
+        cfg->get_key<std::string>("general.radeon.power_dpm_force_performance_level.default", "auto");
 
-  nvidia->set_powermizer_mode(0, powermizer_mode);
-  nvidia->set_clock_offset(0, gpu_offset, memory_offset);
-  nvidia->nvml->set_power_limit(0, power_limit);
+    radeon->set_power_dpm_force_performance_level(power_dpm_force_performance_level);
+  }
+
+#ifdef USE_NVIDIA
+  if (nvidia->has_gpu()) {
+    auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
+    auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
+    auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.default", "auto");
+    auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
+
+    nvidia->set_powermizer_mode(0, powermizer_mode);
+    nvidia->set_clock_offset(0, gpu_offset, memory_offset);
+    nvidia->nvml->set_power_limit(0, power_limit);
+  }
 #endif
 }
 

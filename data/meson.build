@@ -1,4 +1,4 @@
-install_data(['config.json', 'config_example.json'], install_dir: fastgame_config_dir)
+install_data(['config.json', 'config_example.json', 'config_example_nvidia.json'], install_dir: fastgame_config_dir)
 
 # systemd = dependency('systemd', required : false)
 

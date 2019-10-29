@@ -6,6 +6,7 @@
 #include <memory>
 #include "config.h"
 #include "config.hpp"
+#include "radeon.hpp"
 #include "scheduler.hpp"
 
 #ifdef USE_NVIDIA
@@ -47,6 +48,7 @@ class Tweaks {
 
   Config* cfg;
   std::unique_ptr<Scheduler> scheduler;
+  std::unique_ptr<Radeon> radeon;
 
 #ifdef USE_NVIDIA
   std::unique_ptr<Nvidia> nvidia;

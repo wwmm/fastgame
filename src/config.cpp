@@ -12,16 +12,18 @@ Config::Config(const std::string& cfg_path) {
   std::cout << log_tag + "profiles directory: " + profiles_dir << std::endl;
 
   for (const auto& entry : fs::directory_iterator(profiles_dir)) {
-    if (entry.path().extension().string() == ".json") {
-      auto filename = entry.path().filename().string();
+    if (!entry.is_directory()) {
+      if (entry.path().extension().string() == ".json") {
+        auto filename = entry.path().filename().string();
 
-      std::cout << log_tag + "found profile: " + filename << std::endl;
+        std::cout << log_tag + "found profile: " + filename << std::endl;
 
-      boost::property_tree::ptree r;
+        boost::property_tree::ptree r;
 
-      boost::property_tree::read_json(profiles_dir + "/" + filename, r);
+        boost::property_tree::read_json(profiles_dir + "/" + filename, r);
 
-      games.insert(std::pair(r.get<std::string>("executable-name", ""), filename));
+        games.insert(std::pair(r.get<std::string>("executable-name", ""), filename));
+      }
     }
   }
 

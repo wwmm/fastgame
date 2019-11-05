@@ -43,7 +43,9 @@ int main(int argc, char* argv[]) {
       if (apply) {
         auto thread_name = fs::path(comm).stem().string();
 
-        tweaks->parent_thread_pid = pid;
+        if (tweaks->parent_thread_pid == -1) {
+          tweaks->parent_thread_pid = pid;
+        }
 
         tweaks->apply_process(game, pid, thread_name);
 
@@ -126,6 +128,8 @@ int main(int argc, char* argv[]) {
         std::cout << "No games running." << std::endl;
 
         tweaks->remove();
+
+        tweaks->parent_thread_pid = -1;
       }
     }
   });

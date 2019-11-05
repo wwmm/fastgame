@@ -1,15 +1,9 @@
 {
   "executable-name": "ShadowOfTheTombRaider",
-  "environment": [
-    "__GL_THREADED_OPTIMIZATIONS=0",
-    "__GL_MaxFramesAllowed=2",
-    "STAGING_SHARED_MEMORY=1",
-    "WINEFSYNC_SPINCOUNT=2"
-  ],
   "threads": {
-    "initial-cpu-affinity": ["12", "13", "14", "15"],
+    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
     "names": {
-      "ShadowOfTheTombRaider": {
+      "ShadowOfTheTomb": {
         "parent": {
           "cpu-affinity": ["15"],
           "niceness": "-4",
@@ -18,36 +12,24 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["12", "13", "14", "15"],
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "scheduler-policy": "SCHED_BATCH"
         }
       },
-      "dxvk-shader": {
-        "cpu-affinity": ["0", "1", "2", "3"],
-        "scheduler-policy": "SCHED_OTHER"
+      "TaskSchedulerBa": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+        "scheduler-policy": "SCHED_BATCH"
       },
-      "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
+      "TaskSchedulerFo": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+        "scheduler-policy": "SCHED_BATCH"
       },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_OTHER"
+      "TaskSchedulerSi": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+        "scheduler-policy": "SCHED_BATCH"
       },
       "SDLAudioP2": {
-        "cpu-affinity": ["8"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "PulseHotplug": {
-        "cpu-affinity": ["10"],
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
         "scheduler-policy": "SCHED_OTHER"
       }
     }

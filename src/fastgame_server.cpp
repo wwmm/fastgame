@@ -45,6 +45,8 @@ int main(int argc, char* argv[]) {
 
         if (tweaks->parent_thread_pid == -1) {
           tweaks->parent_thread_pid = pid;
+
+          std::cout << game + " parent thread name: " << thread_name << std::endl;
         }
 
         tweaks->apply_process(game, pid, thread_name);
@@ -54,8 +56,6 @@ int main(int argc, char* argv[]) {
         }
 
         pid_list.push_back(std::pair(game, pid));
-
-        std::cout << game + " parent thread name: " << thread_name << std::endl;
 
         std::cout << "(" + std::to_string(pid) + ", " + comm + ", " + exe_path + ", " + cmdline + ")" << std::endl;
       }

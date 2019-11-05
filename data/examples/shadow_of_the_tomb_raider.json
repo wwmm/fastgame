@@ -1,5 +1,5 @@
 {
-  "executable-name": "SOTTR",
+  "executable-name": "ShadowOfTheTombRaider",
   "environment": [
     "__GL_THREADED_OPTIMIZATIONS=0",
     "__GL_MaxFramesAllowed=2",
@@ -9,7 +9,7 @@
   "threads": {
     "initial-cpu-affinity": ["12", "13", "14", "15"],
     "names": {
-      "SOTTR": {
+      "ShadowOfTheTombRaider": {
         "parent": {
           "cpu-affinity": ["15"],
           "niceness": "-4",

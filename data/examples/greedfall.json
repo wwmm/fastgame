@@ -2,7 +2,7 @@
   "executable-name": "GreedFall",
   "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
   "threads": {
-    "initial-cpu-affinity": ["12", "13", "14", "15"],
+    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
     "names": {
       "GreedFall": {
         "parent": {
@@ -13,12 +13,12 @@
           "io-priority": "0"
         },
         "children": {
-          "cpu-affinity": ["12", "13", "14", "15"],
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
           "scheduler-policy": "SCHED_BATCH"
         }
       },
       "dxvk-shader": {
-        "cpu-affinity": ["0", "1", "2", "3"],
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
         "scheduler-policy": "SCHED_BATCH"
       },
       "dxvk-cs": {
@@ -38,11 +38,11 @@
         "scheduler-policy": "SCHED_OTHER"
       },
       "SDLAudioP2": {
-        "cpu-affinity": ["8"],
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
         "scheduler-policy": "SCHED_OTHER"
       },
       "PulseHotplug": {
-        "cpu-affinity": ["10"],
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
         "scheduler-policy": "SCHED_OTHER"
       }
     }

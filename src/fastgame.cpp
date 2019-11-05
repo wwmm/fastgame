@@ -13,26 +13,31 @@ int main(int argc, char* argv[]) {
 
   auto scheduler = std::make_unique<Scheduler>();
 
-  auto game = cmd_options->get_game();
+  auto game_name = cmd_options->get_game();
   auto game_exe = cmd_options->get_game_exe();
-  auto environment = cfg->get_profile_key_array<std::string>(game, "environment");
 
-  scheduler->set_affinity(0, cfg->get_profile_key_array<int>(game, "threads.initial-cpu-affinity"));
+  auto games = cfg->get_games();
 
-  for (auto& env : environment) {
-    std::vector<std::string> results;
+  if (games.find(game_name) != games.end()) {
+    auto environment = cfg->get_profile_key_array<std::string>(game_name, "environment");
 
-    boost::split(results, env, [](char c) { return c == '='; });
+    scheduler->set_affinity(0, cfg->get_profile_key_array<int>(game_name, "threads.initial-cpu-affinity"));
 
-    if (results.size() == 2) {
-      // std::cout << results[0] << "\t" << results[1] << std::endl;
+    for (auto& env : environment) {
+      std::vector<std::string> results;
 
-      setenv(results[0].c_str(), results[1].c_str(), 1);
+      boost::split(results, env, [](char c) { return c == '='; });
+
+      if (results.size() == 2) {
+        // std::cout << results[0] << "\t" << results[1] << std::endl;
+
+        setenv(results[0].c_str(), results[1].c_str(), 1);
+      }
     }
   }
 
   /*
-    Assuming that the game option comes first like in fastgame --game SOTTR --run game_executable
+    Assuming that the game option comes first like in fastgame --game ShadowOfTheTombRaider --run game_executable
   */
 
   std::vector<char*> arguments;

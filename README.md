@@ -28,12 +28,11 @@ launch command. Just start `fastgame_server` before launching the game.
 - Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
 - Change io priority (as far as I know only bfq and cfq schedulers use this information)
 - Nvidia overclocking, power limit and powermize control
+- Radeon amdgpu power profile
 
 # Configuration File Example
 
-A few settings can have different values for each game. When creating a new game section use the name of its executable
-(without extension) as the section name. For example the executable of the game Shadow of the Tomb Raider is named
-`SOTTR.exe`. When creating this game section name it `SOTTR`.
+Settings that are independent of the game process should be put int the file `config.json`. It will look like this:
 
 ```
 {
@@ -57,6 +56,10 @@ A few settings can have different values for each game. When creating a new game
         "defrag": {
           "default": "madvise",
           "game": "always"
+        },
+        "shmem_enabled": {
+          "default": "never",
+          "game": "always"
         }
       }
     },
@@ -79,148 +82,83 @@ A few settings can have different values for each game. When creating a new game
         "game": "1"
       }
     },
-    "nvidia": {
-      "powermizer-mode": {
-        "default": "adaptive",
-        "game": "maximum-performance"
-      },
-      "power-limit": {
-        "default": "180",
-        "game": "200"
-      },
-      "clock-offset": {
-        "gpu": {
-          "default": "0",
-          "game": "150"
-        },
-        "memory": {
-          "default": "0",
-          "game": "500"
-        }
-      }
-    }
-  },
-  "games": {
-    "wineserver": {
-      "threads": {
-        "names": {
-          "wineserver": {
-            "cpu-affinity": ["0"]
-          }
-        }
-      }
-    },
-    "SOTTR": {
-      "environment": [
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "STAGING_SHARED_MEMORY=1",
-        "WINEFSYNC_SPINCOUNT=100"
-      ],
-      "threads": {
-        "names": {
-          "SOTTR": {
-            "parent": {
-              "cpu-affinity": ["15"],
-              "niceness": "-4",
-              "scheduler-policy": "SCHED_OTHER",
-              "io-class": "RT",
-              "io-priority": "0"
-            },
-            "children": {
-              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-              "scheduler-policy": "SCHED_BATCH"
-            }
-          },
-          "dxvk-cs": {
-            "cpu-affinity": ["1"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-writer": {
-            "cpu-affinity": ["2"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-submit": {
-            "cpu-affinity": ["3"],
-            "scheduler-policy": "SCHED_OTHER"
-          }
-        }
-      }
-    },
-    "dota2": {
-      "threads": {
-        "names": {
-          "dota2": {
-            "parent": {
-              "niceness": "-4",
-              "scheduler-policy": "SCHED_OTHER",
-              "io-class": "RT",
-              "io-priority": "0"
-            },
-            "children": {
-              "scheduler-policy": "SCHED_BATCH"
-            }
-          }
-        }
-      }
-    },
-    "RememberMe": {
-      "environment": [
-        "__GL_THREADED_OPTIMIZATIONS=0",
-        "__GL_MaxFramesAllowed=2",
-        "__GL_FSAA_MODE=11",
-        "__GL_LOG_MAX_ANISO=4",
-        "PROTON_USE_D9VK=1",
-        "PROTON_FORCE_LARGE_ADDRESS_AWARE=1"
-      ],
-      "threads": {
-        "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-        "names": {
-          "RememberMe": {
-            "parent": {
-              "cpu-affinity": ["15"],
-              "niceness": "-4",
-              "scheduler-policy": "SCHED_OTHER",
-              "io-class": "RT",
-              "io-priority": "0"
-            },
-            "children": {
-              "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-              "scheduler-policy": "SCHED_BATCH"
-            }
-          },
-          "dxvk-cs": {
-            "cpu-affinity": ["1"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-queue": {
-            "cpu-affinity": ["0"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-writer": {
-            "cpu-affinity": ["2"],
-            "scheduler-policy": "SCHED_OTHER"
-          },
-          "dxvk-submit": {
-            "cpu-affinity": ["3"],
-            "scheduler-policy": "SCHED_OTHER"
-          }
-        }
+    "radeon": {
+      "power_dpm_force_performance_level": {
+        "default": "auto",
+        "game": "high"
       }
     }
   }
 }
-
 ```
 
-When you install FastGame an empty configuration file will be created at `/etc/fastgame/config.json` and an exampple
-will be copied to `/etc/fastgame/config.json`. Do not take the values there as good values for everybody. They are just
-values I have been playing with in my computer. At least for now FastGame's main objective is giving the user the
-ability to change system settings on demand. Customize your config file!
+Settings like cpu affinity can have different values for each game and must be put in our profiles folder. For example
+the executable of the game Shadow of the Tomb Raider is named `SOTTR.exe`. When creating this game profile file put
+`SOTTR` in the field `executable-name`.
+
+```
+{
+  "executable-name": "SOTTR",
+  "environment": [
+    "__GL_THREADED_OPTIMIZATIONS=0",
+    "__GL_MaxFramesAllowed=2",
+    "STAGING_SHARED_MEMORY=1",
+    "WINEFSYNC_SPINCOUNT=2"
+  ],
+  "threads": {
+    "initial-cpu-affinity": ["12", "13", "14", "15"],
+    "names": {
+      "SOTTR": {
+        "parent": {
+          "cpu-affinity": ["15"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "io-class": "RT",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["12", "13", "14", "15"],
+          "scheduler-policy": "SCHED_BATCH"
+        }
+      },
+      "dxvk-shader": {
+        "cpu-affinity": ["0", "1", "2", "3"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-queue": {
+        "cpu-affinity": ["0"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-cs": {
+        "cpu-affinity": ["1"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-writer": {
+        "cpu-affinity": ["2"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-submit": {
+        "cpu-affinity": ["3"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "SDLAudioP2": {
+        "cpu-affinity": ["8"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "PulseHotplug": {
+        "cpu-affinity": ["10"],
+        "scheduler-policy": "SCHED_OTHER"
+      }
+    }
+  }
+}
+```
+
+When you install FastGame an empty configuration file will be created at `/etc/fastgame/config.json` and an example
+will be copied to `/etc/fastgame/config_example.json`. Profile examples can be found at `/etc/fastgame/profiles/examples`.
+Put your profiels in the folder `/etc/fastgame/profiles/`. Do not take the values in the examples as good values for
+everybody. They are just values I have been playing with in my computer. At least for now FastGame's main objective is
+giving the user the ability to change system settings on demand. Customize your configuration files!
 
 # Compilation
 

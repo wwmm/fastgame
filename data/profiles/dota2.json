@@ -1,0 +1,18 @@
+{
+  "executable-name": "dota2",
+  "threads": {
+    "names": {
+      "dota2": {
+        "parent": {
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "io-class": "RT",
+          "io-priority": "0"
+        },
+        "children": {
+          "scheduler-policy": "SCHED_BATCH"
+        }
+      }
+    }
+  }
+}

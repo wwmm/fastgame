@@ -1,0 +1,20 @@
+{
+  "executable-name": "Civ6Sub",
+  "threads": {
+    "names": {
+      "Civ6Sub": {
+        "parent": {
+          "cpu-affinity": ["15"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "io-class": "RT",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "scheduler-policy": "SCHED_BATCH"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "executable-name": "RememberMe",
+  "environment": [
+    "__GL_THREADED_OPTIMIZATIONS=1",
+    "__GL_MaxFramesAllowed=2",
+    "__GL_FSAA_MODE=11",
+    "__GL_LOG_MAX_ANISO=4",
+    "PROTON_USE_D9VK=0",
+    "PROTON_FORCE_LARGE_ADDRESS_AWARE=1",
+    "STAGING_SHARED_MEMORY=1"
+  ],
+  "threads": {
+    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+    "names": {
+      "RememberMe": {
+        "parent": {
+          "cpu-affinity": ["15"],
+          "niceness": "-4",
+          "scheduler-policy": "SCHED_OTHER",
+          "io-class": "RT",
+          "io-priority": "0"
+        },
+        "children": {
+          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
+          "scheduler-policy": "SCHED_BATCH"
+        }
+      },
+      "dxvk-cs": {
+        "cpu-affinity": ["1"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-queue": {
+        "cpu-affinity": ["0"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-writer": {
+        "cpu-affinity": ["2"],
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-submit": {
+        "cpu-affinity": ["3"],
+        "scheduler-policy": "SCHED_OTHER"
+      }
+    }
+  }
+}

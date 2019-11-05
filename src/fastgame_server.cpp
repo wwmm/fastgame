@@ -85,9 +85,13 @@ int main(int argc, char* argv[]) {
 
   nl->new_fork.connect([&](int tgid, int child_pid, std::string child_comm) {
     if (child_comm == "wineserver") {
-      std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
+      auto games = cfg->get_games();
 
-      tweaks->apply_process("wineserver", child_pid, "wineserver");
+      if (games.find("f") != games.end()) {
+        std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
+
+        tweaks->apply_process("wineserver", child_pid, "wineserver");
+      }
     } else {
       auto thread_name = fs::path(child_comm).stem().string();
 

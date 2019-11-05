@@ -1,1 +1,0 @@
-install_subdir('.', install_dir: join_paths(fastgame_config_dir, 'profiles/examples'))

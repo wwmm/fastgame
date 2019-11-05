@@ -1,0 +1,10 @@
+{
+  "executable-name": "wineserver",
+  "threads": {
+    "names": {
+      "wineserver": {
+        "cpu-affinity": ["0"]
+      }
+    }
+  }
+}

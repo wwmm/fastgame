@@ -25,9 +25,10 @@ int main(int argc, char* argv[]) {
       return;
     }
 
-    for (auto game : cfg->get_games()) {
+    for (auto pair : cfg->get_games()) {
       auto apply = false;
       auto path_comm = fs::path(comm);
+      auto game = pair.first;
 
       if (game == comm || game == path_comm.stem().string()) {
         apply = true;

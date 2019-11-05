@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
     if (child_comm == "wineserver") {
       auto games = cfg->get_games();
 
-      if (games.find("f") != games.end()) {
+      if (games.find("wineserver") != games.end()) {
         std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
 
         tweaks->apply_process("wineserver", child_pid, "wineserver");

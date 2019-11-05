@@ -5,45 +5,31 @@
     "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
     "names": {
       "GreedFall": {
-        "parent": {
-          "cpu-affinity": ["15"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "io-class": "RT",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-          "scheduler-policy": "SCHED_BATCH"
-        }
+        "niceness": "-4",
+        "scheduler-policy": "SCHED_BATCH",
+        "io-class": "RT",
+        "io-priority": "0"
       },
-      "dxvk-shader": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_BATCH"
+      "GreedFa:disk$0": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
       },
       "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["1"]
       },
       "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["0"]
       },
       "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["2"]
       },
       "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["3"]
       },
       "SDLAudioP2": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
       },
       "PulseHotplug": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
       }
     }
   }

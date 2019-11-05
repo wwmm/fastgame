@@ -37,6 +37,8 @@ void Scheduler::set_policy(const int& pid, const std::string& policy, const int&
     policy_index = SCHED_ISO;
   } else if (policy == "SCHED_DEADLINE") {
     policy_index = SCHED_DEADLINE;
+  } else if (policy == "SCHED_IDLE") {
+    policy_index = SCHED_IDLE;
   } else {
     policy_index = SCHED_OTHER;
   }

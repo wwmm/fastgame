@@ -2,7 +2,6 @@
   "executable-name": "GreedFall",
   "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
   "threads": {
-    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
     "names": {
       "GreedFall": {
         "niceness": "-4",
@@ -10,20 +9,29 @@
         "io-class": "RT",
         "io-priority": "0"
       },
-      "GreedFa:disk$0": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
-      },
       "dxvk-cs": {
-        "cpu-affinity": ["1"]
+        "cpu-affinity": ["1"],
+        "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-queue": {
-        "cpu-affinity": ["0"]
+        "cpu-affinity": ["0"],
+        "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-writer": {
-        "cpu-affinity": ["2"]
+        "cpu-affinity": ["2"],
+        "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-submit": {
-        "cpu-affinity": ["3"]
+        "cpu-affinity": ["3"],
+        "scheduler-policy": "SCHED_IDLE"
+      },
+      "dxvk-shader": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+        "scheduler-policy": "SCHED_IDLE"
+      },
+      "GreedFa:disk$0": {
+        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
+        "scheduler-policy": "SCHED_IDLE"
       },
       "SDLAudioP2": {
         "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]

@@ -3,7 +3,9 @@
   "threads": {
     "names": {
       "wineserver": {
-        "cpu-affinity": ["0"]
+        "cpu-affinity": ["0"],
+        "scheduler-policy": "SCHED_RR",
+        "scheduler-policy-priority": "1"
       }
     }
   }

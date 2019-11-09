@@ -13,6 +13,7 @@ class Config {
 
   std::map<std::string, std::string> get_games();
   std::string get_profiles_dir();
+  std::vector<std::string> get_thread_name_list(const std::string& game_name);
 
   template <typename T>
   T get_key(const std::string& key, T default_value) {

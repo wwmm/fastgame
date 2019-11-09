@@ -55,7 +55,26 @@ void Tweaks::apply_global() {
 #endif
 }
 
-void Tweaks::apply_process(const std::string& game, const int& pid, const std::string& thread_name) {
+void Tweaks::apply_process(const std::string& game, const int& pid, std::string thread_name) {
+  /*
+    First we do a poor man wildcard. This way we can write in the profile file things like GreedFa:disk$ and the setting
+    will be applied to all threads named like GreedFa:disk$0, GreedFa:disk$1, GreedFa:disk$2, etc
+  */
+
+  auto name_list = cfg->get_thread_name_list(game);
+
+  for (auto name : name_list) {
+    if (thread_name.size() > name.size()) {
+      auto sub_str = thread_name.substr(0, name.size());
+
+      if (sub_str == name) {
+        thread_name = name;
+
+        break;
+      }
+    }
+  }
+
   change_niceness(game, pid, thread_name);
   change_scheduler_policy(game, pid, thread_name);
   change_iopriority(game, pid, thread_name);

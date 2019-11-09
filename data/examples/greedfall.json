@@ -1,6 +1,11 @@
 {
   "executable-name": "GreedFall",
-  "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
+  "environment": [
+    "STAGING_SHARED_MEMORY=1",
+    "WINEFSYNC_SPINCOUNT=2",
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+  ],
   "threads": {
     "names": {
       "GreedFall": {
@@ -9,35 +14,34 @@
         "io-class": "RT",
         "io-priority": "0"
       },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_IDLE"
+      "GreedFal:shlo": {
+        "cpu-affinity": ["0", "1", "2", "3", "8", "9", "10", "11"],
+        "scheduler-policy": "SCHED_OTHER"
       },
-      "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-submit": {
-        "cpu-affinity": ["3"],
+      "GreedFa:disk$": {
         "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-shader": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
-      "GreedFa:disk$0": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_IDLE"
+      "dxvk-cs": {
+        "cpu-affinity": ["1"],
+        "scheduler-policy": "SCHED_BATCH"
       },
-      "SDLAudioP2": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
+      "dxvk-queue": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-writer": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "dxvk-submit": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "SDLAudioP": {
+        "scheduler-policy": "SCHED_OTHER"
       },
       "PulseHotplug": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
+        "scheduler-policy": "SCHED_OTHER"
       }
     }
   }

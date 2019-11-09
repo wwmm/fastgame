@@ -37,3 +37,22 @@ std::map<std::string, std::string> Config::get_games() {
 std::string Config::get_profiles_dir() {
   return profiles_dir;
 }
+
+std::vector<std::string> Config::get_thread_name_list(const std::string& game_name) {
+  boost::property_tree::ptree r;
+
+  boost::property_tree::read_json(profiles_dir + "/" + games[game_name], r);
+
+  std::vector<std::string> out;
+
+  try {
+    auto names_section = r.get_child("threads.names");
+
+    for (auto& it : names_section) {
+      out.push_back(it.first);
+    }
+  } catch (std::exception& e) {
+  }
+
+  return out;
+}

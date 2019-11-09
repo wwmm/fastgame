@@ -1,6 +1,11 @@
 {
   "executable-name": "APlagueTaleInnocence_x64",
-  "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
+  "environment": [
+    "STAGING_SHARED_MEMORY=1",
+    "WINEFSYNC_SPINCOUNT=2",
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+  ],
   "threads": {
     "names": {
       "APlagueTaleInno": {
@@ -9,27 +14,27 @@
         "io-class": "RT",
         "io-priority": "0"
       },
+      "APlagueTal:cs0": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
       "APlague:disk$0": {
         "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-shader": {
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
       "dxvk-cs": {
         "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
       "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
       "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
       "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_IDLE"
+        "scheduler-policy": "SCHED_OTHER"
       },
       "SDLAudioP2": {
         "scheduler-policy": "SCHED_OTHER"

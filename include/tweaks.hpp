@@ -20,7 +20,7 @@ class Tweaks {
   int parent_thread_pid = -1;
 
   void apply_global();
-  void apply_process(const std::string& game, const int& pid, const std::string& thread_name);
+  void apply_process(const std::string& game, const int& pid, std::string thread_name);
   void remove();
 
   template <typename T>

@@ -1,7 +1,10 @@
 {
   "executable-name": "ShadowOfTheTombRaider",
+  "environment": [
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+  ],
   "threads": {
-    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
     "names": {
       "NThreadPool.0": {
         "cpu-affinity": ["0"],
@@ -73,7 +76,7 @@
       },
       "WinMain": {
         "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_OTHER"
+        "scheduler-policy": "SCHED_BATCH"
       }
     }
   }

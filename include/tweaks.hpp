@@ -17,10 +17,8 @@ class Tweaks {
  public:
   Tweaks(Config* config);
 
-  int parent_thread_pid = -1;
-
   void apply_global();
-  void apply_process(const std::string& game, const int& pid, std::string thread_name);
+  void apply_process(const std::string& game, const int& pid);
   void remove();
 
   template <typename T>
@@ -58,9 +56,9 @@ class Tweaks {
 
   void change_cpu_governor(const std::string& name);
   void change_cfs_parameter(const std::string& name, const int& value);
-  void change_iopriority(const std::string& game, const int& pid, const std::string& thread_name);
-  void change_niceness(const std::string& game, const int& pid, const std::string& thread_name);
-  void change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name);
+  void change_iopriority(const std::string& game, const int& pid);
+  void change_niceness(const std::string& game, const int& pid);
+  void change_scheduler_policy(const std::string& game, const int& pid);
   void set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled);
   void set_cpu_dma_latency(const int& latency_us);
 };

@@ -1,5 +1,5 @@
 {
-  "executable-name": "APlagueTaleInnocence_x64",
+  "executable-name": "APlagueTaleInnocence_x64.exe",
   "environment": [
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2",
@@ -17,15 +17,20 @@
       "APlagueTal:cs0": {
         "scheduler-policy": "SCHED_OTHER"
       },
-      "APlague:disk$0": {
+      "APlagueT:shlo": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "APlagueT:gdrv": {
+        "scheduler-policy": "SCHED_OTHER"
+      },
+      "APlague:disk$": {
         "scheduler-policy": "SCHED_IDLE"
       },
       "dxvk-shader": {
         "scheduler-policy": "SCHED_OTHER"
       },
       "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
+        "cpu-affinity": ["1"]
       },
       "dxvk-queue": {
         "scheduler-policy": "SCHED_OTHER"
@@ -36,13 +41,7 @@
       "dxvk-submit": {
         "scheduler-policy": "SCHED_OTHER"
       },
-      "SDLAudioP2": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "SDLAudioP3": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "SDLAudioP4": {
+      "SDLAudioP": {
         "scheduler-policy": "SCHED_OTHER"
       },
       "PulseHotplug": {

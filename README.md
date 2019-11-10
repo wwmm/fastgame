@@ -22,7 +22,7 @@ launch command. Just start `fastgame_server` before launching the game.
 
 - Change cpu frequency governor
 - Change process niceness
-- Use thread name to change its cpu affinity
+- Change its cpu affinity
 - Set Environment variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
 - Change process cpu scheduler policy(SCHED_OTHER, SCHED_BATCH,...)
 - Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
@@ -93,59 +93,17 @@ Settings that are independent of the game process should be put int the file `co
 ```
 
 Settings like cpu affinity can have different values for each game and must be put in our profiles folder. For example
-the executable of the game A Plague Tale Innocence is named `APlagueTaleInnocence_x64.exe`. When creating this game
-profile file put `APlagueTaleInnocence_x64` in the field `executable-name`.
+the executable of the game A Plague Tale Innocence is named `APlagueTaleInnocence_x64.exe`. A profile for this game will
+look like this
 
 ```
 {
-  "executable-name": "APlagueTaleInnocence_x64",
+  "executable-name": "APlagueTaleInnocence_x64.exe",
   "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
-  "threads": {
-    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-    "names": {
-      "APlagueTaleInno": {
-        "parent": {
-          "cpu-affinity": ["15"],
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "io-class": "RT",
-          "io-priority": "0"
-        },
-        "children": {
-          "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"],
-          "scheduler-policy": "SCHED_BATCH"
-        }
-      },
-      "dxvk-shader": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_BATCH"
-      },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "SDLAudioP2": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "PulseHotplug": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_OTHER"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }
 ```
 

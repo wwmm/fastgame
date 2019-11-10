@@ -1,6 +1,3 @@
-#include <string.h>
-#include <filesystem>
-#include <memory>
 #include "cmdline_options.hpp"
 #include "config.h"
 #include "config.hpp"
@@ -41,15 +38,7 @@ int main(int argc, char* argv[]) {
       }
 
       if (apply) {
-        auto thread_name = fs::path(comm).stem().string();
-
-        if (tweaks->parent_thread_pid == -1) {
-          tweaks->parent_thread_pid = pid;
-
-          std::cout << game + " parent thread name: " << thread_name << std::endl;
-        }
-
-        tweaks->apply_process(game, pid, thread_name);
+        tweaks->apply_process(game, pid);
 
         if (pid_list.size() == 0) {
           tweaks->apply_global();
@@ -58,29 +47,6 @@ int main(int argc, char* argv[]) {
         pid_list.push_back(std::pair(game, pid));
 
         std::cout << "(" + std::to_string(pid) + ", " + comm + ", " + exe_path + ", " + cmdline + ")" << std::endl;
-      }
-    }
-
-    for (auto& p : pid_list) {
-      if (pid != p.second) {
-        try {
-          auto task_dir = "/proc/" + std::to_string(p.second) + "/task";
-
-          for (const auto& entry : fs::directory_iterator(task_dir)) {
-            const auto task_pid = std::stoi(entry.path().filename().string());
-
-            if (task_pid != p.second && task_pid == pid) {
-              auto thread_name = fs::path(comm).stem().string();
-
-              tweaks->apply_process(p.first, pid, thread_name);
-
-              std::cout << "new " + p.first + " named thread: (" + comm + ", " + std::to_string(pid) + ")" << std::endl;
-
-              break;
-            }
-          }
-        } catch (std::exception& e) {
-        }
       }
     }
   });
@@ -92,14 +58,12 @@ int main(int argc, char* argv[]) {
       if (games.find("wineserver") != games.end()) {
         std::cout << "wineserver pid: " + std::to_string(child_pid) << std::endl;
 
-        tweaks->apply_process("wineserver", child_pid, "wineserver");
+        tweaks->apply_process("wineserver", child_pid);
       }
     } else {
-      auto thread_name = fs::path(child_comm).stem().string();
-
       for (auto& p : pid_list) {
         if (tgid == p.second && child_pid != tgid) {
-          tweaks->apply_process(p.first, child_pid, thread_name);
+          tweaks->apply_process(p.first, child_pid);
 
           break;
         }
@@ -128,8 +92,6 @@ int main(int argc, char* argv[]) {
         std::cout << "No games running." << std::endl;
 
         tweaks->remove();
-
-        tweaks->parent_thread_pid = -1;
       }
     }
   });

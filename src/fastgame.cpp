@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   if (games.find(game_name) != games.end()) {
     auto environment = cfg->get_profile_key_array<std::string>(game_name, "environment");
 
-    scheduler->set_affinity(0, cfg->get_profile_key_array<int>(game_name, "threads.initial-cpu-affinity"));
+    scheduler->set_affinity(0, cfg->get_profile_key_array<int>(game_name, "cpu-affinity"));
 
     for (auto& env : environment) {
       std::vector<std::string> results;

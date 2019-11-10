@@ -55,51 +55,14 @@ void Tweaks::apply_global() {
 #endif
 }
 
-void Tweaks::apply_process(const std::string& game, const int& pid, std::string thread_name) {
-  /*
-    First we do a poor man wildcard. This way we can write in the profile file things like GreedFa:disk$ and the setting
-    will be applied to all threads named like GreedFa:disk$0, GreedFa:disk$1, GreedFa:disk$2, etc
-  */
+void Tweaks::apply_process(const std::string& game, const int& pid) {
+  change_niceness(game, pid);
+  change_scheduler_policy(game, pid);
+  change_iopriority(game, pid);
 
-  auto name_list = cfg->get_thread_name_list(game);
+  auto mask = cfg->get_profile_key_array<int>(game, "cpu-affinity");
 
-  for (auto name : name_list) {
-    if (thread_name.size() > name.size()) {
-      auto sub_str = thread_name.substr(0, name.size());
-
-      if (sub_str == name) {
-        thread_name = name;
-
-        break;
-      }
-    }
-  }
-
-  change_niceness(game, pid, thread_name);
-  change_scheduler_policy(game, pid, thread_name);
-  change_iopriority(game, pid, thread_name);
-
-  if (pid == parent_thread_pid) {
-    auto mask = cfg->get_profile_key_array<int>(game, "threads.names." + thread_name + ".parent.cpu-affinity");
-
-    if (mask.size() > 0) {
-      scheduler->set_affinity(pid, mask);
-    } else {
-      mask = cfg->get_profile_key_array<int>(game, "threads.names." + thread_name + ".cpu-affinity");
-
-      scheduler->set_affinity(pid, mask);
-    }
-  } else {
-    auto mask = cfg->get_profile_key_array<int>(game, "threads.names." + thread_name + ".children.cpu-affinity");
-
-    if (mask.size() > 0) {
-      scheduler->set_affinity(pid, mask);
-    } else {
-      mask = cfg->get_profile_key_array<int>(game, "threads.names." + thread_name + ".cpu-affinity");
-
-      scheduler->set_affinity(pid, mask);
-    }
-  }
+  scheduler->set_affinity(pid, mask);
 }
 
 void Tweaks::remove() {
@@ -193,111 +156,28 @@ void Tweaks::change_cfs_parameter(const std::string& name, const int& value) {
   std::cout << log_tag + "changed cfs parameter " + name + " to: " << value << std::endl;
 }
 
-void Tweaks::change_niceness(const std::string& game, const int& pid, const std::string& thread_name) {
-  int niceness = 0;
+void Tweaks::change_niceness(const std::string& game, const int& pid) {
+  auto niceness = cfg->get_profile_key(game, "niceness", 0);
 
-  if (pid == parent_thread_pid) {
-    niceness = cfg->get_profile_key(game, "threads.names." + thread_name + ".parent.niceness", -100);
+  setpriority(PRIO_PROCESS, pid, niceness);
+}
 
-    if (niceness != -100) {
-      setpriority(PRIO_PROCESS, pid, niceness);
-    } else {
-      niceness = cfg->get_profile_key(game, "threads.names." + thread_name + ".niceness", 0);
+void Tweaks::change_scheduler_policy(const std::string& game, const int& pid) {
+  auto sched_policy = cfg->get_profile_key<std::string>(game, "scheduler-policy", "invalid");
 
-      setpriority(PRIO_PROCESS, pid, niceness);
-    }
-  } else {
-    niceness = cfg->get_profile_key(game, "threads.names." + thread_name + ".children.niceness", -100);
+  auto sched_priority = cfg->get_profile_key(game, "scheduler-policy-priority", 0);
 
-    if (niceness != -100) {
-      setpriority(PRIO_PROCESS, pid, niceness);
-    } else {
-      niceness = cfg->get_profile_key(game, "threads.names." + thread_name + ".niceness", -1);
-
-      setpriority(PRIO_PROCESS, pid, niceness);
-    }
+  if (sched_policy != "invalid") {
+    scheduler->set_policy(pid, sched_policy, sched_priority);
   }
 }
 
-void Tweaks::change_scheduler_policy(const std::string& game, const int& pid, const std::string& thread_name) {
-  std::string sched_policy;
-  int sched_priority;
+void Tweaks::change_iopriority(const std::string& game, const int& pid) {
+  auto io_class = cfg->get_profile_key<std::string>(game, "io-class", "invalid");
 
-  if (pid == parent_thread_pid) {
-    sched_policy =
-        cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".parent.scheduler-policy", "invalid");
+  auto io_priority = cfg->get_profile_key(game, "io-priority", 7);
 
-    sched_priority =
-        cfg->get_profile_key(game, "threads.names." + thread_name + ".parent.scheduler-policy-priority", 0);
-
-    if (sched_policy != "invalid") {
-      scheduler->set_policy(pid, sched_policy, sched_priority);
-    } else {
-      sched_policy =
-          cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".scheduler-policy", "invalid");
-
-      sched_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".scheduler-policy-priority", 0);
-
-      if (sched_policy != "invalid") {
-        scheduler->set_policy(pid, sched_policy, sched_priority);
-      }
-    }
-  } else {
-    sched_policy = cfg->get_profile_key<std::string>(
-        game, "threads.names." + thread_name + ".children.scheduler-policy", "invalid");
-
-    sched_priority =
-        cfg->get_profile_key(game, "threads.names." + thread_name + ".children.scheduler-policy-priority", 0);
-
-    if (sched_policy != "invalid") {
-      scheduler->set_policy(pid, sched_policy, sched_priority);
-    } else {
-      sched_policy =
-          cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".scheduler-policy", "invalid");
-
-      sched_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".scheduler-policy-priority", 0);
-
-      if (sched_policy != "invalid") {
-        scheduler->set_policy(pid, sched_policy, sched_priority);
-      }
-    }
-  }
-}
-
-void Tweaks::change_iopriority(const std::string& game, const int& pid, const std::string& thread_name) {
-  int io_priority;
-  std::string io_class;
-
-  if (pid == parent_thread_pid) {
-    io_class = cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".parent.io-class", "invalid");
-
-    io_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".parent.io-priority", 7);
-
-    if (io_class != "invalid") {
-      ioprio_set(pid, io_class, io_priority);
-    } else {
-      io_class = cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".io-class", "invalid");
-
-      io_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".io-priority", 7);
-
-      ioprio_set(pid, io_class, io_priority);
-    }
-  } else {
-    io_class =
-        cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".children.io-class", "invalid");
-
-    io_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".children.io-priority", 7);
-
-    if (io_class != "invalid") {
-      ioprio_set(pid, io_class, io_priority);
-    } else {
-      io_class = cfg->get_profile_key<std::string>(game, "threads.names." + thread_name + ".io-class", "invalid");
-
-      io_priority = cfg->get_profile_key(game, "threads.names." + thread_name + ".io-priority", 7);
-
-      ioprio_set(pid, io_class, io_priority);
-    }
-  }
+  ioprio_set(pid, io_class, io_priority);
 }
 
 void Tweaks::set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled) {

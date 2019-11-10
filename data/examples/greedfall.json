@@ -1,48 +1,13 @@
 {
-  "executable-name": "GreedFall",
+  "executable-name": "GreedFall.exe",
   "environment": [
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2",
     "RADV_DEBUG=zerovram",
     "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
   ],
-  "threads": {
-    "names": {
-      "GreedFall": {
-        "niceness": "-4",
-        "scheduler-policy": "SCHED_BATCH",
-        "io-class": "RT",
-        "io-priority": "0"
-      },
-      "GreedFal:shlo": {
-        "cpu-affinity": ["0", "1", "2", "3", "8", "9", "10", "11"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "GreedFa:disk$": {
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-shader": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_BATCH"
-      },
-      "dxvk-queue": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-writer": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-submit": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "SDLAudioP": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "PulseHotplug": {
-        "scheduler-policy": "SCHED_OTHER"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

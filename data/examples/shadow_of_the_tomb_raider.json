@@ -4,80 +4,8 @@
     "RADV_DEBUG=zerovram",
     "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
   ],
-  "threads": {
-    "names": {
-      "NThreadPool.0": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.1": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.2": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.3": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.4": {
-        "cpu-affinity": ["4"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.5": {
-        "cpu-affinity": ["5"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.6": {
-        "cpu-affinity": ["6"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.7": {
-        "cpu-affinity": ["7"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.8": {
-        "cpu-affinity": ["8"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.9": {
-        "cpu-affinity": ["9"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.10": {
-        "cpu-affinity": ["10"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.11": {
-        "cpu-affinity": ["11"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.12": {
-        "cpu-affinity": ["12"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.13": {
-        "cpu-affinity": ["13"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.14": {
-        "cpu-affinity": ["14"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "NThreadPool.15": {
-        "cpu-affinity": ["15"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "BgWorkQ.0": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "WinMain": {
-        "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
-        "scheduler-policy": "SCHED_BATCH"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

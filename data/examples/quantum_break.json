@@ -1,33 +1,8 @@
 {
-  "executable-name": "QuantumBreak",
+  "executable-name": "QuantumBreak.exe",
   "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
-  "threads": {
-    "names": {
-      "QuantumBreak": {
-        "niceness": "-4",
-        "scheduler-policy": "SCHED_BATCH",
-        "io-class": "RT",
-        "io-priority": "0"
-      },
-      "dxvk-shader": {
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_IDLE"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

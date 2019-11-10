@@ -6,47 +6,8 @@
     "RADV_DEBUG=zerovram",
     "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
   ],
-  "threads": {
-    "names": {
-      "APlagueTaleInno": {
-        "niceness": "-4",
-        "scheduler-policy": "SCHED_BATCH",
-        "io-class": "RT",
-        "io-priority": "0"
-      },
-      "APlagueTal:cs0": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "APlagueT:shlo": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "APlagueT:gdrv": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "APlague:disk$": {
-        "scheduler-policy": "SCHED_IDLE"
-      },
-      "dxvk-shader": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"]
-      },
-      "dxvk-queue": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-writer": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-submit": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "SDLAudioP": {
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "PulseHotplug": {
-        "scheduler-policy": "SCHED_OTHER"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

@@ -1,40 +1,13 @@
 {
-  "executable-name": "ShadowOfWar",
+  "executable-name": "ShadowOfWar.exe",
   "environment": [
     "__GL_THREADED_OPTIMIZATIONS=0",
     "__GL_MaxFramesAllowed=2",
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2"
   ],
-  "threads": {
-    "names": {
-      "ShadowOfWar": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "io-class": "RT",
-          "io-priority": "0"
-        },
-        "children": {
-          "scheduler-policy": "SCHED_BATCH"
-        }
-      },
-      "dxvk-cs": {
-        "cpu-affinity": ["1"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-queue": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-writer": {
-        "cpu-affinity": ["2"],
-        "scheduler-policy": "SCHED_OTHER"
-      },
-      "dxvk-submit": {
-        "cpu-affinity": ["3"],
-        "scheduler-policy": "SCHED_OTHER"
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

@@ -1,19 +1,8 @@
 {
   "executable-name": "XCOM2WotC",
   "environment": ["__GL_THREADED_OPTIMIZATIONS=1", "__GL_MaxFramesAllowed=2"],
-  "threads": {
-    "names": {
-      "XCOM2WotC": {
-        "parent": {
-          "niceness": "-4",
-          "scheduler-policy": "SCHED_OTHER",
-          "io-class": "RT",
-          "io-priority": "0"
-        },
-        "children": {
-          "scheduler-policy": "SCHED_BATCH"
-        }
-      }
-    }
-  }
+  "niceness": "-4",
+  "scheduler-policy": "SCHED_BATCH",
+  "io-class": "RT",
+  "io-priority": "0"
 }

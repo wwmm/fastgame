@@ -5,7 +5,5 @@
     "__GL_MaxFramesAllowed=2",
     "LD_PRELOAD=/usr/lib/libfreetype.so"
   ],
-  "threads": {
-    "initial-cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"]
-  }
+  "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"]
 }

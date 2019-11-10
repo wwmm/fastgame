@@ -1,12 +1,9 @@
 {
   "executable-name": "wineserver",
-  "threads": {
-    "names": {
-      "wineserver": {
-        "cpu-affinity": ["0"],
-        "scheduler-policy": "SCHED_RR",
-        "scheduler-policy-priority": "1"
-      }
-    }
-  }
+  "cpu-affinity": ["0"],
+  "niceness": "-5",
+  "scheduler-policy": "SCHED_RR",
+  "scheduler-policy-priority": "1",
+  "io-class": "RT",
+  "io-priority": "0"
 }

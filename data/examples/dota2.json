@@ -1,7 +1,5 @@
 {
-  "executable-name": "dota2",
+  "executable-name": "dota2.sh",
   "niceness": "-4",
-  "scheduler-policy": "SCHED_BATCH",
-  "io-class": "RT",
-  "io-priority": "0"
+  "scheduler-policy": "SCHED_BATCH"
 }

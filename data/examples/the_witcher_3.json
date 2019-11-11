@@ -6,7 +6,5 @@
     "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot"
   ],
   "niceness": "-4",
-  "scheduler-policy": "SCHED_BATCH",
-  "io-class": "RT",
-  "io-priority": "0"
+  "scheduler-policy": "SCHED_BATCH"
 }

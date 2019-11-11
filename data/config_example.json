@@ -29,26 +29,22 @@
     "disk": {
       "device": "sdc",
       "scheduler": {
-        "default": "mq-deadline",
-        "game": "bfq"
+        "default": "bfq",
+        "game": "none"
       },
       "read-ahead": {
         "default": "128",
         "game": "0"
       },
-      "nr-requests": {
-        "default": "64",
-        "game": "32"
-      },
       "rq-affinity": {
-        "default": "2",
-        "game": "1"
+        "default": "1",
+        "game": "2"
       }
     },
     "radeon": {
       "power_dpm_force_performance_level": {
         "default": "auto",
-        "game": "high"
+        "game": "profile_peak"
       }
     }
   }

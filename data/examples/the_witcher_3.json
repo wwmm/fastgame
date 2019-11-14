@@ -3,7 +3,7 @@
   "environment": [
     "STAGING_SHARED_MEMORY=1",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot"
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"

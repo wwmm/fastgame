@@ -1,8 +1,8 @@
 {
   "executable-name": "ShadowOfWar.exe",
   "environment": [
-    "__GL_THREADED_OPTIMIZATIONS=0",
-    "__GL_MaxFramesAllowed=2",
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched",
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2"
   ],

@@ -24,6 +24,12 @@
           "default": "never",
           "game": "always"
         }
+      },
+      "vm": {
+        "vfs_cache_pressure": {
+          "default": "100",
+          "game": "20"
+        }
       }
     },
     "disk": {

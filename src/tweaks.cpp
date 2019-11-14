@@ -19,6 +19,8 @@ void Tweaks::apply_global() {
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.game", "");
   auto hugepage_shmem_enabled = cfg->get_key<std::string>("general.memory.hugepage.shmem_enabled.game", "");
 
+  auto vfs_cache_pressure = cfg->get_key("general.memory.vm.vfs_cache_pressure.game", -1);
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.game", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.game", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.game", -1);
@@ -27,6 +29,7 @@ void Tweaks::apply_global() {
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
   set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
+  change_vm_parameter("vfs_cache_pressure", vfs_cache_pressure);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -73,6 +76,8 @@ void Tweaks::remove() {
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.default", "");
   auto hugepage_shmem_enabled = cfg->get_key<std::string>("general.memory.hugepage.shmem_enabled.default", "");
 
+  auto vfs_cache_pressure = cfg->get_key("general.memory.vm.vfs_cache_pressure.default", -1);
+
   auto disk_scheduler = cfg->get_key<std::string>("general.disk.scheduler.default", "");
   auto disk_read_ahead = cfg->get_key("general.disk.read-ahead.default", -1);
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.default", -1);
@@ -81,6 +86,7 @@ void Tweaks::remove() {
   change_cpu_governor(governor);
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
   set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
+  change_vm_parameter("vfs_cache_pressure", vfs_cache_pressure);
   change_disk_parameter("scheduler", disk_scheduler);
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
@@ -232,4 +238,22 @@ void Tweaks::set_cpu_dma_latency(const int& latency_us = 0) {
   cpu_dma_ofstream << latency_us;
 
   std::cout << log_tag + "/dev/cpu_dma_latency latency: " << latency_us << " us" << std::endl;
+}
+
+void Tweaks::change_vm_parameter(const std::string& name, const int& value) {
+  if (value == -1) {
+    return;
+  }
+
+  auto path = fs::path("/proc/sys/vm/" + name);
+
+  std::ofstream f;
+
+  f.open(path);
+
+  f << value;
+
+  f.close();
+
+  std::cout << log_tag + "changed vm parameter " + name + " to: " << value << std::endl;
 }

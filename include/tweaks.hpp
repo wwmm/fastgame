@@ -61,6 +61,7 @@ class Tweaks {
   void change_scheduler_policy(const std::string& game, const int& pid);
   void set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled);
   void set_cpu_dma_latency(const int& latency_us);
+  void change_vm_parameter(const std::string& name, const int& value);
 };
 
 #endif

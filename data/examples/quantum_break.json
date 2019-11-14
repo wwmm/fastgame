@@ -1,6 +1,11 @@
 {
   "executable-name": "QuantumBreak.exe",
-  "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
+  "environment": [
+    "STAGING_SHARED_MEMORY=1",
+    "WINEFSYNC_SPINCOUNT=2",
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+  ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH",
   "io-class": "RT",

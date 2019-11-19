@@ -1,5 +1,5 @@
 {
-  "executable-name": "dota2.sh",
+  "executable-name": "dota2",
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"
 }

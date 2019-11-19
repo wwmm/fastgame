@@ -36,7 +36,7 @@
       "device": "sdc",
       "scheduler": {
         "default": "bfq",
-        "game": "none"
+        "game": "mq-deadline"
       },
       "read-ahead": {
         "default": "128",

@@ -4,7 +4,9 @@
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched",
+    "VK_INSTANCE_LAYERS=VK_LAYER_MESA_overlay",
+    "VK_LAYER_MESA_OVERLAY_CONFIG=submit,draw,pipeline_graphics,pipeline_compute"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"

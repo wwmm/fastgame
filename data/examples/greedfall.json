@@ -8,6 +8,7 @@
     "VK_INSTANCE_LAYERS=VK_LAYER_MESA_overlay",
     "VK_LAYER_MESA_OVERLAY_CONFIG=submit,draw,draw_indexed,pipeline_graphics,pipeline_compute"
   ],
+  "cpu-affinity": ["8", "9", "10", "11", "0", "1", "2", "3"],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"
 }

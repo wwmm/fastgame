@@ -1,5 +1,11 @@
 {
   "general": {
+    "cpu": {
+      "governor": {
+        "default": "schedutil",
+        "game": "performance"
+      }
+    },
     "nvidia": {
       "powermizer-mode": {
         "default": "adaptive",

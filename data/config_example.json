@@ -3,7 +3,7 @@
     "cpu": {
       "governor": {
         "default": "schedutil",
-        "game": "performance"
+        "game": "schedutil"
       },
       "scheduler": {
         "sched_child_runs_first": {
@@ -51,6 +51,12 @@
       "power_dpm_force_performance_level": {
         "default": "auto",
         "game": "profile_peak"
+      },
+      "hwmon": {
+        "power1_cap": {
+          "default": "195000000",
+          "game": "170000000"
+        }
       }
     }
   }

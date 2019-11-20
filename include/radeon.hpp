@@ -9,6 +9,7 @@ class Radeon {
 
   bool has_gpu();
   void set_power_dpm_force_performance_level(const std::string& mode_name);
+  void set_power_cap(const int& value);
 
  private:
   std::string log_tag = "radeon: ";

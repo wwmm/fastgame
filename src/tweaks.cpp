@@ -103,7 +103,7 @@ void Tweaks::remove() {
     auto power_dpm_force_performance_level =
         cfg->get_key<std::string>("general.radeon.power_dpm_force_performance_level.default", "auto");
 
-    auto power1_cap = cfg->get_key("general.radeon.hwmon.power1_cap.game", -1);
+    auto power1_cap = cfg->get_key("general.radeon.hwmon.power1_cap.default", -1);
 
     radeon->set_power_dpm_force_performance_level(power_dpm_force_performance_level);
     radeon->set_power_cap(power1_cap);

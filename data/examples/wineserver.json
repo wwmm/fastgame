@@ -1,6 +1,6 @@
 {
   "executable-name": "wineserver",
-  "cpu-affinity": ["0"],
+  "cpu-affinity": ["15"],
   "niceness": "-5",
   "scheduler-policy": "SCHED_RR",
   "scheduler-policy-priority": "1",

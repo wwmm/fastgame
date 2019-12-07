@@ -1,5 +1,5 @@
 {
-  "executable-name": "witcher3.exe",
+  "executable-name": "re2.exe",
   "environment": [
     "STAGING_SHARED_MEMORY=1",
     "RADV_PERFTEST=sisched,dfsm,dccmsaa"

@@ -2,7 +2,9 @@
   "executable-name": "ShadowOfTheTombRaider",
   "environment": [
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+    "RADV_PERFTEST=dfsm,sisched",
+    "VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json",
+    "AMDVLK_ENABLE_DEVELOPING_EXT=all"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH",

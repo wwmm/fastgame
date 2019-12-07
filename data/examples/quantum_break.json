@@ -4,7 +4,7 @@
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dccmsaa,dfsm,shader_ballot,sisched"
+    "RADV_PERFTEST=dfsm,sisched"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"

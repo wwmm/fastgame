@@ -45,6 +45,10 @@
       "rq-affinity": {
         "default": "1",
         "game": "2"
+      },
+      "nr-requests": {
+        "default": "64",
+        "game": "1024"
       }
     },
     "radeon": {
@@ -53,6 +57,7 @@
         "game": "profile_peak"
       },
       "hwmon": {
+        "index": "1",
         "power1_cap": {
           "default": "195000000",
           "game": "170000000"

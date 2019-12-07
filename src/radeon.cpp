@@ -28,12 +28,12 @@ void Radeon::set_power_dpm_force_performance_level(const std::string& mode_name)
   std::cout << log_tag + "changed power_dpm_force_performance_level to: " << mode_name << std::endl;
 }
 
-void Radeon::set_power_cap(const int& value) {
-  if (value == -1) {
+void Radeon::set_power_cap(const int& hwmon_index, const int& value) {
+  if (value == -1 || hwmon_index == -1) {
     return;
   }
 
-  auto path = fs::path("/sys/class/drm/card0/device/hwmon/hwmon1/power1_cap");
+  auto path = fs::path("/sys/class/drm/card0/device/hwmon/hwmon" + std::to_string(hwmon_index) + "/power1_cap");
 
   if (!fs::is_regular_file(path)) {
     std::cout << log_tag + "device " + path.string() + " does not exist!" << std::endl;

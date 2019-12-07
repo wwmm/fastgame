@@ -83,6 +83,7 @@ Settings that are independent of the game process should be put int the file `co
       }
     },
     "radeon": {
+      "index": "1",
       "power_dpm_force_performance_level": {
         "default": "auto",
         "game": "high"

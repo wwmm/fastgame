@@ -4,9 +4,9 @@
     "STAGING_SHARED_MEMORY=1",
     "WINEFSYNC_SPINCOUNT=2",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dfsm,sisched",
+    "RADV_PERFTEST=dfsm,dccmsaa,aco",
     "VK_INSTANCE_LAYERS=VK_LAYER_MESA_overlay",
-    "VK_LAYER_MESA_OVERLAY_CONFIG=submit,draw,draw_indexed,pipeline_graphics,pipeline_compute"
+    "VK_LAYER_MESA_OVERLAY_CONFIG=submit,pipeline_graphics,pipeline_compute,compute_invocations"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"

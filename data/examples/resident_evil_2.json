@@ -2,7 +2,9 @@
   "executable-name": "re2.exe",
   "environment": [
     "STAGING_SHARED_MEMORY=1",
-    "RADV_PERFTEST=sisched,dfsm,dccmsaa"
+    "RADV_DEBUG=zerovram",
+    "RADV_PERFTEST=aco,dfsm,dccmsaa,shader_ballot",
+    "WINE_FULLSCREEN_INTEGER_SCALING=1"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH"

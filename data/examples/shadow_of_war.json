@@ -2,9 +2,10 @@
   "executable-name": "ShadowOfWar.exe",
   "environment": [
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dfsm,sisched",
+    "RADV_PERFTEST=aco,dfsm,dccmsaa,shader_ballot",
     "STAGING_SHARED_MEMORY=1",
-    "WINEFSYNC_SPINCOUNT=2"
+    "WINEFSYNC_SPINCOUNT=2",
+    "WINE_FULLSCREEN_INTEGER_SCALING=1"
   ],
   "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH",

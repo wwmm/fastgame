@@ -20,13 +20,10 @@ modify its launch command. Just start `fastgame_server` before launching the gam
 
 # Features
 
-- Change cpu frequency governor
-- Change process niceness
 - Change its cpu affinity
 - Set Environment variables like `__GL_THREADED_OPTIMIZATIONS` independently for each game
 - Change process cpu scheduler policy(SCHED_OTHER, SCHED_BATCH,...)
-- Change disk scheduler(bfq, mq-dealine,...), read ahead, nr_requests and rq_affinity values
-- Change io priority (as far as I know only bfq and cfq schedulers use this information)
+- Change disk read ahead and nr_requests values
 - Nvidia overclocking, power limit and powermize control
 - Radeon amdgpu power profile
 
@@ -38,10 +35,6 @@ Settings that are independent of the game process should be put int the file `co
 {
   "general": {
     "cpu": {
-      "governor": {
-        "default": "schedutil",
-        "game": "performance"
-      },
       "scheduler": {
         "sched_child_runs_first": {
           "default": "0",
@@ -65,10 +58,6 @@ Settings that are independent of the game process should be put int the file `co
     },
     "disk": {
       "device": "sdc",
-      "scheduler": {
-        "default": "mq-deadline",
-        "game": "bfq"
-      },
       "read-ahead": {
         "default": "128",
         "game": "0"
@@ -76,10 +65,6 @@ Settings that are independent of the game process should be put int the file `co
       "nr-requests": {
         "default": "64",
         "game": "32"
-      },
-      "rq-affinity": {
-        "default": "2",
-        "game": "1"
       }
     },
     "radeon": {
@@ -101,10 +86,7 @@ look like this
 {
   "executable-name": "APlagueTaleInnocence_x64.exe",
   "environment": ["STAGING_SHARED_MEMORY=1", "WINEFSYNC_SPINCOUNT=2"],
-  "niceness": "-4",
-  "scheduler-policy": "SCHED_BATCH",
-  "io-class": "RT",
-  "io-priority": "0"
+  "scheduler-policy": "SCHED_BATCH"
 }
 ```
 

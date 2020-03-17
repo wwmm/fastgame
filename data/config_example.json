@@ -33,6 +33,10 @@
       "read-ahead": {
         "default": "128",
         "game": "0"
+      },
+      "nr-requests": {
+        "default": "64",
+        "game": "256"
       }
     },
     "radeon": {

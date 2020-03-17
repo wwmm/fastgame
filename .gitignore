@@ -2,3 +2,6 @@ _build
 build
 .vscode
 profiles
+node_modules
+compile_commands.json
+.clangd

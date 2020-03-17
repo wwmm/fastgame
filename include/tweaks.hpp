@@ -17,6 +17,8 @@ class Tweaks {
  public:
   Tweaks(Config* config);
 
+  int game_parent_pid = -1;
+
   void apply_global();
   void apply_process(const std::string& game, const int& pid);
   void remove();
@@ -25,7 +27,7 @@ class Tweaks {
   void change_disk_parameter(const std::string& name, const T& value) {
     auto device = cfg->get_key<std::string>("general.disk.device", "");
 
-    if (device != "") {
+    if (!device.empty()) {
       if (std::filesystem::exists("/dev/" + device)) {
         auto f_path = "/sys/block/" + device + "/queue/" + name;
         std::ofstream f;
@@ -45,7 +47,6 @@ class Tweaks {
   std::string log_tag = "tweaks: ";
 
   Config* cfg;
-  std::unique_ptr<Scheduler> scheduler;
   std::unique_ptr<Radeon> radeon;
 
 #ifdef USE_NVIDIA
@@ -54,10 +55,7 @@ class Tweaks {
 
   std::ofstream cpu_dma_ofstream;
 
-  void change_cpu_governor(const std::string& name);
   void change_cfs_parameter(const std::string& name, const int& value);
-  void change_iopriority(const std::string& game, const int& pid);
-  void change_niceness(const std::string& game, const int& pid);
   void change_scheduler_policy(const std::string& game, const int& pid);
   void set_hugepages(const std::string& state, const std::string& defrag, const std::string& shmem_enabled);
   void set_cpu_dma_latency(const int& latency_us);

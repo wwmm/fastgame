@@ -1,10 +1,6 @@
 {
   "general": {
     "cpu": {
-      "governor": {
-        "default": "schedutil",
-        "game": "schedutil"
-      },
       "scheduler": {
         "sched_child_runs_first": {
           "default": "0",
@@ -34,21 +30,9 @@
     },
     "disk": {
       "device": "sdc",
-      "scheduler": {
-        "default": "bfq",
-        "game": "mq-deadline"
-      },
       "read-ahead": {
         "default": "128",
         "game": "0"
-      },
-      "rq-affinity": {
-        "default": "1",
-        "game": "2"
-      },
-      "nr-requests": {
-        "default": "64",
-        "game": "1024"
       }
     },
     "radeon": {
@@ -60,7 +44,7 @@
         "index": "2",
         "power1_cap": {
           "default": "195000000",
-          "game": "170000000"
+          "game": "150000000"
         }
       }
     }

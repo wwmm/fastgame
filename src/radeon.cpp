@@ -1,6 +1,7 @@
 #include "radeon.hpp"
 #include <filesystem>
 #include <fstream>
+#include <string>
 
 namespace fs = std::filesystem;
 
@@ -10,7 +11,7 @@ Radeon::Radeon() {
   }
 }
 
-bool Radeon::has_gpu() {
+auto Radeon::has_gpu() -> bool {
   return found_gpu;
 }
 

@@ -7,7 +7,7 @@ CmdlineOptions::CmdlineOptions(int argc, char* argv[]) : desc("Allowed options")
   try {
     desc.add_options()("help", "Print this help message")("config,c", po::value<std::string>()->default_value(""),
                                                           "Configuration File Path")(
-        "game,g", po::value<std::string>()->default_value(""), "Game name as written in our config file")(
+        "game,g", po::value<std::string>()->default_value(""), "Game executable name as written in our config file")(
         "run", po::value<std::string>()->default_value(""), "Execute the executable given as argument");
 
     po::store(po::command_line_parser(argc, argv).options(desc).allow_unregistered().run(), vm);

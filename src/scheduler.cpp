@@ -3,10 +3,8 @@
 #include <iostream>
 #include <string>
 
-Scheduler::Scheduler() {}
-
-void Scheduler::set_affinity(const int& pid, const std::vector<int>& cores) {
-  if (cores.size() > 0) {
+void set_affinity(const int& pid, const std::vector<int>& cores) {
+  if (!cores.empty()) {
     cpu_set_t mask;
 
     CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
@@ -21,9 +19,9 @@ void Scheduler::set_affinity(const int& pid, const std::vector<int>& cores) {
   }
 }
 
-void Scheduler::set_policy(const int& pid, const std::string& policy, const int& priority) {
+void set_policy(const int& pid, const std::string& policy, const int& priority) {
   int policy_index;
-  sched_param policy_params;
+  sched_param policy_params{};
 
   policy_params.sched_priority = priority;
 
@@ -43,7 +41,5 @@ void Scheduler::set_policy(const int& pid, const std::string& policy, const int&
     policy_index = SCHED_OTHER;
   }
 
-  if (sched_setscheduler(pid, policy_index, &policy_params) == -1) {
-    // std::cout << "could not set process " + std::to_string(pid) + " scheduler policy" << std::endl;
-  }
+  sched_setscheduler(pid, policy_index, &policy_params);
 }

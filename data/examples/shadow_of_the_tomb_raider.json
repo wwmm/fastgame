@@ -1,13 +1,10 @@
 {
   "executable-name": "ShadowOfTheTombRaider",
   "environment": [
+    "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=dfsm,dccmsaa,aco",
-    "VK_ICD_FILENAMES=/etc/vulkan/icd.d/amd_icd64.json",
-    "AMDVLK_ENABLE_DEVELOPING_EXT=all"
+    "RADV_PERFTEST=aco,dfsm,dccmsaa,shader_ballot"
   ],
-  "niceness": "-4",
   "scheduler-policy": "SCHED_BATCH",
-  "io-class": "RT",
-  "io-priority": "0"
+  "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"]
 }

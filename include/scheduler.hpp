@@ -4,15 +4,8 @@
 #include <vector>
 #include "config.hpp"
 
-class Scheduler {
- public:
-  Scheduler();
+void set_policy(const int& pid, const std::string& policy, const int& priority);
 
-  void set_affinity(const int& pid, const std::vector<int>& cores);
-
-  void set_policy(const int& pid, const std::string& policy, const int& priority);
-
- private:
-};
+void set_affinity(const int& pid, const std::vector<int>& cores);
 
 #endif

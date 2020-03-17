@@ -6,12 +6,10 @@
 #include "config.hpp"
 #include "scheduler.hpp"
 
-int main(int argc, char* argv[]) {
+auto main(int argc, char* argv[]) -> int {
   auto cmd_options = std::make_unique<CmdlineOptions>(argc, argv);
 
   auto cfg = std::make_unique<Config>(cmd_options->get_config_file_path());
-
-  auto scheduler = std::make_unique<Scheduler>();
 
   auto game_name = cmd_options->get_game();
   auto game_exe = cmd_options->get_game_exe();
@@ -21,7 +19,7 @@ int main(int argc, char* argv[]) {
   if (games.find(game_name) != games.end()) {
     auto environment = cfg->get_profile_key_array<std::string>(game_name, "environment");
 
-    scheduler->set_affinity(0, cfg->get_profile_key_array<int>(game_name, "cpu-affinity"));
+    set_affinity(0, cfg->get_profile_key_array<int>(game_name, "cpu-affinity"));
 
     for (auto& env : environment) {
       std::vector<std::string> results;
@@ -50,9 +48,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  arguments.push_back(0);
-
-  extern char** environ;
+  arguments.push_back(nullptr);
 
   execvpe(game_exe.c_str(), &arguments.front(), environ);
 

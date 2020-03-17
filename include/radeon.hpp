@@ -7,7 +7,7 @@ class Radeon {
  public:
   Radeon();
 
-  bool has_gpu();
+  auto has_gpu() -> bool;
   void set_power_dpm_force_performance_level(const std::string& mode_name);
   void set_power_cap(const int& hwmon_index, const int& value);
 

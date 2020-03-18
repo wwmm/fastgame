@@ -4,18 +4,16 @@
 #include <string>
 
 void set_affinity(const int& pid, const std::vector<int>& cores) {
-  if (!cores.empty()) {
-    cpu_set_t mask;
+  cpu_set_t mask;
 
-    CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+  CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
 
-    for (auto& core : cores) {
-      CPU_SET(core, &mask);  // set the bit that represents the core.
-    }
+  for (auto& core : cores) {
+    CPU_SET(core, &mask);  // set the bit that represents the core.
+  }
 
-    if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
-      // std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
-    }
+  if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
+    // std::cout << "could not set process " + std::to_string(pid) + " cpu affinity" << std::endl;
   }
 }
 

@@ -11,7 +11,7 @@ Tweaks::Tweaks(Config* config) : cfg(config), radeon(std::make_unique<Radeon>())
 
 void Tweaks::apply_global() {
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.game", -1);
-  auto sched_wakeup_granularity_ns = cfg->get_key("general.cpu.scheduler.sched_wakeup_granularity_ns.default", -1);
+  auto sched_wakeup_granularity_ns = cfg->get_key("general.cpu.scheduler.sched_wakeup_granularity_ns.game", -1);
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.game", "");
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.game", "");

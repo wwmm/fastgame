@@ -5,6 +5,10 @@
         "sched_child_runs_first": {
           "default": "0",
           "game": "1"
+        },
+        "sched_wakeup_granularity_ns": {
+          "default": "4000000",
+          "game": "12000000"
         }
       }
     },
@@ -36,7 +40,7 @@
       },
       "nr-requests": {
         "default": "64",
-        "game": "256"
+        "game": "32"
       }
     },
     "radeon": {

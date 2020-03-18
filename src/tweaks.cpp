@@ -11,6 +11,7 @@ Tweaks::Tweaks(Config* config) : cfg(config), radeon(std::make_unique<Radeon>())
 
 void Tweaks::apply_global() {
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.game", -1);
+  auto sched_wakeup_granularity_ns = cfg->get_key("general.cpu.scheduler.sched_wakeup_granularity_ns.default", -1);
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.game", "");
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.game", "");
@@ -22,8 +23,12 @@ void Tweaks::apply_global() {
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.game", -1);
 
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
+  change_cfs_parameter("sched_wakeup_granularity_ns", sched_wakeup_granularity_ns);
+
   set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
+
   change_vm_parameter("vfs_cache_pressure", vfs_cache_pressure);
+
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
 
@@ -74,6 +79,7 @@ void Tweaks::apply_process(const std::string& game, const int& pid) {
 
 void Tweaks::remove() {
   auto sched_child_runs_first = cfg->get_key("general.cpu.scheduler.sched_child_runs_first.default", -1);
+  auto sched_wakeup_granularity_ns = cfg->get_key("general.cpu.scheduler.sched_wakeup_granularity_ns.default", -1);
 
   auto hugepage_state = cfg->get_key<std::string>("general.memory.hugepage.default", "");
   auto hugepage_defrag = cfg->get_key<std::string>("general.memory.hugepage.defrag.default", "");
@@ -85,8 +91,12 @@ void Tweaks::remove() {
   auto disk_nr_requests = cfg->get_key("general.disk.nr-requests.default", -1);
 
   change_cfs_parameter("sched_child_runs_first", sched_child_runs_first);
+  change_cfs_parameter("sched_wakeup_granularity_ns", sched_wakeup_granularity_ns);
+
   set_hugepages(hugepage_state, hugepage_defrag, hugepage_shmem_enabled);
+
   change_vm_parameter("vfs_cache_pressure", vfs_cache_pressure);
+
   change_disk_parameter("read_ahead_kb", disk_read_ahead);
   change_disk_parameter("nr_requests", disk_nr_requests);
 

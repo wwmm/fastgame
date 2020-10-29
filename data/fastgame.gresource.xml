@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/com/github/wwmm/fastgame">
+        <file>about.glade</file>
+        <file>ui/application.glade</file>
+        <file>ui/environment_variables.glade</file>
+        <file>ui/presets_menu.glade</file>
+        <file>ui/preset_row.glade</file>
+    </gresource>
+</gresources>

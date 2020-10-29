@@ -15,6 +15,7 @@ i18n_mod = import('i18n')
 
 prefix = get_option('prefix')
 bindir = join_paths(prefix, get_option('bindir'))
+localedir = join_paths(prefix, get_option('localedir'))
 datadir = join_paths(prefix, get_option('datadir'))
 include_dir = include_directories('include')
 sysconfdir = join_paths(prefix, get_option('sysconfdir'))
@@ -25,10 +26,12 @@ fastgame_config_dir = join_paths(sysconfdir, 'fastgame')
 # Configuration
 conf = configuration_data()
 
+conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+conf.set_quoted('LOCALE_DIR', localedir)
 conf.set_quoted('VERSION', meson.project_version())
 conf.set_quoted('CONFIGDIR', fastgame_config_dir)
 
-subdir('src')
 subdir('data')
+subdir('src')
 
 configure_file(output: 'config.h', configuration: conf)

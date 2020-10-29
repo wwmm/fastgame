@@ -1,13 +1,13 @@
 {
-  "executable-name": "GreedFall.exe",
+  "executable-name": "MonsterHunterWorld.exe",
   "environment": [
     "STAGING_SHARED_MEMORY=1",
+    "PROTON_USE_SECCOMP=1",
     "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json",
     "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=aco,dccmsaa",
+    "RADV_PERFTEST=aco,dccmsaa,tccompatcmask",
     "WINE_FULLSCREEN_INTEGER_SCALING=1",
-    "VK_INSTANCE_LAYERS=VK_LAYER_MESA_overlay",
-    "VK_LAYER_MESA_OVERLAY_CONFIG=submit,pipeline_graphics,pipeline_compute,compute_invocations"
+    "VKD3D_FEATURE_LEVEL=12_0"
   ],
   "scheduler-policy": "SCHED_BATCH",
   "parent-thread": {

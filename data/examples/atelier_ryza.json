@@ -1,15 +1,13 @@
 {
-  "executable-name": "QuantumBreak.exe",
+  "executable-name": "Atelier_Ryza.exe",
   "environment": [
-    "STAGING_SHARED_MEMORY=1",
-    "WINE_FULLSCREEN_INTEGER_SCALING=1",
     "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json",
-    "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=aco,dfsm,dccmsaa,shader_ballot",
+    "RADV_PERFTEST=dccmsaa,tccompatcmask",
+    "RADV_TEX_ANISO=16",
+    "WINE_FULLSCREEN_INTEGER_SCALING=1",
     "VKD3D_FEATURE_LEVEL=12_0"
   ],
   "scheduler-policy": "SCHED_BATCH",
-  "cpu-affinity": ["0", "1", "2", "3", "4", "5", "6", "7"],
   "parent-thread": {
     "cpu-affinity": ["0"],
     "scheduler-policy": "SCHED_OTHER"

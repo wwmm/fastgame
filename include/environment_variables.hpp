@@ -2,7 +2,6 @@
 #define ENVIRONMENT_VARIABLES_HPP
 
 #include <giomm/settings.h>
-#include <glibmm/i18n.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/cellrenderertext.h>

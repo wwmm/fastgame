@@ -2,6 +2,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
+#include "amdgpu.hpp"
 #include "environment_variables.hpp"
 #include "util.hpp"
 
@@ -16,6 +17,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   builder->get_widget("stack", stack);
 
   EnvironmentVariables::add_to_stack(stack, app);
+  Amdgpu::add_to_stack(stack, app);
 
   stack->connect_property_changed("visible-child",
                                   sigc::mem_fun(*this, &ApplicationUi::on_stack_visible_child_changed));

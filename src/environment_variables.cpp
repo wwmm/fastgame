@@ -1,7 +1,5 @@
 #include "environment_variables.hpp"
-#include <glibmm.h>
-#include "gtkmm/cellrenderertext.h"
-#include "gtkmm/liststore.h"
+#include <glibmm/i18n.h>
 #include "util.hpp"
 
 EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject,
@@ -33,8 +31,6 @@ EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject,
 
     iter->set_value(1, new_text);
   });
-
-  // row.
 }
 
 EnvironmentVariables::~EnvironmentVariables() {

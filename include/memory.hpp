@@ -29,9 +29,6 @@ class Memory : public Gtk::Grid {
   Glib::RefPtr<Gtk::Adjustment> power_cap;
 
   void read_transparent_huge_page_values();
-  void read_power_cap();
-  void read_power_cap_max();
-  void read_performance_level();
 };
 
 #endif

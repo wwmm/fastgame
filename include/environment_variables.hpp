@@ -36,8 +36,6 @@ class EnvironmentVariables : public Gtk::Grid {
   Gtk::ListStore* liststore = nullptr;
 
   Gtk::CellRendererText *cell_name = nullptr, *cell_value = nullptr;
-
-  std::vector<sigc::connection> connections;
 };
 
 #endif

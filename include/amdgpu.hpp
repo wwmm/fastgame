@@ -31,8 +31,6 @@ class Amdgpu : public Gtk::Grid {
 
   Glib::RefPtr<Gtk::Adjustment> power_cap;
 
-  std::vector<sigc::connection> connections;
-
   void find_hwmon_index();
   void read_power_cap();
   void read_power_cap_max();

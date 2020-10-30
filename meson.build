@@ -32,6 +32,7 @@ conf.set_quoted('VERSION', meson.project_version())
 conf.set_quoted('CONFIGDIR', fastgame_config_dir)
 
 subdir('data')
+subdir('po')
 subdir('src')
 
 configure_file(output: 'config.h', configuration: conf)

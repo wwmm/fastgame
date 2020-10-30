@@ -34,10 +34,6 @@ Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
 }
 
 Amdgpu::~Amdgpu() {
-  for (auto& c : connections) {
-    c.disconnect();
-  }
-
   util::debug(log_tag + "destroyed");
 }
 

@@ -34,10 +34,6 @@ EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject,
 }
 
 EnvironmentVariables::~EnvironmentVariables() {
-  for (auto& c : connections) {
-    c.disconnect();
-  }
-
   util::debug(log_tag + "destroyed");
 }
 

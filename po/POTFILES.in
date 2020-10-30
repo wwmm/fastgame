@@ -2,5 +2,9 @@ data/com.github.wwmm.fastgame.desktop.in
 data/schemas/com.github.wwmm.fastgame.gschema.xml
 data/ui/about.glade.in
 data/ui/application.glade
-data/ui/profile_row.glade
+data/ui/presets_menu.glade
+data/ui/preset_row.glade
+data/ui/environment_variables.glade
+data/ui/amdgpu.glade
+data/ui/memory.glade
 

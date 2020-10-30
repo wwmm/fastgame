@@ -35,6 +35,8 @@ class Amdgpu : public Gtk::Grid {
 
   void find_hwmon_index();
   void read_power_cap();
+  void read_power_cap_max();
+  void read_performance_level();
 };
 
 #endif

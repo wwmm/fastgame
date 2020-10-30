@@ -67,9 +67,10 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="halign">start</property>
-        <property name="width-chars">5</property>
+        <property name="width-chars">8</property>
         <property name="text">4</property>
         <property name="xalign">0.5</property>
+        <property name="secondary-icon-name">pulseeffects-w-symbolic</property>
         <property name="input-purpose">number</property>
         <property name="adjustment">power_cap</property>
         <property name="numeric">True</property>

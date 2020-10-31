@@ -32,6 +32,7 @@ fastgame_gui_sources = [
 	'environment_variables.cpp',
 	'amdgpu.cpp',
 	'memory.cpp',
+	'cpu.cpp',
 	'util.cpp',
 	gresources
 ]

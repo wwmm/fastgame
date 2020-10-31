@@ -24,9 +24,9 @@ class Memory : public Gtk::Grid {
 
   Application* app = nullptr;
 
-  Gtk::ComboBoxText *enabled = nullptr, *defrag = nullptr, *shmem_enabled = nullptr;
+  Gtk::ComboBoxText *thp_enabled = nullptr, *thp_defrag = nullptr, *thp_shmem_enabled = nullptr;
 
-  Glib::RefPtr<Gtk::Adjustment> power_cap;
+  Glib::RefPtr<Gtk::Adjustment> cache_pressure;
 
   void read_transparent_huge_page_values();
 };

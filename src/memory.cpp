@@ -11,19 +11,17 @@ Memory::Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
     : Gtk::Grid(cobject), app(application) {
   // loading glade widgets
 
-  builder->get_widget("enabled", enabled);
-  builder->get_widget("defrag", defrag);
-  builder->get_widget("shmem_enabled", shmem_enabled);
+  builder->get_widget("thp_enabled", thp_enabled);
+  builder->get_widget("thp_defrag", thp_defrag);
+  builder->get_widget("thp_shmem_enabled", thp_shmem_enabled);
 
-  power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
+  cache_pressure = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("cache_pressure"));
 
   // initializing widgets
 
+  cache_pressure->set_value(std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
+
   read_transparent_huge_page_values();
-
-  // signals connection
-
-  // button_add->signal_clicked().connect([=]() { liststore->append(); });
 }
 
 Memory::~Memory() {
@@ -54,10 +52,10 @@ void Memory::read_transparent_huge_page_values() {
       value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
     }
 
-    enabled->append(value);
+    thp_enabled->append(value);
   }
 
-  enabled->set_active_text(enabled_value);
+  thp_enabled->set_active_text(enabled_value);
 
   // parameter: defrag
 
@@ -72,10 +70,10 @@ void Memory::read_transparent_huge_page_values() {
       value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
     }
 
-    defrag->append(value);
+    thp_defrag->append(value);
   }
 
-  defrag->set_active_text(defrag_value);
+  thp_defrag->set_active_text(defrag_value);
 
   // parameter: shmem_enabled
 
@@ -90,8 +88,8 @@ void Memory::read_transparent_huge_page_values() {
       value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
     }
 
-    shmem_enabled->append(value);
+    thp_shmem_enabled->append(value);
   }
 
-  shmem_enabled->set_active_text(shmem_enabled_value);
+  thp_shmem_enabled->set_active_text(shmem_enabled_value);
 }

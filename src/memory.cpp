@@ -43,11 +43,17 @@ void Memory::add_to_stack(Gtk::Stack* stack, Application* app) {
 void Memory::read_transparent_huge_page_values() {
   // parameter: enabled
 
-  auto [enabled_list, enabled_value] = util::read_system_file_options("/sys/kernel/mm/transparent_hugepage/enabled");
+  auto enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/enabled");
+
+  auto enabled_value = util::get_selected_value(enabled_list);
 
   util::debug(log_tag + "transparent huge pages state: " + enabled_value);
 
   for (auto& value : enabled_list) {
+    if (value.find('[') != std::string::npos) {
+      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+
     enabled->append(value);
   }
 
@@ -55,11 +61,17 @@ void Memory::read_transparent_huge_page_values() {
 
   // parameter: defrag
 
-  auto [defrag_list, defrag_value] = util::read_system_file_options("/sys/kernel/mm/transparent_hugepage/defrag");
+  auto defrag_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/defrag");
+
+  auto defrag_value = util::get_selected_value(defrag_list);
 
   util::debug(log_tag + "transparent huge pages defrag: " + defrag_value);
 
   for (auto& value : defrag_list) {
+    if (value.find('[') != std::string::npos) {
+      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+
     defrag->append(value);
   }
 
@@ -67,12 +79,17 @@ void Memory::read_transparent_huge_page_values() {
 
   // parameter: shmem_enabled
 
-  auto [shmem_enabled_list, shmem_enabled_value] =
-      util::read_system_file_options("/sys/kernel/mm/transparent_hugepage/shmem_enabled");
+  auto shmem_enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled");
+
+  auto shmem_enabled_value = util::get_selected_value(shmem_enabled_list);
 
   util::debug(log_tag + "transparent huge pages state: " + shmem_enabled_value);
 
   for (auto& value : shmem_enabled_list) {
+    if (value.find('[') != std::string::npos) {
+      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+
     shmem_enabled->append(value);
   }
 

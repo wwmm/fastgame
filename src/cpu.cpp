@@ -14,13 +14,14 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, App
   // loading glade widgets
 
   builder->get_widget("use_sched_batch", use_sched_batch);
+  builder->get_widget("frequency_governor", frequency_governor);
   builder->get_widget("affinity_flowbox", affinity_flowbox);
 
   // power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
 
   // initializing widgets
 
-  const auto n_cores = std::thread::hardware_concurrency();
+  n_cores = std::thread::hardware_concurrency();
 
   util::debug(log_tag + "number of cpu cores: " + std::to_string(n_cores));
 
@@ -31,6 +32,19 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, App
 
     affinity_flowbox->add(*checkbutton);
   }
+
+  // We assume that all cores are set to the same frequency governor and that the system has at least one core. In this
+  // case reading the core 0 property should be enough
+
+  auto list_governors = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
+
+  auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
+
+  for (auto& value : list_governors) {
+    frequency_governor->append(value);
+  }
+
+  frequency_governor->set_active_text(selected_governor);
 
   // signals connection
 

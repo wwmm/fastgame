@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-30 12:14-0300\n"
+"POT-Creation-Date: 2020-10-31 19:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,10 @@ msgstr ""
 
 #: data/ui/application.glade:96
 msgid "Presets"
+msgstr ""
+
+#: data/ui/application.glade:107
+msgid "Apply"
 msgstr ""
 
 #: data/ui/presets_menu.glade:57 data/ui/presets_menu.glade:167
@@ -96,42 +100,70 @@ msgstr ""
 msgid "Remove Selection"
 msgstr ""
 
-#: data/ui/amdgpu.glade:25 data/ui/memory.glade:25
+#: data/ui/amdgpu.glade:25
 msgid "Performance Level"
 msgstr ""
 
-#: data/ui/amdgpu.glade:38 data/ui/memory.glade:38
+#: data/ui/amdgpu.glade:38
 msgid "Auto"
 msgstr ""
 
-#: data/ui/amdgpu.glade:39 data/ui/memory.glade:39
+#: data/ui/amdgpu.glade:39
 msgid "Low"
 msgstr ""
 
-#: data/ui/amdgpu.glade:40 data/ui/memory.glade:40
+#: data/ui/amdgpu.glade:40
 msgid "High"
 msgstr ""
 
-#: data/ui/amdgpu.glade:41 data/ui/memory.glade:41
+#: data/ui/amdgpu.glade:41
 msgid "Manual"
 msgstr ""
 
-#: data/ui/amdgpu.glade:42 data/ui/memory.glade:42
+#: data/ui/amdgpu.glade:42
 msgid "Profile Standard"
 msgstr ""
 
-#: data/ui/amdgpu.glade:43 data/ui/memory.glade:43
+#: data/ui/amdgpu.glade:43
 msgid "Profile Min SCLK"
 msgstr ""
 
-#: data/ui/amdgpu.glade:44 data/ui/memory.glade:44
+#: data/ui/amdgpu.glade:44
 msgid "Profile Min MCLK"
 msgstr ""
 
-#: data/ui/amdgpu.glade:45 data/ui/memory.glade:45
+#: data/ui/amdgpu.glade:45
 msgid "Profile Peak"
 msgstr ""
 
-#: data/ui/amdgpu.glade:58 data/ui/memory.glade:58
+#: data/ui/amdgpu.glade:58
 msgid "Power Cap"
+msgstr ""
+
+#: data/ui/memory.glade:30
+msgid "Transparent Huge Pages"
+msgstr ""
+
+#: data/ui/memory.glade:43
+msgid "enabled"
+msgstr ""
+
+#: data/ui/memory.glade:66
+msgid "defrag"
+msgstr ""
+
+#: data/ui/memory.glade:89
+msgid "shmem_enabled"
+msgstr ""
+
+#: data/ui/cpu.glade:24
+msgid "Cores"
+msgstr ""
+
+#: data/ui/cpu.glade:53
+msgid "Frequency Governor"
+msgstr ""
+
+#: data/ui/cpu.glade:77
+msgid "Batch Scheduler"
 msgstr ""

@@ -26,9 +26,8 @@ void info(const std::string& s) {
   g_info(s.c_str(), "%s");
 }
 
-auto read_system_file_options(const std::string& path_str) -> std::tuple<std::vector<std::string>, std::string> {
+auto read_system_setting(const std::string& path_str) -> std::vector<std::string> {
   std::vector<std::string> list;
-  std::string current_value;
 
   auto path = std::filesystem::path(path_str);
 
@@ -44,17 +43,25 @@ auto read_system_file_options(const std::string& path_str) -> std::tuple<std::ve
     while (std::getline(f, value, ' ')) {
       value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
 
-      if (value.find('[') != std::string::npos) {
-        current_value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
-      }
-
       list.emplace_back(value);
     }
 
     f.close();
   }
 
-  return std::make_tuple(list, current_value);
+  return list;
+}
+
+auto get_selected_value(const std::vector<std::string>& list) -> std::string {
+  std::string selected_value;
+
+  for (auto value : list) {
+    if (value.find('[') != std::string::npos) {
+      selected_value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+  }
+
+  return selected_value;
 }
 
 }  // namespace util

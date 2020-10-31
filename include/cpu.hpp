@@ -3,6 +3,7 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/stack.h>
@@ -23,9 +24,13 @@ class Cpu : public Gtk::Grid {
  private:
   std::string log_tag = "cpu: ";
 
+  uint n_cores = 1;
+
   Application* app = nullptr;
 
   Gtk::Switch* use_sched_batch = nullptr;
+
+  Gtk::ComboBoxText* frequency_governor = nullptr;
 
   Gtk::FlowBox* affinity_flowbox = nullptr;
 

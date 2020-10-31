@@ -7,4 +7,5 @@ data/ui/preset_row.glade
 data/ui/environment_variables.glade
 data/ui/amdgpu.glade
 data/ui/memory.glade
+data/ui/cpu.glade
 

@@ -6,10 +6,6 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
 #include <filesystem>
-#include "amdgpu.hpp"
-#include "cpu.hpp"
-#include "environment_variables.hpp"
-#include "memory.hpp"
 #include "util.hpp"
 
 ApplicationUi::ApplicationUi(BaseObjectType* cobject,
@@ -33,10 +29,10 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
 
   create_user_directory();
 
-  EnvironmentVariables::add_to_stack(stack, app);
-  Cpu::add_to_stack(stack, app);
-  Amdgpu::add_to_stack(stack, app);
-  Memory::add_to_stack(stack, app);
+  environment_variables = EnvironmentVariables::add_to_stack(stack);
+  cpu = Cpu::add_to_stack(stack);
+  amdgpu = Amdgpu::add_to_stack(stack);
+  memory = Memory::add_to_stack(stack);
 
   stack->connect_property_changed("visible-child",
                                   sigc::mem_fun(*this, &ApplicationUi::on_stack_visible_child_changed));

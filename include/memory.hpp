@@ -6,23 +6,20 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/stack.h>
-#include "application.hpp"
 
 class Memory : public Gtk::Grid {
  public:
-  Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application);
+  Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
   Memory(const Memory&) = delete;
   auto operator=(const Memory&) -> Memory& = delete;
   Memory(const Memory&&) = delete;
   auto operator=(const Memory &&) -> Memory& = delete;
   ~Memory() override;
 
-  static void add_to_stack(Gtk::Stack* stack, Application* app);
+  static auto add_to_stack(Gtk::Stack* stack) -> Memory*;
 
  private:
   std::string log_tag = "memory: ";
-
-  Application* app = nullptr;
 
   Gtk::ComboBoxText *thp_enabled = nullptr, *thp_defrag = nullptr, *thp_shmem_enabled = nullptr;
 

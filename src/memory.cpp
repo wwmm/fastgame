@@ -7,8 +7,7 @@
 
 namespace fs = std::filesystem;
 
-Memory::Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application)
-    : Gtk::Grid(cobject), app(application) {
+Memory::Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
   // loading glade widgets
 
   builder->get_widget("thp_enabled", thp_enabled);
@@ -28,14 +27,16 @@ Memory::~Memory() {
   util::debug(log_tag + "destroyed");
 }
 
-void Memory::add_to_stack(Gtk::Stack* stack, Application* app) {
+auto Memory::add_to_stack(Gtk::Stack* stack) -> Memory* {
   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/memory.glade");
 
   Memory* ui = nullptr;
 
-  builder->get_widget_derived("widgets_grid", ui, app);
+  builder->get_widget_derived("widgets_grid", ui);
 
   stack->add(*ui, "memory", _("Memory"));
+
+  return ui;
 }
 
 void Memory::read_transparent_huge_page_values() {

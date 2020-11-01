@@ -2,10 +2,8 @@
 #include <glibmm/i18n.h>
 #include "util.hpp"
 
-EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject,
-                                           const Glib::RefPtr<Gtk::Builder>& builder,
-                                           Application* application)
-    : Gtk::Grid(cobject), settings(Gio::Settings::create("com.github.wwmm.fastgame")), app(application) {
+EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+    : Gtk::Grid(cobject), settings(Gio::Settings::create("com.github.wwmm.fastgame")) {
   // loading glade widgets
 
   builder->get_widget("treeview", treeview);
@@ -37,12 +35,14 @@ EnvironmentVariables::~EnvironmentVariables() {
   util::debug(log_tag + "destroyed");
 }
 
-void EnvironmentVariables::add_to_stack(Gtk::Stack* stack, Application* app) {
+auto EnvironmentVariables::add_to_stack(Gtk::Stack* stack) -> EnvironmentVariables* {
   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/environment_variables.glade");
 
   EnvironmentVariables* ui = nullptr;
 
-  builder->get_widget_derived("widgets_grid", ui, app);
+  builder->get_widget_derived("widgets_grid", ui);
 
   stack->add(*ui, "environment_variables", _("Environment Variables"));
+
+  return ui;
 }

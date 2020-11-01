@@ -11,8 +11,13 @@
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stack.h>
+#include <boost/property_tree/ptree.hpp>
 #include <filesystem>
+#include "amdgpu.hpp"
 #include "application.hpp"
+#include "cpu.hpp"
+#include "environment_variables.hpp"
+#include "memory.hpp"
 
 class ApplicationUi : public Gtk::ApplicationWindow {
  public:
@@ -34,7 +39,7 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   std::filesystem::path user_presets_dir;
 
-  std::locale syslocale = std::locale("");
+  boost::property_tree::ptree preset_root;
 
   Gtk::Stack* stack = nullptr;
 
@@ -47,6 +52,14 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Gtk::ListBox* presets_listbox = nullptr;
 
   Gtk::ScrolledWindow* presets_menu_scrolled_window = nullptr;
+
+  EnvironmentVariables* environment_variables = nullptr;
+
+  Cpu* cpu = nullptr;
+
+  Amdgpu* amdgpu = nullptr;
+
+  Memory* memory = nullptr;
 
   std::vector<sigc::connection> connections;
 

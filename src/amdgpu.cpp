@@ -7,8 +7,7 @@
 
 namespace fs = std::filesystem;
 
-Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application)
-    : Gtk::Grid(cobject), app(application) {
+Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
   // loading glade widgets
 
   builder->get_widget("performance_level", performance_level);
@@ -37,14 +36,16 @@ Amdgpu::~Amdgpu() {
   util::debug(log_tag + "destroyed");
 }
 
-void Amdgpu::add_to_stack(Gtk::Stack* stack, Application* app) {
+auto Amdgpu::add_to_stack(Gtk::Stack* stack) -> Amdgpu* {
   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/amdgpu.glade");
 
   Amdgpu* ui = nullptr;
 
-  builder->get_widget_derived("widgets_grid", ui, app);
+  builder->get_widget_derived("widgets_grid", ui);
 
   stack->add(*ui, "amdgpu", _("AMDGPU"));
+
+  return ui;
 }
 
 void Amdgpu::find_hwmon_index() {

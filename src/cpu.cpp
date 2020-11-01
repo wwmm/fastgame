@@ -9,8 +9,7 @@
 
 namespace fs = std::filesystem;
 
-Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application)
-    : Gtk::Grid(cobject), app(application) {
+Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
   // loading glade widgets
 
   builder->get_widget("use_sched_batch", use_sched_batch);
@@ -53,12 +52,14 @@ Cpu::~Cpu() {
   util::debug(log_tag + "destroyed");
 }
 
-void Cpu::add_to_stack(Gtk::Stack* stack, Application* app) {
+auto Cpu::add_to_stack(Gtk::Stack* stack) -> Cpu* {
   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/cpu.glade");
 
   Cpu* ui = nullptr;
 
-  builder->get_widget_derived("widgets_grid", ui, app);
+  builder->get_widget_derived("widgets_grid", ui);
 
   stack->add(*ui, "cpu", _("CPU"));
+
+  return ui;
 }

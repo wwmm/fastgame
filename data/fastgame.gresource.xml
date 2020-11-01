@@ -7,7 +7,6 @@
         <file>ui/amdgpu.glade</file>
         <file>ui/memory.glade</file>
         <file>ui/cpu.glade</file>
-        <file>ui/presets_menu.glade</file>
         <file>ui/preset_row.glade</file>
         <file>icons/pulseeffects-w-symbolic.svg</file>
     </gresource>

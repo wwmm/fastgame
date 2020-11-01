@@ -1,5 +1,7 @@
 #include "environment_variables.hpp"
 #include <glibmm/i18n.h>
+#include <boost/algorithm/string/join.hpp>
+#include "gtkmm/treemodelcolumn.h"
 #include "util.hpp"
 
 EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
@@ -45,4 +47,25 @@ auto EnvironmentVariables::add_to_stack(Gtk::Stack* stack) -> EnvironmentVariabl
   stack->add(*ui, "environment_variables", _("Environment Variables"));
 
   return ui;
+}
+
+auto EnvironmentVariables::get_variables() -> std::string {
+  std::vector<std::string> variables;
+
+  auto children = liststore->children();
+
+  for (const auto& row : children) {
+    std::string variable;
+    std::string value;
+
+    row->get_value(0, variable);
+    row->get_value(1, value);
+
+    variable.append("=");
+    variable.append(value);
+
+    variables.emplace_back(variable);
+  }
+
+  return boost::algorithm::join(variables, ";");
 }

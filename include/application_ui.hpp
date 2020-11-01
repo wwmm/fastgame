@@ -11,7 +11,6 @@
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stack.h>
-#include <boost/property_tree/ptree.hpp>
 #include <filesystem>
 #include "amdgpu.hpp"
 #include "application.hpp"
@@ -38,8 +37,6 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Glib::RefPtr<Gio::Settings> settings;
 
   std::filesystem::path user_presets_dir;
-
-  boost::property_tree::ptree preset_root;
 
   Gtk::Stack* stack = nullptr;
 
@@ -73,9 +70,9 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   auto get_presets_names() -> std::vector<std::string>;
 
-  void on_stack_visible_child_changed();
-
   void create_preset();
+
+  void save_preset(const std::string& name);
 
   void import_preset_file();
 

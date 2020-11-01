@@ -5,6 +5,8 @@
 #include <gtkmm/filechoosernative.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <filesystem>
 #include "util.hpp"
 
@@ -33,9 +35,6 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   cpu = Cpu::add_to_stack(stack);
   amdgpu = Amdgpu::add_to_stack(stack);
   memory = Memory::add_to_stack(stack);
-
-  stack->connect_property_changed("visible-child",
-                                  sigc::mem_fun(*this, &ApplicationUi::on_stack_visible_child_changed));
 
   // binding glade widgets to gsettings keys
 
@@ -103,20 +102,16 @@ auto ApplicationUi::get_presets_names() -> std::vector<std::string> {
   return names;
 }
 
-void ApplicationUi::on_stack_visible_child_changed() {
-  auto name = stack->get_visible_child_name();
+void ApplicationUi::save_preset(const std::string& name) {
+  boost::property_tree::ptree root;
 
-  // if (name == std::string("sink_inputs")) {
-  //   update_headerbar_subtitle(0);
+  root.put("environment-variables", environment_variables->get_variables());
 
-  //   presets_menu_label->set_text(settings->get_string("last-used-output-preset"));
-  // } else if (name == std::string("source_outputs")) {
-  //   update_headerbar_subtitle(1);
+  auto output_file = user_presets_dir / std::filesystem::path{name + ".json"};
 
-  //   presets_menu_label->set_text(settings->get_string("last-used-input-preset"));
-  // } else if (name == std::string("pulse_info")) {
-  //   update_headerbar_subtitle(2);
-  // }
+  boost::property_tree::write_json(output_file, root);
+
+  util::debug(log_tag + "saved preset: " + output_file.string());
 }
 
 void ApplicationUi::create_preset() {
@@ -137,9 +132,15 @@ void ApplicationUi::create_preset() {
 
     preset_name->set_text("");
 
-    // app->presets_manager->add(preset_type, name);
+    for (auto& used_name : get_presets_names()) {
+      if (used_name == name) {
+        return;
+      }
+    }
 
-    // populate_listbox(preset_type);
+    save_preset(name);
+
+    populate_listbox();
   }
 }
 
@@ -227,12 +228,14 @@ void ApplicationUi::populate_listbox() {
       // app->presets_manager->load(preset_type, row->get_name());
     }));
 
-    connections.emplace_back(save_btn->signal_clicked().connect([=]() {
-      // app->presets_manager->save(preset_type, name);
-    }));
+    connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name); }));
 
     connections.emplace_back(remove_btn->signal_clicked().connect([=]() {
-      // app->presets_manager->remove(preset_type, name);
+      auto file_path = user_presets_dir / std::filesystem::path{name + ".json"};
+
+      std::filesystem::remove(file_path);
+
+      util::debug(log_tag + "removed preset file: " + file_path.string());
 
       populate_listbox();
     }));

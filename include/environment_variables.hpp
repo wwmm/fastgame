@@ -21,6 +21,8 @@ class EnvironmentVariables : public Gtk::Grid {
 
   static auto add_to_stack(Gtk::Stack* stack) -> EnvironmentVariables*;
 
+  auto get_variables() -> std::string;
+
  private:
   std::string log_tag = "environment variables: ";
 

@@ -1,6 +1,6 @@
 #include "environment_variables.hpp"
 #include <glibmm/i18n.h>
-#include <boost/algorithm/string/join.hpp>
+#include <sstream>
 #include "gtkmm/treemodelcolumn.h"
 #include "util.hpp"
 
@@ -50,7 +50,7 @@ auto EnvironmentVariables::add_to_stack(Gtk::Stack* stack) -> EnvironmentVariabl
 }
 
 auto EnvironmentVariables::get_variables() -> std::string {
-  std::vector<std::string> variables;
+  std::string output;
 
   auto children = liststore->children();
 
@@ -61,11 +61,34 @@ auto EnvironmentVariables::get_variables() -> std::string {
     row->get_value(0, variable);
     row->get_value(1, value);
 
-    variable.append("=");
-    variable.append(value);
-
-    variables.emplace_back(variable);
+    output.append(variable);
+    output.append("=");
+    output.append(value + ";");
   }
 
-  return boost::algorithm::join(variables, ";");
+  if (!output.empty()) {
+    output.pop_back();
+  }
+
+  return output;
+}
+
+void EnvironmentVariables::set_variables(const std::string& values_str) {
+  std::stringstream ss(values_str);
+
+  std::string key_and_value;
+
+  liststore->clear();
+
+  while (std::getline(ss, key_and_value, ';')) {
+    int delimiter_position = key_and_value.find('=');
+
+    auto key = key_and_value.substr(0, delimiter_position);
+    auto value = key_and_value.substr(delimiter_position + 1);
+
+    auto row = *liststore->append();
+
+    row.set_value(0, key);
+    row.set_value(1, value);
+  }
 }

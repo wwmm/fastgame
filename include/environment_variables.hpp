@@ -23,6 +23,8 @@ class EnvironmentVariables : public Gtk::Grid {
 
   auto get_variables() -> std::string;
 
+  void set_variables(const std::string& values_str);
+
  private:
   std::string log_tag = "environment variables: ";
 

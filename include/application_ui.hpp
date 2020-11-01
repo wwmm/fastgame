@@ -74,6 +74,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   void save_preset(const std::string& name);
 
+  void load_preset(const std::string& name);
+
   void import_preset_file();
 
   static auto on_listbox_sort(Gtk::ListBoxRow* row1, Gtk::ListBoxRow* row2) -> int;

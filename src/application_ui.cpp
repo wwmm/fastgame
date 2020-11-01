@@ -114,6 +114,20 @@ void ApplicationUi::save_preset(const std::string& name) {
   util::debug(log_tag + "saved preset: " + output_file.string());
 }
 
+void ApplicationUi::load_preset(const std::string& name) {
+  auto input_file = user_presets_dir / std::filesystem::path{name + ".json"};
+
+  boost::property_tree::ptree root;
+
+  boost::property_tree::read_json(input_file.string(), root);
+
+  environment_variables->set_variables(root.get<std::string>("environment-variables"));
+
+  // boost::property_tree::write_json(output_file, root);
+
+  // util::debug(log_tag + "saved preset: " + output_file.string());
+}
+
 void ApplicationUi::create_preset() {
   std::string name = preset_name->get_text();
 
@@ -160,11 +174,19 @@ void ApplicationUi::import_preset_file() {
   dialog->signal_response().connect([=](auto response_id) {
     switch (response_id) {
       case Gtk::ResponseType::RESPONSE_ACCEPT: {
-        for (const auto& file_path : dialog->get_filenames()) {
-          // app->presets_manager->import(preset_type, file_path);
+        for (const auto& file_name : dialog->get_filenames()) {
+          auto file_path = std::filesystem::path{file_name};
+
+          if (std::filesystem::is_regular_file(file_path)) {
+            auto output_path = user_presets_dir / std::filesystem::path{file_path.filename()};
+
+            std::filesystem::copy_file(file_path, output_path, std::filesystem::copy_options::overwrite_existing);
+
+            util::debug(log_tag + "imported preset to: " + output_path.string());
+          }
         }
 
-        // populate_listbox(preset_type);
+        populate_listbox();
 
         break;
       }
@@ -224,9 +246,7 @@ void ApplicationUi::populate_listbox() {
 
     label->set_text(name);
 
-    connections.emplace_back(apply_btn->signal_clicked().connect([=]() {
-      // app->presets_manager->load(preset_type, row->get_name());
-    }));
+    connections.emplace_back(apply_btn->signal_clicked().connect([=]() { load_preset(name); }));
 
     connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name); }));
 

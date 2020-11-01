@@ -1,7 +1,6 @@
 #include "environment_variables.hpp"
 #include <glibmm/i18n.h>
 #include <sstream>
-#include "gtkmm/treemodelcolumn.h"
 #include "util.hpp"
 
 EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
@@ -19,6 +18,14 @@ EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject, const Glib::
   // signals connection
 
   button_add->signal_clicked().connect([=]() { liststore->append(); });
+
+  button_remove->signal_clicked().connect([=]() {
+    auto iter = treeview->get_selection()->get_selected();
+
+    if (iter) {
+      liststore->erase(iter);
+    }
+  });
 
   cell_name->signal_edited().connect([=](const Glib::ustring& path, const Glib::ustring& new_text) {
     auto iter = liststore->get_iter(path);
@@ -60,6 +67,10 @@ auto EnvironmentVariables::get_variables() -> std::string {
 
     row->get_value(0, variable);
     row->get_value(1, value);
+
+    if (variable.empty()) {
+      continue;
+    }
 
     output.append(variable);
     output.append("=");

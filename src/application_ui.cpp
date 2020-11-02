@@ -28,6 +28,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   builder->get_widget("presets_listbox", presets_listbox);
   builder->get_widget("presets_menu_button", presets_menu_button);
   builder->get_widget("presets_menu_scrolled_window", presets_menu_scrolled_window);
+  builder->get_widget("button_apply", button_apply);
 
   create_user_directory();
 
@@ -51,6 +52,8 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   presets_listbox->set_sort_func(sigc::ptr_fun(&ApplicationUi::on_listbox_sort));
 
   presets_menu_button->signal_clicked().connect(sigc::mem_fun(*this, &ApplicationUi::on_presets_menu_button_clicked));
+
+  button_apply->signal_clicked().connect([=]() { apply_settings(); });
 
   // restore the window size
 
@@ -102,15 +105,25 @@ auto ApplicationUi::get_presets_names() -> std::vector<std::string> {
   return names;
 }
 
-void ApplicationUi::save_preset(const std::string& name) {
+void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
   boost::property_tree::ptree root;
   boost::property_tree::ptree node;
 
-  root.put("environment-variables", environment_variables->get_variables());
+  for (const auto& v : environment_variables->get_variables()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("environment-variables", node);
 
   root.put("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler());
   root.put("cpu.child-runs-first", cpu->get_child_runs_first());
   root.put("cpu.frequency-governor", cpu->get_frequency_governor());
+
+  node.clear();
 
   for (const auto& c : cpu->get_cores()) {
     boost::property_tree::ptree local_node;
@@ -130,7 +143,7 @@ void ApplicationUi::save_preset(const std::string& name) {
   root.put("memory.transparent-hugepages.defrag", memory->get_thp_defrag());
   root.put("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled());
 
-  auto output_file = user_presets_dir / std::filesystem::path{name + ".json"};
+  auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
 
@@ -144,7 +157,17 @@ void ApplicationUi::load_preset(const std::string& name) {
 
   boost::property_tree::read_json(input_file.string(), root);
 
-  environment_variables->set_variables(root.get<std::string>("environment-variables"));
+  try {
+    std::vector<std::string> variables_list;
+
+    for (const auto& c : root.get_child("environment-variables")) {
+      variables_list.emplace_back(c.second.data());
+    }
+
+    environment_variables->set_variables(variables_list);
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning(log_tag + "error when parsing the environmental variables list");
+  }
 
   cpu->set_enable_batch_scheduler(root.get<bool>("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler()));
   cpu->set_child_runs_first(root.get<bool>("cpu.child-runs-first", cpu->get_child_runs_first()));
@@ -159,7 +182,7 @@ void ApplicationUi::load_preset(const std::string& name) {
 
     cpu->set_cores(cores_list);
   } catch (const boost::property_tree::ptree_error& e) {
-    util::warning(log_tag + "error when parsing the preset cpu core list");
+    util::warning(log_tag + "error when parsing the cpu core list");
   }
 
   amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
@@ -198,7 +221,7 @@ void ApplicationUi::create_preset() {
       }
     }
 
-    save_preset(name);
+    save_preset(name, user_presets_dir);
 
     populate_listbox();
   }
@@ -294,7 +317,7 @@ void ApplicationUi::populate_listbox() {
 
     connections.emplace_back(apply_btn->signal_clicked().connect([=]() { load_preset(name); }));
 
-    connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name); }));
+    connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name, user_presets_dir); }));
 
     connections.emplace_back(remove_btn->signal_clicked().connect([=]() {
       auto file_path = user_presets_dir / std::filesystem::path{name + ".json"};
@@ -320,4 +343,8 @@ void ApplicationUi::on_presets_menu_button_clicked() {
   presets_menu_scrolled_window->set_max_content_height(height);
 
   populate_listbox();
+}
+
+void ApplicationUi::apply_settings() {
+  save_preset("fastgame.json", std::filesystem::temp_directory_path());
 }

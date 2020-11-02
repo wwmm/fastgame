@@ -56,8 +56,8 @@ auto EnvironmentVariables::add_to_stack(Gtk::Stack* stack) -> EnvironmentVariabl
   return ui;
 }
 
-auto EnvironmentVariables::get_variables() -> std::string {
-  std::string output;
+auto EnvironmentVariables::get_variables() -> std::vector<std::string> {
+  std::vector<std::string> list;
 
   auto children = liststore->children();
 
@@ -72,26 +72,19 @@ auto EnvironmentVariables::get_variables() -> std::string {
       continue;
     }
 
-    output.append(variable);
-    output.append("=");
-    output.append(value + ";");
+    variable.append("=");
+    variable.append(value);
+
+    list.emplace_back(variable);
   }
 
-  if (!output.empty()) {
-    output.pop_back();  // removing the ";" at the end
-  }
-
-  return output;
+  return list;
 }
 
-void EnvironmentVariables::set_variables(const std::string& values_str) {
-  std::stringstream ss(values_str);
-
-  std::string key_and_value;
-
+void EnvironmentVariables::set_variables(const std::vector<std::string>& list) {
   liststore->clear();
 
-  while (std::getline(ss, key_and_value, ';')) {
+  for (const auto& key_and_value : list) {
     int delimiter_position = key_and_value.find('=');
 
     auto key = key_and_value.substr(0, delimiter_position);

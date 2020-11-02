@@ -40,7 +40,7 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   Gtk::Stack* stack = nullptr;
 
-  Gtk::Button *add_preset = nullptr, *import_preset = nullptr;
+  Gtk::Button *add_preset = nullptr, *import_preset = nullptr, *button_apply = nullptr;
 
   Gtk::MenuButton* presets_menu_button = nullptr;
 
@@ -72,7 +72,7 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   void create_preset();
 
-  void save_preset(const std::string& name);
+  void save_preset(const std::string& name, const std::filesystem::path& directory);
 
   void load_preset(const std::string& name);
 
@@ -83,6 +83,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   void populate_listbox();
 
   void on_presets_menu_button_clicked();
+
+  void apply_settings();
 };
 
 #endif

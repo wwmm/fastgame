@@ -1,6 +1,7 @@
 #include "cpu.hpp"
 #include <glibmm/i18n.h>
 #include <gtkmm/checkbutton.h>
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -39,6 +40,10 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
 
   for (auto& value : list_governors) {
+    if (value.empty()) {
+      continue;
+    }
+
     frequency_governor->append(value);
   }
 
@@ -62,4 +67,62 @@ auto Cpu::add_to_stack(Gtk::Stack* stack) -> Cpu* {
   stack->add(*ui, "cpu", _("CPU"));
 
   return ui;
+}
+
+auto Cpu::get_enable_batch_scheduler() -> bool {
+  return use_sched_batch->get_active();
+}
+
+void Cpu::set_enable_batch_scheduler(const bool& state) {
+  use_sched_batch->set_active(state);
+}
+
+auto Cpu::get_child_runs_first() -> bool {
+  return child_runs_first->get_active();
+}
+
+void Cpu::set_child_runs_first(const bool& state) {
+  child_runs_first->set_active(state);
+}
+
+auto Cpu::get_frequency_governor() -> std::string {
+  return frequency_governor->get_active_text();
+}
+
+void Cpu::set_frequency_governor(const std::string& name) {
+  frequency_governor->set_active_text(name);
+}
+
+auto Cpu::get_cores() -> std::vector<std::string> {
+  std::vector<std::string> list;
+
+  auto children = affinity_flowbox->get_children();
+
+  for (auto* child : children) {
+    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+    auto* checkbutton = dynamic_cast<Gtk::CheckButton*>(flowbox_child->get_child());
+
+    if (checkbutton->get_active()) {
+      list.emplace_back(checkbutton->get_label());
+    }
+  }
+
+  return list;
+}
+
+void Cpu::set_cores(const std::vector<std::string>& list) {
+  auto children = affinity_flowbox->get_children();
+
+  for (auto* child : children) {
+    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+    auto* checkbutton = dynamic_cast<Gtk::CheckButton*>(flowbox_child->get_child());
+
+    if (std::find(list.begin(), list.end(), checkbutton->get_label()) != list.end()) {
+      checkbutton->set_active(true);
+    } else {
+      checkbutton->set_active(false);
+    }
+  }
 }

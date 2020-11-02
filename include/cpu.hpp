@@ -19,6 +19,22 @@ class Cpu : public Gtk::Grid {
 
   static auto add_to_stack(Gtk::Stack* stack) -> Cpu*;
 
+  auto get_enable_batch_scheduler() -> bool;
+
+  void set_enable_batch_scheduler(const bool& state);
+
+  auto get_child_runs_first() -> bool;
+
+  void set_child_runs_first(const bool& state);
+
+  auto get_frequency_governor() -> std::string;
+
+  void set_frequency_governor(const std::string& name);
+
+  auto get_cores() -> std::vector<std::string>;
+
+  void set_cores(const std::vector<std::string>& list);
+
  private:
   std::string log_tag = "cpu: ";
 

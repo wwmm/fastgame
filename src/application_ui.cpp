@@ -104,8 +104,23 @@ auto ApplicationUi::get_presets_names() -> std::vector<std::string> {
 
 void ApplicationUi::save_preset(const std::string& name) {
   boost::property_tree::ptree root;
+  boost::property_tree::ptree node;
 
   root.put("environment-variables", environment_variables->get_variables());
+
+  root.put("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler());
+  root.put("cpu.child-runs-first", cpu->get_child_runs_first());
+  root.put("cpu.frequency-governor", cpu->get_frequency_governor());
+
+  for (const auto& c : cpu->get_cores()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", c);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("cpu.cores", node);
 
   auto output_file = user_presets_dir / std::filesystem::path{name + ".json"};
 
@@ -123,9 +138,23 @@ void ApplicationUi::load_preset(const std::string& name) {
 
   environment_variables->set_variables(root.get<std::string>("environment-variables"));
 
-  // boost::property_tree::write_json(output_file, root);
+  cpu->set_enable_batch_scheduler(root.get<bool>("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler()));
+  cpu->set_child_runs_first(root.get<bool>("cpu.child-runs-first", cpu->get_child_runs_first()));
+  cpu->set_frequency_governor(root.get<std::string>("cpu.frequency-governor", cpu->get_frequency_governor()));
 
-  // util::debug(log_tag + "saved preset: " + output_file.string());
+  try {
+    std::vector<std::string> cores_list;
+
+    for (const auto& c : root.get_child("cpu.cores")) {
+      cores_list.emplace_back(c.second.data());
+    }
+
+    cpu->set_cores(cores_list);
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning(log_tag + "error when parsing the preset cpu core list");
+  }
+
+  util::debug(log_tag + "loaded preset: " + input_file.string());
 }
 
 void ApplicationUi::create_preset() {

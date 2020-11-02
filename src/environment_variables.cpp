@@ -78,7 +78,7 @@ auto EnvironmentVariables::get_variables() -> std::string {
   }
 
   if (!output.empty()) {
-    output.pop_back();
+    output.pop_back();  // removing the ";" at the end
   }
 
   return output;

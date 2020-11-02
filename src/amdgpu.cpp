@@ -139,25 +139,25 @@ void Amdgpu::read_performance_level() {
 
       f.close();
 
-      util::debug(log_tag + "current performance level: " + level);
+      performance_level->set_active_text(level);
 
-      if (level == "auto") {
-        performance_level->set_active(0);
-      } else if (level == "low") {
-        performance_level->set_active(1);
-      } else if (level == "high") {
-        performance_level->set_active(2);
-      } else if (level == "manual") {
-        performance_level->set_active(3);
-      } else if (level == "profile_standard") {
-        performance_level->set_active(4);
-      } else if (level == "profile_min_sclk") {
-        performance_level->set_active(5);
-      } else if (level == "profile_min_mclk") {
-        performance_level->set_active(6);
-      } else if (level == "profile_peak") {
-        performance_level->set_active(7);
-      }
+      util::debug(log_tag + "current performance level: " + level);
     }
   }
+}
+
+auto Amdgpu::get_performance_level() -> std::string {
+  return performance_level->get_active_text();
+}
+
+void Amdgpu::set_performance_level(const std::string& level) {
+  performance_level->set_active_text(level);
+}
+
+auto Amdgpu::get_power_cap() -> int {
+  return static_cast<int>(power_cap->get_value());
+}
+
+void Amdgpu::set_power_cap(const int& value) {
+  power_cap->set_value(value);
 }

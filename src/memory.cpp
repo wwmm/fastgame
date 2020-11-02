@@ -94,3 +94,35 @@ void Memory::read_transparent_huge_page_values() {
 
   thp_shmem_enabled->set_active_text(shmem_enabled_value);
 }
+
+auto Memory::get_cache_pressure() -> int {
+  return static_cast<int>(cache_pressure->get_value());
+}
+
+void Memory::set_cache_pressure(const int& value) {
+  cache_pressure->set_value(value);
+}
+
+auto Memory::get_thp_enabled() -> std::string {
+  return thp_enabled->get_active_text();
+}
+
+void Memory::set_thp_enabled(const std::string& value) {
+  thp_enabled->set_active_text(value);
+}
+
+auto Memory::get_thp_defrag() -> std::string {
+  return thp_defrag->get_active_text();
+}
+
+void Memory::set_thp_defrag(const std::string& value) {
+  thp_defrag->set_active_text(value);
+}
+
+auto Memory::get_thp_shmem_enabled() -> std::string {
+  return thp_shmem_enabled->get_active_text();
+}
+
+void Memory::set_thp_shmem_enabled(const std::string& value) {
+  thp_shmem_enabled->set_active_text(value);
+}

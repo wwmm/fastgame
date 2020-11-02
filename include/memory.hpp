@@ -18,6 +18,22 @@ class Memory : public Gtk::Grid {
 
   static auto add_to_stack(Gtk::Stack* stack) -> Memory*;
 
+  auto get_cache_pressure() -> int;
+
+  void set_cache_pressure(const int& value);
+
+  auto get_thp_enabled() -> std::string;
+
+  void set_thp_enabled(const std::string& value);
+
+  auto get_thp_defrag() -> std::string;
+
+  void set_thp_defrag(const std::string& value);
+
+  auto get_thp_shmem_enabled() -> std::string;
+
+  void set_thp_shmem_enabled(const std::string& value);
+
  private:
   std::string log_tag = "memory: ";
 

@@ -35,14 +35,14 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <items>
-          <item translatable="yes">Auto</item>
-          <item translatable="yes">Low</item>
-          <item translatable="yes">High</item>
-          <item translatable="yes">Manual</item>
-          <item translatable="yes">Profile Standard</item>
-          <item translatable="yes">Profile Min SCLK</item>
-          <item translatable="yes">Profile Min MCLK</item>
-          <item translatable="yes">Profile Peak</item>
+          <item translatable="yes">auto</item>
+          <item translatable="yes">low</item>
+          <item translatable="yes">high</item>
+          <item translatable="yes">manual</item>
+          <item translatable="yes">profile_standard</item>
+          <item translatable="yes">profile_min_sclk</item>
+          <item translatable="yes">profile_min_mclk</item>
+          <item translatable="yes">profile_peak</item>
         </items>
       </object>
       <packing>

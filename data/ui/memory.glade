@@ -27,7 +27,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-bottom">12</property>
-            <property name="label" translatable="yes">Transparent Huge Pages</property>
+            <property name="label" translatable="yes">Transparent HugePages</property>
           </object>
           <packing>
             <property name="left-attach">0</property>

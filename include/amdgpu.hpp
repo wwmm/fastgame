@@ -18,6 +18,14 @@ class Amdgpu : public Gtk::Grid {
 
   static auto add_to_stack(Gtk::Stack* stack) -> Amdgpu*;
 
+  auto get_performance_level() -> std::string;
+
+  void set_performance_level(const std::string& level);
+
+  auto get_power_cap() -> int;
+
+  void set_power_cap(const int& value);
+
  private:
   std::string log_tag = "amdgpu: ";
 

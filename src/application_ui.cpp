@@ -122,6 +122,14 @@ void ApplicationUi::save_preset(const std::string& name) {
 
   root.add_child("cpu.cores", node);
 
+  root.put("amdgpu.performance-level", amdgpu->get_performance_level());
+  root.put("amdgpu.power-cap", amdgpu->get_power_cap());
+
+  root.put("memory.virtual-memory.cache-pressure", memory->get_cache_pressure());
+  root.put("memory.transparent-hugepages.enabled", memory->get_thp_enabled());
+  root.put("memory.transparent-hugepages.defrag", memory->get_thp_defrag());
+  root.put("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled());
+
   auto output_file = user_presets_dir / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -153,6 +161,15 @@ void ApplicationUi::load_preset(const std::string& name) {
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the preset cpu core list");
   }
+
+  amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
+  amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap", amdgpu->get_power_cap()));
+
+  memory->set_cache_pressure(root.get<int>("memory.virtual-memory.cache-pressure", memory->get_cache_pressure()));
+  memory->set_thp_enabled(root.get<std::string>("memory.transparent-hugepages.enabled", memory->get_thp_enabled()));
+  memory->set_thp_defrag(root.get<std::string>("memory.transparent-hugepages.defrag", memory->get_thp_defrag()));
+  memory->set_thp_shmem_enabled(
+      root.get<std::string>("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled()));
 
   util::debug(log_tag + "loaded preset: " + input_file.string());
 }

@@ -5,6 +5,7 @@
 #include <gtkmm/filechoosernative.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/settings.h>
+#include <polkit/polkit.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <filesystem>
@@ -68,6 +69,10 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
 ApplicationUi::~ApplicationUi() {
   for (auto& c : connections) {
     c.disconnect();
+  }
+
+  if (cpu_dma_ofstream.is_open()) {
+    cpu_dma_ofstream.close();
   }
 
   util::debug(log_tag + "destroyed");
@@ -346,5 +351,31 @@ void ApplicationUi::on_presets_menu_button_clicked() {
 }
 
 void ApplicationUi::apply_settings() {
-  save_preset("fastgame.json", std::filesystem::temp_directory_path());
+  // save_preset("fastgame.json", std::filesystem::temp_directory_path());
+
+  g_autoptr(GError) error = nullptr;
+  g_autoptr(GPermission) permission = nullptr;
+
+  permission = polkit_permission_new_sync("com.github.wwmm.fastgame.apply", nullptr, nullptr, &error);
+
+  if (permission == nullptr) {
+    util::warning(log_tag + error->message);
+
+    return;
+  }
+
+  if (g_permission_acquire(permission, nullptr, &error) != 0) {
+    cpu_dma_ofstream.open("/dev/cpu_dma_latency");
+
+    cpu_dma_ofstream << 0;
+
+    util::debug(log_tag + "enabling /dev/cpu_dma_latency");
+  } else {
+    util::debug(log_tag + error->message);
+  }
+
+  // if (g_permission_get_can_acquire(permission) != 0) {
+  // } else {
+  //   util::debug(log_tag + "we can not acquire the polkit permission");
+  // }
 }

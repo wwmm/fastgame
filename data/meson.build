@@ -35,6 +35,20 @@ gresources = gnome_mod.compile_resources(
   dependencies: [glade_about]
 )
 
-install_data(['config.json', 'config_example.json', 'config_example_nvidia.json'], install_dir: fastgame_config_dir)
+conf_polkit = configuration_data()
 
-install_subdir('examples', install_dir: join_paths(fastgame_config_dir, 'profiles'))
+conf_polkit.set('BINDIR', bindir)
+
+configure_file(input: 'com.github.wwmm.fastgame.apply.policy.in',
+               output: 'com.github.wwmm.fastgame.apply.policy',
+               configuration: conf_polkit,
+               install: true,
+               install_dir: join_paths(datadir, 'polkit-1', 'actions'))
+
+# i18n_mod.merge_file(
+#   input: policy_with_bindir,
+#   output: 'com.github.wwmm.fastgame.apply.policy',
+#   po_dir: join_paths(meson.source_root(), 'po'),
+#   install: true,
+#   install_dir: join_paths(datadir, 'polkit-1', 'actions')
+# )

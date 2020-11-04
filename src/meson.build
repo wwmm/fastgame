@@ -8,8 +8,8 @@ fastgame_launcher_deps = [
 	dependency('boost', version: '>=1.65', modules:['program_options'])
 ]
 
-fastgame_gui_sources = [
-	'fastgame_gui.cpp',
+fastgame_sources = [
+	'fastgame.cpp',
 	'application.cpp',
 	'application_ui.cpp',
 	'environment_variables.cpp',
@@ -20,7 +20,7 @@ fastgame_gui_sources = [
 	gresources
 ]
 
-fastgame_gui_deps = [
+fastgame_deps = [
 	dependency('glib-2.0', version: '>=2.56'),
 	dependency('glibmm-2.4', version: '>=2.56'),
 	dependency('gtk+-3.0', version: '>=3.20'),
@@ -49,10 +49,10 @@ executable(
 )
 
 executable(
-	'fastgame_gui',
-	fastgame_gui_sources,
+	'fastgame',
+	fastgame_sources,
 	include_directories : [include_dir,config_h_dir],
-	dependencies : fastgame_gui_deps,
+	dependencies : fastgame_deps,
 	install: true
 )
 

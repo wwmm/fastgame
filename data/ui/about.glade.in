@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.1 -->
 <interface domain="pulseeffects">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAboutDialog" id="about_dialog">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="program_name">PulseEffects</property>
+    <property name="type-hint">dialog</property>
+    <property name="program-name">FastGame</property>
     <property name="version">@PROJECT_VERSION@</property>
-    <property name="comments" translatable="yes">Audio effects for PulseAudio applications</property>
+    <property name="comments" translatable="yes">Tweak System Settings</property>
     <property name="authors">Wellington Wallace</property>
-    <property name="translator_credits">Wellington Wallace
+    <property name="translator-credits">Wellington Wallace
 Gianluca Boiano</property>
     <property name="artists">ZenCubic</property>
-    <property name="logo_icon_name">pulseeffects</property>
-    <property name="license_type">gpl-3-0</property>
+    <property name="logo-icon-name">fastgame</property>
+    <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <placeholder/>
             </child>
@@ -41,9 +41,6 @@ Gianluca Boiano</property>
           <placeholder/>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

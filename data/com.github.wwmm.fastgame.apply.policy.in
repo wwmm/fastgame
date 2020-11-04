@@ -12,7 +12,7 @@
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/home/wallace/myfiles/code/cpp/fastgame/_build/src/fastgame_apply</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">@BINDIR@/fastgame_apply</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">false</annotate>
   </action>
 

@@ -1,5 +1,3 @@
-subdir('nvidia')
-
 fastgame_server_sources = [
 	'fastgame_server.cpp',
 	'netlink.cpp',
@@ -44,22 +42,25 @@ fastgame_gui_deps = [
 	dependency('gtkmm-3.0', version: '>=3.24'),
 	dependency('sigc++-2.0', version: ['>=2.10', '<3']),
 	dependency('boost', version: '>=1.65'),
-	dependency('polkit-gobject-1')
+	dependency('threads')
 ]
 
-linkwith = []
+fastgame_apply_sources = [
+	'fastgame_apply.cpp',
+	'util.cpp'
+]
 
-if libxnvctrl.found()
-	linkwith += fastgame_nvidia
-endif
+fastgame_apply_deps = [
+	dependency('glib-2.0', version: '>=2.56'),
+	dependency('boost', version: '>=1.65')
+]
 
 executable(
 	'fastgame_server',
 	fastgame_server_sources,
 	include_directories : [include_dir,config_h_dir],
 	dependencies : fastgame_server_deps,
-	install: true,
-	link_with: linkwith
+	install: true
 )
 
 executable(
@@ -75,5 +76,13 @@ executable(
 	fastgame_gui_sources,
 	include_directories : [include_dir,config_h_dir],
 	dependencies : fastgame_gui_deps,
+	install: true
+)
+
+executable(
+	'fastgame_apply',
+	fastgame_apply_sources,
+	include_directories : [include_dir,config_h_dir],
+	dependencies : fastgame_apply_deps,
 	install: true
 )

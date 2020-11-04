@@ -26,6 +26,8 @@ class Amdgpu : public Gtk::Grid {
 
   void set_power_cap(const int& value);
 
+  auto get_card_index() const -> int;
+
  private:
   std::string log_tag = "amdgpu: ";
 
@@ -36,7 +38,6 @@ class Amdgpu : public Gtk::Grid {
 
   Glib::RefPtr<Gtk::Adjustment> power_cap;
 
-  void find_hwmon_index();
   void read_power_cap();
   void read_power_cap_max();
   void read_performance_level();

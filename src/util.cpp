@@ -36,7 +36,7 @@ auto read_system_setting(const std::string& path_str) -> std::vector<std::string
   } else {
     std::ifstream f;
 
-    f.open(path, std::ios::in);
+    f.open(path);
 
     std::string value;
 
@@ -62,6 +62,25 @@ auto get_selected_value(const std::vector<std::string>& list) -> std::string {
   }
 
   return selected_value;
+}
+
+auto find_hwmon_index(const int& card_index) -> int {
+  int index = 0;
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/");
+
+  for (const auto& entry : std::filesystem::directory_iterator(path)) {
+    auto child_directory = std::filesystem::path(entry).filename().string();
+
+    // It is unlikely that a system has more than 10 hwmon devices so we just get the last character
+
+    std::string index_str(1, child_directory.back());
+
+    index = std::stoi(index_str);
+
+    break;
+  }
+
+  return index;
 }
 
 }  // namespace util

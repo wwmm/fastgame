@@ -21,15 +21,14 @@ Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
 
     util::debug(log_tag + "using the card at the index: 0");
 
-    find_hwmon_index();
+    hwmon_index = util::find_hwmon_index(0);
+
+    util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
+
     read_power_cap_max();
     read_power_cap();
     read_performance_level();
   }
-
-  // signals connection
-
-  // button_add->signal_clicked().connect([=]() { liststore->append(); });
 }
 
 Amdgpu::~Amdgpu() {
@@ -48,20 +47,8 @@ auto Amdgpu::add_to_stack(Gtk::Stack* stack) -> Amdgpu* {
   return ui;
 }
 
-void Amdgpu::find_hwmon_index() {
-  auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/");
-
-  for (const auto& entry : fs::directory_iterator(path)) {
-    auto child_directory = fs::path(entry).filename().string();
-
-    // It is unlikely that a system has more than 10 hwmon devices so we just get the last character
-
-    std::string index_str(1, child_directory.back());
-
-    hwmon_index = std::stoi(index_str);
-
-    util::debug(log_tag + "hwmon device index: " + index_str);
-  }
+auto Amdgpu::get_card_index() const -> int {
+  return card_index;
 }
 
 void Amdgpu::read_power_cap() {

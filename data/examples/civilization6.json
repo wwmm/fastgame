@@ -1,9 +1,0 @@
-{
-  "executable-name": "Civ6",
-  "environment": [
-    "__GL_THREADED_OPTIMIZATIONS=1",
-    "__GL_MaxFramesAllowed=2",
-    "LD_PRELOAD=/usr/lib/libfreetype.so"
-  ],
-  "cpu-affinity": ["8", "9", "10", "11", "12", "13", "14", "15"]
-}

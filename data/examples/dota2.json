@@ -1,9 +1,0 @@
-{
-  "executable-name": "dota2",
-  "environment": [
-    "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json",
-    "RADV_DEBUG=zerovram",
-    "RADV_PERFTEST=aco,dfsm,dccmsaa,shader_ballot"
-  ],
-  "scheduler-policy": "SCHED_BATCH"
-}

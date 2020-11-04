@@ -1,25 +1,10 @@
-fastgame_server_sources = [
-	'fastgame_server.cpp',
-	'netlink.cpp',
-	'cmdline_options.cpp',
-	'config.cpp',
-	'scheduler.cpp',
-	'tweaks.cpp',
-	'radeon.cpp'
+fastgame_launcher_sources = [
+	'fastgame_launcher.cpp',
+	'util.cpp'
 ]
 
-fastgame_server_deps = [
-	dependency('boost', version: '>=1.65', modules:['program_options'])
-]
-
-fastgame_sources = [
-	'fastgame.cpp',
-	'cmdline_options.cpp',
-	'config.cpp',
-	'scheduler.cpp'
-]
-
-fastgame_deps = [
+fastgame_launcher_deps = [
+	dependency('glib-2.0', version: '>=2.56'),
 	dependency('boost', version: '>=1.65', modules:['program_options'])
 ]
 
@@ -56,18 +41,10 @@ fastgame_apply_deps = [
 ]
 
 executable(
-	'fastgame_server',
-	fastgame_server_sources,
+	'fastgame_launcher',
+	fastgame_launcher_sources,
 	include_directories : [include_dir,config_h_dir],
-	dependencies : fastgame_server_deps,
-	install: true
-)
-
-executable(
-	'fastgame',
-	fastgame_sources,
-	include_directories : [include_dir,config_h_dir],
-	dependencies : fastgame_deps,
+	dependencies : fastgame_launcher_deps,
 	install: true
 )
 

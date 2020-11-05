@@ -50,6 +50,28 @@ void update_cpu_frequency_governor(const std::string& name) {
   }
 }
 
+void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
+  cpu_set_t mask;
+
+  CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+
+  for (const auto& core_index : cpu_affinity) {
+    CPU_SET(core_index, &mask);
+  }
+
+  if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
+    util::warning("fastgame_apply: could not set the process cpu affinity");
+  }
+}
+
+void set_process_scheduler(const int& pid, const int& policy_index) {
+  sched_param policy_params{};
+
+  policy_params.sched_priority = 0;
+
+  sched_setscheduler(pid, policy_index, &policy_params);
+}
+
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
@@ -79,6 +101,8 @@ auto main(int argc, char* argv[]) -> int {
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("fastgame_apply: error when parsing the cpu core list");
   }
+
+  auto use_batch_scheduler = root.get<bool>("cpu.use-batch-scheduler");
 
   update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first"));
 
@@ -147,32 +171,29 @@ auto main(int argc, char* argv[]) -> int {
 
       std::cout << "fastgame_apply: " << msg << std::endl;
 
-      // cpu affinity
+      apply_cpu_affinity(game_pid, cpu_affinity);
 
-      cpu_set_t mask;
-
-      CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
-
-      for (const auto& core_index : cpu_affinity) {
-        CPU_SET(core_index, &mask);
-      }
-
-      if (sched_setaffinity(game_pid, sizeof(cpu_set_t), &mask) < 0) {
-        util::warning("fastgame_apply: could not set the process cpu affinity");
+      if (use_batch_scheduler) {
+        set_process_scheduler(game_pid, SCHED_BATCH);
       }
     }
   });
 
   nl->new_fork.connect([&](int tgid, int child_pid, const std::string& child_comm) {
     if (child_comm == "wineserver") {
-      util::info("fastgame_apply: wine server pid: " + std::to_string(child_pid));
+      std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << std::endl;
     } else {
       if (tgid == game_pid && child_pid != tgid) {
+        apply_cpu_affinity(child_pid, cpu_affinity);
+
+        if (use_batch_scheduler) {
+          set_process_scheduler(child_pid, SCHED_BATCH);
+        }
       }
     }
   });
 
-  nl->new_exit.connect([&](int pid) {});
+  // nl->new_exit.connect([&](int pid) {});
 
   auto check_lock_file = [&]() {
     while (std::filesystem::is_regular_file(input_file)) {

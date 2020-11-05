@@ -33,17 +33,6 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_launcher: error when parsing the environmental variables list");
   }
 
-  // process scheduler
-
-  if (root.get<bool>("cpu.use-batch-scheduler")) {
-    int policy_index = SCHED_BATCH;
-    sched_param policy_params{};
-
-    policy_params.sched_priority = 0;
-
-    sched_setscheduler(0, policy_index, &policy_params);
-  }
-
   // Assuming that the game executable is the only argument passed as option
 
   std::vector<char*> arguments;

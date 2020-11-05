@@ -53,6 +53,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   Gtk::Spinner* headerbar_spinner = nullptr;
 
+  Gtk::Entry* game_executable = nullptr;
+
   EnvironmentVariables* environment_variables = nullptr;
 
   Cpu* cpu = nullptr;

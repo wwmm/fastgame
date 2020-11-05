@@ -34,6 +34,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   builder->get_widget("presets_menu_scrolled_window", presets_menu_scrolled_window);
   builder->get_widget("button_apply", button_apply);
   builder->get_widget("headerbar_spinner", headerbar_spinner);
+  builder->get_widget("game_executable", game_executable);
 
   create_user_directory();
 
@@ -122,6 +123,8 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   boost::property_tree::ptree root;
   boost::property_tree::ptree node;
 
+  root.put("game-executable", game_executable->get_text());
+
   for (const auto& v : environment_variables->get_variables()) {
     boost::property_tree::ptree local_node;
 
@@ -169,6 +172,8 @@ void ApplicationUi::load_preset(const std::string& name) {
   boost::property_tree::ptree root;
 
   boost::property_tree::read_json(input_file.string(), root);
+
+  game_executable->set_text(root.get<std::string>("game-executable", game_executable->get_text()));
 
   try {
     std::vector<std::string> variables_list;

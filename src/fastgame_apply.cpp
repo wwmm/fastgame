@@ -61,7 +61,24 @@ auto main(int argc, char* argv[]) -> int {
 
   boost::property_tree::read_json(input_file.string(), root);
 
+  // executable
+
+  auto game_executable = root.get<std::string>("game-executable");
+
   // cpu
+
+  std::vector<int> cpu_affinity;
+
+  try {
+    for (const auto& c : root.get_child("cpu.cores")) {
+      int core_index = std::stoi(c.second.data());
+
+      cpu_affinity.emplace_back(core_index);
+    }
+
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("fastgame_apply: error when parsing the cpu core list");
+  }
 
   update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first"));
 
@@ -95,7 +112,7 @@ auto main(int argc, char* argv[]) -> int {
 
   // starting the netlink server
 
-  int game_pid = 0;
+  int game_pid = -1;
 
   auto nl = std::make_unique<Netlink>();
 
@@ -104,14 +121,15 @@ auto main(int argc, char* argv[]) -> int {
       return;
     }
 
+    util::info(comm);
+
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
-    std::string game = "game.exe";
 
-    if (game == comm || game == path_comm.stem().string()) {
+    if (game_executable == comm || game_executable == path_comm.stem().string()) {
       apply = true;
     } else if (comm.size() == 15) {  // comm is larger than 15 characters and was truncated by the kernel
-      auto sub_str = game.substr(0, 15);
+      auto sub_str = game_executable.substr(0, 15);
 
       if (comm == sub_str) {
         apply = true;
@@ -127,7 +145,21 @@ auto main(int argc, char* argv[]) -> int {
       msg.append(exe_path + ", ");
       msg.append(cmdline + ")");
 
-      util::info("fastgame_apply: " + msg);
+      std::cout << "fastgame_apply: " << msg << std::endl;
+
+      // cpu affinity
+
+      cpu_set_t mask;
+
+      CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+
+      for (const auto& core_index : cpu_affinity) {
+        CPU_SET(core_index, &mask);
+      }
+
+      if (sched_setaffinity(game_pid, sizeof(cpu_set_t), &mask) < 0) {
+        util::warning("fastgame_apply: could not set the process cpu affinity");
+      }
     }
   });
 

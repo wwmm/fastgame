@@ -33,27 +33,6 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_launcher: error when parsing the environmental variables list");
   }
 
-  // cpu affinity
-
-  try {
-    cpu_set_t mask;
-
-    CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
-
-    for (const auto& c : root.get_child("cpu.cores")) {
-      int core_index = std::stoi(c.second.data());
-
-      CPU_SET(core_index, &mask);
-    }
-
-    if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0) {
-      util::warning("fastgame_launcher: could not set the process cpu affinity");
-    }
-
-  } catch (const boost::property_tree::ptree_error& e) {
-    util::warning("fastgame_launcher: error when parsing the cpu core list");
-  }
-
   // process scheduler
 
   if (root.get<bool>("cpu.use-batch-scheduler")) {

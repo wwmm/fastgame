@@ -12,7 +12,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stack.h>
 #include <filesystem>
-#include <fstream>
 #include "amdgpu.hpp"
 #include "application.hpp"
 #include "cpu.hpp"
@@ -32,8 +31,6 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
  private:
   std::string log_tag = "application_ui: ";
-
-  std::ofstream cpu_dma_ofstream;
 
   Application* app;
 

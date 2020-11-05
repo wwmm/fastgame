@@ -72,9 +72,13 @@ ApplicationUi::~ApplicationUi() {
     c.disconnect();
   }
 
-  if (cpu_dma_ofstream.is_open()) {
-    cpu_dma_ofstream.close();
-  }
+  // We remove this file so that the server knows it is time to exit
+
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
+  std::filesystem::remove(file_path);
+
+  util::debug(log_tag + "removed the file: " + file_path.string());
 
   util::debug(log_tag + "destroyed");
 }
@@ -366,7 +370,7 @@ void ApplicationUi::apply_settings() {
       util::debug(line);
     }
 
-    c.wait();
+    // c.wait();
   } catch (std::exception& e) {
     util::warning(log_tag + command + " : " + e.what());
   }

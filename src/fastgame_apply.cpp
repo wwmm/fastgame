@@ -2,6 +2,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <filesystem>
 #include <thread>
+#include "netlink.hpp"
 #include "util.hpp"
 
 template <typename T>
@@ -51,6 +52,10 @@ void update_cpu_frequency_governor(const std::string& name) {
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
+  if (!std::filesystem::is_regular_file(input_file)) {
+    util::error("fastgame_apply: could not read " + input_file.string());
+  }
+
   boost::property_tree::ptree root;
 
   boost::property_tree::read_json(input_file.string(), root);
@@ -86,6 +91,48 @@ auto main(int argc, char* argv[]) -> int {
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled",
                         root.get<std::string>("memory.transparent-hugepages.shmem_enabled"));
+
+  // starting the netlink server
+
+  auto nl = std::make_unique<Netlink>();
+
+  nl->new_exec.connect([&](int pid, const std::string& comm, const std::string& cmdline, const std::string& exe_path) {
+    if (comm == "wineserver") {
+      return;
+    }
+
+    auto apply = false;
+    auto path_comm = std::filesystem::path(comm);
+    std::string game = "game.exe";
+
+    if (game == comm || game == path_comm.stem().string()) {
+      apply = true;
+    } else if (comm.size() == 15) {  // comm is larger than 15 characters and was truncated by the kernel
+      auto sub_str = game.substr(0, 15);
+
+      if (comm == sub_str) {
+        apply = true;
+      }
+    }
+
+    if (apply) {
+      std::string msg = "(";
+
+      msg.append(std::to_string(pid) + ", " + comm + ", ");
+      msg.append(exe_path + ", ");
+      msg.append(cmdline + ")");
+
+      util::info("fastgame_apply: " + msg);
+    }
+  });
+
+  nl->new_exit.connect([&](int pid) {});
+
+  if (nl->listen) {
+    nl->lock_file = input_file;
+
+    nl->handle_events();  // This is a blocking call. It has to be started at the end
+  }
 
   return 0;
 }

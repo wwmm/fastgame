@@ -32,6 +32,7 @@ fastgame_deps = [
 
 fastgame_apply_sources = [
 	'fastgame_apply.cpp',
+	'netlink.cpp',
 	'util.cpp'
 ]
 

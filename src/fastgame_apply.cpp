@@ -1,5 +1,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <chrono>
 #include <filesystem>
 #include <thread>
 #include "netlink.hpp"
@@ -94,6 +95,8 @@ auto main(int argc, char* argv[]) -> int {
 
   // starting the netlink server
 
+  int game_pid = 0;
+
   auto nl = std::make_unique<Netlink>();
 
   nl->new_exec.connect([&](int pid, const std::string& comm, const std::string& cmdline, const std::string& exe_path) {
@@ -116,6 +119,8 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     if (apply) {
+      game_pid = pid;
+
       std::string msg = "(";
 
       msg.append(std::to_string(pid) + ", " + comm + ", ");
@@ -126,12 +131,31 @@ auto main(int argc, char* argv[]) -> int {
     }
   });
 
+  nl->new_fork.connect([&](int tgid, int child_pid, const std::string& child_comm) {
+    if (child_comm == "wineserver") {
+      util::info("fastgame_apply: wine server pid: " + std::to_string(child_pid));
+    } else {
+      if (tgid == game_pid && child_pid != tgid) {
+      }
+    }
+  });
+
   nl->new_exit.connect([&](int pid) {});
 
+  auto check_lock_file = [&]() {
+    while (std::filesystem::is_regular_file(input_file)) {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    nl->listen = false;
+  };
+
   if (nl->listen) {
-    nl->lock_file = input_file;
+    std::thread t(check_lock_file);
 
     nl->handle_events();  // This is a blocking call. It has to be started at the end
+
+    t.join();
   }
 
   return 0;

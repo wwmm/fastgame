@@ -7,9 +7,11 @@
 #include <gtkmm/settings.h>
 #include <boost/process.hpp>
 #include <boost/process/search_path.hpp>
+#include <boost/process/spawn.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <filesystem>
+#include "glibmm/main.h"
 #include "util.hpp"
 
 ApplicationUi::ApplicationUi(BaseObjectType* cobject,
@@ -31,6 +33,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   builder->get_widget("presets_menu_button", presets_menu_button);
   builder->get_widget("presets_menu_scrolled_window", presets_menu_scrolled_window);
   builder->get_widget("button_apply", button_apply);
+  builder->get_widget("headerbar_spinner", headerbar_spinner);
 
   create_user_directory();
 
@@ -356,22 +359,41 @@ void ApplicationUi::on_presets_menu_button_clicked() {
 }
 
 void ApplicationUi::apply_settings() {
-  save_preset("fastgame", std::filesystem::temp_directory_path());
+  headerbar_spinner->start();
 
-  std::string command = "pkexec fastgame_apply";
+  // First we remove the file in case a server instance is already running. This will make it exit.
 
-  try {
-    boost::process::ipstream pipe_stream;
-    boost::process::child c(command, boost::process::std_out > pipe_stream);
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
-    std::string line;
+  std::filesystem::remove(file_path);
 
-    while (pipe_stream && std::getline(pipe_stream, line) && !line.empty()) {
-      util::debug(line);
-    }
+  util::debug(log_tag + "removed the file: " + file_path.string());
 
-    // c.wait();
-  } catch (std::exception& e) {
-    util::warning(log_tag + command + " : " + e.what());
-  }
+  /*
+     After a timout of 3 seconds we launch the new server. In case a server instance is already running this should
+     give it enough time to exit.
+  */
+
+  Glib::signal_timeout().connect_seconds_once(
+      [=]() {
+        save_preset("fastgame", std::filesystem::temp_directory_path());
+
+        try {
+          std::thread t([]() {
+            // std::system("pkexec fastgame_apply");
+            boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+
+            c.wait();
+          });
+
+          t.detach();
+
+          headerbar_spinner->stop();
+        } catch (std::exception& e) {
+          headerbar_spinner->stop();
+
+          util::warning(log_tag + e.what());
+        }
+      },
+      3);
 }

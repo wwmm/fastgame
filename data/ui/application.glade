@@ -234,6 +234,17 @@
             <property name="position">2</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkSpinner" id="headerbar_spinner">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>

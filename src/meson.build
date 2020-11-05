@@ -26,7 +26,7 @@ fastgame_deps = [
 	dependency('gtk+-3.0', version: '>=3.20'),
 	dependency('gtkmm-3.0', version: '>=3.24'),
 	dependency('sigc++-2.0', version: ['>=2.10', '<3']),
-	dependency('boost', version: '>=1.65'),
+	dependency('boost', version: '>=1.65', modules:['filesystem']),
 	dependency('threads')
 ]
 
@@ -38,7 +38,8 @@ fastgame_apply_sources = [
 
 fastgame_apply_deps = [
 	dependency('glib-2.0', version: '>=2.56'),
-	dependency('boost', version: '>=1.65')
+	dependency('boost', version: '>=1.65'),
+	dependency('threads')
 ]
 
 executable(

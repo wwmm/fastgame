@@ -10,6 +10,7 @@
 #include <gtkmm/listbox.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/spinner.h>
 #include <gtkmm/stack.h>
 #include <filesystem>
 #include "amdgpu.hpp"
@@ -49,6 +50,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Gtk::ListBox* presets_listbox = nullptr;
 
   Gtk::ScrolledWindow* presets_menu_scrolled_window = nullptr;
+
+  Gtk::Spinner* headerbar_spinner = nullptr;
 
   EnvironmentVariables* environment_variables = nullptr;
 

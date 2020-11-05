@@ -33,6 +33,27 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_launcher: error when parsing the environmental variables list");
   }
 
+  // setting the initial cpu affinity and priority scheduler
+
+  std::vector<int> cpu_affinity;
+
+  try {
+    for (const auto& c : root.get_child("cpu.cores")) {
+      int core_index = std::stoi(c.second.data());
+
+      cpu_affinity.emplace_back(core_index);
+    }
+
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("fastgame_apply: error when parsing the cpu core list");
+  }
+
+  util::apply_cpu_affinity(0, cpu_affinity);
+
+  if (root.get<bool>("cpu.use-batch-scheduler")) {
+    util::set_process_scheduler(0, SCHED_BATCH);
+  }
+
   // Assuming that the game executable is the only argument passed as option
 
   std::vector<char*> arguments;

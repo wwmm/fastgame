@@ -2,6 +2,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <chrono>
 #include <filesystem>
+#include <string>
 #include <thread>
 #include "netlink.hpp"
 #include "util.hpp"
@@ -48,28 +49,6 @@ void update_cpu_frequency_governor(const std::string& name) {
   if (!failed) {
     util::debug("fastgame_apply: changed the cpu frequency governor to " + name);
   }
-}
-
-void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
-  cpu_set_t mask;
-
-  CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
-
-  for (const auto& core_index : cpu_affinity) {
-    CPU_SET(core_index, &mask);
-  }
-
-  if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
-    util::warning("fastgame_apply: could not set the process cpu affinity");
-  }
-}
-
-void set_process_scheduler(const int& pid, const int& policy_index) {
-  sched_param policy_params{};
-
-  policy_params.sched_priority = 0;
-
-  sched_setscheduler(pid, policy_index, &policy_params);
 }
 
 auto main(int argc, char* argv[]) -> int {
@@ -145,8 +124,6 @@ auto main(int argc, char* argv[]) -> int {
       return;
     }
 
-    util::info(comm);
-
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
 
@@ -171,10 +148,10 @@ auto main(int argc, char* argv[]) -> int {
 
       std::cout << "fastgame_apply: " << msg << std::endl;
 
-      apply_cpu_affinity(game_pid, cpu_affinity);
+      util::apply_cpu_affinity(game_pid, cpu_affinity);
 
       if (use_batch_scheduler) {
-        set_process_scheduler(game_pid, SCHED_BATCH);
+        util::set_process_scheduler(game_pid, SCHED_BATCH);
       }
     }
   });
@@ -183,11 +160,25 @@ auto main(int argc, char* argv[]) -> int {
     if (child_comm == "wineserver") {
       std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << std::endl;
     } else {
-      if (tgid == game_pid && child_pid != tgid) {
-        apply_cpu_affinity(child_pid, cpu_affinity);
+      if (tgid == game_pid) {
+        /*
+          For some reason not all of the children can be intercepted here. So we loop over all children whenever a new
+          one is created. This way we are able to apply settings to all of them.
+        */
 
-        if (use_batch_scheduler) {
-          set_process_scheduler(child_pid, SCHED_BATCH);
+        try {
+          auto task_dir = "/proc/" + std::to_string(game_pid) + "/task";
+
+          for (const auto& entry : std::filesystem::directory_iterator(task_dir)) {
+            const auto task_pid = std::stoi(entry.path().filename().string());
+
+            util::apply_cpu_affinity(task_pid, cpu_affinity);
+
+            if (use_batch_scheduler) {
+              util::set_process_scheduler(task_pid, SCHED_BATCH);
+            }
+          }
+        } catch (std::exception& e) {
         }
       }
     }

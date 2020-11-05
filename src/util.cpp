@@ -83,4 +83,26 @@ auto find_hwmon_index(const int& card_index) -> int {
   return index;
 }
 
+void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
+  cpu_set_t mask;
+
+  CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+
+  for (const auto& core_index : cpu_affinity) {
+    CPU_SET(core_index, &mask);
+  }
+
+  if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
+    util::warning("fastgame_apply: could not set the process cpu affinity: " + std::to_string(pid));
+  }
+}
+
+void set_process_scheduler(const int& pid, const int& policy_index) {
+  sched_param policy_params{};
+
+  policy_params.sched_priority = 0;
+
+  sched_setscheduler(pid, policy_index, &policy_params);
+}
+
 }  // namespace util

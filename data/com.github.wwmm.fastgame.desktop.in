@@ -4,7 +4,7 @@ GenericName=System Tweak
 Comment=Allows doing system tweaks that mighty help game performance
 Keywords=system;tweak;game;
 Categories=GTK;System;
-Exec=fastgame_gui
+Exec=fastgame
 # Translators: This is an icon name, don't translate!
 Icon=fastgame
 StartupNotify=true

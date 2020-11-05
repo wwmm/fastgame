@@ -51,7 +51,7 @@ auto main(int argc, char* argv[]) -> int {
   util::apply_cpu_affinity(0, cpu_affinity);
 
   if (root.get<bool>("cpu.use-batch-scheduler")) {
-    util::set_process_scheduler(0, SCHED_BATCH);
+    util::set_process_scheduler(0, SCHED_BATCH, 0);
   }
 
   // Assuming that the game executable is the only argument passed as option

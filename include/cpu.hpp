@@ -35,12 +35,21 @@ class Cpu : public Gtk::Grid {
 
   void set_cores(const std::vector<std::string>& list);
 
+  auto get_use_cpu_dma_latency() -> bool;
+
+  void set_use_cpu_dma_latency(const bool& state);
+
+  auto get_use_realtime_wineserver() -> bool;
+
+  void set_use_realtime_wineserver(const bool& state);
+
  private:
   std::string log_tag = "cpu: ";
 
   uint n_cores = 1;
 
-  Gtk::Switch *use_sched_batch = nullptr, *child_runs_first = nullptr;
+  Gtk::Switch *use_sched_batch = nullptr, *child_runs_first = nullptr, *use_cpu_dma_latency = nullptr,
+              *realtime_wineserver = nullptr;
 
   Gtk::ComboBoxText* frequency_governor = nullptr;
 

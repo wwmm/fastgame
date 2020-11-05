@@ -93,14 +93,14 @@ void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
   }
 
   if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
-    util::warning("fastgame_apply: could not set the process cpu affinity: " + std::to_string(pid));
+    util::warning("fastgame_apply: could not set cpu affinity for the process: " + std::to_string(pid));
   }
 }
 
-void set_process_scheduler(const int& pid, const int& policy_index) {
+void set_process_scheduler(const int& pid, const int& policy_index, const int& priority) {
   sched_param policy_params{};
 
-  policy_params.sched_priority = 0;
+  policy_params.sched_priority = priority;
 
   sched_setscheduler(pid, policy_index, &policy_params);
 }

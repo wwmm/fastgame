@@ -17,6 +17,8 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   builder->get_widget("child_runs_first", child_runs_first);
   builder->get_widget("frequency_governor", frequency_governor);
   builder->get_widget("affinity_flowbox", affinity_flowbox);
+  builder->get_widget("use_cpu_dma_latency", use_cpu_dma_latency);
+  builder->get_widget("realtime_wineserver", realtime_wineserver);
 
   // initializing widgets
 
@@ -125,4 +127,20 @@ void Cpu::set_cores(const std::vector<std::string>& list) {
       checkbutton->set_active(false);
     }
   }
+}
+
+auto Cpu::get_use_cpu_dma_latency() -> bool {
+  return use_cpu_dma_latency->get_active();
+}
+
+void Cpu::set_use_cpu_dma_latency(const bool& state) {
+  use_cpu_dma_latency->set_active(state);
+}
+
+auto Cpu::get_use_realtime_wineserver() -> bool {
+  return realtime_wineserver->get_active();
+}
+
+void Cpu::set_use_realtime_wineserver(const bool& state) {
+  realtime_wineserver->set_active(state);
 }

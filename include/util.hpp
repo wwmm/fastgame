@@ -20,7 +20,7 @@ auto find_hwmon_index(const int& card_index) -> int;
 
 void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity);
 
-void set_process_scheduler(const int& pid, const int& policy_index);
+void set_process_scheduler(const int& pid, const int& policy_index, const int& priority);
 
 }  // namespace util
 

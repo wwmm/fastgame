@@ -58,8 +58,8 @@ auto main(int argc, char* argv[]) -> int {
     util::error("fastgame_apply: could not read " + input_file.string());
   }
 
+  std::ofstream cpu_dma_ofstream;
   boost::property_tree::ptree root;
-
   boost::property_tree::read_json(input_file.string(), root);
 
   // executable
@@ -81,11 +81,18 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_apply: error when parsing the cpu core list");
   }
 
-  auto use_batch_scheduler = root.get<bool>("cpu.use-batch-scheduler");
+  auto use_batch_scheduler = root.get<bool>("cpu.use-batch-scheduler", false);
+  auto use_realtime_wineserver = root.get<bool>("cpu.use-realtime-wineserver", false);
 
-  update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first"));
+  update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first", false));
 
-  update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor"));
+  update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor", "schedutil"));
+
+  if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {
+    cpu_dma_ofstream.open("/dev/cpu_dma_latency");
+
+    cpu_dma_ofstream << 0;
+  }
 
   // amdgpu
 
@@ -151,7 +158,7 @@ auto main(int argc, char* argv[]) -> int {
       util::apply_cpu_affinity(game_pid, cpu_affinity);
 
       if (use_batch_scheduler) {
-        util::set_process_scheduler(game_pid, SCHED_BATCH);
+        util::set_process_scheduler(game_pid, SCHED_BATCH, 0);
       }
     }
   });
@@ -159,6 +166,14 @@ auto main(int argc, char* argv[]) -> int {
   nl->new_fork.connect([&](int tgid, int child_pid, const std::string& child_comm) {
     if (child_comm == "wineserver") {
       std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << std::endl;
+
+      if (use_realtime_wineserver) {
+        util::apply_cpu_affinity(child_pid, cpu_affinity);
+
+        util::set_process_scheduler(child_pid, SCHED_RR, 1);
+
+        std::cout << "fastgame_apply: setting wineserver priority to realtime" << std::endl;
+      }
     } else {
       if (tgid == game_pid) {
         /*
@@ -175,7 +190,7 @@ auto main(int argc, char* argv[]) -> int {
             util::apply_cpu_affinity(task_pid, cpu_affinity);
 
             if (use_batch_scheduler) {
-              util::set_process_scheduler(task_pid, SCHED_BATCH);
+              util::set_process_scheduler(task_pid, SCHED_BATCH, 0);
             }
           }
         } catch (std::exception& e) {
@@ -200,6 +215,10 @@ auto main(int argc, char* argv[]) -> int {
     nl->handle_events();  // This is a blocking call. It has to be started at the end
 
     t.join();
+  }
+
+  if (cpu_dma_ofstream.is_open()) {
+    cpu_dma_ofstream.close();
   }
 
   return 0;

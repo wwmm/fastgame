@@ -1,3 +1,4 @@
+#include <sys/resource.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <chrono>
@@ -83,6 +84,7 @@ auto main(int argc, char* argv[]) -> int {
 
   auto use_batch_scheduler = root.get<bool>("cpu.use-batch-scheduler", false);
   auto use_realtime_wineserver = root.get<bool>("cpu.use-realtime-wineserver", false);
+  int niceness = root.get<int>("cpu.niceness", 0);
 
   update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first", false));
 
@@ -160,6 +162,8 @@ auto main(int argc, char* argv[]) -> int {
       if (use_batch_scheduler) {
         util::set_process_scheduler(game_pid, SCHED_BATCH, 0);
       }
+
+      setpriority(PRIO_PROCESS, game_pid, niceness);
     }
   });
 
@@ -192,6 +196,8 @@ auto main(int argc, char* argv[]) -> int {
             if (use_batch_scheduler) {
               util::set_process_scheduler(task_pid, SCHED_BATCH, 0);
             }
+
+            setpriority(PRIO_PROCESS, game_pid, niceness);
           }
         } catch (std::exception& e) {
         }

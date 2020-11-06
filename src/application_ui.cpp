@@ -140,6 +140,7 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   root.put("cpu.frequency-governor", cpu->get_frequency_governor());
   root.put("cpu.use-cpu-dma-latency", cpu->get_use_cpu_dma_latency());
   root.put("cpu.use-realtime-wineserver", cpu->get_use_realtime_wineserver());
+  root.put("cpu.niceness", cpu->get_niceness());
 
   node.clear();
 
@@ -194,6 +195,7 @@ void ApplicationUi::load_preset(const std::string& name) {
   cpu->set_frequency_governor(root.get<std::string>("cpu.frequency-governor", cpu->get_frequency_governor()));
   cpu->set_use_cpu_dma_latency(root.get<bool>("cpu.use-cpu-dma-latency", cpu->get_use_cpu_dma_latency()));
   cpu->set_use_realtime_wineserver(root.get<bool>("cpu.use-realtime-wineserver", cpu->get_use_realtime_wineserver()));
+  cpu->set_niceness(root.get<int>("cpu.niceness", cpu->get_niceness()));
 
   try {
     std::vector<std::string> cores_list;

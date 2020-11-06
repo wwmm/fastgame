@@ -2,150 +2,77 @@
 <!-- Generated with glade 3.38.1 -->
 <interface domain="pulseeffects">
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkAdjustment" id="power_cap">
-    <property name="upper">500</property>
-    <property name="value">100</property>
+  <object class="GtkAdjustment" id="niceness">
+    <property name="lower">-20</property>
+    <property name="upper">19</property>
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
-  <!-- n-columns=2 n-rows=6 -->
+  <!-- n-columns=2 n-rows=3 -->
   <object class="GtkGrid" id="widgets_grid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="halign">center</property>
     <property name="valign">center</property>
-    <property name="row-spacing">24</property>
-    <property name="column-spacing">6</property>
+    <property name="row-spacing">48</property>
+    <property name="column-spacing">60</property>
     <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Cores</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFlowBox" id="affinity_flowbox">
+      <!-- n-columns=2 n-rows=2 -->
+      <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">center</property>
-        <property name="homogeneous">True</property>
+        <property name="valign">start</property>
+        <property name="row-spacing">12</property>
         <property name="column-spacing">3</property>
-        <property name="row-spacing">3</property>
-        <property name="min-children-per-line">8</property>
-        <property name="max-children-per-line">8</property>
-        <property name="selection-mode">none</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Frequency Governor</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBoxText" id="frequency_governor">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">start</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Use the Batch Scheduler</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSwitch" id="use_sched_batch">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="halign">start</property>
-        <property name="valign">center</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Child Runs First</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSwitch" id="child_runs_first">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="halign">start</property>
-        <property name="valign">center</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Realtime Wineserver</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSwitch" id="realtime_wineserver">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="halign">start</property>
-        <property name="valign">center</property>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Use /dev/cpu_dma_latency</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Use the Batch Scheduler</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="use_sched_batch">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Use /dev/cpu_dma_latency</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="use_cpu_dma_latency">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -153,16 +80,198 @@
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="use_cpu_dma_latency">
+      <!-- n-columns=2 n-rows=2 -->
+      <object class="GtkGrid">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="halign">start</property>
-        <property name="valign">center</property>
+        <property name="can-focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">start</property>
+        <property name="row-spacing">12</property>
+        <property name="column-spacing">3</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Child Runs First</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="child_runs_first">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Realtime Wineserver</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="realtime_wineserver">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>
         <property name="top-attach">1</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkBox" id="box_frequency_governor">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">Frequency Governor</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="frequency_governor">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box_cores">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="label" translatable="yes">Cores</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="affinity_flowbox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="homogeneous">True</property>
+            <property name="column-spacing">3</property>
+            <property name="row-spacing">3</property>
+            <property name="min-children-per-line">8</property>
+            <property name="max-children-per-line">8</property>
+            <property name="selection-mode">none</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box_niceness">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">Niceness</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="input-purpose">number</property>
+            <property name="adjustment">niceness</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="power_cap">
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
   </object>
 </interface>

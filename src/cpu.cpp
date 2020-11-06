@@ -20,6 +20,8 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   builder->get_widget("use_cpu_dma_latency", use_cpu_dma_latency);
   builder->get_widget("realtime_wineserver", realtime_wineserver);
 
+  niceness = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("niceness"));
+
   // initializing widgets
 
   n_cores = std::thread::hardware_concurrency();
@@ -143,4 +145,12 @@ auto Cpu::get_use_realtime_wineserver() -> bool {
 
 void Cpu::set_use_realtime_wineserver(const bool& state) {
   realtime_wineserver->set_active(state);
+}
+
+auto Cpu::get_niceness() -> int {
+  return static_cast<int>(niceness->get_value());
+}
+
+void Cpu::set_niceness(const int& value) {
+  niceness->set_value(value);
 }

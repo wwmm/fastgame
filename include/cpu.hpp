@@ -1,6 +1,7 @@
 #ifndef CPU_HPP
 #define CPU_HPP
 
+#include <gtkmm/adjustment.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/flowbox.h>
@@ -43,6 +44,10 @@ class Cpu : public Gtk::Grid {
 
   void set_use_realtime_wineserver(const bool& state);
 
+  auto get_niceness() -> int;
+
+  void set_niceness(const int& value);
+
  private:
   std::string log_tag = "cpu: ";
 
@@ -54,6 +59,8 @@ class Cpu : public Gtk::Grid {
   Gtk::ComboBoxText* frequency_governor = nullptr;
 
   Gtk::FlowBox* affinity_flowbox = nullptr;
+
+  Glib::RefPtr<Gtk::Adjustment> niceness;
 };
 
 #endif

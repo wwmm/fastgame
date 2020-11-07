@@ -43,7 +43,9 @@ auto read_system_setting(const std::string& path_str) -> std::vector<std::string
     while (std::getline(f, value, ' ')) {
       value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
 
-      list.emplace_back(value);
+      if (!value.empty()) {
+        list.emplace_back(value);
+      }
     }
 
     f.close();

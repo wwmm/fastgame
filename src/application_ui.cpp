@@ -40,6 +40,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
 
   environment_variables = EnvironmentVariables::add_to_stack(stack);
   cpu = Cpu::add_to_stack(stack);
+  disk = Disk::add_to_stack(stack);
   amdgpu = Amdgpu::add_to_stack(stack);
   memory = Memory::add_to_stack(stack);
 

@@ -16,6 +16,7 @@
 #include "amdgpu.hpp"
 #include "application.hpp"
 #include "cpu.hpp"
+#include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
 
@@ -62,6 +63,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Amdgpu* amdgpu = nullptr;
 
   Memory* memory = nullptr;
+
+  Disk* disk = nullptr;
 
   std::vector<sigc::connection> connections;
 

@@ -16,6 +16,7 @@ fastgame_sources = [
 	'amdgpu.cpp',
 	'memory.cpp',
 	'cpu.cpp',
+	'disk.cpp',
 	'util.cpp',
 	gresources
 ]

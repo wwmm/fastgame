@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -66,7 +66,7 @@
          id="tspan853"
          x="2.1166666"
          y="6.614583"
-         style="stroke-width:0.264583"></tspan></text>
+         style="stroke-width:0.264583" /></text>
     <ellipse
        style="fill:#00bebe;stroke-width:0.310093;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
        id="path857"
@@ -76,15 +76,15 @@
        ry="6.2091966" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:9.27438px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#aa0000;fill-opacity:1;stroke:none;stroke-width:0.579649;"
-       x="0.62920111"
-       y="9.3412704"
+       style="font-style:normal;font-weight:normal;font-size:7.36125px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.460078"
+       x="1.5208529"
+       y="8.8363008"
        id="text861"
-       transform="scale(0.94049304,1.0632721)"><tspan
+       transform="scale(0.9695599,1.0313958)"><tspan
          sodipodi:role="line"
          id="tspan859"
-         x="0.62920111"
-         y="9.3412704"
-         style="stroke-width:0.579649;fill:#aa0000;fill-opacity:1;">FG</tspan></text>
+         x="1.5208529"
+         y="8.8363008"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.460078">FG</tspan></text>
   </g>
 </svg>

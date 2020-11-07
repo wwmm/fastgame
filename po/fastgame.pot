@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-31 19:03-0300\n"
+"POT-Creation-Date: 2020-11-07 11:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.github.wwmm.fastgame.desktop.in:3 data/ui/application.glade:61
+#: data/com.github.wwmm.fastgame.desktop.in:3 data/ui/application.glade:213
 msgid "FastGame"
 msgstr ""
 
 #: data/com.github.wwmm.fastgame.desktop.in:4
-msgid "System Tweak"
+msgid "System Settings Tweak"
 msgstr ""
 
 #: data/com.github.wwmm.fastgame.desktop.in:5
-msgid "Allows doing system tweaks that mighty help game performance"
+msgid "Tweak system performance for games"
 msgstr ""
 
 #: data/com.github.wwmm.fastgame.desktop.in:6
@@ -34,58 +34,47 @@ msgid "system;tweak;game;"
 msgstr ""
 
 #: data/ui/about.glade.in:11
-msgid "Audio effects for PulseAudio applications"
+msgid "Tweak System Settings"
 msgstr ""
 
-#: data/ui/application.glade:68
-msgid "Settings"
-msgstr ""
-
-#: data/ui/application.glade:96
-msgid "Presets"
-msgstr ""
-
-#: data/ui/application.glade:107
-msgid "Apply"
-msgstr ""
-
-#: data/ui/presets_menu.glade:57 data/ui/presets_menu.glade:167
-#: data/ui/environment_variables.glade:39
+#: data/ui/application.glade:36 data/ui/environment_variables.glade:39
 msgid "Name"
 msgstr ""
 
-#: data/ui/presets_menu.glade:70 data/ui/presets_menu.glade:180
+#: data/ui/application.glade:49
 msgid "Create Preset"
 msgstr ""
 
-#: data/ui/presets_menu.glade:88 data/ui/presets_menu.glade:198
+#: data/ui/application.glade:67
 msgid "Import Presets"
 msgstr ""
 
-#: data/ui/presets_menu.glade:148
-msgid "Output"
+#: data/ui/application.glade:181
+msgid "Executable"
 msgstr ""
 
-#: data/ui/presets_menu.glade:258
-msgid "Input"
+#: data/ui/application.glade:220
+msgid "Settings"
 msgstr ""
 
-#: data/ui/preset_row.glade:52
+#: data/ui/application.glade:248
+msgid "Presets"
+msgstr ""
+
+#: data/ui/application.glade:259
+msgid "Apply"
+msgstr ""
+
+#: data/ui/preset_row.glade:47
 msgid "Load"
 msgstr ""
 
-#: data/ui/preset_row.glade:69
+#: data/ui/preset_row.glade:64
 msgid "Save current settings to this preset file"
 msgstr ""
 
-#: data/ui/preset_row.glade:85
+#: data/ui/preset_row.glade:80
 msgid "Remove this preset file"
-msgstr ""
-
-#: data/ui/preset_row.glade:101
-msgid ""
-"Automatically apply this preset whenever the currently used device is "
-"plugged in the system"
 msgstr ""
 
 #: data/ui/environment_variables.glade:53
@@ -96,52 +85,52 @@ msgstr ""
 msgid "Add Line"
 msgstr ""
 
-#: data/ui/environment_variables.glade:95
+#: data/ui/environment_variables.glade:98
 msgid "Remove Selection"
 msgstr ""
 
-#: data/ui/amdgpu.glade:25
+#: data/ui/amdgpu.glade:25 data/ui/disk.glade:25
 msgid "Performance Level"
 msgstr ""
 
-#: data/ui/amdgpu.glade:38
-msgid "Auto"
+#: data/ui/amdgpu.glade:38 data/ui/disk.glade:38
+msgid "auto"
 msgstr ""
 
-#: data/ui/amdgpu.glade:39
-msgid "Low"
+#: data/ui/amdgpu.glade:39 data/ui/disk.glade:39
+msgid "low"
 msgstr ""
 
-#: data/ui/amdgpu.glade:40
-msgid "High"
+#: data/ui/amdgpu.glade:40 data/ui/disk.glade:40
+msgid "high"
 msgstr ""
 
-#: data/ui/amdgpu.glade:41
-msgid "Manual"
+#: data/ui/amdgpu.glade:41 data/ui/disk.glade:41
+msgid "manual"
 msgstr ""
 
-#: data/ui/amdgpu.glade:42
-msgid "Profile Standard"
+#: data/ui/amdgpu.glade:42 data/ui/disk.glade:42
+msgid "profile_standard"
 msgstr ""
 
-#: data/ui/amdgpu.glade:43
-msgid "Profile Min SCLK"
+#: data/ui/amdgpu.glade:43 data/ui/disk.glade:43
+msgid "profile_min_sclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:44
-msgid "Profile Min MCLK"
+#: data/ui/amdgpu.glade:44 data/ui/disk.glade:44
+msgid "profile_min_mclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:45
-msgid "Profile Peak"
+#: data/ui/amdgpu.glade:45 data/ui/disk.glade:45
+msgid "profile_peak"
 msgstr ""
 
-#: data/ui/amdgpu.glade:58
+#: data/ui/amdgpu.glade:58 data/ui/disk.glade:58
 msgid "Power Cap"
 msgstr ""
 
 #: data/ui/memory.glade:30
-msgid "Transparent Huge Pages"
+msgid "Transparent HugePages"
 msgstr ""
 
 #: data/ui/memory.glade:43
@@ -156,14 +145,38 @@ msgstr ""
 msgid "shmem_enabled"
 msgstr ""
 
-#: data/ui/cpu.glade:24
-msgid "Cores"
+#: data/ui/memory.glade:127
+msgid "Virtual Memory"
 msgstr ""
 
-#: data/ui/cpu.glade:53
+#: data/ui/memory.glade:141
+msgid "Cache Pressure"
+msgstr ""
+
+#: data/ui/cpu.glade:33
+msgid "Use the Batch Scheduler"
+msgstr ""
+
+#: data/ui/cpu.glade:57
+msgid "Use /dev/cpu_dma_latency"
+msgstr ""
+
+#: data/ui/cpu.glade:96
+msgid "Child Runs First"
+msgstr ""
+
+#: data/ui/cpu.glade:120
+msgid "Realtime Wineserver"
+msgstr ""
+
+#: data/ui/cpu.glade:157
 msgid "Frequency Governor"
 msgstr ""
 
-#: data/ui/cpu.glade:77
-msgid "Batch Scheduler"
+#: data/ui/cpu.glade:194
+msgid "Cores"
+msgstr ""
+
+#: data/ui/cpu.glade:240
+msgid "Niceness"
 msgstr ""

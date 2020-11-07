@@ -35,6 +35,11 @@ gresources = gnome_mod.compile_resources(
   dependencies: [glade_about]
 )
 
+#icondir = join_paths(datadir, 'icons', 'hicolor')
+#install_data('fastgame.svg',
+#  install_dir: join_paths(icondir, 'scalable', 'apps')
+#)
+
 conf_polkit = configuration_data()
 
 conf_polkit.set('BINDIR', bindir)

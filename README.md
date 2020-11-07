@@ -40,6 +40,7 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 - Apply the Realtime IO priority to the game process
 - Set amdgpu performance level and power cap
 - Configure the virtual memory cache pressure
+- Configure the virtual memory compaction proactiveness
 - Configuring transparent hugepages
 - Saving all the settings above to a preset file that can be easily loaded
 

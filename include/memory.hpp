@@ -34,12 +34,16 @@ class Memory : public Gtk::Grid {
 
   void set_thp_shmem_enabled(const std::string& value);
 
+  auto get_compaction_proactiveness() -> int;
+
+  void set_compaction_proactiveness(const int& value);
+
  private:
   std::string log_tag = "memory: ";
 
   Gtk::ComboBoxText *thp_enabled = nullptr, *thp_defrag = nullptr, *thp_shmem_enabled = nullptr;
 
-  Glib::RefPtr<Gtk::Adjustment> cache_pressure;
+  Glib::RefPtr<Gtk::Adjustment> cache_pressure, compaction_proactiveness;
 
   void read_transparent_huge_page_values();
 };

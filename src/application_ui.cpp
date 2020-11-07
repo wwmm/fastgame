@@ -177,6 +177,7 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   // memory
 
   root.put("memory.virtual-memory.cache-pressure", memory->get_cache_pressure());
+  root.put("memory.virtual-memory.compaction-proactiveness", memory->get_compaction_proactiveness());
   root.put("memory.transparent-hugepages.enabled", memory->get_thp_enabled());
   root.put("memory.transparent-hugepages.defrag", memory->get_thp_defrag());
   root.put("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled());
@@ -251,6 +252,8 @@ void ApplicationUi::load_preset(const std::string& name) {
   // memory
 
   memory->set_cache_pressure(root.get<int>("memory.virtual-memory.cache-pressure", memory->get_cache_pressure()));
+  memory->set_compaction_proactiveness(
+      root.get<int>("memory.virtual-memory.compaction-proactiveness", memory->get_compaction_proactiveness()));
   memory->set_thp_enabled(root.get<std::string>("memory.transparent-hugepages.enabled", memory->get_thp_enabled()));
   memory->set_thp_defrag(root.get<std::string>("memory.transparent-hugepages.defrag", memory->get_thp_defrag()));
   memory->set_thp_shmem_enabled(

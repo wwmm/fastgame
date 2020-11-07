@@ -15,10 +15,14 @@ Memory::Memory(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
   builder->get_widget("thp_shmem_enabled", thp_shmem_enabled);
 
   cache_pressure = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("cache_pressure"));
+  compaction_proactiveness =
+      Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("compaction_proactiveness"));
 
   // initializing widgets
 
   cache_pressure->set_value(std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
+
+  compaction_proactiveness->set_value(std::stoi(util::read_system_setting("/proc/sys/vm/compaction_proactiveness")[0]));
 
   read_transparent_huge_page_values();
 }
@@ -125,4 +129,12 @@ auto Memory::get_thp_shmem_enabled() -> std::string {
 
 void Memory::set_thp_shmem_enabled(const std::string& value) {
   thp_shmem_enabled->set_active_text(value);
+}
+
+auto Memory::get_compaction_proactiveness() -> int {
+  return static_cast<int>(compaction_proactiveness->get_value());
+}
+
+void Memory::set_compaction_proactiveness(const int& value) {
+  compaction_proactiveness->set_value(value);
 }

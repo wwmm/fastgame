@@ -124,7 +124,11 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   boost::property_tree::ptree root;
   boost::property_tree::ptree node;
 
+  // game executable
+
   root.put("game-executable", game_executable->get_text());
+
+  // environment variables
 
   for (const auto& v : environment_variables->get_variables()) {
     boost::property_tree::ptree local_node;
@@ -135,6 +139,8 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   }
 
   root.add_child("environment-variables", node);
+
+  // cpu
 
   root.put("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler());
   root.put("cpu.child-runs-first", cpu->get_child_runs_first());
@@ -155,8 +161,20 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
 
   root.add_child("cpu.cores", node);
 
+  // disk
+
+  root.put("disk.device", disk->get_device());
+  root.put("disk.scheduler", disk->get_scheduler());
+  root.put("disk.enable-realtime-priority", disk->get_enable_realtime_priority());
+  root.put("disk.readahead", disk->get_readahead());
+  root.put("disk.nr-requests", disk->get_nr_requests());
+
+  // amdgpu
+
   root.put("amdgpu.performance-level", amdgpu->get_performance_level());
   root.put("amdgpu.power-cap", amdgpu->get_power_cap());
+
+  // memory
 
   root.put("memory.virtual-memory.cache-pressure", memory->get_cache_pressure());
   root.put("memory.transparent-hugepages.enabled", memory->get_thp_enabled());
@@ -177,7 +195,11 @@ void ApplicationUi::load_preset(const std::string& name) {
 
   boost::property_tree::read_json(input_file.string(), root);
 
+  // game executable
+
   game_executable->set_text(root.get<std::string>("game-executable", game_executable->get_text()));
+
+  // environmental variables
 
   try {
     std::vector<std::string> variables_list;
@@ -190,6 +212,8 @@ void ApplicationUi::load_preset(const std::string& name) {
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the environmental variables list");
   }
+
+  // cpu
 
   cpu->set_enable_batch_scheduler(root.get<bool>("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler()));
   cpu->set_child_runs_first(root.get<bool>("cpu.child-runs-first", cpu->get_child_runs_first()));
@@ -210,8 +234,21 @@ void ApplicationUi::load_preset(const std::string& name) {
     util::warning(log_tag + "error when parsing the cpu core list");
   }
 
+  // disk
+
+  disk->set_device(root.get<std::string>("disk.device", disk->get_device()));
+  disk->set_scheduler(root.get<std::string>("disk.scheduler", disk->get_scheduler()));
+  disk->set_enable_realtime_priority(
+      root.get<bool>("disk.enable-realtime-priority", disk->get_enable_realtime_priority()));
+  disk->set_readahead(root.get<int>("disk.readahead", disk->get_readahead()));
+  disk->set_nr_requests(root.get<int>("disk.nr-requests", disk->get_nr_requests()));
+
+  // amdgpu
+
   amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
   amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap", amdgpu->get_power_cap()));
+
+  // memory
 
   memory->set_cache_pressure(root.get<int>("memory.virtual-memory.cache-pressure", memory->get_cache_pressure()));
   memory->set_thp_enabled(root.get<std::string>("memory.transparent-hugepages.enabled", memory->get_thp_enabled()));

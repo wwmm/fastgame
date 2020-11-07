@@ -53,6 +53,8 @@ void Disk::init_scheduler() {
 
   auto scheduler_value = util::get_selected_value(scheduler_list);
 
+  scheduler->remove_all();
+
   for (auto& value : scheduler_list) {
     if (value.find('[') != std::string::npos) {
       value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
@@ -134,4 +136,12 @@ auto Disk::get_nr_requests() -> int {
 
 void Disk::set_nr_requests(const int& value) {
   nr_requests->set_value(value);
+}
+
+auto Disk::get_enable_realtime_priority() -> bool {
+  return enable_realtime_priority->get_active();
+}
+
+void Disk::set_enable_realtime_priority(const bool& value) {
+  enable_realtime_priority->set_active(value);
 }

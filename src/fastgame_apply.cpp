@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <string>
 #include <thread>
+#include "ioprio.hpp"
 #include "netlink.hpp"
 #include "util.hpp"
 
@@ -96,6 +97,18 @@ auto main(int argc, char* argv[]) -> int {
     cpu_dma_ofstream << 0;
   }
 
+  // disk
+
+  auto disk_device = root.get<std::string>("disk.device");
+  auto disk_scheduler = root.get<std::string>("disk.scheduler");
+  auto enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
+  auto disk_readahead = root.get<int>("disk.readahead", 128);
+  auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
+
+  update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
+  update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
+  update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
+
   // amdgpu
 
   update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level",
@@ -164,6 +177,10 @@ auto main(int argc, char* argv[]) -> int {
       }
 
       setpriority(PRIO_PROCESS, game_pid, niceness);
+
+      if (enable_realtime_io_priority) {
+        ioprio_set_realtime(game_pid, 7);
+      }
     }
   });
 
@@ -198,6 +215,10 @@ auto main(int argc, char* argv[]) -> int {
             }
 
             setpriority(PRIO_PROCESS, game_pid, niceness);
+
+            if (enable_realtime_io_priority) {
+              ioprio_set_realtime(game_pid, 7);
+            }
           }
         } catch (std::exception& e) {
         }

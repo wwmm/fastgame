@@ -25,16 +25,8 @@ enum {
   IOPRIO_WHO_USER,
 };
 
-static inline auto ioprio_set(int pid, const std::string& io_class_str, int priority) -> long {
-  int io_class = IOPRIO_CLASS_BE;
-
-  if (io_class_str == "RT") {
-    io_class = IOPRIO_CLASS_RT;
-  } else if (io_class_str == "IDLE") {
-    io_class = IOPRIO_CLASS_IDLE;
-  }
-
-  return syscall(SYS_ioprio_set, IOPRIO_WHO_PROCESS, pid, IOPRIO_PRIO_VALUE(io_class, priority));
+static inline auto ioprio_set_realtime(int pid, int priority) -> long {
+  return syscall(SYS_ioprio_set, IOPRIO_WHO_PROCESS, pid, IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, priority));
 }
 
 #endif

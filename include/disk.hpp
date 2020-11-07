@@ -35,6 +35,10 @@ class Disk : public Gtk::Grid {
 
   void set_nr_requests(const int& value);
 
+  auto get_enable_realtime_priority() -> bool;
+
+  void set_enable_realtime_priority(const bool& value);
+
  private:
   std::string log_tag = "disk: ";
 

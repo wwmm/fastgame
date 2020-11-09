@@ -138,6 +138,16 @@ auto main(int argc, char* argv[]) -> int {
   update_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled",
                         root.get<std::string>("memory.transparent-hugepages.shmem_enabled"));
 
+  // network
+
+  update_system_setting("/proc/sys/net/ipv4/tcp_sack", root.get<bool>("network.ipv4.use_tcp_sack", true));
+
+  update_system_setting("/proc/sys/net/ipv4/tcp_keepalive_time",
+                        root.get<int>("network.ipv4.tcp_keepalive_time", 7200));
+
+  update_system_setting("/proc/sys/net/ipv4/tcp_keepalive_intvl",
+                        root.get<int>("network.ipv4.tcp_keepalive_interval", 75));
+
   // starting the netlink server
 
   int game_pid = -1;

@@ -8,4 +8,5 @@ data/ui/amdgpu.glade
 data/ui/memory.glade
 data/ui/cpu.glade
 data/ui/disk.glade
+data/ui/network.glade
 

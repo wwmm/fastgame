@@ -20,6 +20,7 @@
 #include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
+#include "network.hpp"
 
 class ApplicationUi : public Gtk::ApplicationWindow {
  public:
@@ -68,6 +69,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Memory* memory = nullptr;
 
   Disk* disk = nullptr;
+
+  Network* network = nullptr;
 
   std::vector<sigc::connection> connections;
 

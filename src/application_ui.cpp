@@ -12,6 +12,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <filesystem>
 #include "glibmm/main.h"
+#include "network.hpp"
 #include "util.hpp"
 
 ApplicationUi::ApplicationUi(BaseObjectType* cobject,
@@ -45,6 +46,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   disk = Disk::add_to_stack(stack);
   amdgpu = Amdgpu::add_to_stack(stack);
   memory = Memory::add_to_stack(stack);
+  network = Network::add_to_stack(stack);
 
   // binding glade widgets to gsettings keys
 
@@ -187,6 +189,12 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   root.put("memory.transparent-hugepages.defrag", memory->get_thp_defrag());
   root.put("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled());
 
+  // network
+
+  root.put("network.ipv4.use_tcp_sack", network->get_use_tcp_sack());
+  root.put("network.ipv4.tcp_keepalive_time", network->get_tcp_keepalive_time());
+  root.put("network.ipv4.tcp_keepalive_interval", network->get_tcp_keepalive_interval());
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -263,6 +271,13 @@ void ApplicationUi::load_preset(const std::string& name) {
   memory->set_thp_defrag(root.get<std::string>("memory.transparent-hugepages.defrag", memory->get_thp_defrag()));
   memory->set_thp_shmem_enabled(
       root.get<std::string>("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled()));
+
+  // network
+
+  network->set_use_tcp_sack(root.get<bool>("network.ipv4.use_tcp_sack", network->get_use_tcp_sack()));
+  network->set_tcp_keepalive_time(root.get<int>("network.ipv4.tcp_keepalive_time", network->get_tcp_keepalive_time()));
+  network->set_tcp_keepalive_interval(
+      root.get<int>("network.ipv4.tcp_keepalive_interval", network->get_tcp_keepalive_interval()));
 
   util::debug(log_tag + "loaded preset: " + input_file.string());
 }

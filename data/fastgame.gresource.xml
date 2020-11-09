@@ -8,8 +8,10 @@
         <file>ui/memory.glade</file>
         <file>ui/cpu.glade</file>
         <file>ui/disk.glade</file>
+        <file>ui/network.glade</file>
         <file>ui/preset_row.glade</file>
         <file>icons/pulseeffects-w-symbolic.svg</file>
         <file>icons/pulseeffects-kb-symbolic.svg</file>
+        <file>icons/pulseeffects-s-symbolic.svg</file>
     </gresource>
 </gresources>

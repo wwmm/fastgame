@@ -17,6 +17,7 @@ fastgame_sources = [
 	'memory.cpp',
 	'cpu.cpp',
 	'disk.cpp',
+	'network.cpp',
 	'util.cpp',
 	gresources
 ]

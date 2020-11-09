@@ -12,6 +12,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/spinner.h>
 #include <gtkmm/stack.h>
+#include <gtkmm/switch.h>
 #include <filesystem>
 #include "amdgpu.hpp"
 #include "application.hpp"
@@ -42,7 +43,7 @@ class ApplicationUi : public Gtk::ApplicationWindow {
 
   Gtk::Stack* stack = nullptr;
 
-  Gtk::Button *add_preset = nullptr, *import_preset = nullptr, *button_apply = nullptr;
+  Gtk::Button *add_preset = nullptr, *import_preset = nullptr, *button_apply = nullptr, *button_about = nullptr;
 
   Gtk::MenuButton* presets_menu_button = nullptr;
 
@@ -55,6 +56,8 @@ class ApplicationUi : public Gtk::ApplicationWindow {
   Gtk::Spinner* headerbar_spinner = nullptr;
 
   Gtk::Entry* game_executable = nullptr;
+
+  Gtk::Switch* use_dark_theme = nullptr;
 
   EnvironmentVariables* environment_variables = nullptr;
 

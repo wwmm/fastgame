@@ -35,6 +35,8 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   builder->get_widget("button_apply", button_apply);
   builder->get_widget("headerbar_spinner", headerbar_spinner);
   builder->get_widget("game_executable", game_executable);
+  builder->get_widget("button_about", button_about);
+  builder->get_widget("use_dark_theme", use_dark_theme);
 
   create_user_directory();
 
@@ -49,6 +51,7 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   auto flag = Gio::SettingsBindFlags::SETTINGS_BIND_DEFAULT;
 
   settings->bind("use-dark-theme", Gtk::Settings::get_default().get(), "gtk_application_prefer_dark_theme", flag);
+  settings->bind("use-dark-theme", use_dark_theme, "active", flag);
 
   // signal connection
 
@@ -61,6 +64,8 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   presets_menu_button->signal_clicked().connect(sigc::mem_fun(*this, &ApplicationUi::on_presets_menu_button_clicked));
 
   button_apply->signal_clicked().connect([=]() { apply_settings(); });
+
+  button_about->signal_clicked().connect([=]() { app->activate_action("about"); });
 
   // restore the window size
 

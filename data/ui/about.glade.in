@@ -11,8 +11,7 @@
     <property name="comments" translatable="yes">Tweak System Settings</property>
     <property name="authors">Wellington Wallace</property>
     <property name="translator-credits">Wellington Wallace
-Gianluca Boiano</property>
-    <property name="artists">ZenCubic</property>
+</property>
     <property name="logo-icon-name">fastgame</property>
     <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">

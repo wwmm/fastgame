@@ -9,7 +9,6 @@ url='https://github.com/wwmm/fastgame'
 license=('GPL3')
 depends=('boost-libs' 'gtk3' 'gtkmm3' 'glibmm' 'libsigc++')
 makedepends=('meson' 'boost' 'itstool')
-#optdepends=('libxnvctrl: nvidia overclock')
 source=("git+https://github.com/wwmm/fastgame.git")
 conflicts=(fastgame)
 provides=(fastgame)

@@ -111,14 +111,16 @@ auto main(int argc, char* argv[]) -> int {
 
   // amdgpu
 
-  update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level",
-                        root.get<std::string>("amdgpu.performance-level"));
+  if (util::card_is_amdgpu(0)) {
+    update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level",
+                          root.get<std::string>("amdgpu.performance-level"));
 
-  int hwmon_index = util::find_hwmon_index(0);
-  int power_cap = 1000000 * root.get<int>("amdgpu.power-cap");  // power must be in microwatts
+    int hwmon_index = util::find_hwmon_index(0);
+    int power_cap = 1000000 * root.get<int>("amdgpu.power-cap");  // power must be in microwatts
 
-  update_system_setting("/sys/class/drm/card0/device/hwmon/hwmon" + std::to_string(hwmon_index) + "/power1_cap",
-                        power_cap);
+    update_system_setting("/sys/class/drm/card0/device/hwmon/hwmon" + std::to_string(hwmon_index) + "/power1_cap",
+                          power_cap);
+  }
 
   // virtual memory
 

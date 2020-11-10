@@ -31,7 +31,6 @@ class Amdgpu : public Gtk::Grid {
  private:
   std::string log_tag = "amdgpu: ";
 
-  bool found_gpu = false;
   uint card_index = 0, hwmon_index = 0;
 
   Gtk::ComboBoxText* performance_level = nullptr;

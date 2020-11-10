@@ -44,7 +44,11 @@ ApplicationUi::ApplicationUi(BaseObjectType* cobject,
   environment_variables = EnvironmentVariables::add_to_stack(stack);
   cpu = Cpu::add_to_stack(stack);
   disk = Disk::add_to_stack(stack);
-  amdgpu = Amdgpu::add_to_stack(stack);
+
+  if (util::card_is_amdgpu(0)) {
+    amdgpu = Amdgpu::add_to_stack(stack);
+  }
+
   memory = Memory::add_to_stack(stack);
   network = Network::add_to_stack(stack);
 
@@ -178,8 +182,10 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
 
   // amdgpu
 
-  root.put("amdgpu.performance-level", amdgpu->get_performance_level());
-  root.put("amdgpu.power-cap", amdgpu->get_power_cap());
+  if (amdgpu != nullptr) {
+    root.put("amdgpu.performance-level", amdgpu->get_performance_level());
+    root.put("amdgpu.power-cap", amdgpu->get_power_cap());
+  }
 
   // memory
 
@@ -260,8 +266,10 @@ void ApplicationUi::load_preset(const std::string& name) {
 
   // amdgpu
 
-  amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
-  amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap", amdgpu->get_power_cap()));
+  if (amdgpu != nullptr) {
+    amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
+    amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap", amdgpu->get_power_cap()));
+  }
 
   // memory
 

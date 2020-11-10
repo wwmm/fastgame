@@ -16,19 +16,15 @@ Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
 
   // initializing widgets
 
-  if (fs::is_directory("/sys/class/drm/card" + std::to_string(card_index))) {
-    found_gpu = true;
+  util::debug(log_tag + "using the card at the index: 0");
 
-    util::debug(log_tag + "using the card at the index: 0");
+  hwmon_index = util::find_hwmon_index(0);
 
-    hwmon_index = util::find_hwmon_index(0);
+  util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
 
-    util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
-
-    read_power_cap_max();
-    read_power_cap();
-    read_performance_level();
-  }
+  read_power_cap_max();
+  read_power_cap();
+  read_performance_level();
 }
 
 Amdgpu::~Amdgpu() {
@@ -52,84 +48,78 @@ auto Amdgpu::get_card_index() const -> int {
 }
 
 void Amdgpu::read_power_cap() {
-  if (found_gpu) {
-    auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                         std::to_string(hwmon_index) + "/power1_cap");
+  auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                       std::to_string(hwmon_index) + "/power1_cap");
 
-    if (!fs::is_regular_file(path)) {
-      util::debug(log_tag + "file " + path.string() + " does not exist!");
-      util::debug(log_tag + "could not change the power cap!");
-    } else {
-      std::ifstream f;
+  if (!fs::is_regular_file(path)) {
+    util::debug(log_tag + "file " + path.string() + " does not exist!");
+    util::debug(log_tag + "could not change the power cap!");
+  } else {
+    std::ifstream f;
 
-      f.open(path, std::ios::in);
+    f.open(path, std::ios::in);
 
-      int raw_value = 0;  // microWatts
+    int raw_value = 0;  // microWatts
 
-      f >> raw_value;
+    f >> raw_value;
 
-      f.close();
+    f.close();
 
-      int power_cap_in_watts = raw_value / 1000000;
+    int power_cap_in_watts = raw_value / 1000000;
 
-      power_cap->set_value(power_cap_in_watts);
+    power_cap->set_value(power_cap_in_watts);
 
-      util::debug(log_tag + "current power cap: " + std::to_string(power_cap_in_watts) + " W");
-    }
+    util::debug(log_tag + "current power cap: " + std::to_string(power_cap_in_watts) + " W");
   }
 }
 
 void Amdgpu::read_power_cap_max() {
-  if (found_gpu) {
-    auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                         std::to_string(hwmon_index) + "/power1_cap_max");
+  auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                       std::to_string(hwmon_index) + "/power1_cap_max");
 
-    if (!fs::is_regular_file(path)) {
-      util::debug(log_tag + "file " + path.string() + " does not exist!");
-      util::debug(log_tag + "could not read the maximum power cap!");
-    } else {
-      std::ifstream f;
+  if (!fs::is_regular_file(path)) {
+    util::debug(log_tag + "file " + path.string() + " does not exist!");
+    util::debug(log_tag + "could not read the maximum power cap!");
+  } else {
+    std::ifstream f;
 
-      f.open(path, std::ios::in);
+    f.open(path, std::ios::in);
 
-      int raw_value = 0;  // microWatts
+    int raw_value = 0;  // microWatts
 
-      f >> raw_value;
+    f >> raw_value;
 
-      f.close();
+    f.close();
 
-      int power_cap_in_watts = raw_value / 1000000;
+    int power_cap_in_watts = raw_value / 1000000;
 
-      power_cap->set_upper(power_cap_in_watts);
+    power_cap->set_upper(power_cap_in_watts);
 
-      util::debug(log_tag + "maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
-    }
+    util::debug(log_tag + "maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
   }
 }
 
 void Amdgpu::read_performance_level() {
-  if (found_gpu) {
-    auto path =
-        fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/power_dpm_force_performance_level");
+  auto path =
+      fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/power_dpm_force_performance_level");
 
-    if (!fs::is_regular_file(path)) {
-      util::debug(log_tag + "file " + path.string() + " does not exist!");
-      util::debug(log_tag + "could not change the performance level!");
-    } else {
-      std::ifstream f;
+  if (!fs::is_regular_file(path)) {
+    util::debug(log_tag + "file " + path.string() + " does not exist!");
+    util::debug(log_tag + "could not change the performance level!");
+  } else {
+    std::ifstream f;
 
-      f.open(path, std::ios::in);
+    f.open(path, std::ios::in);
 
-      std::string level;
+    std::string level;
 
-      f >> level;
+    f >> level;
 
-      f.close();
+    f.close();
 
-      performance_level->set_active_text(level);
+    performance_level->set_active_text(level);
 
-      util::debug(log_tag + "current performance level: " + level);
-    }
+    util::debug(log_tag + "current performance level: " + level);
   }
 }
 

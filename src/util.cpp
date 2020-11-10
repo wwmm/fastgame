@@ -107,4 +107,12 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
   sched_setscheduler(pid, policy_index, &policy_params);
 }
 
+auto card_is_amdgpu(const int& card_index) -> bool {
+  // that is probably not the best way to find out if a amdgpu card is present...
+
+  return false;
+  return std::filesystem::is_regular_file("/sys/class/drm/card" + std::to_string(card_index) +
+                                          "/device/power_dpm_force_performance_level");
+}
+
 }  // namespace util

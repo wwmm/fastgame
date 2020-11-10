@@ -140,13 +140,17 @@ auto main(int argc, char* argv[]) -> int {
 
   // network
 
-  update_system_setting("/proc/sys/net/ipv4/tcp_sack", root.get<bool>("network.ipv4.use_tcp_sack", true));
+  if (root.get<bool>("network.ipv4.use_tcp_mtu_probing", true)) {
+    // Disabled by default, enabled when an ICMP black hole is detected
+    update_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing", 1);
+  }
 
-  update_system_setting("/proc/sys/net/ipv4/tcp_keepalive_time",
-                        root.get<int>("network.ipv4.tcp_keepalive_time", 7200));
+  update_system_setting("/proc/sys/net/ipv4/tcp_congestion_control",
+                        root.get<std::string>("network.ipv4.tcp_congestion_control", "reno"));
 
-  update_system_setting("/proc/sys/net/ipv4/tcp_keepalive_intvl",
-                        root.get<int>("network.ipv4.tcp_keepalive_interval", 75));
+  update_system_setting("/proc/sys/net/ipv4/tcp_max_reordering", root.get<int>("network.ipv4.tcp_max_reordering", 300));
+
+  update_system_setting("/proc/sys/net/ipv4/tcp_probe_interval", root.get<int>("network.ipv4.tcp_probe_interval", 600));
 
   // starting the netlink server
 

@@ -10,20 +10,38 @@ namespace fs = std::filesystem;
 Network::Network(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
   // loading glade widgets
 
-  builder->get_widget("use_tcp_sack", use_tcp_sack);
+  builder->get_widget("use_tcp_mtu_probing", use_tcp_mtu_probing);
+  builder->get_widget("tcp_congestion_control", tcp_congestion_control);
 
-  tcp_keepalive_time = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("tcp_keepalive_time"));
-  tcp_keepalive_interval = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("tcp_keepalive_interval"));
+  tcp_max_reordering = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("tcp_max_reordering"));
+  tcp_probe_interval = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("tcp_probe_interval"));
 
   // initializing widgets
 
-  use_tcp_sack->set_active(static_cast<bool>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_sack")[0])));
+  auto tcp_congestion_control_list = util::read_system_setting("/proc/sys/net/ipv4/tcp_available_congestion_control");
 
-  tcp_keepalive_time->set_value(
-      static_cast<int>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_keepalive_time")[0])));
+  auto tcp_congestion_control_value = util::read_system_setting("/proc/sys/net/ipv4/tcp_congestion_control")[0];
 
-  tcp_keepalive_interval->set_value(
-      static_cast<int>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_keepalive_intvl")[0])));
+  util::debug(log_tag + "tcp congestion control: " + tcp_congestion_control_value);
+
+  for (auto& value : tcp_congestion_control_list) {
+    if (value.find('[') != std::string::npos) {
+      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+
+    tcp_congestion_control->append(value);
+  }
+
+  tcp_congestion_control->set_active_text(tcp_congestion_control_value);
+
+  use_tcp_mtu_probing->set_active(
+      static_cast<bool>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing")[0])));
+
+  tcp_max_reordering->set_value(
+      static_cast<int>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_max_reordering")[0])));
+
+  tcp_probe_interval->set_value(
+      static_cast<int>(std::stoi(util::read_system_setting("/proc/sys/net/ipv4/tcp_probe_interval")[0])));
 }
 
 Network::~Network() {
@@ -42,26 +60,34 @@ auto Network::add_to_stack(Gtk::Stack* stack) -> Network* {
   return ui;
 }
 
-auto Network::get_use_tcp_sack() -> bool {
-  return use_tcp_sack->get_active();
+auto Network::get_use_tcp_mtu_probing() -> bool {
+  return use_tcp_mtu_probing->get_active();
 }
 
-void Network::set_use_tcp_sack(const bool& state) {
-  use_tcp_sack->set_active(state);
+void Network::set_use_tcp_mtu_probing(const bool& state) {
+  use_tcp_mtu_probing->set_active(state);
 }
 
-auto Network::get_tcp_keepalive_time() -> int {
-  return static_cast<int>(tcp_keepalive_time->get_value());
+auto Network::get_tcp_max_reordering() -> int {
+  return static_cast<int>(tcp_max_reordering->get_value());
 }
 
-void Network::set_tcp_keepalive_time(const int& value) {
-  tcp_keepalive_time->set_value(value);
+void Network::set_tcp_max_reordering(const int& value) {
+  tcp_max_reordering->set_value(value);
 }
 
-auto Network::get_tcp_keepalive_interval() -> int {
-  return static_cast<int>(tcp_keepalive_interval->get_value());
+auto Network::get_tcp_probe_interval() -> int {
+  return static_cast<int>(tcp_probe_interval->get_value());
 }
 
-void Network::set_tcp_keepalive_interval(const int& value) {
-  tcp_keepalive_interval->set_value(value);
+void Network::set_tcp_probe_interval(const int& value) {
+  tcp_probe_interval->set_value(value);
+}
+
+auto Network::get_tcp_congestion_control() -> std::string {
+  return tcp_congestion_control->get_active_text();
+}
+
+void Network::set_tcp_congestion_control(const std::string& value) {
+  tcp_congestion_control->set_active_text(value);
 }

@@ -2,21 +2,21 @@
 <!-- Generated with glade 3.38.1 -->
 <interface domain="pulseeffects">
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkAdjustment" id="tcp_keepalive_interval">
+  <object class="GtkAdjustment" id="tcp_max_reordering">
     <property name="lower">1</property>
-    <property name="upper">86400</property>
+    <property name="upper">1000000</property>
+    <property name="value">1000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="tcp_probe_interval">
+    <property name="lower">1</property>
+    <property name="upper">1000000</property>
     <property name="value">60</property>
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
-  <object class="GtkAdjustment" id="tcp_keepalive_time">
-    <property name="lower">1</property>
-    <property name="upper">86400</property>
-    <property name="value">60</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">1</property>
-  </object>
-  <!-- n-columns=2 n-rows=3 -->
+  <!-- n-columns=2 n-rows=4 -->
   <object class="GtkGrid" id="widgets_grid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -30,7 +30,7 @@
         <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="hexpand">False</property>
-        <property name="label" translatable="yes">Use TCP SACK</property>
+        <property name="label" translatable="yes">TCP MTU Probing</property>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -42,11 +42,11 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">TCP Keepalive Time</property>
+        <property name="label" translatable="yes">TCP Maximum Reordering</property>
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
@@ -57,18 +57,17 @@
         <property name="width-chars">8</property>
         <property name="text">4</property>
         <property name="xalign">0.5</property>
-        <property name="secondary-icon-name">pulseeffects-s-symbolic</property>
         <property name="input-purpose">number</property>
-        <property name="adjustment">tcp_keepalive_time</property>
+        <property name="adjustment">tcp_max_reordering</property>
         <property name="numeric">True</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkSwitch" id="use_tcp_sack">
+      <object class="GtkSwitch" id="use_tcp_mtu_probing">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="halign">start</property>
@@ -84,11 +83,11 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">TCP Keepalive Interval</property>
+        <property name="label" translatable="yes">TCP Probe Interval</property>
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">2</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
@@ -101,13 +100,35 @@
         <property name="xalign">0.5</property>
         <property name="secondary-icon-name">pulseeffects-s-symbolic</property>
         <property name="input-purpose">number</property>
-        <property name="adjustment">tcp_keepalive_interval</property>
+        <property name="adjustment">tcp_probe_interval</property>
         <property name="numeric">True</property>
         <property name="value">60</property>
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">TCP Congestion Control</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="tcp_congestion_control">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
   </object>

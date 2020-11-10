@@ -191,9 +191,10 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
 
   // network
 
-  root.put("network.ipv4.use_tcp_sack", network->get_use_tcp_sack());
-  root.put("network.ipv4.tcp_keepalive_time", network->get_tcp_keepalive_time());
-  root.put("network.ipv4.tcp_keepalive_interval", network->get_tcp_keepalive_interval());
+  root.put("network.ipv4.use_tcp_mtu_probing", network->get_use_tcp_mtu_probing());
+  root.put("network.ipv4.tcp_congestion_control", network->get_tcp_congestion_control());
+  root.put("network.ipv4.tcp_max_reordering", network->get_tcp_max_reordering());
+  root.put("network.ipv4.tcp_probe_interval", network->get_tcp_probe_interval());
 
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
@@ -274,10 +275,12 @@ void ApplicationUi::load_preset(const std::string& name) {
 
   // network
 
-  network->set_use_tcp_sack(root.get<bool>("network.ipv4.use_tcp_sack", network->get_use_tcp_sack()));
-  network->set_tcp_keepalive_time(root.get<int>("network.ipv4.tcp_keepalive_time", network->get_tcp_keepalive_time()));
-  network->set_tcp_keepalive_interval(
-      root.get<int>("network.ipv4.tcp_keepalive_interval", network->get_tcp_keepalive_interval()));
+  network->set_use_tcp_mtu_probing(
+      root.get<bool>("network.ipv4.use_tcp_mtu_probing", network->get_use_tcp_mtu_probing()));
+  network->set_tcp_congestion_control(
+      root.get<std::string>("network.ipv4.tcp_congestion_control", network->get_tcp_congestion_control()));
+  network->set_tcp_max_reordering(root.get<int>("network.ipv4.tcp_max_reordering", network->get_tcp_max_reordering()));
+  network->set_tcp_probe_interval(root.get<int>("network.ipv4.tcp_probe_interval", network->get_tcp_probe_interval()));
 
   util::debug(log_tag + "loaded preset: " + input_file.string());
 }

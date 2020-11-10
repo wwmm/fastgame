@@ -143,6 +143,8 @@ auto main(int argc, char* argv[]) -> int {
   if (root.get<bool>("network.ipv4.use_tcp_mtu_probing", true)) {
     // Disabled by default, enabled when an ICMP black hole is detected
     update_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing", 1);
+  } else {
+    update_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing", 0);
   }
 
   update_system_setting("/proc/sys/net/ipv4/tcp_congestion_control",

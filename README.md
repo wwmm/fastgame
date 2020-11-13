@@ -43,6 +43,7 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 - Configure the virtual memory cache pressure
 - Configure the virtual memory compaction proactiveness
 - Configuring transparent hugepages
+- Configuring a few tcp network parameters like: congestion control, mtu probing, etc
 - Saving all the settings above to a preset file that can be easily loaded
 
 # Compilation

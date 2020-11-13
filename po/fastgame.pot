@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-07 11:44-0300\n"
+"POT-Creation-Date: 2020-11-13 16:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,6 +65,14 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+#: data/ui/application.glade:305
+msgid "Use Dark Theme"
+msgstr ""
+
+#: data/ui/application.glade:326
+msgid "About"
+msgstr ""
+
 #: data/ui/preset_row.glade:47
 msgid "Load"
 msgstr ""
@@ -89,68 +97,72 @@ msgstr ""
 msgid "Remove Selection"
 msgstr ""
 
-#: data/ui/amdgpu.glade:25 data/ui/disk.glade:25
+#: data/ui/amdgpu.glade:25
 msgid "Performance Level"
 msgstr ""
 
-#: data/ui/amdgpu.glade:38 data/ui/disk.glade:38
+#: data/ui/amdgpu.glade:38
 msgid "auto"
 msgstr ""
 
-#: data/ui/amdgpu.glade:39 data/ui/disk.glade:39
+#: data/ui/amdgpu.glade:39
 msgid "low"
 msgstr ""
 
-#: data/ui/amdgpu.glade:40 data/ui/disk.glade:40
+#: data/ui/amdgpu.glade:40
 msgid "high"
 msgstr ""
 
-#: data/ui/amdgpu.glade:41 data/ui/disk.glade:41
+#: data/ui/amdgpu.glade:41
 msgid "manual"
 msgstr ""
 
-#: data/ui/amdgpu.glade:42 data/ui/disk.glade:42
+#: data/ui/amdgpu.glade:42
 msgid "profile_standard"
 msgstr ""
 
-#: data/ui/amdgpu.glade:43 data/ui/disk.glade:43
+#: data/ui/amdgpu.glade:43
 msgid "profile_min_sclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:44 data/ui/disk.glade:44
+#: data/ui/amdgpu.glade:44
 msgid "profile_min_mclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:45 data/ui/disk.glade:45
+#: data/ui/amdgpu.glade:45
 msgid "profile_peak"
 msgstr ""
 
-#: data/ui/amdgpu.glade:58 data/ui/disk.glade:58
+#: data/ui/amdgpu.glade:58
 msgid "Power Cap"
 msgstr ""
 
-#: data/ui/memory.glade:30
+#: data/ui/memory.glade:37
 msgid "Transparent HugePages"
 msgstr ""
 
-#: data/ui/memory.glade:43
+#: data/ui/memory.glade:50
 msgid "enabled"
 msgstr ""
 
-#: data/ui/memory.glade:66
+#: data/ui/memory.glade:73
 msgid "defrag"
 msgstr ""
 
-#: data/ui/memory.glade:89
+#: data/ui/memory.glade:96
 msgid "shmem_enabled"
 msgstr ""
 
-#: data/ui/memory.glade:127
+#: data/ui/memory.glade:136
 msgid "Virtual Memory"
 msgstr ""
 
-#: data/ui/memory.glade:141
+#: data/ui/memory.glade:150
 msgid "Cache Pressure"
+msgstr ""
+
+#: data/ui/memory.glade:176
+msgid "Compaction Proactiveness"
 msgstr ""
 
 #: data/ui/cpu.glade:33
@@ -179,4 +191,44 @@ msgstr ""
 
 #: data/ui/cpu.glade:240
 msgid "Niceness"
+msgstr ""
+
+#: data/ui/disk.glade:32
+msgid "Device"
+msgstr ""
+
+#: data/ui/disk.glade:55
+msgid "Readahead"
+msgstr ""
+
+#: data/ui/disk.glade:85
+msgid "Scheduler"
+msgstr ""
+
+#: data/ui/disk.glade:108
+msgid "nr_requests"
+msgstr ""
+
+#: data/ui/disk.glade:134
+msgid "Realtime Priority"
+msgstr ""
+
+#: data/ui/disk.glade:158
+msgid "Add Random"
+msgstr ""
+
+#: data/ui/network.glade:33
+msgid "TCP MTU Probing"
+msgstr ""
+
+#: data/ui/network.glade:45
+msgid "TCP Maximum Reordering"
+msgstr ""
+
+#: data/ui/network.glade:86
+msgid "TCP Probe Interval"
+msgstr ""
+
+#: data/ui/network.glade:117
+msgid "TCP Congestion Control"
 msgstr ""

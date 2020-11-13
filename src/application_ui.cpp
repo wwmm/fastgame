@@ -179,6 +179,7 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   root.put("disk.enable-realtime-priority", disk->get_enable_realtime_priority());
   root.put("disk.readahead", disk->get_readahead());
   root.put("disk.nr-requests", disk->get_nr_requests());
+  root.put("disk.add_random", disk->get_enable_add_random());
 
   // amdgpu
 
@@ -263,6 +264,7 @@ void ApplicationUi::load_preset(const std::string& name) {
       root.get<bool>("disk.enable-realtime-priority", disk->get_enable_realtime_priority()));
   disk->set_readahead(root.get<int>("disk.readahead", disk->get_readahead()));
   disk->set_nr_requests(root.get<int>("disk.nr-requests", disk->get_nr_requests()));
+  disk->set_enable_add_random(root.get<bool>("disk.add_random", disk->get_enable_add_random()));
 
   // amdgpu
 

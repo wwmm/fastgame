@@ -14,7 +14,7 @@ class Disk : public Gtk::Grid {
   Disk(const Disk&) = delete;
   auto operator=(const Disk&) -> Disk& = delete;
   Disk(const Disk&&) = delete;
-  auto operator=(const Disk &&) -> Disk& = delete;
+  auto operator=(const Disk&&) -> Disk& = delete;
   ~Disk() override;
 
   static auto add_to_stack(Gtk::Stack* stack) -> Disk*;
@@ -39,18 +39,20 @@ class Disk : public Gtk::Grid {
 
   void set_enable_realtime_priority(const bool& value);
 
+  auto get_enable_add_random() -> bool;
+
+  void set_enable_add_random(const bool& value);
+
  private:
   std::string log_tag = "disk: ";
 
   Gtk::ComboBoxText *device = nullptr, *scheduler = nullptr;
 
-  Gtk::Switch* enable_realtime_priority = nullptr;
+  Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr;
 
   Glib::RefPtr<Gtk::Adjustment> readahead, nr_requests;
 
   void init_scheduler();
-  void init_readahead();
-  void init_nr_requests();
 };
 
 #endif

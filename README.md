@@ -37,6 +37,7 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 - Apply the SCHED_RR priority scheduler to the wineserver process
 - Change the disk scheduler
 - Change the readahead and nr_requests values
+- Disable the disk `add_random`
 - Apply the Realtime IO priority to the game process
 - Set amdgpu performance level and power cap
 - Configure the virtual memory cache pressure

@@ -13,6 +13,7 @@ Disk::Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) :
   builder->get_widget("device", device);
   builder->get_widget("scheduler", scheduler);
   builder->get_widget("enable_realtime_priority", enable_realtime_priority);
+  builder->get_widget("add_random", add_random);
 
   readahead = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("readahead"));
   nr_requests = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("nr_requests"));
@@ -25,8 +26,13 @@ Disk::Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) :
 
   device->signal_changed().connect([=]() {
     init_scheduler();
-    init_readahead();
-    init_nr_requests();
+
+    nr_requests->set_value(std::stoi(util::read_system_setting(device->get_active_text() + "/queue/nr_requests")[0]));
+
+    readahead->set_value(std::stoi(util::read_system_setting(device->get_active_text() + "/queue/read_ahead_kb")[0]));
+
+    add_random->set_active(
+        static_cast<bool>(std::stoi(util::read_system_setting(device->get_active_text() + "/queue/add_random")[0])));
   });
 
   device->set_active(0);
@@ -64,46 +70,6 @@ void Disk::init_scheduler() {
   }
 
   scheduler->set_active_text(scheduler_value);
-}
-
-void Disk::init_readahead() {
-  auto path = fs::path(device->get_active_text() + "/queue/read_ahead_kb");
-
-  if (!fs::is_regular_file(path)) {
-    util::debug(log_tag + "file " + path.string() + " does not exist!");
-  } else {
-    std::ifstream f;
-
-    f.open(path, std::ios::in);
-
-    int value = 0;  // KB
-
-    f >> value;
-
-    f.close();
-
-    readahead->set_value(value);
-  }
-}
-
-void Disk::init_nr_requests() {
-  auto path = fs::path(device->get_active_text() + "/queue/nr_requests");
-
-  if (!fs::is_regular_file(path)) {
-    util::debug(log_tag + "file " + path.string() + " does not exist!");
-  } else {
-    std::ifstream f;
-
-    f.open(path, std::ios::in);
-
-    int value = 0;  // KB
-
-    f >> value;
-
-    f.close();
-
-    nr_requests->set_value(value);
-  }
 }
 
 auto Disk::get_device() -> std::string {
@@ -144,4 +110,12 @@ auto Disk::get_enable_realtime_priority() -> bool {
 
 void Disk::set_enable_realtime_priority(const bool& value) {
   enable_realtime_priority->set_active(value);
+}
+
+auto Disk::get_enable_add_random() -> bool {
+  return add_random->get_active();
+}
+
+void Disk::set_enable_add_random(const bool& value) {
+  add_random->set_active(value);
 }

@@ -16,7 +16,8 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   builder->get_widget("use_sched_batch", use_sched_batch);
   builder->get_widget("child_runs_first", child_runs_first);
   builder->get_widget("frequency_governor", frequency_governor);
-  builder->get_widget("affinity_flowbox", affinity_flowbox);
+  builder->get_widget("game_affinity_flowbox", game_affinity_flowbox);
+  builder->get_widget("workqueue_affinity_flowbox", workqueue_affinity_flowbox);
   builder->get_widget("use_cpu_dma_latency", use_cpu_dma_latency);
   builder->get_widget("realtime_wineserver", realtime_wineserver);
 
@@ -29,11 +30,14 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   util::debug(log_tag + "number of cpu cores: " + std::to_string(n_cores));
 
   for (uint n = 0; n < n_cores; n++) {
-    auto* checkbutton = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
+    auto* checkbutton1 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
+    auto* checkbutton2 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
 
-    checkbutton->set_active(true);
+    checkbutton1->set_active(true);
+    checkbutton2->set_active(true);
 
-    affinity_flowbox->add(*checkbutton);
+    game_affinity_flowbox->add(*checkbutton1);
+    workqueue_affinity_flowbox->add(*checkbutton2);
   }
 
   // We assume that all cores are set to the same frequency governor and that the system has at least one core. In this
@@ -97,10 +101,10 @@ void Cpu::set_frequency_governor(const std::string& name) {
   frequency_governor->set_active_text(name);
 }
 
-auto Cpu::get_cores() -> std::vector<std::string> {
+auto Cpu::get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string> {
   std::vector<std::string> list;
 
-  auto children = affinity_flowbox->get_children();
+  auto children = flowbox->get_children();
 
   for (auto* child : children) {
     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
@@ -115,8 +119,8 @@ auto Cpu::get_cores() -> std::vector<std::string> {
   return list;
 }
 
-void Cpu::set_cores(const std::vector<std::string>& list) {
-  auto children = affinity_flowbox->get_children();
+void Cpu::set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list) {
+  auto children = flowbox->get_children();
 
   for (auto* child : children) {
     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
@@ -129,6 +133,22 @@ void Cpu::set_cores(const std::vector<std::string>& list) {
       checkbutton->set_active(false);
     }
   }
+}
+
+auto Cpu::get_game_cores() -> std::vector<std::string> {
+  return get_cores(game_affinity_flowbox);
+}
+
+void Cpu::set_game_cores(const std::vector<std::string>& list) {
+  set_cores(game_affinity_flowbox, list);
+}
+
+auto Cpu::get_workqueue_cores() -> std::vector<std::string> {
+  return get_cores(workqueue_affinity_flowbox);
+}
+
+void Cpu::set_workqueue_cores(const std::vector<std::string>& list) {
+  set_cores(workqueue_affinity_flowbox, list);
 }
 
 auto Cpu::get_use_cpu_dma_latency() -> bool {

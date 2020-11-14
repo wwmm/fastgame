@@ -162,7 +162,7 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
 
   node.clear();
 
-  for (const auto& c : cpu->get_cores()) {
+  for (const auto& c : cpu->get_game_cores()) {
     boost::property_tree::ptree local_node;
 
     local_node.put("", c);
@@ -170,7 +170,19 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
     node.push_back(std::make_pair("", local_node));
   }
 
-  root.add_child("cpu.cores", node);
+  root.add_child("cpu.game-cores", node);
+
+  node.clear();
+
+  for (const auto& c : cpu->get_workqueue_cores()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", c);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("cpu.workqueue-cores", node);
 
   // disk
 
@@ -247,11 +259,19 @@ void ApplicationUi::load_preset(const std::string& name) {
   try {
     std::vector<std::string> cores_list;
 
-    for (const auto& c : root.get_child("cpu.cores")) {
+    for (const auto& c : root.get_child("cpu.game-cores")) {
       cores_list.emplace_back(c.second.data());
     }
 
-    cpu->set_cores(cores_list);
+    cpu->set_game_cores(cores_list);
+
+    cores_list.clear();
+
+    for (const auto& c : root.get_child("cpu.workqueue-cores")) {
+      cores_list.emplace_back(c.second.data());
+    }
+
+    cpu->set_workqueue_cores(cores_list);
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the cpu core list");
   }

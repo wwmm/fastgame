@@ -1,7 +1,9 @@
 #include <sys/resource.h>
+#include <array>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <chrono>
+#include <cmath>
 #include <filesystem>
 #include <string>
 #include <thread>
@@ -53,6 +55,32 @@ void update_cpu_frequency_governor(const std::string& name) {
   }
 }
 
+void apply_workqueue_affinity(const std::vector<int>& cpu_affinity) {
+  int bitmask = 0;
+
+  for (const auto& core_index : cpu_affinity) {
+    bitmask += std::pow(2, core_index);
+  }
+
+  std::array<std::string, 3> paths{"/sys/devices/virtual/workqueue/cpumask",
+                                   "/sys/devices/virtual/workqueue/writeback/cpumask",
+                                   "/sys/bus/workqueue/devices/writeback/cpumask"};
+
+  std::ofstream f;
+
+  for (auto& path : paths) {
+    f.open(path);
+
+    f << bitmask;
+
+    f.close();
+
+    if (f.fail()) {
+      util::warning("error writing the workqueue affinity to: " + path);
+    }
+  }
+}
+
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
@@ -70,13 +98,20 @@ auto main(int argc, char* argv[]) -> int {
 
   // cpu
 
-  std::vector<int> cpu_affinity;
+  std::vector<int> game_cpu_affinity;
+  std::vector<int> workqueue_cpu_affinity;
 
   try {
-    for (const auto& c : root.get_child("cpu.cores")) {
+    for (const auto& c : root.get_child("cpu.game-cores")) {
       int core_index = std::stoi(c.second.data());
 
-      cpu_affinity.emplace_back(core_index);
+      game_cpu_affinity.emplace_back(core_index);
+    }
+
+    for (const auto& c : root.get_child("cpu.workqueue-cores")) {
+      int core_index = std::stoi(c.second.data());
+
+      workqueue_cpu_affinity.emplace_back(core_index);
     }
 
   } catch (const boost::property_tree::ptree_error& e) {
@@ -96,6 +131,8 @@ auto main(int argc, char* argv[]) -> int {
 
     cpu_dma_ofstream << 0;
   }
+
+  apply_workqueue_affinity(workqueue_cpu_affinity);
 
   // disk
 
@@ -193,7 +230,7 @@ auto main(int argc, char* argv[]) -> int {
 
       std::cout << "fastgame_apply: " << msg << std::endl;
 
-      util::apply_cpu_affinity(game_pid, cpu_affinity);
+      util::apply_cpu_affinity(game_pid, game_cpu_affinity);
 
       if (use_batch_scheduler) {
         util::set_process_scheduler(game_pid, SCHED_BATCH, 0);
@@ -212,7 +249,7 @@ auto main(int argc, char* argv[]) -> int {
       std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << std::endl;
 
       if (use_realtime_wineserver) {
-        util::apply_cpu_affinity(child_pid, cpu_affinity);
+        util::apply_cpu_affinity(child_pid, game_cpu_affinity);
 
         util::set_process_scheduler(child_pid, SCHED_RR, 1);
 
@@ -231,7 +268,7 @@ auto main(int argc, char* argv[]) -> int {
           for (const auto& entry : std::filesystem::directory_iterator(task_dir)) {
             const auto task_pid = std::stoi(entry.path().filename().string());
 
-            util::apply_cpu_affinity(task_pid, cpu_affinity);
+            util::apply_cpu_affinity(task_pid, game_cpu_affinity);
 
             if (use_batch_scheduler) {
               util::set_process_scheduler(task_pid, SCHED_BATCH, 0);

@@ -15,7 +15,7 @@ class Cpu : public Gtk::Grid {
   Cpu(const Cpu&) = delete;
   auto operator=(const Cpu&) -> Cpu& = delete;
   Cpu(const Cpu&&) = delete;
-  auto operator=(const Cpu &&) -> Cpu& = delete;
+  auto operator=(const Cpu&&) -> Cpu& = delete;
   ~Cpu() override;
 
   static auto add_to_stack(Gtk::Stack* stack) -> Cpu*;
@@ -32,10 +32,6 @@ class Cpu : public Gtk::Grid {
 
   void set_frequency_governor(const std::string& name);
 
-  auto get_cores() -> std::vector<std::string>;
-
-  void set_cores(const std::vector<std::string>& list);
-
   auto get_use_cpu_dma_latency() -> bool;
 
   void set_use_cpu_dma_latency(const bool& state);
@@ -48,6 +44,14 @@ class Cpu : public Gtk::Grid {
 
   void set_niceness(const int& value);
 
+  auto get_game_cores() -> std::vector<std::string>;
+
+  void set_game_cores(const std::vector<std::string>& list);
+
+  auto get_workqueue_cores() -> std::vector<std::string>;
+
+  void set_workqueue_cores(const std::vector<std::string>& list);
+
  private:
   std::string log_tag = "cpu: ";
 
@@ -58,9 +62,13 @@ class Cpu : public Gtk::Grid {
 
   Gtk::ComboBoxText* frequency_governor = nullptr;
 
-  Gtk::FlowBox* affinity_flowbox = nullptr;
+  Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr;
 
   Glib::RefPtr<Gtk::Adjustment> niceness;
+
+  static auto get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string>;
+
+  static void set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list);
 };
 
 #endif

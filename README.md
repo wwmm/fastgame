@@ -29,7 +29,8 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 # Features
 
 - Set Environment variables like `RADV_PERFTEST`
-- Easy cpu affinity configuration
+- Game cpu affinity configuration
+- Kernel workqueue cpu affinity configuration
 - Change the cpu frequency governor
 - Change the process niceness
 - Use /dev/cpu_dma_latency to avoid deep C-States

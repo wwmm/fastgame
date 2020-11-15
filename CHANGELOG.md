@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.1.3]
+
 ### Added
 
 - Amdgpu irq affinity can be set

@@ -52,6 +52,10 @@ class Cpu : public Gtk::Grid {
 
   void set_workqueue_cores(const std::vector<std::string>& list);
 
+  auto get_wineserver_cores() -> std::vector<std::string>;
+
+  void set_wineserver_cores(const std::vector<std::string>& list);
+
  private:
   std::string log_tag = "cpu: ";
 
@@ -62,7 +66,8 @@ class Cpu : public Gtk::Grid {
 
   Gtk::ComboBoxText* frequency_governor = nullptr;
 
-  Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr;
+  Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr,
+               *wineserver_affinity_flowbox = nullptr;
 
   Glib::RefPtr<Gtk::Adjustment> niceness;
 

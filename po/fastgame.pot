@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 16:51-0300\n"
+"POT-Creation-Date: 2020-11-15 13:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,44 +97,52 @@ msgstr ""
 msgid "Remove Selection"
 msgstr ""
 
-#: data/ui/amdgpu.glade:25
+#: data/ui/amdgpu.glade:33
 msgid "Performance Level"
 msgstr ""
 
-#: data/ui/amdgpu.glade:38
+#: data/ui/amdgpu.glade:46
 msgid "auto"
 msgstr ""
 
-#: data/ui/amdgpu.glade:39
+#: data/ui/amdgpu.glade:47
 msgid "low"
 msgstr ""
 
-#: data/ui/amdgpu.glade:40
+#: data/ui/amdgpu.glade:48
 msgid "high"
 msgstr ""
 
-#: data/ui/amdgpu.glade:41
+#: data/ui/amdgpu.glade:49
 msgid "manual"
 msgstr ""
 
-#: data/ui/amdgpu.glade:42
+#: data/ui/amdgpu.glade:50
 msgid "profile_standard"
 msgstr ""
 
-#: data/ui/amdgpu.glade:43
+#: data/ui/amdgpu.glade:51
 msgid "profile_min_sclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:44
+#: data/ui/amdgpu.glade:52
 msgid "profile_min_mclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:45
+#: data/ui/amdgpu.glade:53
 msgid "profile_peak"
 msgstr ""
 
-#: data/ui/amdgpu.glade:58
+#: data/ui/amdgpu.glade:66
 msgid "Power Cap"
+msgstr ""
+
+#: data/ui/amdgpu.glade:111
+msgid "IRQ Affinity"
+msgstr ""
+
+#: data/ui/amdgpu.glade:124
+msgid "Cores"
 msgstr ""
 
 #: data/ui/memory.glade:37
@@ -185,12 +193,24 @@ msgstr ""
 msgid "Frequency Governor"
 msgstr ""
 
-#: data/ui/cpu.glade:194
-msgid "Cores"
+#: data/ui/cpu.glade:195
+msgid "Niceness"
 msgstr ""
 
-#: data/ui/cpu.glade:240
-msgid "Niceness"
+#: data/ui/cpu.glade:238
+msgid "Game"
+msgstr ""
+
+#: data/ui/cpu.glade:268
+msgid "Kernel Workqueue"
+msgstr ""
+
+#: data/ui/cpu.glade:299
+msgid "Affinity"
+msgstr ""
+
+#: data/ui/cpu.glade:311
+msgid "Wineserver"
 msgstr ""
 
 #: data/ui/disk.glade:32

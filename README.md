@@ -1,7 +1,7 @@
 # FastGame
 
 This is a project I started for fun and for learning purposes. It allows the user to apply small system configuration
-tweaks that may increase gaming performance. The kernel Process Events Connector is used to monitor creation and
+tweaks that may(or may not) increase gaming performance. The kernel Process Events Connector is used to monitor creation and
 destruction of processes. When the kernel sends us the PID value of a recently created process we read the file
 `/proc/PID/comm` and if the process name matches the game executable name provided in the user interface a few settings
 are applied to the game process.
@@ -28,6 +28,10 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 
 # Features
 
+First of all have in mind that there is no guarantee that the settings exposed by FastGame will improve your game
+performance. Think of FastGame as an easy way to test if they can help you. That being said these are the current
+settings that can be configured through FastGame:
+
 - Set Environment variables like `RADV_PERFTEST`
 - Game cpu affinity configuration
 - Kernel workqueue cpu affinity configuration
@@ -36,11 +40,12 @@ you have to do is putting this `fastgame_launcher %command%` in the launch optio
 - Use /dev/cpu_dma_latency to avoid deep C-States
 - Apply the SCHED_BATCH priority scheduler to the game process
 - Apply the SCHED_RR priority scheduler to the wineserver process
+- Set the wineserver cpu affinity
 - Change the disk scheduler
 - Change the readahead and nr_requests values
 - Disable the disk `add_random`
 - Apply the Realtime IO priority to the game process
-- Set amdgpu performance level and power cap
+- Set amdgpu performance level, power cap and irq affinity
 - Configure the virtual memory cache pressure
 - Configure the virtual memory compaction proactiveness
 - Configuring transparent hugepages

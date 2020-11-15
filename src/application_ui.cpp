@@ -184,6 +184,18 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
 
   root.add_child("cpu.workqueue-cores", node);
 
+  node.clear();
+
+  for (const auto& c : cpu->get_wineserver_cores()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", c);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("cpu.wineserver-cores", node);
+
   // disk
 
   root.put("disk.device", disk->get_device());
@@ -273,6 +285,14 @@ void ApplicationUi::load_preset(const std::string& name) {
     }
 
     cpu->set_workqueue_cores(cores_list);
+
+    cores_list.clear();
+
+    for (const auto& c : root.get_child("cpu.wineserver-cores")) {
+      cores_list.emplace_back(c.second.data());
+    }
+
+    cpu->set_wineserver_cores(cores_list);
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the cpu core list");
   }

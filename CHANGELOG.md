@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Amdgpu irq affinity can be set
+- Wineserver cpu affinity can be set
+
 ## [0.1.2]
 
 ### Added

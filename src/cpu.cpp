@@ -20,6 +20,7 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   builder->get_widget("workqueue_affinity_flowbox", workqueue_affinity_flowbox);
   builder->get_widget("use_cpu_dma_latency", use_cpu_dma_latency);
   builder->get_widget("realtime_wineserver", realtime_wineserver);
+  builder->get_widget("wineserver_affinity_flowbox", wineserver_affinity_flowbox);
 
   niceness = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("niceness"));
 
@@ -32,12 +33,15 @@ Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : G
   for (uint n = 0; n < n_cores; n++) {
     auto* checkbutton1 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
     auto* checkbutton2 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
+    auto* checkbutton3 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
 
     checkbutton1->set_active(true);
     checkbutton2->set_active(true);
+    checkbutton3->set_active(true);
 
     game_affinity_flowbox->add(*checkbutton1);
     workqueue_affinity_flowbox->add(*checkbutton2);
+    wineserver_affinity_flowbox->add(*checkbutton3);
   }
 
   // We assume that all cores are set to the same frequency governor and that the system has at least one core. In this
@@ -149,6 +153,14 @@ auto Cpu::get_workqueue_cores() -> std::vector<std::string> {
 
 void Cpu::set_workqueue_cores(const std::vector<std::string>& list) {
   set_cores(workqueue_affinity_flowbox, list);
+}
+
+auto Cpu::get_wineserver_cores() -> std::vector<std::string> {
+  return get_cores(wineserver_affinity_flowbox);
+}
+
+void Cpu::set_wineserver_cores(const std::vector<std::string>& list) {
+  set_cores(wineserver_affinity_flowbox, list);
 }
 
 auto Cpu::get_use_cpu_dma_latency() -> bool {

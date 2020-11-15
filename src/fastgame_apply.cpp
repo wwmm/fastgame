@@ -100,6 +100,7 @@ auto main(int argc, char* argv[]) -> int {
 
   std::vector<int> game_cpu_affinity;
   std::vector<int> workqueue_cpu_affinity;
+  std::vector<int> wineserver_cpu_affinity;
 
   try {
     for (const auto& c : root.get_child("cpu.game-cores")) {
@@ -112,6 +113,12 @@ auto main(int argc, char* argv[]) -> int {
       int core_index = std::stoi(c.second.data());
 
       workqueue_cpu_affinity.emplace_back(core_index);
+    }
+
+    for (const auto& c : root.get_child("cpu.wineserver-cores")) {
+      int core_index = std::stoi(c.second.data());
+
+      wineserver_cpu_affinity.emplace_back(core_index);
     }
 
   } catch (const boost::property_tree::ptree_error& e) {
@@ -259,6 +266,8 @@ auto main(int argc, char* argv[]) -> int {
 
         std::cout << "fastgame_apply: setting wineserver priority to realtime" << std::endl;
       }
+
+      util::apply_cpu_affinity(child_pid, wineserver_cpu_affinity);
     } else {
       if (tgid == game_pid) {
         /*

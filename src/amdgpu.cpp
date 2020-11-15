@@ -1,8 +1,11 @@
 #include "amdgpu.hpp"
 #include <glibmm/i18n.h>
+#include <gtkmm/radiobutton.h>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 #include <string>
+#include <thread>
 #include "util.hpp"
 
 namespace fs = std::filesystem;
@@ -11,6 +14,7 @@ Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
   // loading glade widgets
 
   builder->get_widget("performance_level", performance_level);
+  builder->get_widget("irq_affinity_flowbox", irq_affinity_flowbox);
 
   power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
 
@@ -25,6 +29,7 @@ Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builde
   read_power_cap_max();
   read_power_cap();
   read_performance_level();
+  read_irq_affinity();
 }
 
 Amdgpu::~Amdgpu() {
@@ -123,6 +128,35 @@ void Amdgpu::read_performance_level() {
   }
 }
 
+void Amdgpu::read_irq_affinity() {
+  int gpu_irq = util::get_irq_number("amdgpu");
+
+  util::debug(log_tag + "gpu irq number: " + std::to_string(gpu_irq));
+
+  uint current_core = util::get_irq_affinity(gpu_irq);
+
+  uint n_cores = std::thread::hardware_concurrency();
+
+  for (uint n = 0; n < n_cores; n++) {
+    auto* radiobutton = Gtk::make_managed<Gtk::RadioButton>(std::to_string(n));
+
+    if (n > 0) {
+      auto children = irq_affinity_flowbox->get_children();
+      auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(children[0]);
+
+      auto* first_radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+      radiobutton->join_group(*first_radiobutton);
+    }
+
+    if (n == current_core) {
+      radiobutton->set_active(true);
+    }
+
+    irq_affinity_flowbox->add(*radiobutton);
+  }
+}
+
 auto Amdgpu::get_performance_level() -> std::string {
   return performance_level->get_active_text();
 }
@@ -137,4 +171,36 @@ auto Amdgpu::get_power_cap() -> int {
 
 void Amdgpu::set_power_cap(const int& value) {
   power_cap->set_value(value);
+}
+
+auto Amdgpu::get_irq_affinity() const -> int {
+  auto children = irq_affinity_flowbox->get_children();
+
+  for (auto& child : children) {
+    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+    auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+    if (radiobutton->get_active()) {
+      return std::stoi(radiobutton->get_label());
+    }
+  }
+
+  return 0;
+}
+
+void Amdgpu::set_irq_affinity(const int& core_index) {
+  auto children = irq_affinity_flowbox->get_children();
+
+  for (auto& child : children) {
+    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+    auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+    if (radiobutton->get_label() == std::to_string(core_index)) {
+      radiobutton->set_active(true);
+
+      break;
+    }
+  }
 }

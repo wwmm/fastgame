@@ -114,4 +114,41 @@ auto card_is_amdgpu(const int& card_index) -> bool {
                                           "/device/power_dpm_force_performance_level");
 }
 
+auto get_irq_number(const std::string& name) -> int {
+  std::ifstream f;
+
+  f.open("/proc/interrupts");
+
+  int gpu_irq = -1;
+  std::string line;
+
+  while (std::getline(f, line)) {
+    if (line.find(name) != std::string::npos) {
+      std::istringstream iss(line);
+
+      iss >> gpu_irq;  // the interrupt is the first number
+
+      break;
+    }
+  }
+
+  f.close();
+
+  return gpu_irq;
+}
+
+auto get_irq_affinity(const int& irq_number) -> int {
+  std::ifstream f;
+
+  uint cpu_core = 0;
+
+  f.open("/proc/irq/" + std::to_string(irq_number) + "/effective_affinity_list");
+
+  f >> cpu_core;  // we assume that the irq can use only 1 cpu core
+
+  f.close();
+
+  return cpu_core;
+}
+
 }  // namespace util

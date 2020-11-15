@@ -156,9 +156,13 @@ auto main(int argc, char* argv[]) -> int {
 
     int hwmon_index = util::find_hwmon_index(0);
     int power_cap = 1000000 * root.get<int>("amdgpu.power-cap");  // power must be in microwatts
+    int gpu_irq = util::get_irq_number("amdgpu");
+    int irq_affinity = root.get<int>("amdgpu.irq-affinity", 0);
 
     update_system_setting("/sys/class/drm/card0/device/hwmon/hwmon" + std::to_string(hwmon_index) + "/power1_cap",
                           power_cap);
+
+    update_system_setting("/proc/irq/" + std::to_string(gpu_irq) + "/smp_affinity_list", irq_affinity);
   }
 
   // virtual memory

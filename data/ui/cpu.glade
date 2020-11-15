@@ -223,7 +223,7 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=2 n-rows=3 -->
+      <!-- n-columns=2 n-rows=4 -->
       <object class="GtkGrid" id="grid_affinity">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -301,6 +301,36 @@
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Wineserver</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="wineserver_affinity_flowbox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="homogeneous">True</property>
+            <property name="column-spacing">3</property>
+            <property name="row-spacing">3</property>
+            <property name="min-children-per-line">8</property>
+            <property name="max-children-per-line">8</property>
+            <property name="selection-mode">none</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>

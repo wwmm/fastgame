@@ -24,6 +24,10 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
 
 auto card_is_amdgpu(const int& card_index) -> bool;
 
+auto get_irq_number(const std::string& name) -> int;
+
+auto get_irq_affinity(const int& irq_number) -> int;  // we assume that the irq can use only one cpu core
+
 }  // namespace util
 
 #endif

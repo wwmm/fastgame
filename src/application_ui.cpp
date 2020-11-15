@@ -198,6 +198,7 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   if (amdgpu != nullptr) {
     root.put("amdgpu.performance-level", amdgpu->get_performance_level());
     root.put("amdgpu.power-cap", amdgpu->get_power_cap());
+    root.put("amdgpu.irq-affinity", amdgpu->get_irq_affinity());
   }
 
   // memory
@@ -291,6 +292,7 @@ void ApplicationUi::load_preset(const std::string& name) {
   if (amdgpu != nullptr) {
     amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level", amdgpu->get_performance_level()));
     amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap", amdgpu->get_power_cap()));
+    amdgpu->set_irq_affinity(root.get<int>("amdgpu.irq-affinity", amdgpu->get_irq_affinity()));
   }
 
   // memory

@@ -1,8 +1,10 @@
 #include "disk.hpp"
 #include <glibmm/i18n.h>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include "udisks/udisks-generated.h"
 #include "util.hpp"
 
 namespace fs = std::filesystem;
@@ -14,9 +16,22 @@ Disk::Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) :
   builder->get_widget("scheduler", scheduler);
   builder->get_widget("enable_realtime_priority", enable_realtime_priority);
   builder->get_widget("add_random", add_random);
+  builder->get_widget("disable_apm", disable_apm);
 
   readahead = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("readahead"));
   nr_requests = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("nr_requests"));
+
+  // initializing the udisk client
+
+  GError* error = nullptr;
+
+  udisks_client = udisks_client_new_sync(nullptr, &error);
+
+  if (udisks_client == nullptr) {
+    util::warning(log_tag + "Error connecting to the udisks daemon: " + error->message);
+
+    g_error_free(error);
+  }
 
   // initializing widgets
 
@@ -26,6 +41,8 @@ Disk::Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) :
 
   device->signal_changed().connect([=]() {
     init_scheduler();
+
+    init_udisks_object();
 
     nr_requests->set_value(std::stoi(util::read_system_setting(device->get_active_text() + "/queue/nr_requests")[0]));
 
@@ -70,6 +87,79 @@ void Disk::init_scheduler() {
   }
 
   scheduler->set_active_text(scheduler_value);
+}
+
+void Disk::init_udisks_object() {
+  apm_level = 127;
+  supports_apm = false;
+
+  drive_id.clear();
+
+  disable_apm->set_sensitive(false);
+
+  if (udisks_client != nullptr) {
+    auto selected_device = device->get_active_text().substr(11);
+
+    auto* objects = g_dbus_object_manager_get_objects(udisks_client_get_object_manager(udisks_client));
+
+    while (objects != nullptr) {
+      auto* object = UDISKS_OBJECT(objects->data);
+
+      auto* drive = udisks_object_get_drive(object);
+
+      if (drive != nullptr) {
+        auto* block = udisks_client_get_block_for_drive(udisks_client, drive, 1 /* get physical*/);
+
+        if (block != nullptr) {
+          auto device = std::string(udisks_block_get_device(block)).substr(5);
+
+          if (device == selected_device) {
+            auto* drive_ata = udisks_object_get_drive_ata(object);
+
+            if (drive_ata != nullptr) {
+              supports_apm = udisks_drive_ata_get_apm_supported(drive_ata) == 1;
+
+              drive_id = udisks_drive_get_id(drive);
+
+              if (supports_apm) {
+                disable_apm->set_sensitive();
+
+                // reading the current configuration
+
+                auto* config = udisks_drive_get_configuration(drive);
+
+                GVariantIter iter;
+                GVariant* child = nullptr;
+                gchar* key = nullptr;
+
+                g_variant_iter_init(&iter, config);
+
+                while (g_variant_iter_next(&iter, "{sv}", &key, &child) != 0) {
+                  if (std::strcmp(key, "ata-apm-level") == 0) {
+                    if (g_variant_type_equal(g_variant_get_type(child), G_VARIANT_TYPE_INT32) != 0) {
+                      apm_level = g_variant_get_int32(child);
+
+                      util::warning(drive_id + " apm level: " + std::to_string(apm_level));
+                    }
+                  }
+                }
+              } else {
+                util::debug(log_tag + "device " + selected_device + " does not support apm control");
+              }
+            } else {
+              util::debug(log_tag + "device " + selected_device + " does not support the ata interface");
+            }
+
+            break;
+          }
+        }
+      }
+
+      objects = objects->next;
+    }
+  }
+
+  disable_apm->set_active(apm_level == 255);
 }
 
 auto Disk::get_device() -> std::string {
@@ -118,4 +208,16 @@ auto Disk::get_enable_add_random() -> bool {
 
 void Disk::set_enable_add_random(const bool& value) {
   add_random->set_active(value);
+}
+
+auto Disk::get_drive_id() -> std::string {
+  return drive_id;
+}
+
+auto Disk::get_disable_apm() -> bool {
+  return disable_apm->get_active();
+}
+
+void Disk::set_disable_apm(const bool& value) {
+  disable_apm->set_active(value);
 }

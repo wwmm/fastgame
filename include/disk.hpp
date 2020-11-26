@@ -7,6 +7,7 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/stack.h>
 #include <gtkmm/switch.h>
+#include <udisks/udisks.h>
 
 class Disk : public Gtk::Grid {
  public:
@@ -43,16 +44,32 @@ class Disk : public Gtk::Grid {
 
   void set_enable_add_random(const bool& value);
 
+  auto get_drive_id() -> std::string;
+
+  auto get_disable_apm() -> bool;
+
+  void set_disable_apm(const bool& value);
+
  private:
   std::string log_tag = "disk: ";
 
   Gtk::ComboBoxText *device = nullptr, *scheduler = nullptr;
 
-  Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr;
+  Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr, *disable_apm = nullptr;
 
   Glib::RefPtr<Gtk::Adjustment> readahead, nr_requests;
 
+  UDisksClient* udisks_client = nullptr;
+
+  bool supports_apm = false;
+
+  int apm_level = 127;
+
+  std::string drive_id;
+
   void init_scheduler();
+
+  void init_udisks_object();
 };
 
 #endif

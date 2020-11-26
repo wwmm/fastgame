@@ -29,7 +29,8 @@ fastgame_deps = [
 	dependency('gtkmm-3.0', version: '>=3.24'),
 	dependency('sigc++-2.0', version: ['>=2.10', '<3']),
 	dependency('boost', version: '>=1.65', modules:['filesystem']),
-	dependency('threads')
+	dependency('threads'),
+	dependency('udisks2')
 ]
 
 fastgame_apply_sources = [

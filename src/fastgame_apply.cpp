@@ -81,6 +81,8 @@ void apply_workqueue_affinity(const std::vector<int>& cpu_affinity) {
   }
 }
 
+void set_disk_apm_state(const bool& state) {}
+
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
@@ -160,6 +162,8 @@ auto main(int argc, char* argv[]) -> int {
     auto drive_id = root.get<std::string>("disk.udisks.drive-id");
 
     auto disable_apm = root.get<bool>("disk.udisks.disable-apm", false);
+
+    set_disk_apm_state(disable_apm);
   }
 
   // amdgpu

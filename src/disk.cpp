@@ -221,3 +221,7 @@ auto Disk::get_disable_apm() -> bool {
 void Disk::set_disable_apm(const bool& value) {
   disable_apm->set_active(value);
 }
+
+auto Disk::get_supports_apm() const -> bool {
+  return supports_apm;
+}

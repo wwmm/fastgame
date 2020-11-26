@@ -50,6 +50,8 @@ class Disk : public Gtk::Grid {
 
   void set_disable_apm(const bool& value);
 
+  auto get_supports_apm() const -> bool;
+
  private:
   std::string log_tag = "disk: ";
 

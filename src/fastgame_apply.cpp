@@ -1,4 +1,5 @@
 #include <sys/resource.h>
+#include <udisks/udisks.h>
 #include <array>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -81,7 +82,36 @@ void apply_workqueue_affinity(const std::vector<int>& cpu_affinity) {
   }
 }
 
-void set_disk_apm_state(const bool& state) {}
+void set_disk_apm_state(const std::string& drive_id, const bool& state) {
+  // initializing the udisk client
+
+  GError* error = nullptr;
+
+  auto* client = udisks_client_new_sync(nullptr, &error);
+
+  if (client == nullptr) {
+    util::warning(error->message);
+
+    g_error_free(error);
+
+    return;
+  }
+
+  auto* objects = g_dbus_object_manager_get_objects(udisks_client_get_object_manager(client));
+
+  while (objects != nullptr) {
+    auto* object = UDISKS_OBJECT(objects->data);
+
+    auto* drive = udisks_object_get_drive(object);
+
+    if (drive != nullptr) {
+      if (drive_id == udisks_drive_get_id(drive)) {
+      }
+    }
+
+    objects = objects->next;
+  }
+}
 
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
@@ -163,7 +193,7 @@ auto main(int argc, char* argv[]) -> int {
 
     auto disable_apm = root.get<bool>("disk.udisks.disable-apm", false);
 
-    set_disk_apm_state(disable_apm);
+    set_disk_apm_state(drive_id, disable_apm);
   }
 
   // amdgpu

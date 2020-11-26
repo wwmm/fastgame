@@ -42,7 +42,8 @@ fastgame_apply_sources = [
 fastgame_apply_deps = [
 	dependency('glib-2.0', version: '>=2.56'),
 	dependency('boost', version: '>=1.65'),
-	dependency('threads')
+	dependency('threads'),
+	dependency('udisks2')
 ]
 
 executable(

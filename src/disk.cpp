@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
-#include "udisks/udisks-generated.h"
 #include "util.hpp"
 
 namespace fs = std::filesystem;

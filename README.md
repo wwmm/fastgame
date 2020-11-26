@@ -44,6 +44,7 @@ settings that can be configured through FastGame:
 - Change the disk scheduler
 - Change the readahead and nr_requests values
 - Disable the disk `add_random`
+- Enable the disk write cache and disable APM
 - Apply the Realtime IO priority to the game process
 - Set amdgpu performance level, power cap and irq affinity
 - Configure the virtual memory cache pressure

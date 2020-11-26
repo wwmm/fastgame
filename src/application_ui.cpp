@@ -204,9 +204,11 @@ void ApplicationUi::save_preset(const std::string& name, const std::filesystem::
   root.put("disk.readahead", disk->get_readahead());
   root.put("disk.nr-requests", disk->get_nr_requests());
   root.put("disk.add_random", disk->get_enable_add_random());
-  root.put("disk.udisks.supports-apm", disk->get_supports_apm());
   root.put("disk.udisks.drive-id", disk->get_drive_id());
+  root.put("disk.udisks.supports-apm", disk->get_supports_apm());
   root.put("disk.udisks.disable-apm", disk->get_disable_apm());
+  root.put("disk.udisks.supports-write-cache", disk->get_supports_write_cache());
+  root.put("disk.udisks.enable-write-cache", disk->get_enable_write_cache());
 
   // amdgpu
 
@@ -310,6 +312,7 @@ void ApplicationUi::load_preset(const std::string& name) {
   disk->set_nr_requests(root.get<int>("disk.nr-requests", disk->get_nr_requests()));
   disk->set_enable_add_random(root.get<bool>("disk.add_random", disk->get_enable_add_random()));
   disk->set_disable_apm(root.get<bool>("disk.udisks.disable-apm", disk->get_disable_apm()));
+  disk->set_enable_write_cache(root.get<bool>("disk.udisks.enable-write-cache", disk->get_enable_write_cache()));
 
   // amdgpu
 

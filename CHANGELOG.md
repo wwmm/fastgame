@@ -8,6 +8,8 @@
 
 - Amdgpu irq affinity can be set
 - Wineserver cpu affinity can be set
+- HDD automatic power management(APM) can be enabled/disabled
+- HDD write cache can be enabled/disabled
 
 ## [0.1.2]
 

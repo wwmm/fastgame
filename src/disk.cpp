@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include "udisks/udisks-generated.h"
 #include "util.hpp"
 
 namespace fs = std::filesystem;
@@ -16,6 +17,7 @@ Disk::Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) :
   builder->get_widget("enable_realtime_priority", enable_realtime_priority);
   builder->get_widget("add_random", add_random);
   builder->get_widget("disable_apm", disable_apm);
+  builder->get_widget("enable_write_cache", enable_write_cache);
 
   readahead = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("readahead"));
   nr_requests = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("nr_requests"));
@@ -89,12 +91,12 @@ void Disk::init_scheduler() {
 }
 
 void Disk::init_udisks_object() {
-  apm_level = 127;
   supports_apm = false;
 
   drive_id.clear();
 
   disable_apm->set_sensitive(false);
+  enable_write_cache->set_sensitive(false);
 
   if (udisks_client != nullptr) {
     auto selected_device = device->get_active_text().substr(11);
@@ -117,34 +119,37 @@ void Disk::init_udisks_object() {
 
             if (drive_ata != nullptr) {
               supports_apm = udisks_drive_ata_get_apm_supported(drive_ata) == 1;
+              supports_write_cache = udisks_drive_ata_get_write_cache_supported(drive_ata) == 1;
+
+              disable_apm->set_sensitive(supports_apm);
+              enable_write_cache->set_sensitive(supports_write_cache);
 
               drive_id = udisks_drive_get_id(drive);
 
-              if (supports_apm) {
-                disable_apm->set_sensitive();
+              // reading the current configuration
 
-                // reading the current configuration
+              auto* config = udisks_drive_get_configuration(drive);
 
-                auto* config = udisks_drive_get_configuration(drive);
+              GVariantIter iter;
+              GVariant* child = nullptr;
+              gchar* key = nullptr;
 
-                GVariantIter iter;
-                GVariant* child = nullptr;
-                gchar* key = nullptr;
+              g_variant_iter_init(&iter, config);
 
-                g_variant_iter_init(&iter, config);
-
-                while (g_variant_iter_next(&iter, "{sv}", &key, &child) != 0) {
-                  if (std::strcmp(key, "ata-apm-level") == 0) {
-                    if (g_variant_type_equal(g_variant_get_type(child), G_VARIANT_TYPE_INT32) != 0) {
-                      apm_level = g_variant_get_int32(child);
-
-                      util::warning(drive_id + " apm level: " + std::to_string(apm_level));
-                    }
+              while (g_variant_iter_next(&iter, "{sv}", &key, &child) != 0) {
+                if (std::strcmp(key, "ata-apm-level") == 0) {
+                  if (g_variant_type_equal(g_variant_get_type(child), G_VARIANT_TYPE_INT32) != 0) {
+                    disable_apm->set_active(g_variant_get_int32(child) == 255);
                   }
                 }
-              } else {
-                util::debug(log_tag + "device " + selected_device + " does not support apm control");
+
+                if (std::strcmp(key, "ata-write-cache-enabled") == 0) {
+                  if (g_variant_type_equal(g_variant_get_type(child), G_VARIANT_TYPE_BOOLEAN) != 0) {
+                    enable_write_cache->set_active(g_variant_get_boolean(child) != 0);
+                  }
+                }
               }
+
             } else {
               util::debug(log_tag + "device " + selected_device + " does not support the ata interface");
             }
@@ -157,8 +162,6 @@ void Disk::init_udisks_object() {
       objects = objects->next;
     }
   }
-
-  disable_apm->set_active(apm_level == 255);
 }
 
 auto Disk::get_device() -> std::string {
@@ -223,4 +226,16 @@ void Disk::set_disable_apm(const bool& value) {
 
 auto Disk::get_supports_apm() const -> bool {
   return supports_apm;
+}
+
+auto Disk::get_enable_write_cache() -> bool {
+  return enable_write_cache->get_active();
+}
+
+void Disk::set_enable_write_cache(const bool& value) {
+  enable_write_cache->set_active(value);
+}
+
+auto Disk::get_supports_write_cache() const -> bool {
+  return supports_write_cache;
 }

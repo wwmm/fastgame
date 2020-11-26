@@ -82,7 +82,13 @@ void apply_workqueue_affinity(const std::vector<int>& cpu_affinity) {
   }
 }
 
-void set_disk_apm_state(const std::string& drive_id, const bool& state) {
+void apply_udisks_configuration(const boost::property_tree::ptree& root) {
+  auto drive_id = root.get<std::string>("disk.udisks.drive-id");
+  auto supports_apm = root.get<bool>("disk.udisks.supports-apm", false);
+  auto disable_apm = root.get<bool>("disk.udisks.disable-apm", false);
+  auto supports_write_cache = root.get<bool>("disk.udisks.supports-write-cache", false);
+  auto enable_write_cache = root.get<bool>("disk.udisks.enable-write-cache", false);
+
   // initializing the udisk client
 
   GError* error = nullptr;
@@ -106,6 +112,34 @@ void set_disk_apm_state(const std::string& drive_id, const bool& state) {
 
     if (drive != nullptr) {
       if (drive_id == udisks_drive_get_id(drive)) {
+        GVariantBuilder builder;
+        GVariant* value = nullptr;
+
+        g_variant_builder_init(&builder, G_VARIANT_TYPE_VARDICT);
+
+        if (supports_apm) {
+          if (disable_apm) {
+            g_variant_builder_add(&builder, "{sv}", "ata-apm-level", g_variant_new_int32(255));
+          } else {
+            g_variant_builder_add(&builder, "{sv}", "ata-apm-level", g_variant_new_int32(127));
+          }
+        }
+
+        if (supports_write_cache) {
+          if (enable_write_cache) {
+            g_variant_builder_add(&builder, "{sv}", "ata-write-cache-enabled", g_variant_new_boolean(1));
+          } else {
+            g_variant_builder_add(&builder, "{sv}", "ata-write-cache-enabled", g_variant_new_boolean(0));
+          }
+        }
+
+        value = g_variant_builder_end(&builder);
+
+        udisks_drive_call_set_configuration_sync(drive, value, g_variant_new("a{sv}", nullptr), nullptr, nullptr);
+
+        //   util::warning(g_variant_print(value, 1));
+
+        break;
       }
     }
 
@@ -181,20 +215,13 @@ auto main(int argc, char* argv[]) -> int {
   auto disk_readahead = root.get<int>("disk.readahead", 128);
   auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
   auto enable_add_random = root.get<bool>("disk.add_random", true);
-  auto disk_supports_apm = root.get<bool>("disk.udisks.supports-apm", false);
 
   update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
   update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
   update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
   update_system_setting(disk_device + "/queue/add_random", enable_add_random);
 
-  if (disk_supports_apm) {
-    auto drive_id = root.get<std::string>("disk.udisks.drive-id");
-
-    auto disable_apm = root.get<bool>("disk.udisks.disable-apm", false);
-
-    set_disk_apm_state(drive_id, disable_apm);
-  }
+  apply_udisks_configuration(root);
 
   // amdgpu
 

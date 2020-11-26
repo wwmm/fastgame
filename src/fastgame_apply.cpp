@@ -149,11 +149,18 @@ auto main(int argc, char* argv[]) -> int {
   auto disk_readahead = root.get<int>("disk.readahead", 128);
   auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
   auto enable_add_random = root.get<bool>("disk.add_random", true);
+  auto disk_supports_apm = root.get<bool>("disk.udisks.supports-apm", false);
 
   update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
   update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
   update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
   update_system_setting(disk_device + "/queue/add_random", enable_add_random);
+
+  if (disk_supports_apm) {
+    auto drive_id = root.get<std::string>("disk.udisks.drive-id");
+
+    auto disable_apm = root.get<bool>("disk.udisks.disable-apm", false);
+  }
 
   // amdgpu
 

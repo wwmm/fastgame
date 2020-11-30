@@ -285,6 +285,19 @@ auto main(int argc, char* argv[]) -> int {
       return;
     }
 
+    if (comm.size() > 4) {
+      auto sub_comm = comm.substr(comm.size() - 4);
+
+      if (sub_comm == ":cs0") {  // dxvk or vkd3d command stream
+        util::apply_cpu_affinity(pid, wineserver_cpu_affinity);
+
+        std::cout << "fastgame_apply: setting dxvk/vkd3d command stream cpu affinity to the wineserver core"
+                  << std::endl;
+
+        setpriority(PRIO_PROCESS, pid, niceness);
+      }
+    }
+
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
 
@@ -309,12 +322,6 @@ auto main(int argc, char* argv[]) -> int {
 
       std::cout << "fastgame_apply: " << msg << std::endl;
 
-      util::apply_cpu_affinity(game_pid, game_cpu_affinity);
-
-      if (use_batch_scheduler) {
-        util::set_process_scheduler(game_pid, SCHED_BATCH, 0);
-      }
-
       setpriority(PRIO_PROCESS, game_pid, niceness);
 
       if (enable_realtime_io_priority) {
@@ -328,8 +335,6 @@ auto main(int argc, char* argv[]) -> int {
       std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << std::endl;
 
       if (use_realtime_wineserver) {
-        util::apply_cpu_affinity(child_pid, game_cpu_affinity);
-
         util::set_process_scheduler(child_pid, SCHED_RR, 1);
 
         std::cout << "fastgame_apply: setting wineserver priority to realtime" << std::endl;
@@ -338,30 +343,14 @@ auto main(int argc, char* argv[]) -> int {
       util::apply_cpu_affinity(child_pid, wineserver_cpu_affinity);
     } else {
       if (tgid == game_pid) {
-        /*
-          For some reason not all of the children can be intercepted here. So we loop over all children whenever a new
-          one is created. This way we are able to apply settings to all of them.
-        */
+        if (use_batch_scheduler) {
+          util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
+        }
 
-        try {
-          auto task_dir = "/proc/" + std::to_string(game_pid) + "/task";
+        setpriority(PRIO_PROCESS, child_pid, niceness);
 
-          for (const auto& entry : std::filesystem::directory_iterator(task_dir)) {
-            const auto task_pid = std::stoi(entry.path().filename().string());
-
-            util::apply_cpu_affinity(task_pid, game_cpu_affinity);
-
-            if (use_batch_scheduler) {
-              util::set_process_scheduler(task_pid, SCHED_BATCH, 0);
-            }
-
-            setpriority(PRIO_PROCESS, game_pid, niceness);
-
-            if (enable_realtime_io_priority) {
-              ioprio_set_realtime(game_pid, 7);
-            }
-          }
-        } catch (std::exception& e) {
+        if (enable_realtime_io_priority) {
+          ioprio_set_realtime(child_pid, 7);
         }
       }
     }

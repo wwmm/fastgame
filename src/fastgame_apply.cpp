@@ -288,13 +288,14 @@ auto main(int argc, char* argv[]) -> int {
     if (comm.size() > 4) {
       auto sub_comm = comm.substr(comm.size() - 4);
 
-      if (sub_comm == ":cs0") {  // dxvk or vkd3d command stream
-        util::apply_cpu_affinity(pid, wineserver_cpu_affinity);
-
-        std::cout << "fastgame_apply: setting dxvk/vkd3d command stream cpu affinity to the wineserver core"
-                  << std::endl;
-
+      if (sub_comm == ":cs0") {  // dxvk or vkd3d ":cs0" thread can not be caught in the fork callback
         setpriority(PRIO_PROCESS, pid, niceness);
+
+        if (enable_realtime_io_priority) {
+          ioprio_set_realtime(pid, 7);
+        }
+
+        return;
       }
     }
 
@@ -343,6 +344,8 @@ auto main(int argc, char* argv[]) -> int {
       util::apply_cpu_affinity(child_pid, wineserver_cpu_affinity);
     } else {
       if (tgid == game_pid) {
+        // std::cout << "new game fork: " << child_comm << "\t" << std::to_string(child_pid) << std::endl;
+
         if (use_batch_scheduler) {
           util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
         }

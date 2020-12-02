@@ -20,6 +20,8 @@ auto find_hwmon_index(const int& card_index) -> int;
 
 void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity);
 
+void clear_cpu_affinity(const int& pid);
+
 void set_process_scheduler(const int& pid, const int& policy_index, const int& priority);
 
 auto card_is_amdgpu(const int& card_index) -> bool;

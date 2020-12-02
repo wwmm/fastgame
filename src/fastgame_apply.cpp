@@ -364,6 +364,15 @@ auto main(int argc, char* argv[]) -> int {
         if (use_batch_scheduler) {
           if (child_comm != game_comm) {
             util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
+
+            /*
+              Sometimes these ":disk$" threads(vkd3d? dxvk?) use a lot of cpu. It is better to let them use any core
+              than force the same affinity as the order game threads
+            */
+
+            if (child_comm.find(":disk$") != std::string::npos) {
+              util::clear_cpu_affinity(child_pid);
+            }
           }
         }
 

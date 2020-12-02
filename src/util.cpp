@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <thread>
 
 namespace util {
 
@@ -97,6 +98,20 @@ void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
   if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
     util::warning("fastgame_apply: could not set cpu affinity for the process: " + std::to_string(pid));
   }
+}
+
+void clear_cpu_affinity(const int& pid) {
+  uint n_cores = std::thread::hardware_concurrency();
+
+  cpu_set_t mask;
+
+  CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
+
+  for (uint n = 0; n < n_cores; n++) {
+    CPU_SET(n, &mask);
+  }
+
+  sched_setaffinity(pid, sizeof(cpu_set_t), &mask);
 }
 
 void set_process_scheduler(const int& pid, const int& policy_index, const int& priority) {

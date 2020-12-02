@@ -299,6 +299,19 @@ auto main(int argc, char* argv[]) -> int {
       }
     }
 
+    /*
+      Workaround for Proton games run through Pressure-Vessel. More information at
+      https://github.com/ValveSoftware/steam-runtime/issues/304
+    */
+
+    if (comm == "_v2-entry-point") {
+      util::apply_cpu_affinity(pid, game_cpu_affinity);
+
+      return;
+    }
+
+    // std::cout << "new exec: " << comm << "\t" << std::to_string(pid) << std::endl;
+
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
 

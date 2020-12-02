@@ -277,11 +277,25 @@ auto main(int argc, char* argv[]) -> int {
   // starting the netlink server
 
   int game_pid = -1;
+  std::string game_comm;
 
   auto nl = std::make_unique<Netlink>();
 
   nl->new_exec.connect([&](int pid, const std::string& comm, const std::string& cmdline, const std::string& exe_path) {
+    // std::cout << "new exec: " << comm << "\t" << cmdline << "\t" << std::to_string(pid) << std::endl;
+
     if (comm == "wineserver") {
+      return;
+    }
+
+    /*
+      Workaround for Proton games run through Pressure-Vessel. More information at
+      https://github.com/ValveSoftware/steam-runtime/issues/304
+    */
+
+    if (comm == "pressure-vessel") {
+      util::apply_cpu_affinity(pid, game_cpu_affinity);
+
       return;
     }
 
@@ -299,19 +313,6 @@ auto main(int argc, char* argv[]) -> int {
       }
     }
 
-    /*
-      Workaround for Proton games run through Pressure-Vessel. More information at
-      https://github.com/ValveSoftware/steam-runtime/issues/304
-    */
-
-    if (comm == "_v2-entry-point") {
-      util::apply_cpu_affinity(pid, game_cpu_affinity);
-
-      return;
-    }
-
-    // std::cout << "new exec: " << comm << "\t" << std::to_string(pid) << std::endl;
-
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
 
@@ -327,6 +328,7 @@ auto main(int argc, char* argv[]) -> int {
 
     if (apply) {
       game_pid = pid;
+      game_comm = comm;
 
       std::string msg = "(";
 
@@ -360,7 +362,9 @@ auto main(int argc, char* argv[]) -> int {
         // std::cout << "new game fork: " << child_comm << "\t" << std::to_string(child_pid) << std::endl;
 
         if (use_batch_scheduler) {
-          util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
+          if (child_comm != game_comm) {
+            util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
+          }
         }
 
         setpriority(PRIO_PROCESS, child_pid, niceness);

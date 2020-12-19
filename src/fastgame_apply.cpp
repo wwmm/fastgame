@@ -293,11 +293,11 @@ auto main(int argc, char* argv[]) -> int {
       https://github.com/ValveSoftware/steam-runtime/issues/304
     */
 
-    if (comm == "pressure-vessel") {
-      util::apply_cpu_affinity(pid, game_cpu_affinity);
+    // if (comm == "pressure-vessel") {
+    //   util::apply_cpu_affinity(pid, game_cpu_affinity);
 
-      return;
-    }
+    //   return;
+    // }
 
     if (comm.size() > 4) {
       auto sub_comm = comm.substr(comm.size() - 4);

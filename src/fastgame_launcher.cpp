@@ -38,14 +38,14 @@ auto main(int argc, char* argv[]) -> int {
   std::vector<int> cpu_affinity;
 
   try {
-    for (const auto& c : root.get_child("cpu.cores")) {
+    for (const auto& c : root.get_child("cpu.game-cores")) {
       int core_index = std::stoi(c.second.data());
 
       cpu_affinity.emplace_back(core_index);
     }
 
   } catch (const boost::property_tree::ptree_error& e) {
-    util::warning("fastgame_apply: error when parsing the cpu core list");
+    util::warning("fastgame_launcher: error when parsing the cpu core list");
   }
 
   util::apply_cpu_affinity(0, cpu_affinity);

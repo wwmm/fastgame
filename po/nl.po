@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the fastgame package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fastgame\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-15 13:17-0300\n"
+"PO-Revision-Date: 2021-03-14 19:28+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl\n"
+
+#: data/com.github.wwmm.fastgame.desktop.in:3 data/ui/application.glade:213
+msgid "FastGame"
+msgstr "FastGame"
+
+#: data/com.github.wwmm.fastgame.desktop.in:4
+msgid "System Settings Tweak"
+msgstr "Systeemaanpassingen"
+
+#: data/com.github.wwmm.fastgame.desktop.in:5
+msgid "Tweak system performance for games"
+msgstr "Maak je systeem geschikt voor games"
+
+#: data/com.github.wwmm.fastgame.desktop.in:6
+msgid "system;tweak;game;"
+msgstr "systeem;tweak;aanpassen;aanpassing;game;spel;"
+
+#: data/ui/about.glade.in:11
+msgid "Tweak System Settings"
+msgstr "Systeemaanpassingen"
+
+#: data/ui/application.glade:36 data/ui/environment_variables.glade:39
+msgid "Name"
+msgstr "Naam"
+
+#: data/ui/application.glade:49
+msgid "Create Preset"
+msgstr "Voorinstelling maken"
+
+#: data/ui/application.glade:67
+msgid "Import Presets"
+msgstr "Voorinstellingen importeren"
+
+#: data/ui/application.glade:181
+msgid "Executable"
+msgstr "Uitvoerbaar bestand"
+
+#: data/ui/application.glade:220
+msgid "Settings"
+msgstr "Instellingen"
+
+#: data/ui/application.glade:248
+msgid "Presets"
+msgstr "Voorinstellingen"
+
+#: data/ui/application.glade:259
+msgid "Apply"
+msgstr "Toepassen"
+
+#: data/ui/application.glade:305
+msgid "Use Dark Theme"
+msgstr "Donker thema"
+
+#: data/ui/application.glade:326
+msgid "About"
+msgstr "Over"
+
+#: data/ui/preset_row.glade:47
+msgid "Load"
+msgstr "Laden"
+
+#: data/ui/preset_row.glade:64
+msgid "Save current settings to this preset file"
+msgstr "Sla de huidige instellingen op in dit voorinstellingsbestand"
+
+#: data/ui/preset_row.glade:80
+msgid "Remove this preset file"
+msgstr "Verwijder dit voorinstellingsbestand"
+
+#: data/ui/environment_variables.glade:53
+msgid "Value"
+msgstr "Waarde"
+
+#: data/ui/environment_variables.glade:82
+msgid "Add Line"
+msgstr "Regel toevoegen"
+
+#: data/ui/environment_variables.glade:98
+msgid "Remove Selection"
+msgstr "Selectie verwijderen"
+
+#: data/ui/amdgpu.glade:33
+msgid "Performance Level"
+msgstr "Prestatieniveau"
+
+#: data/ui/amdgpu.glade:46
+msgid "auto"
+msgstr "automatisch"
+
+#: data/ui/amdgpu.glade:47
+msgid "low"
+msgstr "laag"
+
+#: data/ui/amdgpu.glade:48
+msgid "high"
+msgstr "hoog"
+
+#: data/ui/amdgpu.glade:49
+msgid "manual"
+msgstr "handmatig"
+
+#: data/ui/amdgpu.glade:50
+msgid "profile_standard"
+msgstr "profiel_standaard"
+
+#: data/ui/amdgpu.glade:51
+msgid "profile_min_sclk"
+msgstr "profiel_min_sdk"
+
+#: data/ui/amdgpu.glade:52
+msgid "profile_min_mclk"
+msgstr "profiel_min_mclk"
+
+#: data/ui/amdgpu.glade:53
+msgid "profile_peak"
+msgstr "profiel_piek"
+
+#: data/ui/amdgpu.glade:66
+msgid "Power Cap"
+msgstr "Energieniveau begrenzen"
+
+#: data/ui/amdgpu.glade:111
+msgid "IRQ Affinity"
+msgstr "IRQ-affiniteit"
+
+#: data/ui/amdgpu.glade:124
+msgid "Cores"
+msgstr "Aantal kernen"
+
+#: data/ui/memory.glade:37
+msgid "Transparent HugePages"
+msgstr "Transparante HugePages"
+
+#: data/ui/memory.glade:50
+msgid "enabled"
+msgstr "ingeschakeld"
+
+#: data/ui/memory.glade:73
+msgid "defrag"
+msgstr "defragmenteren"
+
+#: data/ui/memory.glade:96
+msgid "shmem_enabled"
+msgstr "shmem_inschakelen"
+
+#: data/ui/memory.glade:136
+msgid "Virtual Memory"
+msgstr "Virtueel geheugen"
+
+#: data/ui/memory.glade:150
+msgid "Cache Pressure"
+msgstr "Cachebelasting"
+
+#: data/ui/memory.glade:176
+msgid "Compaction Proactiveness"
+msgstr "Verkleiningsniveau"
+
+#: data/ui/cpu.glade:33
+msgid "Use the Batch Scheduler"
+msgstr "Reeksplanning gebruiken"
+
+#: data/ui/cpu.glade:57
+msgid "Use /dev/cpu_dma_latency"
+msgstr "/dev/cpu_dma_latency gebruiken"
+
+#: data/ui/cpu.glade:96
+msgid "Child Runs First"
+msgstr "Eerst onderliggend proces"
+
+#: data/ui/cpu.glade:120
+msgid "Realtime Wineserver"
+msgstr "Realtime-Wineserver"
+
+#: data/ui/cpu.glade:157
+msgid "Frequency Governor"
+msgstr "Frequentiegovernor"
+
+#: data/ui/cpu.glade:195
+msgid "Niceness"
+msgstr "Niceness"
+
+#: data/ui/cpu.glade:238
+msgid "Game"
+msgstr "Game"
+
+#: data/ui/cpu.glade:268
+msgid "Kernel Workqueue"
+msgstr "Kernel-werkvolgorde"
+
+#: data/ui/cpu.glade:299
+msgid "Affinity"
+msgstr "Affiniteit"
+
+#: data/ui/cpu.glade:311
+msgid "Wineserver"
+msgstr "Wineserver"
+
+#: data/ui/disk.glade:32
+msgid "Device"
+msgstr "Apparaat"
+
+#: data/ui/disk.glade:55
+msgid "Readahead"
+msgstr "Vooruitlezen"
+
+#: data/ui/disk.glade:85
+msgid "Scheduler"
+msgstr "Schema"
+
+#: data/ui/disk.glade:108
+msgid "nr_requests"
+msgstr "aantal_verzoeken"
+
+#: data/ui/disk.glade:134
+msgid "Realtime Priority"
+msgstr "Realtime-prioriteit"
+
+#: data/ui/disk.glade:158
+msgid "Add Random"
+msgstr "Willekeurig"
+
+#: data/ui/network.glade:33
+msgid "TCP MTU Probing"
+msgstr "TCP MTU aanspreken"
+
+#: data/ui/network.glade:45
+msgid "TCP Maximum Reordering"
+msgstr "TCP: maximale herordening"
+
+#: data/ui/network.glade:86
+msgid "TCP Probe Interval"
+msgstr "TCP: aanspreektussenpoos"
+
+#: data/ui/network.glade:117
+msgid "TCP Congestion Control"
+msgstr "TCP: druktebeheer"

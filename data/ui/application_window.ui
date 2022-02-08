@@ -82,6 +82,13 @@
                 </child>
 
                 <child>
+                    <object class="AdwViewStack" id="stack">
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                    </object>
+                </child>
+
+                <child>
                     <object class="GtkBox">
                         <property name="margin-start">6</property>
                         <property name="margin-end">6</property>
@@ -100,13 +107,10 @@
                                 <property name="hexpand">1</property>
                             </object>
                         </child>
-                    </object>
-                </child>
 
-                <child>
-                    <object class="AdwViewStack" id="stack">
-                        <property name="hexpand">1</property>
-                        <property name="vexpand">1</property>
+                        <style>
+                            <class name="toolbar" />
+                        </style>
                     </object>
                 </child>
 

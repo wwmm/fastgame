@@ -3,6 +3,7 @@
     <gresource prefix="/com/github/wwmm/fastgame">
         <file>ui/application_window.ui</file>
         <file>ui/presets_menu.ui</file>
+        <file>ui/shortcuts.ui</file>
         <file>ui/environment_variables.glade</file>
         <file>ui/amdgpu.glade</file>
         <file>ui/memory.glade</file>

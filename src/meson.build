@@ -13,7 +13,7 @@ fastgame_sources = [
 	'application.cpp',
 	'application_ui.cpp',
 	'presets_menu.cpp',
-	# 'environment_variables.cpp',
+	'environment_variables.cpp',
 	# 'amdgpu.cpp',
 	# 'memory.cpp',
 	# 'cpu.cpp',

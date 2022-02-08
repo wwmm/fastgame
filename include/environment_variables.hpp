@@ -1,42 +1,50 @@
-#ifndef ENVIRONMENT_VARIABLES_HPP
-#define ENVIRONMENT_VARIABLES_HPP
+#pragma once
 
-#include <giomm/settings.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/cellrenderertext.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/stack.h>
-#include <gtkmm/treeview.h>
+#include <adwaita.h>
+#include <filesystem>
+#include "application.hpp"
 
-class EnvironmentVariables : public Gtk::Grid {
- public:
-  EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-  EnvironmentVariables(const EnvironmentVariables&) = delete;
-  auto operator=(const EnvironmentVariables&) -> EnvironmentVariables& = delete;
-  EnvironmentVariables(const EnvironmentVariables&&) = delete;
-  auto operator=(const EnvironmentVariables &&) -> EnvironmentVariables& = delete;
-  ~EnvironmentVariables() override;
+namespace ui::environmental_variables {
 
-  static auto add_to_stack(Gtk::Stack* stack) -> EnvironmentVariables*;
+G_BEGIN_DECLS
 
-  auto get_variables() -> std::vector<std::string>;
+#define FG_TYPE_ENVIRONMENT_VARIABLES (environment_variables_get_type())
 
-  void set_variables(const std::vector<std::string>& list);
+G_DECLARE_FINAL_TYPE(EnvironmentVariables, environment_variables, FG, ENVIRONMENT_VARIABLES, GtkBox)
 
- private:
-  std::string log_tag = "environment variables: ";
+G_END_DECLS
 
-  Glib::RefPtr<Gio::Settings> settings;
+auto create() -> EnvironmentVariables*;
 
-  Gtk::Button *button_add = nullptr, *button_remove = nullptr;
+void setup(EnvironmentVariables* self, app::Application* application);
 
-  Gtk::TreeView* treeview = nullptr;
+}  // namespace ui::environmental_variables
 
-  Gtk::ListStore* liststore = nullptr;
+// class EnvironmentVariables : public Gtk::Grid {
+//  public:
+//   EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
+//   EnvironmentVariables(const EnvironmentVariables&) = delete;
+//   auto operator=(const EnvironmentVariables&) -> EnvironmentVariables& = delete;
+//   EnvironmentVariables(const EnvironmentVariables&&) = delete;
+//   auto operator=(const EnvironmentVariables&&) -> EnvironmentVariables& = delete;
+//   ~EnvironmentVariables() override;
 
-  Gtk::CellRendererText *cell_name = nullptr, *cell_value = nullptr;
-};
+//   static auto add_to_stack(Gtk::Stack* stack) -> EnvironmentVariables*;
 
-#endif
+//   auto get_variables() -> std::vector<std::string>;
+
+//   void set_variables(const std::vector<std::string>& list);
+
+//  private:
+//   std::string log_tag = "environment variables: ";
+
+//   Glib::RefPtr<Gio::Settings> settings;
+
+//   Gtk::Button *button_add = nullptr, *button_remove = nullptr;
+
+//   Gtk::TreeView* treeview = nullptr;
+
+//   Gtk::ListStore* liststore = nullptr;
+
+//   Gtk::CellRendererText *cell_name = nullptr, *cell_value = nullptr;
+// };

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="fastgame">
+    <template class="EnvironmentVariables" parent="GtkBox">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+
+            </object>
+        </child>
+    </template>
+</interface>

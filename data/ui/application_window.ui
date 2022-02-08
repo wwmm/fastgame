@@ -92,6 +92,7 @@
                                     <object class="GtkListView" id="listview">
                                         <property name="vexpand">1</property>
                                         <property name="model" bind-source="stack" bind-property="pages" bind-flags="sync-create" />
+
                                         <property name="factory">
                                             <object class="GtkBuilderListItemFactory">
                                                 <property name="resource">/com/github/wwmm/fastgame/ui/factory_sections_listview.ui</property>

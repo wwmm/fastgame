@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="easyeffects">
+<interface domain="fastgame">
     <object class="GtkShortcutsWindow" id="window">
         <property name="modal">1</property>
         <child>

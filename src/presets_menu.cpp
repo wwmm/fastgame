@@ -329,7 +329,7 @@ void presets_menu_init(PresetsMenu* self) {
 
   self->data = new Data();
 
-  self->settings = g_settings_new("com.github.wwmm.easyeffects");
+  self->settings = g_settings_new("com.github.wwmm.fastgame");
 
   create_user_directory();
 }

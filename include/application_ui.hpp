@@ -1,104 +1,90 @@
-#ifndef APPLICATION_WINDOW_HPP
-#define APPLICATION_WINDOW_HPP
+#pragma once
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/applicationwindow.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/listbox.h>
-#include <gtkmm/menubutton.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/spinner.h>
-#include <gtkmm/stack.h>
-#include <gtkmm/switch.h>
 #include <filesystem>
-#include "amdgpu.hpp"
-#include "application.hpp"
-#include "cpu.hpp"
-#include "disk.hpp"
-#include "environment_variables.hpp"
-#include "memory.hpp"
-#include "network.hpp"
 
-class ApplicationUi : public Gtk::ApplicationWindow {
- public:
-  ApplicationUi(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application);
-  ApplicationUi(const ApplicationUi&) = delete;
-  auto operator=(const ApplicationUi&) -> ApplicationUi& = delete;
-  ApplicationUi(const ApplicationUi&&) = delete;
-  auto operator=(const ApplicationUi &&) -> ApplicationUi& = delete;
-  ~ApplicationUi() override;
+// #include "amdgpu.hpp"
+// #include "application.hpp"
+// #include "cpu.hpp"
+// #include "disk.hpp"
+// #include "environment_variables.hpp"
+// #include "memory.hpp"
+// #include "network.hpp"
 
-  static auto create(Application* app) -> ApplicationUi*;
+// class ApplicationUi : public Gtk::ApplicationWindow {
+//  public:
+//   ApplicationUi(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder, Application* application);
+//   ApplicationUi(const ApplicationUi&) = delete;
+//   auto operator=(const ApplicationUi&) -> ApplicationUi& = delete;
+//   ApplicationUi(const ApplicationUi&&) = delete;
+//   auto operator=(const ApplicationUi&&) -> ApplicationUi& = delete;
+//   ~ApplicationUi() override;
 
- private:
-  std::string log_tag = "application_ui: ";
+//   static auto create(Application* app) -> ApplicationUi*;
 
-  Application* app;
+//  private:
+//   std::string log_tag = "application_ui: ";
 
-  Glib::RefPtr<Gio::Settings> settings;
+//   Application* app;
 
-  std::filesystem::path user_presets_dir;
+//   Glib::RefPtr<Gio::Settings> settings;
 
-  Gtk::Stack* stack = nullptr;
+//   std::filesystem::path user_presets_dir;
 
-  Gtk::Button *add_preset = nullptr, *import_preset = nullptr, *button_apply = nullptr, *button_about = nullptr;
+//   Gtk::Stack* stack = nullptr;
 
-  Gtk::MenuButton* presets_menu_button = nullptr;
+//   Gtk::Button *add_preset = nullptr, *import_preset = nullptr, *button_apply = nullptr, *button_about = nullptr;
 
-  Gtk::Entry* preset_name = nullptr;
+//   Gtk::MenuButton* presets_menu_button = nullptr;
 
-  Gtk::ListBox* presets_listbox = nullptr;
+//   Gtk::Entry* preset_name = nullptr;
 
-  Gtk::ScrolledWindow* presets_menu_scrolled_window = nullptr;
+//   Gtk::ListBox* presets_listbox = nullptr;
 
-  Gtk::Spinner* headerbar_spinner = nullptr;
+//   Gtk::ScrolledWindow* presets_menu_scrolled_window = nullptr;
 
-  Gtk::Entry* game_executable = nullptr;
+//   Gtk::Spinner* headerbar_spinner = nullptr;
 
-  Gtk::Switch* use_dark_theme = nullptr;
+//   Gtk::Entry* game_executable = nullptr;
 
-  EnvironmentVariables* environment_variables = nullptr;
+//   Gtk::Switch* use_dark_theme = nullptr;
 
-  Cpu* cpu = nullptr;
+//   EnvironmentVariables* environment_variables = nullptr;
 
-  Amdgpu* amdgpu = nullptr;
+//   Cpu* cpu = nullptr;
 
-  Memory* memory = nullptr;
+//   Amdgpu* amdgpu = nullptr;
 
-  Disk* disk = nullptr;
+//   Memory* memory = nullptr;
 
-  Network* network = nullptr;
+//   Disk* disk = nullptr;
 
-  std::vector<sigc::connection> connections;
+//   Network* network = nullptr;
 
-  static void get_object(const Glib::RefPtr<Gtk::Builder>& builder,
-                         const std::string& name,
-                         Glib::RefPtr<Gtk::Adjustment>& object) {
-    object = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object(name));
-  }
+//   std::vector<sigc::connection> connections;
 
-  void create_user_directory();
+//   static void get_object(const Glib::RefPtr<Gtk::Builder>& builder,
+//                          const std::string& name,
+//                          Glib::RefPtr<Gtk::Adjustment>& object) {
+//     object = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object(name));
+//   }
 
-  auto get_presets_names() -> std::vector<std::string>;
+//   void create_user_directory();
 
-  void create_preset();
+//   auto get_presets_names() -> std::vector<std::string>;
 
-  void save_preset(const std::string& name, const std::filesystem::path& directory);
+//   void create_preset();
 
-  void load_preset(const std::string& name);
+//   void save_preset(const std::string& name, const std::filesystem::path& directory);
 
-  void import_preset_file();
+//   void load_preset(const std::string& name);
 
-  static auto on_listbox_sort(Gtk::ListBoxRow* row1, Gtk::ListBoxRow* row2) -> int;
+//   void import_preset_file();
 
-  void populate_listbox();
+//   static auto on_listbox_sort(Gtk::ListBoxRow* row1, Gtk::ListBoxRow* row2) -> int;
 
-  void on_presets_menu_button_clicked();
+//   void populate_listbox();
 
-  void apply_settings();
-};
+//   void on_presets_menu_button_clicked();
 
-#endif
+//   void apply_settings();
+// };

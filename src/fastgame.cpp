@@ -1,22 +1,21 @@
 #include <glib-unix.h>
-#include <glibmm/i18n.h>
+#include "application.hpp"
 #include "application_ui.hpp"
 #include "config.h"
-#include "util.hpp"
 
 auto sigterm(void* data) -> bool {
-  auto* app = static_cast<Application*>(data);
+  auto* app = G_APPLICATION(data);
 
-  for (const auto& w : app->get_windows()) {
-    w->hide();
-  }
+  app::hide_all_windows(app);
 
-  app->quit();
+  g_application_quit(app);
 
   return G_SOURCE_REMOVE;
 }
 
 auto main(int argc, char* argv[]) -> int {
+  util::debug("fastgame version: " + std::string(VERSION));
+
   try {
     // Init internationalization support before anything else
 
@@ -32,11 +31,17 @@ auto main(int argc, char* argv[]) -> int {
       return errno;
     }
 
-    auto app = Application::create();
+    auto* app = app::application_new();
 
-    g_unix_signal_add(2, (GSourceFunc)sigterm, app.get());
+    g_unix_signal_add(2, (GSourceFunc)sigterm, app);
 
-    return app->run(argc, argv);
+    auto status = g_application_run(app, argc, argv);
+
+    g_object_unref(app);
+
+    util::debug("Exitting the main function with status: " + std::to_string(status));
+
+    return status;
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
 

@@ -12,22 +12,21 @@ fastgame_sources = [
 	'fastgame.cpp',
 	'application.cpp',
 	'application_ui.cpp',
-	'environment_variables.cpp',
-	'amdgpu.cpp',
-	'memory.cpp',
-	'cpu.cpp',
-	'disk.cpp',
-	'network.cpp',
+	# 'environment_variables.cpp',
+	# 'amdgpu.cpp',
+	# 'memory.cpp',
+	# 'cpu.cpp',
+	# 'disk.cpp',
+	# 'network.cpp',
 	'util.cpp',
 	gresources
 ]
 
 fastgame_deps = [
 	dependency('glib-2.0', version: '>=2.56'),
-	dependency('glibmm-2.4', version: '>=2.56'),
-	dependency('gtk+-3.0', version: '>=3.20'),
-	dependency('gtkmm-3.0', version: '>=3.24'),
-	dependency('sigc++-2.0', version: ['>=2.10', '<3']),
+	dependency('gtk4', version: '>=4.2.1'),
+	dependency('libadwaita-1', version: '>=1.0.0'),
+	dependency('sigc++-3.0', version: '>=3.0.6'),
 	dependency('boost', version: '>=1.65', modules:['filesystem']),
 	dependency('threads'),
 	dependency('udisks2')

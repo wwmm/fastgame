@@ -1,29 +1,39 @@
-#ifndef APPLICATION_HPP
-#define APPLICATION_HPP
+#pragma once
 
-#include <giomm/settings.h>
-#include <gtkmm/application.h>
+#include <adwaita.h>
+#include <glib/gi18n.h>
+#include <sigc++/sigc++.h>
+#include <string>
+#include "config.h"
+#include "util.hpp"
 
-class Application : public Gtk::Application {
+namespace app {
+
+G_BEGIN_DECLS
+
+#define EE_TYPE_APPLICATION (application_get_type())
+
+G_DECLARE_FINAL_TYPE(Application, application, EE, APP, AdwApplication)
+
+G_END_DECLS
+
+struct Data {
  public:
-  Application();
-  Application(const Application&) = delete;
-  auto operator=(const Application&) -> Application& = delete;
-  Application(const Application&&) = delete;
-  auto operator=(const Application &&) -> Application& = delete;
-  ~Application() override;
+  std::vector<sigc::connection> connections;
 
-  static auto create() -> Glib::RefPtr<Application>;
-  Glib::RefPtr<Gio::Settings> settings;
-
- protected:
-  void on_startup() override;
-  void on_activate() override;
-
- private:
-  std::string log_tag = "application: ";
-
-  void create_actions();
+  std::vector<gulong> gconnections, gconnections_sie, gconnections_soe;
 };
 
-#endif
+struct _Application {
+  AdwApplication parent_instance;
+
+  GSettings* settings;
+
+  Data* data;
+};
+
+auto application_new() -> GApplication*;
+
+void hide_all_windows(GApplication* app);
+
+}  // namespace app

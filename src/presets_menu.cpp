@@ -6,6 +6,8 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "presets_menu: ";
 
+static std::filesystem::path user_presets_dir = g_get_user_config_dir() + "/fastgame"s;
+
 struct Data {
  public:
   ~Data() { util::debug(log_tag + "data struct destroyed"s); }
@@ -34,6 +36,18 @@ struct _PresetsMenu {
 };
 
 G_DEFINE_TYPE(PresetsMenu, presets_menu, GTK_TYPE_POPOVER)
+
+void create_user_directory() {
+  if (!std::filesystem::is_directory(user_presets_dir)) {
+    if (std::filesystem::create_directories(user_presets_dir)) {
+      util::debug(log_tag + "user presets directory created: "s + user_presets_dir.string());
+    } else {
+      util::warning(log_tag + "failed to create user presets directory: "s + user_presets_dir.string());
+    }
+  } else {
+    util::debug(log_tag + "user presets directory already exists: "s + user_presets_dir.string());
+  }
+}
 
 void create_preset(PresetsMenu* self, GtkButton* button) {
   auto name = std::string(g_utf8_make_valid(gtk_editable_get_text(GTK_EDITABLE(self->preset_name)), -1));

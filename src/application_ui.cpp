@@ -4,7 +4,7 @@
 #include <boost/process/spawn.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <filesystem>
+
 // #include "network.hpp"
 #include "util.hpp"
 
@@ -165,6 +165,14 @@ void finalize(GObject* object) {
 
   delete self->data;
 
+  // We remove this file so that the server knows it is time to exit
+
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
+  std::filesystem::remove(file_path);
+
+  util::debug(log_tag + "removed the file: "s + file_path.string());
+
   util::debug(log_tag + "finalized"s);
 
   G_OBJECT_CLASS(application_window_parent_class)->finalize(object);
@@ -297,13 +305,9 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     c.disconnect();
 //   }
 
-//   // We remove this file so that the server knows it is time to exit
+//
 
-//   auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
-
-//   std::filesystem::remove(file_path);
-
-//   util::debug(log_tag + "removed the file: " + file_path.string());
+//
 
 //   util::debug(log_tag + "destroyed");
 // }
@@ -316,18 +320,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   builder->get_widget_derived("ApplicationUi", window, app_this);
 
 //   return window;
-// }
-
-// void ApplicationUi::create_user_directory() {
-//   if (!std::filesystem::is_directory(user_presets_dir)) {
-//     if (std::filesystem::create_directories(user_presets_dir)) {
-//       util::debug(log_tag + "user presets directory created: " + user_presets_dir.string());
-//     } else {
-//       util::warning(log_tag + "failed to create user presets directory: " + user_presets_dir.string());
-//     }
-//   } else {
-//     util::debug(log_tag + "user presets directory already exists: " + user_presets_dir.string());
-//   }
 // }
 
 // auto ApplicationUi::get_presets_names() -> std::vector<std::string> {

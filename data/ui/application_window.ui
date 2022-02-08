@@ -82,6 +82,28 @@
                 </child>
 
                 <child>
+                    <object class="GtkBox">
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="spacing">3</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Executable</property>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkEntry" id="game_executable">
+                                <property name="hexpand">1</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
                     <object class="AdwViewStack" id="stack">
                         <property name="hexpand">1</property>
                         <property name="vexpand">1</property>

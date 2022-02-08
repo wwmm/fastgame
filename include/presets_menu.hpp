@@ -1,6 +1,7 @@
 #pragma once
 
 #include <adwaita.h>
+#include <filesystem>
 #include "application.hpp"
 
 namespace ui::presets_menu {

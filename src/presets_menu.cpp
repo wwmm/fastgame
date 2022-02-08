@@ -211,9 +211,9 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
 
   g_object_unref(factory);
 
-  //   for (const auto& name : self->data->application->presets_manager->get_names(preset_type)) {
-  //     gtk_string_list_append(string_list, name.c_str());
-  //   }
+  for (const auto& name : get_presets_names()) {
+    gtk_string_list_append(string_list, name.c_str());
+  }
 }
 
 void setup(PresetsMenu* self, app::Application* application) {

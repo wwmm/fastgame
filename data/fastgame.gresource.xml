@@ -5,6 +5,7 @@
         <file>ui/presets_menu.ui</file>
         <file>ui/preset_row.ui</file>
         <file>ui/shortcuts.ui</file>
+        <file>ui/factory_sections_listview.ui</file>
         <file>ui/environment_variables.glade</file>
         <file>ui/amdgpu.glade</file>
         <file>ui/memory.glade</file>

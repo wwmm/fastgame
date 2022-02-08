@@ -44,6 +44,7 @@
                                 <style>
                                     <class name="suggested-action" />
                                 </style>
+
                                 <accessibility>
                                     <property name="label" translatable="yes">Global Bypass</property>
                                 </accessibility>
@@ -82,19 +83,50 @@
                 </child>
 
                 <child>
-                    <object class="AdwViewStack" id="stack">
-                        <property name="hexpand">1</property>
-                        <property name="vexpand">1</property>
+                    <object class="GtkBox">
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkScrolledWindow">
+                                <property name="propagate-natural-width">1</property>
+                                <child>
+                                    <object class="GtkListView" id="listview">
+                                        <property name="vexpand">1</property>
+                                        <property name="model" bind-source="stack" bind-property="pages" bind-flags="sync-create" />
+                                        <property name="factory">
+                                            <object class="GtkBuilderListItemFactory">
+                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_sections_listview.ui</property>
+                                            </object>
+                                        </property>
+
+                                        <style>
+                                            <class name="navigation-sidebar" />
+                                        </style>
+
+                                        <accessibility>
+                                            <property name="label" translatable="yes">Configuration sections</property>
+                                        </accessibility>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkSeparator">
+                                <property name="orientation">vertical</property>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwViewStack" id="stack">
+                                <property name="hexpand">1</property>
+                                <property name="vexpand">1</property>
+                            </object>
+                        </child>
                     </object>
                 </child>
 
                 <child>
                     <object class="GtkBox">
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="margin-top">6</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="spacing">3</property>
                         <child>
                             <object class="GtkLabel">
                                 <property name="halign">end</property>

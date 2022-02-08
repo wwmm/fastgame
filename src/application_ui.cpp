@@ -6,7 +6,6 @@
 #include <boost/property_tree/ptree.hpp>
 
 // #include "network.hpp"
-#include "util.hpp"
 
 namespace ui::application_window {
 
@@ -31,6 +30,8 @@ struct _ApplicationWindow {
   AdwWindow parent_instance;
 
   AdwViewStack* stack;
+
+  GtkListView* listview;
 
   GtkMenuButton* presets_menu_button;
 

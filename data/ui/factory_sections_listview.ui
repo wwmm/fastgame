@@ -8,7 +8,7 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <binding name="icon_name">
-                            <lookup name="icon-name" type="GtkStackPage">
+                            <lookup name="icon-name" type="AdwViewStackPage">
                                 <lookup name="item">GtkListItem</lookup>
                             </lookup>
                         </binding>
@@ -18,7 +18,7 @@
                 <child>
                     <object class="GtkLabel">
                         <binding name="label">
-                            <lookup name="title" type="GtkStackPage">
+                            <lookup name="title" type="AdwViewStackPage">
                                 <lookup name="item">GtkListItem</lookup>
                             </lookup>
                         </binding>

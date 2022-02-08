@@ -1,11 +1,5 @@
 #include "application_ui.hpp"
-#include <boost/process.hpp>
-#include <boost/process/search_path.hpp>
-#include <boost/process/spawn.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-
-// #include "network.hpp"
+#include "environment_variables.hpp"
 
 namespace ui::application_window {
 
@@ -40,6 +34,8 @@ struct _ApplicationWindow {
   GtkSpinner* spinner;
 
   ui::presets_menu::PresetsMenu* presetsMenu;
+
+  ui::environmental_variables::EnvironmentVariables* environment_variables;
 
   GSettings* settings;
 
@@ -216,6 +212,12 @@ void application_window_init(ApplicationWindow* self) {
   self->data->icon_theme = setup_icon_theme();
 
   self->presetsMenu = ui::presets_menu::create();
+  self->environment_variables = ui::environmental_variables::create();
+
+  auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
+                                             "environment_variables", _("Environment Variables"));
+
+  adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
 
   gtk_menu_button_set_popover(self->presets_menu_button, GTK_WIDGET(self->presetsMenu));
 

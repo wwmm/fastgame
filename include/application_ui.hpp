@@ -2,7 +2,14 @@
 
 #include <adwaita.h>
 #include <filesystem>
+#include "environment_variables.hpp"
 #include "presets_menu.hpp"
+
+#include <boost/process.hpp>
+#include <boost/process/search_path.hpp>
+#include <boost/process/spawn.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 namespace ui::application_window {
 
@@ -22,7 +29,6 @@ auto create(GApplication* gapp) -> ApplicationWindow*;
 // #include "application.hpp"
 // #include "cpu.hpp"
 // #include "disk.hpp"
-// #include "environment_variables.hpp"
 // #include "memory.hpp"
 // #include "network.hpp"
 

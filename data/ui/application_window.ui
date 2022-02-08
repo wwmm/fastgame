@@ -84,7 +84,6 @@
 
                 <child>
                     <object class="GtkBox">
-                        <property name="spacing">6</property>
                         <child>
                             <object class="GtkScrolledWindow">
                                 <property name="propagate-natural-width">1</property>

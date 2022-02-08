@@ -236,26 +236,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //                              Application* application)
 //     : Gtk::ApplicationWindow(cobject),
 //       app(application),
-//       settings(app->settings),
-//       user_presets_dir(Glib::get_user_config_dir() + "/fastgame") {
-//   Gtk::IconTheme::get_default()->add_resource_path("/com/github/wwmm/fastgame/icons");
-
-//   // loading glade widgets
-
-//   builder->get_widget("stack", stack);
-//   builder->get_widget("add_preset", add_preset);
-//   builder->get_widget("import_preset", import_preset);
-//   builder->get_widget("preset_name", preset_name);
-//   builder->get_widget("presets_listbox", presets_listbox);
-//   builder->get_widget("presets_menu_button", presets_menu_button);
-//   builder->get_widget("presets_menu_scrolled_window", presets_menu_scrolled_window);
-//   builder->get_widget("button_apply", button_apply);
-//   builder->get_widget("headerbar_spinner", headerbar_spinner);
-//   builder->get_widget("game_executable", game_executable);
-//   builder->get_widget("button_about", button_about);
-//   builder->get_widget("use_dark_theme", use_dark_theme);
-
-//   create_user_directory();
 
 //   environment_variables = EnvironmentVariables::add_to_stack(stack);
 //   cpu = Cpu::add_to_stack(stack);
@@ -268,68 +248,14 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   memory = Memory::add_to_stack(stack);
 //   network = Network::add_to_stack(stack);
 
-//   // binding glade widgets to gsettings keys
-
-//   auto flag = Gio::SettingsBindFlags::SETTINGS_BIND_DEFAULT;
-
-//   settings->bind("use-dark-theme", Gtk::Settings::get_default().get(), "gtk_application_prefer_dark_theme", flag);
-//   settings->bind("use-dark-theme", use_dark_theme, "active", flag);
-
 //   // signal connection
 
 //   add_preset->signal_clicked().connect([=]() { create_preset(); });
 
 //   import_preset->signal_clicked().connect([=]() { import_preset_file(); });
 
-//   presets_listbox->set_sort_func(sigc::ptr_fun(&ApplicationUi::on_listbox_sort));
-
-//   presets_menu_button->signal_clicked().connect(sigc::mem_fun(*this,
-//   &ApplicationUi::on_presets_menu_button_clicked));
-
 //   button_apply->signal_clicked().connect([=]() { apply_settings(); });
 
-//   button_about->signal_clicked().connect([=]() { app->activate_action("about"); });
-
-//   // restore the window size
-
-//   auto window_width = settings->get_int("window-width");
-//   auto window_height = settings->get_int("window-height");
-
-//   if (window_width > 0 && window_height > 0) {
-//     set_default_size(window_width, window_height);
-//   }
-// }
-
-// ApplicationUi::~ApplicationUi() {
-//   for (auto& c : connections) {
-//     c.disconnect();
-//   }
-
-//
-
-//
-
-//   util::debug(log_tag + "destroyed");
-// }
-
-// auto ApplicationUi::create(Application* app_this) -> ApplicationUi* {
-//   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/application.glade");
-
-//   ApplicationUi* window = nullptr;
-
-//   builder->get_widget_derived("ApplicationUi", window, app_this);
-
-//   return window;
-// }
-
-// auto ApplicationUi::get_presets_names() -> std::vector<std::string> {
-//   std::vector<std::string> names;
-
-//   for (const auto& entry : std::filesystem::directory_iterator(user_presets_dir)) {
-//     names.emplace_back(entry.path().stem().string());
-//   }
-
-//   return names;
 // }
 
 // void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
@@ -578,66 +504,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   }
 // }
 
-// void ApplicationUi::import_preset_file() {
-//   auto* main_window = dynamic_cast<Gtk::Window*>(this->get_toplevel());
-
-//   auto dialog = Gtk::FileChooserNative::create(
-//       _("Import Presets"), *main_window, Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN, _("Open"), _("Cancel"));
-
-//   auto dialog_filter = Gtk::FileFilter::create();
-
-//   dialog_filter->set_name(_("Presets"));
-//   dialog_filter->add_pattern("*.json");
-
-//   dialog->add_filter(dialog_filter);
-
-//   dialog->signal_response().connect([=](auto response_id) {
-//     switch (response_id) {
-//       case Gtk::ResponseType::RESPONSE_ACCEPT: {
-//         for (const auto& file_name : dialog->get_filenames()) {
-//           auto file_path = std::filesystem::path{file_name};
-
-//           if (std::filesystem::is_regular_file(file_path)) {
-//             auto output_path = user_presets_dir / std::filesystem::path{file_path.filename()};
-
-//             std::filesystem::copy_file(file_path, output_path, std::filesystem::copy_options::overwrite_existing);
-
-//             util::debug(log_tag + "imported preset to: " + output_path.string());
-//           }
-//         }
-
-//         populate_listbox();
-
-//         break;
-//       }
-//       default:
-//         break;
-//     }
-//   });
-
-//   dialog->set_modal(true);
-//   dialog->set_select_multiple(true);
-//   dialog->show();
-// }
-
-// auto ApplicationUi::on_listbox_sort(Gtk::ListBoxRow* row1, Gtk::ListBoxRow* row2) -> int {
-//   auto name1 = row1->get_name();
-//   auto name2 = row2->get_name();
-
-//   std::vector<std::string> names = {name1, name2};
-
-//   std::sort(names.begin(), names.end());
-
-//   if (name1 == names[0]) {
-//     return -1;
-//   }
-//   if (name2 == names[0]) {
-//     return 1;
-//   }
-
-//   return 0;
-// }
-
 // void ApplicationUi::populate_listbox() {
 //   auto children = presets_listbox->get_children();
 
@@ -683,17 +549,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     presets_listbox->add(*row);
 //     presets_listbox->show_all();
 //   }
-// }
-
-// void ApplicationUi::on_presets_menu_button_clicked() {
-//   auto* parent = dynamic_cast<Gtk::ApplicationWindow*>(this->get_toplevel());
-//   const float scaling_factor = 0.7F;
-
-//   int height = static_cast<int>(scaling_factor * static_cast<float>(parent->get_allocated_height()));
-
-//   presets_menu_scrolled_window->set_max_content_height(height);
-
-//   populate_listbox();
 // }
 
 // void ApplicationUi::apply_settings() {

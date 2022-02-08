@@ -49,6 +49,16 @@ void create_user_directory() {
   }
 }
 
+auto get_presets_names() -> std::vector<std::string> {
+  std::vector<std::string> names;
+
+  for (const auto& entry : std::filesystem::directory_iterator(user_presets_dir)) {
+    names.emplace_back(entry.path().stem().string());
+  }
+
+  return names;
+}
+
 void create_preset(PresetsMenu* self, GtkButton* button) {
   auto name = std::string(g_utf8_make_valid(gtk_editable_get_text(GTK_EDITABLE(self->preset_name)), -1));
 
@@ -92,7 +102,16 @@ void import_preset(PresetsMenu* self) {
                        auto* file = gtk_file_chooser_get_file(chooser);
                        auto* path = g_file_get_path(file);
 
-                       //  self->data->application->presets_manager->import(PresetType::input, path);
+                       auto file_path = std::filesystem::path{path};
+
+                       if (std::filesystem::is_regular_file(file_path)) {
+                         auto output_path = user_presets_dir / std::filesystem::path{file_path.filename()};
+
+                         std::filesystem::copy_file(file_path, output_path,
+                                                    std::filesystem::copy_options::overwrite_existing);
+
+                         util::debug(log_tag + "imported preset to: "s + output_path.string());
+                       }
 
                        g_free(path);
 
@@ -311,6 +330,8 @@ void presets_menu_init(PresetsMenu* self) {
   self->data = new Data();
 
   self->settings = g_settings_new("com.github.wwmm.easyeffects");
+
+  create_user_directory();
 }
 
 auto create() -> PresetsMenu* {

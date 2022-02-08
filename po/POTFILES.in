@@ -1,7 +1,6 @@
 data/com.github.wwmm.fastgame.desktop.in
 data/schemas/com.github.wwmm.fastgame.gschema.xml
-data/ui/about.glade.in
-data/ui/application.glade
+data/ui/application_window.ui
 data/ui/preset_row.glade
 data/ui/environment_variables.glade
 data/ui/amdgpu.glade
@@ -9,4 +8,5 @@ data/ui/memory.glade
 data/ui/cpu.glade
 data/ui/disk.glade
 data/ui/network.glade
+src/presets_menu.cpp
 

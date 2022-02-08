@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "application_ui.hpp"
 
 namespace app {
 
@@ -27,7 +28,7 @@ void application_class_init(ApplicationClass* klass) {
   application_class->startup = [](GApplication* gapp) {
     G_APPLICATION_CLASS(application_parent_class)->startup(gapp);
 
-    auto* self = EE_APP(gapp);
+    auto* self = FG_APP(gapp);
 
     self->data = new Data();
 
@@ -38,16 +39,16 @@ void application_class_init(ApplicationClass* klass) {
     if (gtk_application_get_active_window(GTK_APPLICATION(gapp)) == nullptr) {
       G_APPLICATION_CLASS(application_parent_class)->activate(gapp);
 
-      // auto* window = ui::application_window::create(gapp);
+      auto* window = ui::application_window::create(gapp);
 
-      // gtk_window_present(GTK_WINDOW(window));
+      gtk_window_present(GTK_WINDOW(window));
     }
   };
 
   application_class->shutdown = [](GApplication* gapp) {
     G_APPLICATION_CLASS(application_parent_class)->shutdown(gapp);
 
-    auto* self = EE_APP(gapp);
+    auto* self = FG_APP(gapp);
 
     for (auto& c : self->data->connections) {
       c.disconnect();
@@ -90,7 +91,7 @@ void application_init(Application* self) {
 
   entries[2] = {"fullscreen",
                 [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
-                  auto* self = EE_APP(gapp);
+                  auto* self = FG_APP(gapp);
 
                   auto state = g_settings_get_boolean(self->settings, "window-fullscreen") != 0;
 
@@ -108,7 +109,7 @@ void application_init(Application* self) {
 
   entries[3] = {"shortcuts",
                 [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
-                  auto* builder = gtk_builder_new_from_resource("/com/github/wwmm/easyeffects/ui/shortcuts.ui");
+                  auto* builder = gtk_builder_new_from_resource("/com/github/wwmm/fastgame/ui/shortcuts.ui");
 
                   auto* window = GTK_SHORTCUTS_WINDOW(gtk_builder_get_object(builder, "window"));
 
@@ -140,93 +141,10 @@ void application_init(Application* self) {
 auto application_new() -> GApplication* {
   g_set_application_name("FastGame");
 
-  auto* app = g_object_new(EE_TYPE_APPLICATION, "application-id", "com.github.wwmm.fastgame", "flags",
+  auto* app = g_object_new(FG_TYPE_APPLICATION, "application-id", "com.github.wwmm.fastgame", "flags",
                            G_APPLICATION_FLAGS_NONE, nullptr);
 
   return G_APPLICATION(app);
 }
 
 }  // namespace app
-
-// Application::Application() : Gtk::Application("com.github.wwmm.fastgame", Gio::APPLICATION_FLAGS_NONE) {
-//   Glib::set_application_name("FastGame");
-// }
-
-// auto Application::create() -> Glib::RefPtr<Application> {
-//   return Glib::RefPtr<Application>(new Application());
-// }
-
-// void Application::on_startup() {
-//   Gtk::Application::on_startup();
-
-//   util::debug(log_tag + "fastgame version: " + std::string(VERSION));
-
-//   settings = Gio::Settings::create("com.github.wwmm.fastgame");
-
-//   create_actions();
-// }
-
-// void Application::on_activate() {
-//   if (get_active_window() == nullptr) {
-//     /*
-//       Note to myself: do not wrap this pointer in a smart pointer. Causes memory leaks when closing the window
-//       because GTK reference counting system will see that there is still someone with an object reference and it
-//       won't free the widgets.
-//     */
-//     auto* window = ApplicationUi::create(this);
-
-//     add_window(*window);
-
-//     window->signal_hide().connect([&, window]() {
-//       int width = 0;
-//       int height = 0;
-
-//       window->get_size(width, height);
-
-//       settings->set_int("window-width", width);
-//       settings->set_int("window-height", height);
-
-//       delete window;
-//     });
-
-//     window->show_all();
-//   }
-// }
-
-// void Application::create_actions() {
-//   add_action("about", [&]() {
-//     auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/about.glade");
-
-//     auto* dialog = (Gtk::Dialog*)builder->get_object("about_dialog").get();
-
-//     dialog->signal_response().connect([=](auto response_id) {
-//       switch (response_id) {
-//         case Gtk::RESPONSE_CLOSE:
-//         case Gtk::RESPONSE_CANCEL:
-//         case Gtk::RESPONSE_DELETE_EVENT: {
-//           dialog->hide();
-//           util::debug(log_tag + "hiding the about dialog window");
-//           break;
-//         }
-//         default:
-//           util::debug(log_tag + "unexpected about dialog response!");
-//           break;
-//       }
-//     });
-
-//     dialog->set_transient_for(*get_active_window());
-
-//     dialog->show();
-
-//     // Bring it to the front, in case it was already shown:
-//     dialog->present();
-//   });
-
-//   add_action("quit", [&] {
-//     auto* window = get_active_window();
-
-//     window->hide();
-//   });
-
-//   set_accel_for_action("app.quit", "<Ctrl>Q");
-// }

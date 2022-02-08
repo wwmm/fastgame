@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/com/github/wwmm/fastgame">
-        <file>about.glade</file>
-        <file>ui/application.glade</file>
+        <file>ui/application_window.ui</file>
+        <file>ui/presets_menu.ui</file>
         <file>ui/environment_variables.glade</file>
         <file>ui/amdgpu.glade</file>
         <file>ui/memory.glade</file>

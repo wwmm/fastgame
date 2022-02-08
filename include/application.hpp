@@ -11,9 +11,9 @@ namespace app {
 
 G_BEGIN_DECLS
 
-#define EE_TYPE_APPLICATION (application_get_type())
+#define FG_TYPE_APPLICATION (application_get_type())
 
-G_DECLARE_FINAL_TYPE(Application, application, EE, APP, AdwApplication)
+G_DECLARE_FINAL_TYPE(Application, application, FG, APP, AdwApplication)
 
 G_END_DECLS
 

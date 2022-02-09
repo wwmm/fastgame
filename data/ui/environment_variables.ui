@@ -28,7 +28,7 @@
 
                                         <property name="factory">
                                             <object class="GtkBuilderListItemFactory">
-                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_env_table_column.ui</property>
+                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_column_name.ui</property>
                                             </object>
                                         </property>
                                     </object>
@@ -41,7 +41,7 @@
 
                                         <property name="factory">
                                             <object class="GtkBuilderListItemFactory">
-                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_env_table_column.ui</property>
+                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_column_value.ui</property>
                                             </object>
                                         </property>
                                     </object>

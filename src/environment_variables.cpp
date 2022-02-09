@@ -97,7 +97,7 @@ void environment_variables_init(EnvironmentVariables* self) {
 
   g_object_unref(selection);
 
-  auto* holder = ui::holders::create("nome", "valor");
+  auto* holder = ui::holders::create("v", "1");
 
   g_list_store_append(self->model, holder);
 }

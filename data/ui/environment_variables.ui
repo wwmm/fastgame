@@ -26,8 +26,6 @@
                                     <object class="GtkColumnViewColumn" id="name_column">
                                         <property name="title" translatable="yes">Name</property>
 
-                                        <!-- <property name="header-menu">header_menu</property> -->
-
                                         <property name="factory">
                                             <object class="GtkBuilderListItemFactory">
                                                 <property name="resource">/com/github/wwmm/fastgame/ui/factory_env_table_column.ui</property>
@@ -40,8 +38,6 @@
                                     <object class="GtkColumnViewColumn" id="value_column">
                                         <property name="title" translatable="yes">Value</property>
                                         <property name="expand">1</property>
-
-                                        <!-- <property name="header-menu">header_menu</property> -->
 
                                         <property name="factory">
                                             <object class="GtkBuilderListItemFactory">

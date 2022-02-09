@@ -20,13 +20,7 @@ struct Data {
 struct _EnvironmentVariables {
   GtkPopover parent_instance;
 
-  GtkScrolledWindow* scrolled_window;
-
-  GtkListView* listview;
-
-  GtkText* preset_name;
-
-  GtkStringList* string_list;
+  GListStore* model;
 
   GSettings* settings;
 
@@ -80,10 +74,6 @@ void environment_variables_class_init(EnvironmentVariablesClass* klass) {
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/environment_variables.ui");
 
   // gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, string_list);
-
-  // gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, scrolled_window);
-  // gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, listview);
-  // gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, preset_name);
 
   // gtk_widget_class_bind_template_callback(widget_class, create_preset);
   // gtk_widget_class_bind_template_callback(widget_class, import_preset);

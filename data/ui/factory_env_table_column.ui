@@ -2,12 +2,12 @@
     <template class="GtkListItem">
         <property name="child">
             <object class="GtkLabel">
-                <binding name="label">
-                    <property name="xalign">0</property>
+                <property name="xalign">0</property>
 
-                    <!-- <lookup name="title" type="AdwViewStackPage">
+                <binding name="label">
+                    <lookup name="name" type="EnvironmentVariableHolder">
                         <lookup name="item">GtkListItem</lookup>
-                    </lookup> -->
+                    </lookup>
                 </binding>
             </object>
         </property>

@@ -1,4 +1,5 @@
 #include "environment_variables.hpp"
+#include "environment_variable_holder.hpp"
 
 namespace ui::environmental_variables {
 
@@ -19,6 +20,8 @@ struct Data {
 
 struct _EnvironmentVariables {
   GtkPopover parent_instance;
+
+  GtkColumnView* columnview;
 
   GListStore* model;
 
@@ -73,7 +76,7 @@ void environment_variables_class_init(EnvironmentVariablesClass* klass) {
 
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/environment_variables.ui");
 
-  // gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, string_list);
+  gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, columnview);
 
   // gtk_widget_class_bind_template_callback(widget_class, create_preset);
   // gtk_widget_class_bind_template_callback(widget_class, import_preset);
@@ -85,6 +88,18 @@ void environment_variables_init(EnvironmentVariables* self) {
   self->data = new Data();
 
   self->settings = g_settings_new("com.github.wwmm.fastgame");
+
+  self->model = g_list_store_new(ui::holders::environment_variable_holder_get_type());
+
+  auto* selection = gtk_single_selection_new(G_LIST_MODEL(self->model));
+
+  gtk_column_view_set_model(self->columnview, GTK_SELECTION_MODEL(selection));
+
+  g_object_unref(selection);
+
+  auto* holder = ui::holders::create("nome", "valor");
+
+  g_list_store_append(self->model, holder);
 }
 
 auto create() -> EnvironmentVariables* {

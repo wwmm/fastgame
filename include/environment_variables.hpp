@@ -3,6 +3,7 @@
 #include <adwaita.h>
 #include <filesystem>
 #include "application.hpp"
+#include "environment_variable_holder.hpp"
 
 namespace ui::environmental_variables {
 

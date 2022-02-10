@@ -9,6 +9,8 @@
                         <lookup name="item">GtkListItem</lookup>
                     </lookup>
                 </binding>
+
+                <signal name="notify::text" handler="on_value_changed" />
             </object>
         </property>
     </template>

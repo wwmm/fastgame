@@ -5,6 +5,7 @@
         <file>ui/environment_variables.ui</file>
         <file>ui/factory_column_name.ui</file>
         <file>ui/factory_column_value.ui</file>
+        <file>ui/factory_column_delete.ui</file>
         <file>ui/factory_sections_listview.ui</file>
         <file>ui/presets_menu.ui</file>
         <file>ui/preset_row.ui</file>

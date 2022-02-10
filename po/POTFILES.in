@@ -2,6 +2,9 @@ data/com.github.wwmm.fastgame.desktop.in
 data/schemas/com.github.wwmm.fastgame.gschema.xml
 data/ui/application_window.ui
 data/ui/environment_variables.ui
+data/ui/factory_column_name.ui
+data/ui/factory_column_value.ui
+data/ui/factory_column_delete.ui
 data/ui/presets_menu.ui
 data/ui/shortcuts.ui
 data/ui/preset_row.ui

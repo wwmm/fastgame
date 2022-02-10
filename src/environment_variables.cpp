@@ -1,11 +1,12 @@
 #include "environment_variables.hpp"
-#include "environment_variable_holder.hpp"
 
 namespace ui::environmental_variables {
 
 using namespace std::string_literals;
 
 auto constexpr log_tag = "environmental_variables: ";
+
+GListStore* model;
 
 struct Data {
  public:
@@ -23,14 +24,60 @@ struct _EnvironmentVariables {
 
   GtkColumnView* columnview;
 
-  GListStore* model;
-
   GSettings* settings;
 
   Data* data;
 };
 
 G_DEFINE_TYPE(EnvironmentVariables, environment_variables, GTK_TYPE_BOX)
+
+void on_add_line(EnvironmentVariables* self, GtkButton* btn) {
+  auto* holder = ui::holders::create("", "");
+
+  g_list_store_append(model, holder);
+
+  g_object_unref(holder);
+}
+
+void on_name_changed(GtkEditableLabel* label, GParamSpec* pspec, GtkListItem* item) {
+  auto* text = gtk_editable_get_text(GTK_EDITABLE(label));
+
+  auto child_item = gtk_list_item_get_item(item);
+
+  auto* holder = static_cast<ui::holders::EnvironmentVariableHolder*>(child_item);
+
+  holder->data->name = text;
+}
+
+void on_value_changed(GtkEditableLabel* label, GParamSpec* pspec, GtkListItem* item) {
+  auto* text = gtk_editable_get_text(GTK_EDITABLE(label));
+
+  auto child_item = gtk_list_item_get_item(item);
+
+  auto* holder = static_cast<ui::holders::EnvironmentVariableHolder*>(child_item);
+
+  holder->data->value = text;
+}
+
+void on_remove_line(GtkListItem* self, GtkButton* btn) {
+  auto child_item = gtk_list_item_get_item(self);
+
+  auto* holder = static_cast<ui::holders::EnvironmentVariableHolder*>(child_item);
+
+  for (guint n = 0; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto* h = static_cast<ui::holders::EnvironmentVariableHolder*>(g_list_model_get_item(G_LIST_MODEL(model), n));
+
+    if (h != nullptr) {
+      if (h->data->name == holder->data->name) {
+        g_list_store_remove(model, n);
+
+        break;
+      }
+
+      g_object_unref(h);
+    }
+  }
+}
 
 void setup(EnvironmentVariables* self, app::Application* application) {
   self->data->application = application;
@@ -78,8 +125,10 @@ void environment_variables_class_init(EnvironmentVariablesClass* klass) {
 
   gtk_widget_class_bind_template_child(widget_class, EnvironmentVariables, columnview);
 
-  // gtk_widget_class_bind_template_callback(widget_class, create_preset);
-  // gtk_widget_class_bind_template_callback(widget_class, import_preset);
+  gtk_widget_class_bind_template_callback(widget_class, on_add_line);
+  gtk_widget_class_bind_template_callback(widget_class, on_remove_line);
+  gtk_widget_class_bind_template_callback(widget_class, on_name_changed);
+  gtk_widget_class_bind_template_callback(widget_class, on_value_changed);
 }
 
 void environment_variables_init(EnvironmentVariables* self) {
@@ -89,17 +138,13 @@ void environment_variables_init(EnvironmentVariables* self) {
 
   self->settings = g_settings_new("com.github.wwmm.fastgame");
 
-  self->model = g_list_store_new(ui::holders::environment_variable_holder_get_type());
+  model = g_list_store_new(ui::holders::environment_variable_holder_get_type());
 
-  auto* selection = gtk_single_selection_new(G_LIST_MODEL(self->model));
+  auto* selection = gtk_no_selection_new(G_LIST_MODEL(model));
 
   gtk_column_view_set_model(self->columnview, GTK_SELECTION_MODEL(selection));
 
   g_object_unref(selection);
-
-  auto* holder = ui::holders::create("v", "1");
-
-  g_list_store_append(self->model, holder);
 }
 
 auto create() -> EnvironmentVariables* {
@@ -107,20 +152,6 @@ auto create() -> EnvironmentVariables* {
 }
 
 }  // namespace ui::environmental_variables
-
-// EnvironmentVariables::EnvironmentVariables(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
-//     : Gtk::Grid(cobject), settings(Gio::Settings::create("com.github.wwmm.fastgame")) {
-//   // loading glade widgets
-
-//   builder->get_widget("treeview", treeview);
-//   builder->get_widget("button_add", button_add);
-//   builder->get_widget("button_remove", button_remove);
-
-//   liststore = dynamic_cast<Gtk::ListStore*>(builder->get_object("liststore").get());
-//   cell_name = dynamic_cast<Gtk::CellRendererText*>(builder->get_object("cell_name").get());
-//   cell_value = dynamic_cast<Gtk::CellRendererText*>(builder->get_object("cell_value").get());
-
-//   // signals connection
 
 //   button_add->signal_clicked().connect([=]() { liststore->append(); });
 
@@ -143,22 +174,6 @@ auto create() -> EnvironmentVariables* {
 
 //     iter->set_value(1, new_text);
 //   });
-// }
-
-// EnvironmentVariables::~EnvironmentVariables() {
-//   util::debug(log_tag + "destroyed");
-// }
-
-// auto EnvironmentVariables::add_to_stack(Gtk::Stack* stack) -> EnvironmentVariables* {
-//   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/environment_variables.glade");
-
-//   EnvironmentVariables* ui = nullptr;
-
-//   builder->get_widget_derived("widgets_grid", ui);
-
-//   stack->add(*ui, "environment_variables", _("Environment Variables"));
-
-//   return ui;
 // }
 
 // auto EnvironmentVariables::get_variables() -> std::vector<std::string> {

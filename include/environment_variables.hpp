@@ -17,6 +17,8 @@ G_END_DECLS
 
 auto create() -> EnvironmentVariables*;
 
-void setup(EnvironmentVariables* self, app::Application* application);
+void add_list(const std::vector<std::string>& list);
+
+auto get_list() -> std::vector<std::string>;
 
 }  // namespace ui::environmental_variables

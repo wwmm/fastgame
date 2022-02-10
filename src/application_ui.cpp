@@ -525,50 +525,10 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::populate_listbox() {
-//   auto children = presets_listbox->get_children();
-
-//   for (const auto& c : children) {
-//     presets_listbox->remove(*c);
-//   }
-
-//   auto names = get_presets_names();
-
-//   for (const auto& name : names) {
-//     auto b = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/preset_row.glade");
-
-//     Gtk::ListBoxRow* row = nullptr;
-//     Gtk::Button* apply_btn = nullptr;
-//     Gtk::Button* save_btn = nullptr;
-//     Gtk::Button* remove_btn = nullptr;
-//     Gtk::Label* label = nullptr;
-
-//     b->get_widget("preset_row", row);
-//     b->get_widget("apply", apply_btn);
-//     b->get_widget("save", save_btn);
-//     b->get_widget("remove", remove_btn);
-//     b->get_widget("name", label);
-
-//     row->set_name(name);
-
-//     label->set_text(name);
-
 //     connections.emplace_back(apply_btn->signal_clicked().connect([=]() { load_preset(name); }));
 
 //     connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name, user_presets_dir); }));
 
-//     connections.emplace_back(remove_btn->signal_clicked().connect([=]() {
-//       auto file_path = user_presets_dir / std::filesystem::path{name + ".json"};
-
-//       std::filesystem::remove(file_path);
-
-//       util::debug(log_tag + "removed preset file: " + file_path.string());
-
-//       populate_listbox();
-//     }));
-
-//     presets_listbox->add(*row);
-//     presets_listbox->show_all();
-//   }
 // }
 
 // void ApplicationUi::apply_settings() {

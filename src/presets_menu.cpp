@@ -13,10 +13,6 @@ struct Data {
   ~Data() { util::debug(log_tag + "data struct destroyed"s); }
 
   app::Application* application;
-
-  std::vector<sigc::connection> connections;
-
-  std::vector<gulong> gconnections;
 };
 
 struct _PresetsMenu {
@@ -29,8 +25,6 @@ struct _PresetsMenu {
   GtkText* preset_name;
 
   GtkStringList* string_list;
-
-  GSettings* settings;
 
   Data* data;
 };
@@ -154,8 +148,7 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
                                             string_object != nullptr) {
                                           auto* name = gtk_string_object_get_string(string_object);
 
-                                          //   self->data->application->presets_manager->load_preset_file(PresetType::output,
-                                          //   preset_name);
+                                          load_preset.emit(name);
                                         }
                                       }),
                                       self);
@@ -166,8 +159,7 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
                                             string_object != nullptr) {
                                           auto* name = gtk_string_object_get_string(string_object);
 
-                                          //   self->data->application->presets_manager->save_preset_file(PresetType::output,
-                                          //   preset_name);
+                                          save_preset.emit(name);
                                         }
                                       }),
                                       self);
@@ -178,8 +170,11 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
                                             string_object != nullptr) {
                                           auto* name = gtk_string_object_get_string(string_object);
 
-                                          //   self->data->application->presets_manager->remove(PresetType::output,
-                                          //   preset_name);
+                                          auto file_path = user_presets_dir / std::filesystem::path{name + ".json"s};
+
+                                          std::filesystem::remove(file_path);
+
+                                          util::debug(log_tag + "removed preset file: "s + file_path.string());
                                         }
                                       }),
                                       self);
@@ -273,21 +268,6 @@ void show(GtkWidget* widget) {
 }
 
 void dispose(GObject* object) {
-  auto* self = FG_PRESETS_MENU(object);
-
-  for (auto& c : self->data->connections) {
-    c.disconnect();
-  }
-
-  for (auto& handler_id : self->data->gconnections) {
-    g_signal_handler_disconnect(self->settings, handler_id);
-  }
-
-  self->data->connections.clear();
-  self->data->gconnections.clear();
-
-  g_object_unref(self->settings);
-
   util::debug(log_tag + "disposed"s);
 
   G_OBJECT_CLASS(presets_menu_parent_class)->dispose(object);
@@ -328,8 +308,6 @@ void presets_menu_init(PresetsMenu* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
   self->data = new Data();
-
-  self->settings = g_settings_new("com.github.wwmm.fastgame");
 
   create_user_directory();
 }

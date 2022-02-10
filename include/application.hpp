@@ -3,6 +3,7 @@
 #include <adwaita.h>
 #include <glib/gi18n.h>
 #include <sigc++/sigc++.h>
+#include <filesystem>
 #include <string>
 #include "config.h"
 #include "util.hpp"

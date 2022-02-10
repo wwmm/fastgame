@@ -29,8 +29,6 @@ struct _ApplicationWindow {
 
   GtkMenuButton* presets_menu_button;
 
-  GtkButton* apply_settings;
-
   GtkSpinner* spinner;
 
   ui::presets_menu::PresetsMenu* presetsMenu;
@@ -43,6 +41,25 @@ struct _ApplicationWindow {
 };
 
 G_DEFINE_TYPE(ApplicationWindow, application_window, ADW_TYPE_APPLICATION_WINDOW)
+
+void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
+  gtk_spinner_start(self->spinner);
+
+  // First we remove the file in case a server instance is already running. This will make it exit.
+
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
+  std::filesystem::remove(file_path);
+
+  util::debug(log_tag + "removed the file: "s + file_path.string());
+
+  /*
+   After a timout of 3 seconds we launch the new server. In case a server instance is already running this should
+   give it enough time to exit.
+  */
+
+  g_timeout_add_seconds(3, GSourceFunc(+[](ApplicationWindow* self) { gtk_spinner_stop(self->spinner); }), self);
+}
 
 void init_theme_color(ApplicationWindow* self) {
   if (g_settings_get_boolean(self->settings, "use-dark-theme") == 0) {
@@ -191,8 +208,9 @@ void application_window_class_init(ApplicationWindowClass* klass) {
 
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, stack);
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, presets_menu_button);
-  gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, apply_settings);
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, spinner);
+
+  gtk_widget_class_bind_template_callback(widget_class, on_apply_settings);
 }
 
 void application_window_init(ApplicationWindow* self) {
@@ -240,7 +258,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     : Gtk::ApplicationWindow(cobject),
 //       app(application),
 
-//   environment_variables = EnvironmentVariables::add_to_stack(stack);
 //   cpu = Cpu::add_to_stack(stack);
 //   disk = Disk::add_to_stack(stack);
 
@@ -555,20 +572,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::apply_settings() {
-//   headerbar_spinner->start();
-
-//   // First we remove the file in case a server instance is already running. This will make it exit.
-
-//   auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
-
-//   std::filesystem::remove(file_path);
-
-//   util::debug(log_tag + "removed the file: " + file_path.string());
-
-//   /*
-//      After a timout of 3 seconds we launch the new server. In case a server instance is already running this should
-//      give it enough time to exit.
-//   */
 
 //   Glib::signal_timeout().connect_seconds_once(
 //       [=]() {

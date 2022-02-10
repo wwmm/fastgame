@@ -41,6 +41,9 @@
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Apply</property>
+
+                                <signal name="clicked" handler="on_apply_settings" object="ApplicationWindow" />
+
                                 <style>
                                     <class name="suggested-action" />
                                 </style>

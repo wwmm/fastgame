@@ -29,6 +29,8 @@ struct _PresetsMenu {
 
   GtkStringList* string_list;
 
+  GFileMonitor* dir_monitor = nullptr;
+
   Data* data;
 };
 
@@ -224,44 +226,6 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
 
 void setup(PresetsMenu* self, app::Application* application) {
   self->data->application = application;
-
-  setup_listview(self, self->listview, self->string_list);
-
-  //   self->data->connections.push_back(
-  //       self->data->application->presets_manager->user_output_preset_created.connect([=](const std::string&
-  //       preset_name) {
-  //         if (preset_name.empty()) {
-  //           util::warning(log_tag + "can't retrieve information about the preset file"s);
-
-  //           return;
-  //         }
-
-  //         for (guint n = 0; n < g_list_model_get_n_items(G_LIST_MODEL(self->output_string_list)); n++) {
-  //           if (preset_name == gtk_string_list_get_string(self->output_string_list, n)) {
-  //             return;
-  //           }
-  //         }
-
-  //         gtk_string_list_append(self->output_string_list, preset_name.c_str());
-  //       }));
-
-  //   self->data->connections.push_back(
-  //       self->data->application->presets_manager->user_output_preset_removed.connect([=](const std::string&
-  //       preset_name) {
-  //         if (preset_name.empty()) {
-  //           util::warning(log_tag + "can't retrieve information about the preset file"s);
-
-  //           return;
-  //         }
-
-  //         for (guint n = 0; n < g_list_model_get_n_items(G_LIST_MODEL(self->output_string_list)); n++) {
-  //           if (preset_name == gtk_string_list_get_string(self->output_string_list, n)) {
-  //             gtk_string_list_remove(self->output_string_list, n);
-
-  //             return;
-  //           }
-  //         }
-  //       }));
 }
 
 void show(GtkWidget* widget) {
@@ -286,6 +250,10 @@ void dispose(GObject* object) {
 
 void finalize(GObject* object) {
   auto* self = FG_PRESETS_MENU(object);
+
+  g_file_monitor_cancel(self->dir_monitor);
+
+  g_object_unref(self->dir_monitor);
 
   delete self->data;
 
@@ -320,7 +288,63 @@ void presets_menu_init(PresetsMenu* self) {
 
   self->data = new Data();
 
+  setup_listview(self, self->listview, self->string_list);
+
   create_user_directory();
+
+  auto* gfile = g_file_new_for_path(user_presets_dir.c_str());
+
+  self->dir_monitor = g_file_monitor_directory(gfile, G_FILE_MONITOR_NONE, nullptr, nullptr);
+
+  g_object_unref(gfile);
+
+  g_signal_connect(self->dir_monitor, "changed",
+                   G_CALLBACK(+[](GFileMonitor* monitor, GFile* file, GFile* other_file, GFileMonitorEvent event_type,
+                                  PresetsMenu* self) {
+                     switch (event_type) {
+                       case G_FILE_MONITOR_EVENT_CREATED: {
+                         const auto preset_name = util::remove_filename_extension(g_file_get_basename(file));
+
+                         if (preset_name.empty()) {
+                           util::warning(log_tag + "can't retrieve information about the preset file"s);
+
+                           return;
+                         }
+
+                         for (guint n = 0; n < g_list_model_get_n_items(G_LIST_MODEL(self->string_list)); n++) {
+                           if (preset_name == gtk_string_list_get_string(self->string_list, n)) {
+                             return;
+                           }
+                         }
+
+                         gtk_string_list_append(self->string_list, preset_name.c_str());
+
+                         break;
+                       }
+                       case G_FILE_MONITOR_EVENT_DELETED: {
+                         const auto preset_name = util::remove_filename_extension(g_file_get_basename(file));
+
+                         if (preset_name.empty()) {
+                           util::warning(log_tag + "can't retrieve information about the preset file"s);
+
+                           return;
+                         }
+
+                         for (guint n = 0; n < g_list_model_get_n_items(G_LIST_MODEL(self->string_list)); n++) {
+                           if (preset_name == gtk_string_list_get_string(self->string_list, n)) {
+                             gtk_string_list_remove(self->string_list, n);
+
+                             return;
+                           }
+                         }
+
+                         break;
+                       }
+                       default:
+                         break;
+                     }
+                   }),
+                   self);
 }
 
 auto create() -> PresetsMenu* {

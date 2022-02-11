@@ -1,9 +1,4 @@
 #include "util.hpp"
-#include <glib.h>
-#include <algorithm>
-#include <filesystem>
-#include <fstream>
-#include <thread>
 
 namespace util {
 
@@ -164,6 +159,10 @@ auto get_irq_affinity(const int& irq_number) -> int {
   f.close();
 
   return cpu_core;
+}
+
+auto remove_filename_extension(const std::string& basename) -> std::string {
+  return basename.substr(0, basename.find_last_of('.'));
 }
 
 }  // namespace util

@@ -44,6 +44,33 @@ struct _ApplicationWindow {
 
 G_DEFINE_TYPE(ApplicationWindow, application_window, ADW_TYPE_APPLICATION_WINDOW)
 
+void save_preset(ApplicationWindow* self, const std::string& name, const std::filesystem::path& directory) {
+  boost::property_tree::ptree root;
+  boost::property_tree::ptree node;
+
+  // game executable
+
+  root.put("game-executable", gtk_editable_get_text(GTK_EDITABLE(self->game_executable)));
+
+  // environment variables
+
+  for (const auto& v : ui::environment_variables::get_list()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("environment-variables", node);
+
+  auto output_file = directory / std::filesystem::path{name + ".json"};
+
+  boost::property_tree::write_json(output_file, root);
+
+  util::debug(log_tag + "saved preset: "s + output_file.string());
+}
+
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
   gtk_spinner_start(self->spinner);
 
@@ -60,7 +87,12 @@ void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
    give it enough time to exit.
   */
 
-  g_timeout_add_seconds(3, GSourceFunc(+[](ApplicationWindow* self) { gtk_spinner_stop(self->spinner); }), self);
+  g_timeout_add_seconds(3, GSourceFunc(+[](ApplicationWindow* self) {
+                          save_preset(self, "fastgame", std::filesystem::temp_directory_path());
+
+                          gtk_spinner_stop(self->spinner);
+                        }),
+                        self);
 }
 
 void init_theme_color(ApplicationWindow* self) {
@@ -93,33 +125,6 @@ auto setup_icon_theme() -> GtkIconTheme* {
   gtk_icon_theme_add_resource_path(icon_theme, "/com/github/wwmm/fastgame/icons");
 
   return icon_theme;
-}
-
-void save_preset(ApplicationWindow* self, const std::string& name, const std::filesystem::path& directory) {
-  boost::property_tree::ptree root;
-  boost::property_tree::ptree node;
-
-  // game executable
-
-  root.put("game-executable", gtk_editable_get_text(GTK_EDITABLE(self->game_executable)));
-
-  // environment variables
-
-  for (const auto& v : ui::environment_variables::get_list()) {
-    boost::property_tree::ptree local_node;
-
-    local_node.put("", v);
-
-    node.push_back(std::make_pair("", local_node));
-  }
-
-  root.add_child("environment-variables", node);
-
-  auto output_file = directory / std::filesystem::path{name + ".json"};
-
-  boost::property_tree::write_json(output_file, root);
-
-  util::debug(log_tag + "saved preset: "s + output_file.string());
 }
 
 void constructed(GObject* object) {
@@ -517,8 +522,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 //   Glib::signal_timeout().connect_seconds_once(
 //       [=]() {
-//         save_preset("fastgame", std::filesystem::temp_directory_path());
-
 //         try {
 //           std::thread t([]() {
 //             // std::system("pkexec fastgame_apply");

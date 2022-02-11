@@ -5,7 +5,7 @@
 #include "application.hpp"
 #include "environment_variable_holder.hpp"
 
-namespace ui::environmental_variables {
+namespace ui::environment_variables {
 
 G_BEGIN_DECLS
 
@@ -21,4 +21,4 @@ void add_list(const std::vector<std::string>& list);
 
 auto get_list() -> std::vector<std::string>;
 
-}  // namespace ui::environmental_variables
+}  // namespace ui::environment_variables

@@ -6,7 +6,7 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "presets_menu: ";
 
-static std::filesystem::path user_presets_dir = g_get_user_config_dir() + "/fastgame"s;
+std::filesystem::path user_presets_dir = g_get_user_config_dir() + "/fastgame"s;
 
 sigc::signal<void(const std::string&)> save_preset;
 sigc::signal<void(const std::string&)> load_preset;

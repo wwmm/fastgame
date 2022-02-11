@@ -13,6 +13,8 @@ G_DECLARE_FINAL_TYPE(PresetsMenu, presets_menu, FG, PRESETS_MENU, GtkPopover)
 
 G_END_DECLS
 
+extern std::filesystem::path user_presets_dir;
+
 extern sigc::signal<void(const std::string&)> save_preset;
 extern sigc::signal<void(const std::string&)> load_preset;
 

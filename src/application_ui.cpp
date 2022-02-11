@@ -1,4 +1,5 @@
 #include "application_ui.hpp"
+#include "presets_menu.hpp"
 
 namespace ui::application_window {
 
@@ -28,11 +29,13 @@ struct _ApplicationWindow {
 
   GtkMenuButton* presets_menu_button;
 
+  GtkEntry* game_executable;
+
   GtkSpinner* spinner;
 
   ui::presets_menu::PresetsMenu* presetsMenu;
 
-  ui::environmental_variables::EnvironmentVariables* environment_variables;
+  ui::environment_variables::EnvironmentVariables* environment_variables;
 
   GSettings* settings;
 
@@ -90,6 +93,33 @@ auto setup_icon_theme() -> GtkIconTheme* {
   gtk_icon_theme_add_resource_path(icon_theme, "/com/github/wwmm/fastgame/icons");
 
   return icon_theme;
+}
+
+void save_preset(ApplicationWindow* self, const std::string& name, const std::filesystem::path& directory) {
+  boost::property_tree::ptree root;
+  boost::property_tree::ptree node;
+
+  // game executable
+
+  root.put("game-executable", gtk_editable_get_text(GTK_EDITABLE(self->game_executable)));
+
+  // environment variables
+
+  for (const auto& v : ui::environment_variables::get_list()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("environment-variables", node);
+
+  auto output_file = directory / std::filesystem::path{name + ".json"};
+
+  boost::property_tree::write_json(output_file, root);
+
+  util::debug(log_tag + "saved preset: "s + output_file.string());
 }
 
 void constructed(GObject* object) {
@@ -207,6 +237,7 @@ void application_window_class_init(ApplicationWindowClass* klass) {
 
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, stack);
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, presets_menu_button);
+  gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, game_executable);
   gtk_widget_class_bind_template_child(widget_class, ApplicationWindow, spinner);
 
   gtk_widget_class_bind_template_callback(widget_class, on_apply_settings);
@@ -229,7 +260,7 @@ void application_window_init(ApplicationWindow* self) {
   self->data->icon_theme = setup_icon_theme();
 
   self->presetsMenu = ui::presets_menu::create();
-  self->environment_variables = ui::environmental_variables::create();
+  self->environment_variables = ui::environment_variables::create();
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
                                              "environment_variables", _("Environment Variables"));
@@ -244,7 +275,8 @@ void application_window_init(ApplicationWindow* self) {
                    G_CALLBACK(+[](GSettings* settings, char* key, ApplicationWindow* self) { init_theme_color(self); }),
                    self);
 
-  ui::presets_menu::save_preset.connect([](const std::string& name) { util::warning("save: " + name); });
+  ui::presets_menu::save_preset.connect(
+      [=](const std::string& name) { save_preset(self, name, ui::presets_menu::user_presets_dir); });
 
   ui::presets_menu::load_preset.connect([](const std::string& name) { util::warning("load: " + name); });
 }
@@ -282,24 +314,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
-//   boost::property_tree::ptree root;
-//   boost::property_tree::ptree node;
-
-//   // game executable
-
-//   root.put("game-executable", game_executable->get_text());
-
-//   // environment variables
-
-//   for (const auto& v : environment_variables->get_variables()) {
-//     boost::property_tree::ptree local_node;
-
-//     local_node.put("", v);
-
-//     node.push_back(std::make_pair("", local_node));
-//   }
-
-//   root.add_child("environment-variables", node);
 
 //   // cpu
 
@@ -383,11 +397,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   root.put("network.ipv4.tcp_max_reordering", network->get_tcp_max_reordering());
 //   root.put("network.ipv4.tcp_probe_interval", network->get_tcp_probe_interval());
 
-//   auto output_file = directory / std::filesystem::path{name + ".json"};
-
-//   boost::property_tree::write_json(output_file, root);
-
-//   util::debug(log_tag + "saved preset: " + output_file.string());
 // }
 
 // void ApplicationUi::load_preset(const std::string& name) {

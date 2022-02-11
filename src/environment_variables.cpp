@@ -1,6 +1,6 @@
 #include "environment_variables.hpp"
 
-namespace ui::environmental_variables {
+namespace ui::environment_variables {
 
 using namespace std::string_literals;
 
@@ -148,4 +148,4 @@ auto create() -> EnvironmentVariables* {
   return static_cast<EnvironmentVariables*>(g_object_new(FG_TYPE_ENVIRONMENT_VARIABLES, nullptr));
 }
 
-}  // namespace ui::environmental_variables
+}  // namespace ui::environment_variables

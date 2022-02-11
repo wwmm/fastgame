@@ -8,6 +8,9 @@ auto constexpr log_tag = "presets_menu: ";
 
 static std::filesystem::path user_presets_dir = g_get_user_config_dir() + "/fastgame"s;
 
+sigc::signal<void(const std::string&)> save_preset;
+sigc::signal<void(const std::string&)> load_preset;
+
 struct Data {
  public:
   ~Data() { util::debug(log_tag + "data struct destroyed"s); }
@@ -74,7 +77,15 @@ void create_preset(PresetsMenu* self, GtkButton* button) {
     return;
   }
 
-  //   self->data->application->presets_manager->add(preset_type, name);
+  gtk_editable_set_text(GTK_EDITABLE(self->preset_name), "");
+
+  for (const auto& used_name : get_presets_names()) {
+    if (used_name == name) {
+      return;
+    }
+  }
+
+  save_preset.emit(name);
 }
 
 void import_preset(PresetsMenu* self) {

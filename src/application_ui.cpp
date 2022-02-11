@@ -1,5 +1,4 @@
 #include "application_ui.hpp"
-#include "environment_variables.hpp"
 
 namespace ui::application_window {
 
@@ -244,6 +243,10 @@ void application_window_init(ApplicationWindow* self) {
   g_signal_connect(self->settings, "changed::use-dark-theme",
                    G_CALLBACK(+[](GSettings* settings, char* key, ApplicationWindow* self) { init_theme_color(self); }),
                    self);
+
+  ui::presets_menu::save_preset.connect([](const std::string& name) { util::warning("save: " + name); });
+
+  ui::presets_menu::load_preset.connect([](const std::string& name) { util::warning("load: " + name); });
 }
 
 auto create(GApplication* gapp) -> ApplicationWindow* {
@@ -492,36 +495,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   network->get_tcp_probe_interval()));
 
 //   util::debug(log_tag + "loaded preset: " + input_file.string());
-// }
-
-// void ApplicationUi::create_preset() {
-//   std::string name = preset_name->get_text();
-
-//   if (!name.empty()) {
-//     std::string illegalChars = "\\/";
-
-//     for (auto it = name.begin(); it < name.end(); ++it) {
-//       bool found = illegalChars.find(*it) != std::string::npos;
-
-//       if (found) {
-//         preset_name->set_text("");
-
-//         return;
-//       }
-//     }
-
-//     preset_name->set_text("");
-
-//     for (auto& used_name : get_presets_names()) {
-//       if (used_name == name) {
-//         return;
-//       }
-//     }
-
-//     save_preset(name, user_presets_dir);
-
-//     populate_listbox();
-//   }
 // }
 
 // void ApplicationUi::populate_listbox() {

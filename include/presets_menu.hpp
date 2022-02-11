@@ -13,8 +13,8 @@ G_DECLARE_FINAL_TYPE(PresetsMenu, presets_menu, FG, PRESETS_MENU, GtkPopover)
 
 G_END_DECLS
 
-inline static sigc::signal<void(const std::string)> save_preset;
-inline static sigc::signal<void(const std::string)> load_preset;
+extern sigc::signal<void(const std::string&)> save_preset;
+extern sigc::signal<void(const std::string&)> load_preset;
 
 auto create() -> PresetsMenu*;
 

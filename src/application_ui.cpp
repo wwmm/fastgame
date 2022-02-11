@@ -71,6 +71,32 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   util::debug(log_tag + "saved preset: "s + output_file.string());
 }
 
+void load_preset(ApplicationWindow* self, const std::string& name) {
+  auto input_file = ui::presets_menu::user_presets_dir / std::filesystem::path{name + ".json"};
+
+  boost::property_tree::ptree root;
+
+  boost::property_tree::read_json(input_file.string(), root);
+
+  // game executable
+
+  gtk_editable_set_text(GTK_EDITABLE(self->game_executable), root.get<std::string>("game-executable", "").c_str());
+
+  // environmental variables
+
+  try {
+    std::vector<std::string> variables_list;
+
+    for (const auto& c : root.get_child("environment-variables")) {
+      variables_list.emplace_back(c.second.data());
+    }
+
+    ui::environment_variables::add_list(variables_list);
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning(log_tag + "error when parsing the environmental variables list"s);
+  }
+}
+
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
   gtk_spinner_start(self->spinner);
 
@@ -283,7 +309,7 @@ void application_window_init(ApplicationWindow* self) {
   ui::presets_menu::save_preset.connect(
       [=](const std::string& name) { save_preset(self, name, ui::presets_menu::user_presets_dir); });
 
-  ui::presets_menu::load_preset.connect([](const std::string& name) { util::warning("load: " + name); });
+  ui::presets_menu::load_preset.connect([=](const std::string& name) { load_preset(self, name); });
 }
 
 auto create(GApplication* gapp) -> ApplicationWindow* {
@@ -405,29 +431,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::load_preset(const std::string& name) {
-//   auto input_file = user_presets_dir / std::filesystem::path{name + ".json"};
-
-//   boost::property_tree::ptree root;
-
-//   boost::property_tree::read_json(input_file.string(), root);
-
-//   // game executable
-
-//   game_executable->set_text(root.get<std::string>("game-executable", game_executable->get_text()));
-
-//   // environmental variables
-
-//   try {
-//     std::vector<std::string> variables_list;
-
-//     for (const auto& c : root.get_child("environment-variables")) {
-//       variables_list.emplace_back(c.second.data());
-//     }
-
-//     environment_variables->set_variables(variables_list);
-//   } catch (const boost::property_tree::ptree_error& e) {
-//     util::warning(log_tag + "error when parsing the environmental variables list");
-//   }
 
 //   // cpu
 

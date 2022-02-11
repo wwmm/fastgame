@@ -2,6 +2,7 @@
 <gresources>
     <gresource prefix="/com/github/wwmm/fastgame">
         <file>ui/application_window.ui</file>
+        <file>ui/cpu.ui</file>
         <file>ui/environment_variables.ui</file>
         <file>ui/factory_column_name.ui</file>
         <file>ui/factory_column_value.ui</file>
@@ -12,11 +13,8 @@
         <file>ui/shortcuts.ui</file>
         <file>ui/amdgpu.glade</file>
         <file>ui/memory.glade</file>
-        <file>ui/cpu.glade</file>
         <file>ui/disk.glade</file>
         <file>ui/network.glade</file>
-        <file>icons/pulseeffects-w-symbolic.svg</file>
-        <file>icons/pulseeffects-kb-symbolic.svg</file>
-        <file>icons/pulseeffects-s-symbolic.svg</file>
+        <file>icons/scalable/emblems/fg-cpu-symbolic.svg</file>
     </gresource>
 </gresources>

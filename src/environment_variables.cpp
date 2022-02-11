@@ -4,7 +4,7 @@ namespace ui::environment_variables {
 
 using namespace std::string_literals;
 
-auto constexpr log_tag = "environmental_variables: ";
+auto constexpr log_tag = "environment_variables: ";
 
 GListStore* model;
 

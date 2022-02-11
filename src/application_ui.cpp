@@ -37,6 +37,8 @@ struct _ApplicationWindow {
 
   ui::environment_variables::EnvironmentVariables* environment_variables;
 
+  ui::cpu::Cpu* cpu;
+
   GSettings* settings;
 
   Data* data;
@@ -292,11 +294,15 @@ void application_window_init(ApplicationWindow* self) {
 
   self->presetsMenu = ui::presets_menu::create();
   self->environment_variables = ui::environment_variables::create();
+  self->cpu = ui::cpu::create();
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
                                              "environment_variables", _("Environment Variables"));
 
+  auto* page_cpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->cpu), "cpu", _("CPU"));
+
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
+  adw_view_stack_page_set_icon_name(page_cpu, "fg-cpu-symbolic");
 
   gtk_menu_button_set_popover(self->presets_menu_button, GTK_WIDGET(self->presetsMenu));
 

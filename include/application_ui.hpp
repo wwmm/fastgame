@@ -2,6 +2,7 @@
 
 #include <adwaita.h>
 #include <filesystem>
+#include "cpu.hpp"
 #include "environment_variables.hpp"
 #include "presets_menu.hpp"
 
@@ -27,7 +28,6 @@ auto create(GApplication* gapp) -> ApplicationWindow*;
 
 // #include "amdgpu.hpp"
 // #include "application.hpp"
-// #include "cpu.hpp"
 // #include "disk.hpp"
 // #include "memory.hpp"
 // #include "network.hpp"

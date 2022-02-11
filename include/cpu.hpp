@@ -1,79 +1,89 @@
-#ifndef CPU_HPP
-#define CPU_HPP
+#pragma once
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/flowbox.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/stack.h>
-#include <gtkmm/switch.h>
+#include <adwaita.h>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <thread>
+#include "util.hpp"
 
-class Cpu : public Gtk::Grid {
- public:
-  Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-  Cpu(const Cpu&) = delete;
-  auto operator=(const Cpu&) -> Cpu& = delete;
-  Cpu(const Cpu&&) = delete;
-  auto operator=(const Cpu&&) -> Cpu& = delete;
-  ~Cpu() override;
+namespace ui::cpu {
 
-  static auto add_to_stack(Gtk::Stack* stack) -> Cpu*;
+G_BEGIN_DECLS
 
-  auto get_enable_batch_scheduler() -> bool;
+#define FG_TYPE_CPU (cpu_get_type())
 
-  void set_enable_batch_scheduler(const bool& state);
+G_DECLARE_FINAL_TYPE(Cpu, cpu, FG, CPU, GtkBox)
 
-  auto get_child_runs_first() -> bool;
+G_END_DECLS
 
-  void set_child_runs_first(const bool& state);
+auto create() -> Cpu*;
 
-  auto get_frequency_governor() -> std::string;
+//   auto get_enable_batch_scheduler() -> bool;
 
-  void set_frequency_governor(const std::string& name);
+//   void set_enable_batch_scheduler(const bool& state);
 
-  auto get_use_cpu_dma_latency() -> bool;
+//   auto get_child_runs_first() -> bool;
 
-  void set_use_cpu_dma_latency(const bool& state);
+//   void set_child_runs_first(const bool& state);
 
-  auto get_use_realtime_wineserver() -> bool;
+//   auto get_frequency_governor() -> std::string;
 
-  void set_use_realtime_wineserver(const bool& state);
+//   void set_frequency_governor(const std::string& name);
 
-  auto get_niceness() -> int;
+//   auto get_use_cpu_dma_latency() -> bool;
 
-  void set_niceness(const int& value);
+//   void set_use_cpu_dma_latency(const bool& state);
 
-  auto get_game_cores() -> std::vector<std::string>;
+//   auto get_use_realtime_wineserver() -> bool;
 
-  void set_game_cores(const std::vector<std::string>& list);
+//   void set_use_realtime_wineserver(const bool& state);
 
-  auto get_workqueue_cores() -> std::vector<std::string>;
+//   auto get_niceness() -> int;
 
-  void set_workqueue_cores(const std::vector<std::string>& list);
+//   void set_niceness(const int& value);
 
-  auto get_wineserver_cores() -> std::vector<std::string>;
+//   auto get_game_cores() -> std::vector<std::string>;
 
-  void set_wineserver_cores(const std::vector<std::string>& list);
+//   void set_game_cores(const std::vector<std::string>& list);
 
- private:
-  std::string log_tag = "cpu: ";
+//   auto get_workqueue_cores() -> std::vector<std::string>;
 
-  uint n_cores = 1;
+//   void set_workqueue_cores(const std::vector<std::string>& list);
 
-  Gtk::Switch *use_sched_batch = nullptr, *child_runs_first = nullptr, *use_cpu_dma_latency = nullptr,
-              *realtime_wineserver = nullptr;
+//   auto get_wineserver_cores() -> std::vector<std::string>;
 
-  Gtk::ComboBoxText* frequency_governor = nullptr;
+//   void set_wineserver_cores(const std::vector<std::string>& list);
 
-  Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr,
-               *wineserver_affinity_flowbox = nullptr;
+}  // namespace ui::cpu
 
-  Glib::RefPtr<Gtk::Adjustment> niceness;
+// class Cpu : public Gtk::Grid {
+//  public:
+//   Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
+//   Cpu(const Cpu&) = delete;
+//   auto operator=(const Cpu&) -> Cpu& = delete;
+//   Cpu(const Cpu&&) = delete;
+//   auto operator=(const Cpu&&) -> Cpu& = delete;
+//   ~Cpu() override;
 
-  static auto get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string>;
+//   static auto add_to_stack(Gtk::Stack* stack) -> Cpu*;
 
-  static void set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list);
-};
+//  private:
+//   std::string log_tag = "cpu: ";
 
-#endif
+//   uint n_cores = 1;
+
+//   Gtk::Switch *use_sched_batch = nullptr, *child_runs_first = nullptr, *use_cpu_dma_latency = nullptr,
+//               *realtime_wineserver = nullptr;
+
+//   Gtk::ComboBoxText* frequency_governor = nullptr;
+
+//   Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr,
+//                *wineserver_affinity_flowbox = nullptr;
+
+//   Glib::RefPtr<Gtk::Adjustment> niceness;
+
+//   static auto get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string>;
+
+//   static void set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list);
+// };

@@ -7,5 +7,103 @@
         <property name="margin-end">6</property>
         <property name="margin-top">6</property>
         <property name="margin-bottom">6</property>
+        <child>
+            <object class="AdwPreferencesPage">
+                <property name="hexpand">1</property>
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Scheduler and Priority</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Frequency Governor</property>
+                                <child>
+                                    <object class="GtkDropDown" id="dropdown_frequency_governor">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Niceness</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="niceness">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">-20</property>
+                                                <property name="upper">19</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">1</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Use the Batch Scheduler</property>
+                                <property name="activatable_widget">use_sched_batch</property>
+                                <child>
+                                    <object class="GtkSwitch" id="use_sched_batch">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Realtime Wineserver</property>
+                                <property name="activatable_widget">realtime_wineserver</property>
+                                <child>
+                                    <object class="GtkSwitch" id="realtime_wineserver">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Use /dev/cpu_dma_latency</property>
+                                <property name="activatable_widget">use_cpu_dma_latency</property>
+                                <child>
+                                    <object class="GtkSwitch" id="use_cpu_dma_latency">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Child Runs First</property>
+                                <property name="activatable_widget">child_runs_first</property>
+                                <child>
+                                    <object class="GtkSwitch" id="child_runs_first">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Affinity</property>
+                    </object>
+                </child>
+            </object>
+        </child>
     </template>
 </interface>

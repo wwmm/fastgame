@@ -146,7 +146,23 @@ void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
   g_timeout_add_seconds(3, GSourceFunc(+[](ApplicationWindow* self) {
                           save_preset(self, "fastgame", std::filesystem::temp_directory_path());
 
-                          gtk_spinner_stop(self->spinner);
+                          try {
+                            std::thread t([]() {
+                              // std::system("pkexec fastgame_apply");
+                              boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+
+                              c.wait();
+                            });
+
+                            t.detach();
+
+                            gtk_spinner_stop(self->spinner);
+
+                          } catch (std::exception& e) {
+                            gtk_spinner_stop(self->spinner);
+
+                            util::warning(log_tag + std::string(e.what()));
+                          }
                         }),
                         self);
 }
@@ -358,7 +374,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     : Gtk::ApplicationWindow(cobject),
 //       app(application),
 
-//   cpu = Cpu::add_to_stack(stack);
 //   disk = Disk::add_to_stack(stack);
 
 //   if (util::card_is_amdgpu(0)) {
@@ -367,14 +382,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 //   memory = Memory::add_to_stack(stack);
 //   network = Network::add_to_stack(stack);
-
-//   // signal connection
-
-//   add_preset->signal_clicked().connect([=]() { create_preset(); });
-
-//   import_preset->signal_clicked().connect([=]() { import_preset_file(); });
-
-//   button_apply->signal_clicked().connect([=]() { apply_settings(); });
 
 // }
 
@@ -457,8 +464,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 // void ApplicationUi::load_preset(const std::string& name) {
 
-//
-
 //   try {
 //     std::vector<std::string> cores_list;
 
@@ -530,35 +535,4 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   network->get_tcp_probe_interval()));
 
 //   util::debug(log_tag + "loaded preset: " + input_file.string());
-// }
-
-// void ApplicationUi::populate_listbox() {
-//     connections.emplace_back(apply_btn->signal_clicked().connect([=]() { load_preset(name); }));
-
-//     connections.emplace_back(save_btn->signal_clicked().connect([=]() { save_preset(name, user_presets_dir); }));
-
-// }
-
-// void ApplicationUi::apply_settings() {
-
-//   Glib::signal_timeout().connect_seconds_once(
-//       [=]() {
-//         try {
-//           std::thread t([]() {
-//             // std::system("pkexec fastgame_apply");
-//             boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
-
-//             c.wait();
-//           });
-
-//           t.detach();
-
-//           headerbar_spinner->stop();
-//         } catch (std::exception& e) {
-//           headerbar_spinner->stop();
-
-//           util::warning(log_tag + e.what());
-//         }
-//       },
-//       3);
 // }

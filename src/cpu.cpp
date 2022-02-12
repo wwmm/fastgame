@@ -16,6 +16,8 @@ struct _Cpu {
   GtkSpinButton* niceness;
 
   GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first;
+
+  GtkFlowBox *flowbox_game_affinity, *flowbox_wineserver_affinity;
 };
 
 G_DEFINE_TYPE(Cpu, cpu, GTK_TYPE_BOX)
@@ -95,6 +97,8 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_cpu_dma_latency);
   gtk_widget_class_bind_template_child(widget_class, Cpu, child_runs_first);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, flowbox_game_affinity);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, flowbox_wineserver_affinity);
 
   // gtk_widget_class_bind_template_callback(widget_class, on_add_line);
 }
@@ -104,10 +108,6 @@ void cpu_init(Cpu* self) {
 
   gtk_switch_set_active(self->child_runs_first,
                         std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0]) != 0);
-
-  auto n_cores = std::thread::hardware_concurrency();
-
-  util::debug(log_tag + "number of cores: "s + std::to_string(n_cores));
 
   /* We assume that all cores are set to the same frequency governor and that the system has at least one core. In
      this case reading the core 0 property should be enough
@@ -134,6 +134,27 @@ void cpu_init(Cpu* self) {
   }
 
   gtk_combo_box_set_active(GTK_COMBO_BOX(self->frequency_governor), selected_id);
+
+  auto n_cores = std::thread::hardware_concurrency();
+
+  util::debug(log_tag + "number of cores: "s + std::to_string(n_cores));
+
+  for (uint n = 0; n < n_cores; n++) {
+    //     auto* checkbutton3 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
+
+    auto* checkbutton1 = gtk_check_button_new_with_label(std::to_string(n).c_str());
+    auto* checkbutton2 = gtk_check_button_new_with_label(std::to_string(n).c_str());
+
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(checkbutton1), 1);
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(checkbutton2), 1);
+
+    //     checkbutton3->set_active(true);
+
+    gtk_flow_box_append(self->flowbox_game_affinity, checkbutton1);
+    gtk_flow_box_append(self->flowbox_wineserver_affinity, checkbutton2);
+
+    //     wineserver_affinity_flowbox->add(*checkbutton3);
+  }
 }
 
 auto create() -> Cpu* {
@@ -152,20 +173,6 @@ auto create() -> Cpu* {
 //   builder->get_widget("wineserver_affinity_flowbox", wineserver_affinity_flowbox);
 
 //   // initializing widgets
-
-//   for (uint n = 0; n < n_cores; n++) {
-//     auto* checkbutton1 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
-//     auto* checkbutton2 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
-//     auto* checkbutton3 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
-
-//     checkbutton1->set_active(true);
-//     checkbutton2->set_active(true);
-//     checkbutton3->set_active(true);
-
-//     game_affinity_flowbox->add(*checkbutton1);
-//     workqueue_affinity_flowbox->add(*checkbutton2);
-//     wineserver_affinity_flowbox->add(*checkbutton3);
-//   }
 
 // }
 

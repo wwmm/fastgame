@@ -66,6 +66,15 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   root.add_child("environment-variables", node);
 
+  // cpu
+
+  root.put("cpu.use-batch-scheduler", ui::cpu::get_enable_batch_scheduler(self->cpu));
+  root.put("cpu.child-runs-first", ui::cpu::get_child_runs_first(self->cpu));
+  // root.put("cpu.frequency-governor", ui::cpu::get_frequency_governor(self->cpu));
+  root.put("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu));
+  root.put("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu));
+  root.put("cpu.niceness", ui::cpu::get_niceness(self->cpu));
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -97,6 +106,25 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the environmental variables list"s);
   }
+
+  // cpu
+
+  ui::cpu::set_enable_batch_scheduler(
+      self->cpu, root.get<bool>("cpu.use-batch-scheduler", ui::cpu::get_enable_batch_scheduler(self->cpu)));
+
+  ui::cpu::set_child_runs_first(self->cpu,
+                                root.get<bool>("cpu.child-runs-first", ui::cpu::get_child_runs_first(self->cpu)));
+
+  // ui::cpu::set_frequency_governor(root.get<std::string>("cpu.frequency-governor",
+  // ui::cpu::get_frequency_governor()));
+
+  ui::cpu::set_use_cpu_dma_latency(
+      self->cpu, root.get<bool>("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu)));
+
+  ui::cpu::set_use_realtime_wineserver(
+      self->cpu, root.get<bool>("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu)));
+
+  ui::cpu::set_niceness(self->cpu, root.get<int>("cpu.niceness", ui::cpu::get_niceness(self->cpu)));
 }
 
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
@@ -352,15 +380,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 // void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
 
-//   // cpu
-
-//   root.put("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler());
-//   root.put("cpu.child-runs-first", cpu->get_child_runs_first());
-//   root.put("cpu.frequency-governor", cpu->get_frequency_governor());
-//   root.put("cpu.use-cpu-dma-latency", cpu->get_use_cpu_dma_latency());
-//   root.put("cpu.use-realtime-wineserver", cpu->get_use_realtime_wineserver());
-//   root.put("cpu.niceness", cpu->get_niceness());
-
 //   node.clear();
 
 //   for (const auto& c : cpu->get_game_cores()) {
@@ -438,14 +457,7 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 // void ApplicationUi::load_preset(const std::string& name) {
 
-//   // cpu
-
-//   cpu->set_enable_batch_scheduler(root.get<bool>("cpu.use-batch-scheduler", cpu->get_enable_batch_scheduler()));
-//   cpu->set_child_runs_first(root.get<bool>("cpu.child-runs-first", cpu->get_child_runs_first()));
-//   cpu->set_frequency_governor(root.get<std::string>("cpu.frequency-governor", cpu->get_frequency_governor()));
-//   cpu->set_use_cpu_dma_latency(root.get<bool>("cpu.use-cpu-dma-latency", cpu->get_use_cpu_dma_latency()));
-//   cpu->set_use_realtime_wineserver(root.get<bool>("cpu.use-realtime-wineserver",
-//   cpu->get_use_realtime_wineserver())); cpu->set_niceness(root.get<int>("cpu.niceness", cpu->get_niceness()));
+//
 
 //   try {
 //     std::vector<std::string> cores_list;

@@ -31,17 +31,17 @@ auto get_use_cpu_dma_latency(Cpu* self) -> bool;
 
 void set_use_cpu_dma_latency(Cpu* self, const bool& state);
 
+auto get_use_realtime_wineserver(Cpu* self) -> bool;
+
+void set_use_realtime_wineserver(Cpu* self, const bool& state);
+
+auto get_niceness(Cpu* self) -> int;
+
+void set_niceness(Cpu* self, const int& value);
+
 //   auto get_frequency_governor() -> std::string;
 
 //   void set_frequency_governor(const std::string& name);
-
-//   auto get_use_realtime_wineserver() -> bool;
-
-//   void set_use_realtime_wineserver(const bool& state);
-
-//   auto get_niceness() -> int;
-
-//   void set_niceness(const int& value);
 
 //   auto get_game_cores() -> std::vector<std::string>;
 
@@ -66,22 +66,11 @@ void set_use_cpu_dma_latency(Cpu* self, const bool& state);
 //   auto operator=(const Cpu&&) -> Cpu& = delete;
 //   ~Cpu() override;
 
-//   static auto add_to_stack(Gtk::Stack* stack) -> Cpu*;
-
 //  private:
-//   std::string log_tag = "cpu: ";
-
 //   uint n_cores = 1;
-
-//   Gtk::Switch *use_sched_batch = nullptr, *child_runs_first = nullptr, *use_cpu_dma_latency = nullptr,
-//               *realtime_wineserver = nullptr;
-
-//   Gtk::ComboBoxText* frequency_governor = nullptr;
 
 //   Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr,
 //                *wineserver_affinity_flowbox = nullptr;
-
-//   Glib::RefPtr<Gtk::Adjustment> niceness;
 
 //   static auto get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string>;
 

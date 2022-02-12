@@ -44,6 +44,22 @@ auto get_use_cpu_dma_latency(Cpu* self) -> bool {
   return gtk_switch_get_active(self->use_cpu_dma_latency);
 }
 
+void set_use_realtime_wineserver(Cpu* self, const bool& state) {
+  gtk_switch_set_active(self->realtime_wineserver, state != 0);
+}
+
+auto get_use_realtime_wineserver(Cpu* self) -> bool {
+  return gtk_switch_get_active(self->realtime_wineserver);
+}
+
+void set_niceness(Cpu* self, const int& value) {
+  gtk_spin_button_set_value(self->niceness, value);
+}
+
+auto get_niceness(Cpu* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->niceness));
+}
+
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -201,20 +217,4 @@ auto create() -> Cpu* {
 
 // void Cpu::set_wineserver_cores(const std::vector<std::string>& list) {
 //   set_cores(wineserver_affinity_flowbox, list);
-// }
-
-// auto Cpu::get_use_realtime_wineserver() -> bool {
-//   return realtime_wineserver->get_active();
-// }
-
-// void Cpu::set_use_realtime_wineserver(const bool& state) {
-//   realtime_wineserver->set_active(state);
-// }
-
-// auto Cpu::get_niceness() -> int {
-//   return static_cast<int>(niceness->get_value());
-// }
-
-// void Cpu::set_niceness(const int& value) {
-//   niceness->set_value(value);
 // }

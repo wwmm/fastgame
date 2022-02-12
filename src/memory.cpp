@@ -16,6 +16,22 @@ struct _Memory {
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
 
+void set_cache_pressure(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->cache_pressure, value);
+}
+
+auto get_cache_pressure(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->cache_pressure));
+}
+
+void set_compaction_proactiveness(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->compaction_proactiveness, value);
+}
+
+auto get_compaction_proactiveness(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->compaction_proactiveness));
+}
+
 void read_transparent_huge_page_values(Memory* self) {
   // parameter: enabled
 
@@ -98,8 +114,6 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, thp_shmem_enabled);
   gtk_widget_class_bind_template_child(widget_class, Memory, cache_pressure);
   gtk_widget_class_bind_template_child(widget_class, Memory, compaction_proactiveness);
-
-  // gtk_widget_class_bind_template_callback(widget_class, on_add_line);
 }
 
 void memory_init(Memory* self) {
@@ -122,42 +136,34 @@ auto create() -> Memory* {
 
 // namespace fs = std::filesystem;
 
-// auto Memory::get_cache_pressure() -> int {
-//   return static_cast<int>(cache_pressure->get_value());
-// }
-
-// void Memory::set_cache_pressure(const int& value) {
-//   cache_pressure->set_value(value);
-// }
-
-// auto Memory::get_thp_enabled() -> std::string {
+// auto get_thp_enabled() -> std::string {
 //   return thp_enabled->get_active_text();
 // }
 
-// void Memory::set_thp_enabled(const std::string& value) {
+// void set_thp_enabled(const std::string& value) {
 //   thp_enabled->set_active_text(value);
 // }
 
-// auto Memory::get_thp_defrag() -> std::string {
+// auto get_thp_defrag() -> std::string {
 //   return thp_defrag->get_active_text();
 // }
 
-// void Memory::set_thp_defrag(const std::string& value) {
+// void set_thp_defrag(const std::string& value) {
 //   thp_defrag->set_active_text(value);
 // }
 
-// auto Memory::get_thp_shmem_enabled() -> std::string {
+// auto get_thp_shmem_enabled() -> std::string {
 //   return thp_shmem_enabled->get_active_text();
 // }
 
-// void Memory::set_thp_shmem_enabled(const std::string& value) {
+// void set_thp_shmem_enabled(const std::string& value) {
 //   thp_shmem_enabled->set_active_text(value);
 // }
 
-// auto Memory::get_compaction_proactiveness() -> int {
+// auto get_compaction_proactiveness() -> int {
 //   return static_cast<int>(compaction_proactiveness->get_value());
 // }
 
-// void Memory::set_compaction_proactiveness(const int& value) {
+// void set_compaction_proactiveness(const int& value) {
 //   compaction_proactiveness->set_value(value);
 // }

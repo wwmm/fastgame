@@ -32,6 +32,30 @@ auto get_compaction_proactiveness(Memory* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->compaction_proactiveness));
 }
 
+void set_thp_enabled(Memory* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_enabled), name.c_str());
+}
+
+auto get_thp_enabled(Memory* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->thp_enabled);
+}
+
+void set_thp_defrag(Memory* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_defrag), name.c_str());
+}
+
+auto get_thp_defrag(Memory* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->thp_defrag);
+}
+
+void set_thp_shmem_enabled(Memory* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_shmem_enabled), name.c_str());
+}
+
+auto get_thp_shmem_enabled(Memory* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->thp_shmem_enabled);
+}
+
 void read_transparent_huge_page_values(Memory* self) {
   // parameter: enabled
 
@@ -133,29 +157,3 @@ auto create() -> Memory* {
 }
 
 }  // namespace ui::memory
-
-// namespace fs = std::filesystem;
-
-// auto get_thp_enabled() -> std::string {
-//   return thp_enabled->get_active_text();
-// }
-
-// void set_thp_enabled(const std::string& value) {
-//   thp_enabled->set_active_text(value);
-// }
-
-// auto get_thp_defrag() -> std::string {
-//   return thp_defrag->get_active_text();
-// }
-
-// void set_thp_defrag(const std::string& value) {
-//   thp_defrag->set_active_text(value);
-// }
-
-// auto get_thp_shmem_enabled() -> std::string {
-//   return thp_shmem_enabled->get_active_text();
-// }
-
-// void set_thp_shmem_enabled(const std::string& value) {
-//   thp_shmem_enabled->set_active_text(value);
-// }

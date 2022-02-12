@@ -26,4 +26,16 @@ void set_compaction_proactiveness(Memory* self, const int& value);
 
 auto get_compaction_proactiveness(Memory* self) -> int;
 
+void set_thp_enabled(Memory* self, const std::string& name);
+
+auto get_thp_enabled(Memory* self) -> std::string;
+
+void set_thp_defrag(Memory* self, const std::string& name);
+
+auto get_thp_defrag(Memory* self) -> std::string;
+
+void set_thp_shmem_enabled(Memory* self, const std::string& name);
+
+auto get_thp_shmem_enabled(Memory* self) -> std::string;
+
 }  // namespace ui::memory

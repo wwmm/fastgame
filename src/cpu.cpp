@@ -11,7 +11,7 @@ GListStore* model;
 struct _Cpu {
   GtkPopover parent_instance;
 
-  GtkDropDown* dropdown_frequency_governor;
+  GtkComboBoxText* frequency_governor;
 
   GtkSpinButton* niceness;
 
@@ -60,6 +60,14 @@ auto get_niceness(Cpu* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->niceness));
 }
 
+void set_frequency_governor(Cpu* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->frequency_governor), name.c_str());
+}
+
+auto get_frequency_governor(Cpu* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->frequency_governor);
+}
+
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -81,7 +89,7 @@ void cpu_class_init(CpuClass* klass) {
 
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/cpu.ui");
 
-  gtk_widget_class_bind_template_child(widget_class, Cpu, dropdown_frequency_governor);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, frequency_governor);
   gtk_widget_class_bind_template_child(widget_class, Cpu, niceness);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
@@ -93,6 +101,39 @@ void cpu_class_init(CpuClass* klass) {
 
 void cpu_init(Cpu* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
+
+  gtk_switch_set_active(self->child_runs_first,
+                        std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0]) != 0);
+
+  auto n_cores = std::thread::hardware_concurrency();
+
+  util::debug(log_tag + "number of cores: "s + std::to_string(n_cores));
+
+  /* We assume that all cores are set to the same frequency governor and that the system has at least one core. In
+     this case reading the core 0 property should be enough
+  */
+
+  auto list_governors = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
+
+  auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
+
+  int selected_id = 0;
+
+  for (size_t n = 0; n < list_governors.size(); n++) {
+    auto value = list_governors[n];
+
+    if (value == selected_governor) {
+      selected_id = n;
+    }
+
+    if (value.empty()) {
+      continue;
+    }
+
+    gtk_combo_box_text_append(self->frequency_governor, value.c_str(), value.c_str());
+  }
+
+  gtk_combo_box_set_active(GTK_COMBO_BOX(self->frequency_governor), selected_id);
 }
 
 auto create() -> Cpu* {
@@ -112,10 +153,6 @@ auto create() -> Cpu* {
 
 //   // initializing widgets
 
-//   n_cores = std::thread::hardware_concurrency();
-
-//   util::debug(log_tag + "number of cpu cores: " + std::to_string(n_cores));
-
 //   for (uint n = 0; n < n_cores; n++) {
 //     auto* checkbutton1 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
 //     auto* checkbutton2 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
@@ -130,35 +167,6 @@ auto create() -> Cpu* {
 //     wineserver_affinity_flowbox->add(*checkbutton3);
 //   }
 
-//   // We assume that all cores are set to the same frequency governor and that the system has at least one core. In
-//   this
-//   // case reading the core 0 property should be enough
-
-//   auto list_governors =
-//   util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
-
-//   auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
-
-//   for (auto& value : list_governors) {
-//     if (value.empty()) {
-//       continue;
-//     }
-
-//     frequency_governor->append(value);
-//   }
-
-//   frequency_governor->set_active_text(selected_governor);
-
-//   child_runs_first->set_active(
-//       static_cast<bool>(std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0])));
-// }
-
-// auto Cpu::get_frequency_governor() -> std::string {
-//   return frequency_governor->get_active_text();
-// }
-
-// void Cpu::set_frequency_governor(const std::string& name) {
-//   frequency_governor->set_active_text(name);
 // }
 
 // auto Cpu::get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string> {

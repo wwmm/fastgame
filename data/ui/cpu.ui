@@ -18,7 +18,7 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Frequency Governor</property>
                                 <child>
-                                    <object class="GtkDropDown" id="dropdown_frequency_governor">
+                                    <object class="GtkComboBoxText" id="frequency_governor">
                                         <property name="valign">center</property>
                                     </object>
                                 </child>

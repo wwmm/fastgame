@@ -39,9 +39,9 @@ auto get_niceness(Cpu* self) -> int;
 
 void set_niceness(Cpu* self, const int& value);
 
-//   auto get_frequency_governor() -> std::string;
+auto get_frequency_governor(Cpu* self) -> std::string;
 
-//   void set_frequency_governor(const std::string& name);
+void set_frequency_governor(Cpu* self, const std::string& name);
 
 //   auto get_game_cores() -> std::vector<std::string>;
 

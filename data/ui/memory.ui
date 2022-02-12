@@ -99,4 +99,13 @@
             </object>
         </child>
     </template>
+
+    <object class="GtkSizeGroup">
+        <property name="mode">horizontal</property>
+        <widgets>
+            <widget name="thp_enabled" />
+            <widget name="thp_defrag" />
+            <widget name="thp_shmem_enabled" />
+        </widgets>
+    </object>
 </interface>

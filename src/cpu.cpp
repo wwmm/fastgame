@@ -163,15 +163,7 @@ void cpu_init(Cpu* self) {
 
   auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
 
-  int selected_id = 0;
-
-  for (size_t n = 0; n < list_governors.size(); n++) {
-    auto value = list_governors[n];
-
-    if (value == selected_governor) {
-      selected_id = n;
-    }
-
+  for (auto& value : list_governors) {
     if (value.empty()) {
       continue;
     }
@@ -179,7 +171,7 @@ void cpu_init(Cpu* self) {
     gtk_combo_box_text_append(self->frequency_governor, value.c_str(), value.c_str());
   }
 
-  gtk_combo_box_set_active(GTK_COMBO_BOX(self->frequency_governor), selected_id);
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->frequency_governor), selected_governor.c_str());
 
   auto n_cores = std::thread::hardware_concurrency();
 

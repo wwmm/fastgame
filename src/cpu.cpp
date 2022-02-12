@@ -11,10 +11,38 @@ GListStore* model;
 struct _Cpu {
   GtkPopover parent_instance;
 
-  GtkColumnView* columnview;
+  GtkDropDown* dropdown_frequency_governor;
+
+  GtkSpinButton* niceness;
+
+  GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first;
 };
 
 G_DEFINE_TYPE(Cpu, cpu, GTK_TYPE_BOX)
+
+void set_enable_batch_scheduler(Cpu* self, const bool& state) {
+  gtk_switch_set_active(self->use_sched_batch, state != 0);
+}
+
+auto get_enable_batch_scheduler(Cpu* self) -> bool {
+  return gtk_switch_get_active(self->use_sched_batch);
+}
+
+void set_child_runs_first(Cpu* self, const bool& state) {
+  gtk_switch_set_active(self->child_runs_first, state != 0);
+}
+
+auto get_child_runs_first(Cpu* self) -> bool {
+  return gtk_switch_get_active(self->child_runs_first);
+}
+
+void set_use_cpu_dma_latency(Cpu* self, const bool& state) {
+  gtk_switch_set_active(self->use_cpu_dma_latency, state != 0);
+}
+
+auto get_use_cpu_dma_latency(Cpu* self) -> bool {
+  return gtk_switch_get_active(self->use_cpu_dma_latency);
+}
 
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
@@ -37,12 +65,14 @@ void cpu_class_init(CpuClass* klass) {
 
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/cpu.ui");
 
-  // gtk_widget_class_bind_template_child(widget_class, Cpu, columnview);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, dropdown_frequency_governor);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, niceness);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, use_cpu_dma_latency);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, child_runs_first);
 
   // gtk_widget_class_bind_template_callback(widget_class, on_add_line);
-  // gtk_widget_class_bind_template_callback(widget_class, on_remove_line);
-  // gtk_widget_class_bind_template_callback(widget_class, on_name_changed);
-  // gtk_widget_class_bind_template_callback(widget_class, on_value_changed);
 }
 
 void cpu_init(Cpu* self) {
@@ -60,16 +90,9 @@ auto create() -> Cpu* {
 // Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
 //   // loading glade widgets
 
-//   builder->get_widget("use_sched_batch", use_sched_batch);
-//   builder->get_widget("child_runs_first", child_runs_first);
-//   builder->get_widget("frequency_governor", frequency_governor);
 //   builder->get_widget("game_affinity_flowbox", game_affinity_flowbox);
 //   builder->get_widget("workqueue_affinity_flowbox", workqueue_affinity_flowbox);
-//   builder->get_widget("use_cpu_dma_latency", use_cpu_dma_latency);
-//   builder->get_widget("realtime_wineserver", realtime_wineserver);
 //   builder->get_widget("wineserver_affinity_flowbox", wineserver_affinity_flowbox);
-
-//   niceness = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("niceness"));
 
 //   // initializing widgets
 
@@ -112,38 +135,6 @@ auto create() -> Cpu* {
 
 //   child_runs_first->set_active(
 //       static_cast<bool>(std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0])));
-// }
-
-// Cpu::~Cpu() {
-//   util::debug(log_tag + "destroyed");
-// }
-
-// auto Cpu::add_to_stack(Gtk::Stack* stack) -> Cpu* {
-//   auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/cpu.glade");
-
-//   Cpu* ui = nullptr;
-
-//   builder->get_widget_derived("widgets_grid", ui);
-
-//   stack->add(*ui, "cpu", _("CPU"));
-
-//   return ui;
-// }
-
-// auto Cpu::get_enable_batch_scheduler() -> bool {
-//   return use_sched_batch->get_active();
-// }
-
-// void Cpu::set_enable_batch_scheduler(const bool& state) {
-//   use_sched_batch->set_active(state);
-// }
-
-// auto Cpu::get_child_runs_first() -> bool {
-//   return child_runs_first->get_active();
-// }
-
-// void Cpu::set_child_runs_first(const bool& state) {
-//   child_runs_first->set_active(state);
 // }
 
 // auto Cpu::get_frequency_governor() -> std::string {
@@ -210,14 +201,6 @@ auto create() -> Cpu* {
 
 // void Cpu::set_wineserver_cores(const std::vector<std::string>& list) {
 //   set_cores(wineserver_affinity_flowbox, list);
-// }
-
-// auto Cpu::get_use_cpu_dma_latency() -> bool {
-//   return use_cpu_dma_latency->get_active();
-// }
-
-// void Cpu::set_use_cpu_dma_latency(const bool& state) {
-//   use_cpu_dma_latency->set_active(state);
 // }
 
 // auto Cpu::get_use_realtime_wineserver() -> bool {

@@ -19,21 +19,21 @@ G_END_DECLS
 
 auto create() -> Cpu*;
 
-//   auto get_enable_batch_scheduler() -> bool;
+auto get_enable_batch_scheduler(Cpu* self) -> bool;
 
-//   void set_enable_batch_scheduler(const bool& state);
+void set_enable_batch_scheduler(Cpu* self, const bool& state);
 
-//   auto get_child_runs_first() -> bool;
+auto get_child_runs_first(Cpu* self) -> bool;
 
-//   void set_child_runs_first(const bool& state);
+void set_child_runs_first(Cpu* self, const bool& state);
+
+auto get_use_cpu_dma_latency(Cpu* self) -> bool;
+
+void set_use_cpu_dma_latency(Cpu* self, const bool& state);
 
 //   auto get_frequency_governor() -> std::string;
 
 //   void set_frequency_governor(const std::string& name);
-
-//   auto get_use_cpu_dma_latency() -> bool;
-
-//   void set_use_cpu_dma_latency(const bool& state);
 
 //   auto get_use_realtime_wineserver() -> bool;
 

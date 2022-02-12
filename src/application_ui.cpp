@@ -101,6 +101,14 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   root.add_child("cpu.wineserver-cores", node);
 
+  // memory
+
+  root.put("memory.virtual-memory.cache-pressure", ui::memory::get_cache_pressure(self->memory));
+  root.put("memory.virtual-memory.compaction-proactiveness", ui::memory::get_compaction_proactiveness(self->memory));
+  root.put("memory.transparent-hugepages.enabled", ui::memory::get_thp_enabled(self->memory));
+  root.put("memory.transparent-hugepages.defrag", ui::memory::get_thp_defrag(self->memory));
+  root.put("memory.transparent-hugepages.shmem_enabled", ui::memory::get_thp_shmem_enabled(self->memory));
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -171,6 +179,25 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the cpu core list"s);
   }
+
+  // memory
+
+  ui::memory::set_cache_pressure(self->memory, root.get<int>("memory.virtual-memory.cache-pressure",
+                                                             ui::memory::get_cache_pressure(self->memory)));
+
+  ui::memory::set_compaction_proactiveness(self->memory,
+                                           root.get<int>("memory.virtual-memory.compaction-proactiveness",
+                                                         ui::memory::get_compaction_proactiveness(self->memory)));
+
+  ui::memory::set_thp_enabled(self->memory, root.get<std::string>("memory.transparent-hugepages.enabled",
+                                                                  ui::memory::get_thp_enabled(self->memory)));
+
+  ui::memory::set_thp_defrag(self->memory, root.get<std::string>("memory.transparent-hugepages.defrag",
+                                                                 ui::memory::get_thp_defrag(self->memory)));
+
+  ui::memory::set_thp_shmem_enabled(self->memory,
+                                    root.get<std::string>("memory.transparent-hugepages.shmem_enabled",
+                                                          ui::memory::get_thp_shmem_enabled(self->memory)));
 }
 
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
@@ -458,14 +485,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     root.put("amdgpu.irq-affinity", amdgpu->get_irq_affinity());
 //   }
 
-//   // memory
-
-//   root.put("memory.virtual-memory.cache-pressure", memory->get_cache_pressure());
-//   root.put("memory.virtual-memory.compaction-proactiveness", memory->get_compaction_proactiveness());
-//   root.put("memory.transparent-hugepages.enabled", memory->get_thp_enabled());
-//   root.put("memory.transparent-hugepages.defrag", memory->get_thp_defrag());
-//   root.put("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled());
-
 //   // network
 
 //   root.put("network.ipv4.use_tcp_mtu_probing", network->get_use_tcp_mtu_probing());
@@ -497,16 +516,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //     amdgpu->get_power_cap())); amdgpu->set_irq_affinity(root.get<int>("amdgpu.irq-affinity",
 //     amdgpu->get_irq_affinity()));
 //   }
-
-//   // memory
-
-//   memory->set_cache_pressure(root.get<int>("memory.virtual-memory.cache-pressure", memory->get_cache_pressure()));
-//   memory->set_compaction_proactiveness(
-//       root.get<int>("memory.virtual-memory.compaction-proactiveness", memory->get_compaction_proactiveness()));
-//   memory->set_thp_enabled(root.get<std::string>("memory.transparent-hugepages.enabled", memory->get_thp_enabled()));
-//   memory->set_thp_defrag(root.get<std::string>("memory.transparent-hugepages.defrag", memory->get_thp_defrag()));
-//   memory->set_thp_shmem_enabled(
-//       root.get<std::string>("memory.transparent-hugepages.shmem_enabled", memory->get_thp_shmem_enabled()));
 
 //   // network
 

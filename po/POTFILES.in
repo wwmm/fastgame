@@ -6,11 +6,11 @@ data/ui/environment_variables.ui
 data/ui/factory_column_name.ui
 data/ui/factory_column_value.ui
 data/ui/factory_column_delete.ui
+data/ui/memory.ui
 data/ui/presets_menu.ui
 data/ui/shortcuts.ui
 data/ui/preset_row.ui
 data/ui/amdgpu.glade
-data/ui/memory.glade
 data/ui/disk.glade
 data/ui/network.glade
 src/application_ui.cpp

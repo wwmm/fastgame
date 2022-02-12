@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="fastgame">
+    <template class="Memory" parent="GtkBox">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <child>
+            <object class="AdwPreferencesPage">
+                <property name="hexpand">1</property>
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Transparent HugePages</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Enabled</property>
+                                <child>
+                                    <object class="GtkComboBoxText" id="thp_enabled">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Defrag</property>
+                                <child>
+                                    <object class="GtkComboBoxText" id="thp_defrag">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Shared Memory Enabled</property>
+                                <child>
+                                    <object class="GtkComboBoxText" id="thp_shmem_enabled">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Virtual</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Cache Pressure</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="cache_pressure">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="upper">200</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">1</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Compaction Proactiveness</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="compaction_proactiveness">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="upper">100</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">10</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

@@ -8,13 +8,14 @@
         <file>ui/factory_column_value.ui</file>
         <file>ui/factory_column_delete.ui</file>
         <file>ui/factory_sections_listview.ui</file>
+        <file>ui/memory.ui</file>
         <file>ui/presets_menu.ui</file>
         <file>ui/preset_row.ui</file>
         <file>ui/shortcuts.ui</file>
         <file>ui/amdgpu.glade</file>
-        <file>ui/memory.glade</file>
         <file>ui/disk.glade</file>
         <file>ui/network.glade</file>
         <file>icons/scalable/emblems/fg-cpu-symbolic.svg</file>
+        <file>icons/scalable/emblems/fg-memory-symbolic.svg</file>
     </gresource>
 </gresources>

@@ -6,8 +6,6 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "cpu: ";
 
-GListStore* model;
-
 struct _Cpu {
   GtkPopover parent_instance;
 
@@ -149,8 +147,6 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Cpu, child_runs_first);
   gtk_widget_class_bind_template_child(widget_class, Cpu, flowbox_game_affinity);
   gtk_widget_class_bind_template_child(widget_class, Cpu, flowbox_wineserver_affinity);
-
-  // gtk_widget_class_bind_template_callback(widget_class, on_add_line);
 }
 
 void cpu_init(Cpu* self) {

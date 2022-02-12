@@ -159,11 +159,3 @@ auto create() -> Memory* {
 // void set_thp_shmem_enabled(const std::string& value) {
 //   thp_shmem_enabled->set_active_text(value);
 // }
-
-// auto get_compaction_proactiveness() -> int {
-//   return static_cast<int>(compaction_proactiveness->get_value());
-// }
-
-// void set_compaction_proactiveness(const int& value) {
-//   compaction_proactiveness->set_value(value);
-// }

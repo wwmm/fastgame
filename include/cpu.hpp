@@ -45,10 +45,10 @@ void set_frequency_governor(Cpu* self, const std::string& name);
 
 void set_game_cores(Cpu* self, const std::vector<std::string>& list);
 
+auto get_game_cores(Cpu* self) -> std::vector<std::string>;
+
 void set_wineserver_cores(Cpu* self, const std::vector<std::string>& list);
 
-//   auto get_game_cores() -> std::vector<std::string>;
-
-//   auto get_wineserver_cores() -> std::vector<std::string>;
+auto get_wineserver_cores(Cpu* self) -> std::vector<std::string>;
 
 }  // namespace ui::cpu

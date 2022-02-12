@@ -86,12 +86,38 @@ void set_cores(Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& l
   }
 }
 
+auto get_cores(Cpu* self, GtkFlowBox* flowbox) -> std::vector<std::string> {
+  std::vector<std::string> list;
+
+  for (auto child = gtk_widget_get_first_child(GTK_WIDGET(flowbox)); child != nullptr;) {
+    auto* next_child = gtk_widget_get_next_sibling(child);
+
+    auto* checkbutton = GTK_CHECK_BUTTON(gtk_widget_get_first_child(child));
+
+    if (gtk_check_button_get_active(checkbutton) != 0) {
+      list.emplace_back(gtk_check_button_get_label(checkbutton));
+    }
+
+    child = next_child;
+  }
+
+  return list;
+}
+
 void set_game_cores(Cpu* self, const std::vector<std::string>& list) {
   set_cores(self, self->flowbox_game_affinity, list);
 }
 
+auto get_game_cores(Cpu* self) -> std::vector<std::string> {
+  return get_cores(self, self->flowbox_game_affinity);
+}
+
 void set_wineserver_cores(Cpu* self, const std::vector<std::string>& list) {
   set_cores(self, self->flowbox_wineserver_affinity, list);
+}
+
+auto get_wineserver_cores(Cpu* self) -> std::vector<std::string> {
+  return get_cores(self, self->flowbox_wineserver_affinity);
 }
 
 void dispose(GObject* object) {
@@ -186,29 +212,3 @@ auto create() -> Cpu* {
 }
 
 }  // namespace ui::cpu
-
-// auto Cpu::get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string> {
-//   std::vector<std::string> list;
-
-//   auto children = flowbox->get_children();
-
-//   for (auto* child : children) {
-//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
-
-//     auto* checkbutton = dynamic_cast<Gtk::CheckButton*>(flowbox_child->get_child());
-
-//     if (checkbutton->get_active()) {
-//       list.emplace_back(checkbutton->get_label());
-//     }
-//   }
-
-//   return list;
-// }
-
-// auto Cpu::get_game_cores() -> std::vector<std::string> {
-//   return get_cores(game_affinity_flowbox);
-// }
-
-// auto Cpu::get_wineserver_cores() -> std::vector<std::string> {
-//   return get_cores(wineserver_affinity_flowbox);
-// }

@@ -75,6 +75,30 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu));
   root.put("cpu.niceness", ui::cpu::get_niceness(self->cpu));
 
+  node.clear();
+
+  for (const auto& c : ui::cpu::get_game_cores(self->cpu)) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", c);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("cpu.game-cores", node);
+
+  node.clear();
+
+  for (const auto& c : ui::cpu::get_wineserver_cores(self->cpu)) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", c);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("cpu.wineserver-cores", node);
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -406,30 +430,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
-
-//   node.clear();
-
-//   for (const auto& c : cpu->get_game_cores()) {
-//     boost::property_tree::ptree local_node;
-
-//     local_node.put("", c);
-
-//     node.push_back(std::make_pair("", local_node));
-//   }
-
-//   root.add_child("cpu.game-cores", node);
-
-//   node.clear();
-
-//   for (const auto& c : cpu->get_wineserver_cores()) {
-//     boost::property_tree::ptree local_node;
-
-//     local_node.put("", c);
-
-//     node.push_back(std::make_pair("", local_node));
-//   }
-
-//   root.add_child("cpu.wineserver-cores", node);
 
 //   // disk
 

@@ -125,6 +125,26 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
       self->cpu, root.get<bool>("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu)));
 
   ui::cpu::set_niceness(self->cpu, root.get<int>("cpu.niceness", ui::cpu::get_niceness(self->cpu)));
+
+  try {
+    std::vector<std::string> cores_list;
+
+    for (const auto& c : root.get_child("cpu.game-cores")) {
+      cores_list.emplace_back(c.second.data());
+    }
+
+    ui::cpu::set_game_cores(self->cpu, cores_list);
+
+    cores_list.clear();
+
+    for (const auto& c : root.get_child("cpu.wineserver-cores")) {
+      cores_list.emplace_back(c.second.data());
+    }
+
+    ui::cpu::set_wineserver_cores(self->cpu, cores_list);
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning(log_tag + "error when parsing the cpu core list"s);
+  }
 }
 
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
@@ -401,18 +421,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 //   node.clear();
 
-//   for (const auto& c : cpu->get_workqueue_cores()) {
-//     boost::property_tree::ptree local_node;
-
-//     local_node.put("", c);
-
-//     node.push_back(std::make_pair("", local_node));
-//   }
-
-//   root.add_child("cpu.workqueue-cores", node);
-
-//   node.clear();
-
 //   for (const auto& c : cpu->get_wineserver_cores()) {
 //     boost::property_tree::ptree local_node;
 
@@ -463,34 +471,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::load_preset(const std::string& name) {
-
-//   try {
-//     std::vector<std::string> cores_list;
-
-//     for (const auto& c : root.get_child("cpu.game-cores")) {
-//       cores_list.emplace_back(c.second.data());
-//     }
-
-//     cpu->set_game_cores(cores_list);
-
-//     cores_list.clear();
-
-//     for (const auto& c : root.get_child("cpu.workqueue-cores")) {
-//       cores_list.emplace_back(c.second.data());
-//     }
-
-//     cpu->set_workqueue_cores(cores_list);
-
-//     cores_list.clear();
-
-//     for (const auto& c : root.get_child("cpu.wineserver-cores")) {
-//       cores_list.emplace_back(c.second.data());
-//     }
-
-//     cpu->set_wineserver_cores(cores_list);
-//   } catch (const boost::property_tree::ptree_error& e) {
-//     util::warning(log_tag + "error when parsing the cpu core list");
-//   }
 
 //   // disk
 

@@ -56,32 +56,6 @@ void update_cpu_frequency_governor(const std::string& name) {
   }
 }
 
-void apply_workqueue_affinity(const std::vector<int>& cpu_affinity) {
-  int bitmask = 0;
-
-  for (const auto& core_index : cpu_affinity) {
-    bitmask += std::pow(2, core_index);
-  }
-
-  std::array<std::string, 3> paths{"/sys/devices/virtual/workqueue/cpumask",
-                                   "/sys/devices/virtual/workqueue/writeback/cpumask",
-                                   "/sys/bus/workqueue/devices/writeback/cpumask"};
-
-  std::ofstream f;
-
-  for (auto& path : paths) {
-    f.open(path);
-
-    f << bitmask;
-
-    f.close();
-
-    if (f.fail()) {
-      util::warning("error writing the workqueue affinity to: " + path);
-    }
-  }
-}
-
 void apply_udisks_configuration(const boost::property_tree::ptree& root) {
   auto drive_id = root.get<std::string>("disk.udisks.drive-id");
   auto supports_apm = root.get<bool>("disk.udisks.supports-apm", false);
@@ -165,7 +139,6 @@ auto main(int argc, char* argv[]) -> int {
   // cpu
 
   std::vector<int> game_cpu_affinity;
-  std::vector<int> workqueue_cpu_affinity;
   std::vector<int> wineserver_cpu_affinity;
 
   try {
@@ -173,12 +146,6 @@ auto main(int argc, char* argv[]) -> int {
       int core_index = std::stoi(c.second.data());
 
       game_cpu_affinity.emplace_back(core_index);
-    }
-
-    for (const auto& c : root.get_child("cpu.workqueue-cores")) {
-      int core_index = std::stoi(c.second.data());
-
-      workqueue_cpu_affinity.emplace_back(core_index);
     }
 
     for (const auto& c : root.get_child("cpu.wineserver-cores")) {
@@ -204,8 +171,6 @@ auto main(int argc, char* argv[]) -> int {
 
     cpu_dma_ofstream << 0;
   }
-
-  apply_workqueue_affinity(workqueue_cpu_affinity);
 
   // disk
 

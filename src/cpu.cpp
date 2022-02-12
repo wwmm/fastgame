@@ -70,6 +70,30 @@ auto get_frequency_governor(Cpu* self) -> std::string {
   return gtk_combo_box_text_get_active_text(self->frequency_governor);
 }
 
+void set_cores(Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& list) {
+  for (auto child = gtk_widget_get_first_child(GTK_WIDGET(flowbox)); child != nullptr;) {
+    auto* next_child = gtk_widget_get_next_sibling(child);
+
+    auto* checkbutton = GTK_CHECK_BUTTON(gtk_widget_get_first_child(child));
+
+    if (std::find(list.begin(), list.end(), gtk_check_button_get_label(checkbutton)) != list.end()) {
+      gtk_check_button_set_active(checkbutton, 1);
+    } else {
+      gtk_check_button_set_active(checkbutton, 0);
+    }
+
+    child = next_child;
+  }
+}
+
+void set_game_cores(Cpu* self, const std::vector<std::string>& list) {
+  set_cores(self, self->flowbox_game_affinity, list);
+}
+
+void set_wineserver_cores(Cpu* self, const std::vector<std::string>& list) {
+  set_cores(self, self->flowbox_wineserver_affinity, list);
+}
+
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -163,19 +187,6 @@ auto create() -> Cpu* {
 
 }  // namespace ui::cpu
 
-// namespace fs = std::filesystem;
-
-// Cpu::Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
-//   // loading glade widgets
-
-//   builder->get_widget("game_affinity_flowbox", game_affinity_flowbox);
-//   builder->get_widget("workqueue_affinity_flowbox", workqueue_affinity_flowbox);
-//   builder->get_widget("wineserver_affinity_flowbox", wineserver_affinity_flowbox);
-
-//   // initializing widgets
-
-// }
-
 // auto Cpu::get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string> {
 //   std::vector<std::string> list;
 
@@ -194,42 +205,10 @@ auto create() -> Cpu* {
 //   return list;
 // }
 
-// void Cpu::set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list) {
-//   auto children = flowbox->get_children();
-
-//   for (auto* child : children) {
-//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
-
-//     auto* checkbutton = dynamic_cast<Gtk::CheckButton*>(flowbox_child->get_child());
-
-//     if (std::find(list.begin(), list.end(), checkbutton->get_label()) != list.end()) {
-//       checkbutton->set_active(true);
-//     } else {
-//       checkbutton->set_active(false);
-//     }
-//   }
-// }
-
 // auto Cpu::get_game_cores() -> std::vector<std::string> {
 //   return get_cores(game_affinity_flowbox);
 // }
 
-// void Cpu::set_game_cores(const std::vector<std::string>& list) {
-//   set_cores(game_affinity_flowbox, list);
-// }
-
-// auto Cpu::get_workqueue_cores() -> std::vector<std::string> {
-//   return get_cores(workqueue_affinity_flowbox);
-// }
-
-// void Cpu::set_workqueue_cores(const std::vector<std::string>& list) {
-//   set_cores(workqueue_affinity_flowbox, list);
-// }
-
 // auto Cpu::get_wineserver_cores() -> std::vector<std::string> {
 //   return get_cores(wineserver_affinity_flowbox);
-// }
-
-// void Cpu::set_wineserver_cores(const std::vector<std::string>& list) {
-//   set_cores(wineserver_affinity_flowbox, list);
 // }

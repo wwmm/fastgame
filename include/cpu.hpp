@@ -43,36 +43,12 @@ auto get_frequency_governor(Cpu* self) -> std::string;
 
 void set_frequency_governor(Cpu* self, const std::string& name);
 
+void set_game_cores(Cpu* self, const std::vector<std::string>& list);
+
+void set_wineserver_cores(Cpu* self, const std::vector<std::string>& list);
+
 //   auto get_game_cores() -> std::vector<std::string>;
-
-//   void set_game_cores(const std::vector<std::string>& list);
-
-//   auto get_workqueue_cores() -> std::vector<std::string>;
-
-//   void set_workqueue_cores(const std::vector<std::string>& list);
 
 //   auto get_wineserver_cores() -> std::vector<std::string>;
 
-//   void set_wineserver_cores(const std::vector<std::string>& list);
-
 }  // namespace ui::cpu
-
-// class Cpu : public Gtk::Grid {
-//  public:
-//   Cpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-//   Cpu(const Cpu&) = delete;
-//   auto operator=(const Cpu&) -> Cpu& = delete;
-//   Cpu(const Cpu&&) = delete;
-//   auto operator=(const Cpu&&) -> Cpu& = delete;
-//   ~Cpu() override;
-
-//  private:
-//   uint n_cores = 1;
-
-//   Gtk::FlowBox *game_affinity_flowbox = nullptr, *workqueue_affinity_flowbox = nullptr,
-//                *wineserver_affinity_flowbox = nullptr;
-
-//   static auto get_cores(Gtk::FlowBox* flowbox) -> std::vector<std::string>;
-
-//   static void set_cores(Gtk::FlowBox* flowbox, const std::vector<std::string>& list);
-// };

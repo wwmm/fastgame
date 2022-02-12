@@ -34,7 +34,6 @@ settings that can be configured through FastGame:
 
 - Set Environment variables like `RADV_PERFTEST`
 - Game cpu affinity configuration
-- Kernel workqueue cpu affinity configuration
 - Change the cpu frequency governor
 - Change the process niceness
 - Use /dev/cpu_dma_latency to avoid deep C-States

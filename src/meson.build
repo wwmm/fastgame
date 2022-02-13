@@ -10,6 +10,7 @@ fastgame_launcher_deps = [
 
 fastgame_sources = [
 	'fastgame.cpp',
+	'amdgpu.cpp',
 	'application.cpp',
 	'application_ui.cpp',
 	'cpu.cpp',
@@ -17,9 +18,9 @@ fastgame_sources = [
 	'environment_variables.cpp',
 	'memory.cpp',
 	'presets_menu.cpp',
-	# 'amdgpu.cpp',
 	# 'disk.cpp',
 	# 'network.cpp',
+	'ui_helpers.cpp',
 	'util.cpp',
 	gresources
 ]
@@ -30,6 +31,7 @@ fastgame_deps = [
 	dependency('libadwaita-1', version: '>=1.0.0'),
 	dependency('sigc++-3.0', version: '>=3.0.6'),
 	dependency('boost', version: '>=1.65', modules:['filesystem']),
+	dependency('fmt'),
 	dependency('threads'),
 	dependency('udisks2')
 ]

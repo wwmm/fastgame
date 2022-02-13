@@ -2,7 +2,7 @@ project(
 	'fastgame',
 	'c',
 	'cpp',
-	default_options : ['cpp_std=c++17','buildtype=debugoptimized'],
+	default_options : ['cpp_std=c++20','buildtype=debugoptimized'],
 	version: '0.1.4',
 	meson_version: '>= 0.51.0'
 )

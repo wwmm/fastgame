@@ -1,53 +1,64 @@
-#ifndef AMDGPU_HPP
-#define AMDGPU_HPP
+#pragma once
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/flowbox.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/stack.h>
+#include <adwaita.h>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include "ui_helpers.hpp"
+#include "util.hpp"
 
-class Amdgpu : public Gtk::Grid {
- public:
-  Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-  Amdgpu(const Amdgpu&) = delete;
-  auto operator=(const Amdgpu&) -> Amdgpu& = delete;
-  Amdgpu(const Amdgpu&&) = delete;
-  auto operator=(const Amdgpu&&) -> Amdgpu& = delete;
-  ~Amdgpu() override;
+namespace ui::amdgpu {
 
-  static auto add_to_stack(Gtk::Stack* stack) -> Amdgpu*;
+G_BEGIN_DECLS
 
-  auto get_performance_level() -> std::string;
+#define FG_TYPE_AMDGPU (amdgpu_get_type())
 
-  void set_performance_level(const std::string& level);
+G_DECLARE_FINAL_TYPE(Amdgpu, amdgpu, FG, AMDGPU, GtkBox)
 
-  auto get_power_cap() -> int;
+G_END_DECLS
 
-  void set_power_cap(const int& value);
+auto create() -> Amdgpu*;
 
-  auto get_card_index() const -> int;
+}  // namespace ui::amdgpu
 
-  auto get_irq_affinity() const -> int;
+// class Amdgpu : public Gtk::Grid {
+//  public:
+//   Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
+//   Amdgpu(const Amdgpu&) = delete;
+//   auto operator=(const Amdgpu&) -> Amdgpu& = delete;
+//   Amdgpu(const Amdgpu&&) = delete;
+//   auto operator=(const Amdgpu&&) -> Amdgpu& = delete;
+//   ~Amdgpu() override;
 
-  void set_irq_affinity(const int& core_index);
+//   static auto add_to_stack(Gtk::Stack* stack) -> Amdgpu*;
 
- private:
-  std::string log_tag = "amdgpu: ";
+//   auto get_performance_level() -> std::string;
 
-  uint card_index = 0, hwmon_index = 0;
+//   void set_performance_level(const std::string& level);
 
-  Gtk::ComboBoxText* performance_level = nullptr;
+//   auto get_power_cap() -> int;
 
-  Gtk::FlowBox* irq_affinity_flowbox = nullptr;
+//   void set_power_cap(const int& value);
 
-  Glib::RefPtr<Gtk::Adjustment> power_cap;
+//   auto get_card_index() const -> int;
 
-  void read_power_cap();
-  void read_power_cap_max();
-  void read_performance_level();
-  void read_irq_affinity();
-};
+//   auto get_irq_affinity() const -> int;
 
-#endif
+//   void set_irq_affinity(const int& core_index);
+
+//  private:
+//   std::string log_tag = "amdgpu: ";
+
+//   uint card_index = 0, hwmon_index = 0;
+
+//   Gtk::ComboBoxText* performance_level = nullptr;
+
+//   Gtk::FlowBox* irq_affinity_flowbox = nullptr;
+
+//   Glib::RefPtr<Gtk::Adjustment> power_cap;
+
+//   void read_power_cap();
+//   void read_power_cap_max();
+//   void read_performance_level();
+//   void read_irq_affinity();
+// };

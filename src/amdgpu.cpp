@@ -1,206 +1,241 @@
 #include "amdgpu.hpp"
-#include <glibmm/i18n.h>
-#include <gtkmm/radiobutton.h>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <thread>
-#include "util.hpp"
 
-namespace fs = std::filesystem;
+namespace ui::amdgpu {
 
-Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
-  // loading glade widgets
+using namespace std::string_literals;
 
-  builder->get_widget("performance_level", performance_level);
-  builder->get_widget("irq_affinity_flowbox", irq_affinity_flowbox);
+auto constexpr log_tag = "amdgpu: ";
 
-  power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
+struct _Amdgpu {
+  GtkPopover parent_instance;
 
-  // initializing widgets
+  GtkComboBoxText* performance_level;
 
-  util::debug(log_tag + "using the card at the index: 0");
+  GtkSpinButton* power_cap;
+};
 
-  hwmon_index = util::find_hwmon_index(0);
+G_DEFINE_TYPE(Amdgpu, amdgpu, GTK_TYPE_BOX)
 
-  util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
+void dispose(GObject* object) {
+  util::debug(log_tag + "disposed"s);
 
-  read_power_cap_max();
-  read_power_cap();
-  read_performance_level();
-  read_irq_affinity();
+  G_OBJECT_CLASS(amdgpu_parent_class)->dispose(object);
 }
 
-Amdgpu::~Amdgpu() {
-  util::debug(log_tag + "destroyed");
+void finalize(GObject* object) {
+  util::debug(log_tag + "finalized"s);
+
+  G_OBJECT_CLASS(amdgpu_parent_class)->finalize(object);
 }
 
-auto Amdgpu::add_to_stack(Gtk::Stack* stack) -> Amdgpu* {
-  auto builder = Gtk::Builder::create_from_resource("/com/github/wwmm/fastgame/ui/amdgpu.glade");
+void amdgpu_class_init(AmdgpuClass* klass) {
+  auto* object_class = G_OBJECT_CLASS(klass);
+  auto* widget_class = GTK_WIDGET_CLASS(klass);
 
-  Amdgpu* ui = nullptr;
+  object_class->dispose = dispose;
+  object_class->finalize = finalize;
 
-  builder->get_widget_derived("widgets_grid", ui);
+  gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/amdgpu.ui");
 
-  stack->add(*ui, "amdgpu", _("AMDGPU"));
-
-  return ui;
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap);
 }
 
-auto Amdgpu::get_card_index() const -> int {
-  return card_index;
+void amdgpu_init(Amdgpu* self) {
+  gtk_widget_init_template(GTK_WIDGET(self));
+
+  ui::prepare_spinbutton<"W">(self->power_cap);
+
+  // gtk_spin_button_set_value(self->cache_pressure,
+  //                           std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
+
+  // gtk_spin_button_set_value(self->compaction_proactiveness,
+  //                           std::stoi(util::read_system_setting("/proc/sys/vm/compaction_proactiveness")[0]));
 }
 
-void Amdgpu::read_power_cap() {
-  auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                       std::to_string(hwmon_index) + "/power1_cap");
-
-  if (!fs::is_regular_file(path)) {
-    util::debug(log_tag + "file " + path.string() + " does not exist!");
-    util::debug(log_tag + "could not change the power cap!");
-  } else {
-    std::ifstream f;
-
-    f.open(path, std::ios::in);
-
-    int raw_value = 0;  // microWatts
-
-    f >> raw_value;
-
-    f.close();
-
-    int power_cap_in_watts = raw_value / 1000000;
-
-    power_cap->set_value(power_cap_in_watts);
-
-    util::debug(log_tag + "current power cap: " + std::to_string(power_cap_in_watts) + " W");
-  }
+auto create() -> Amdgpu* {
+  return static_cast<Amdgpu*>(g_object_new(FG_TYPE_AMDGPU, nullptr));
 }
 
-void Amdgpu::read_power_cap_max() {
-  auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                       std::to_string(hwmon_index) + "/power1_cap_max");
+}  // namespace ui::amdgpu
 
-  if (!fs::is_regular_file(path)) {
-    util::debug(log_tag + "file " + path.string() + " does not exist!");
-    util::debug(log_tag + "could not read the maximum power cap!");
-  } else {
-    std::ifstream f;
+// namespace fs = std::filesystem;
 
-    f.open(path, std::ios::in);
+// Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
+//   // loading glade widgets
 
-    int raw_value = 0;  // microWatts
+//   builder->get_widget("performance_level", performance_level);
+//   builder->get_widget("irq_affinity_flowbox", irq_affinity_flowbox);
 
-    f >> raw_value;
+//   power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
 
-    f.close();
+//   // initializing widgets
 
-    int power_cap_in_watts = raw_value / 1000000;
+//   util::debug(log_tag + "using the card at the index: 0");
 
-    power_cap->set_upper(power_cap_in_watts);
+//   hwmon_index = util::find_hwmon_index(0);
 
-    util::debug(log_tag + "maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
-  }
-}
+//   util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
 
-void Amdgpu::read_performance_level() {
-  auto path =
-      fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/power_dpm_force_performance_level");
+//   read_power_cap_max();
+//   read_power_cap();
+//   read_performance_level();
+//   read_irq_affinity();
+// }
 
-  if (!fs::is_regular_file(path)) {
-    util::debug(log_tag + "file " + path.string() + " does not exist!");
-    util::debug(log_tag + "could not change the performance level!");
-  } else {
-    std::ifstream f;
+// auto Amdgpu::get_card_index() const -> int {
+//   return card_index;
+// }
 
-    f.open(path, std::ios::in);
+// void Amdgpu::read_power_cap() {
+//   auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+//                        std::to_string(hwmon_index) + "/power1_cap");
 
-    std::string level;
+//   if (!fs::is_regular_file(path)) {
+//     util::debug(log_tag + "file " + path.string() + " does not exist!");
+//     util::debug(log_tag + "could not change the power cap!");
+//   } else {
+//     std::ifstream f;
 
-    f >> level;
+//     f.open(path, std::ios::in);
 
-    f.close();
+//     int raw_value = 0;  // microWatts
 
-    performance_level->set_active_text(level);
+//     f >> raw_value;
 
-    util::debug(log_tag + "current performance level: " + level);
-  }
-}
+//     f.close();
 
-void Amdgpu::read_irq_affinity() {
-  int gpu_irq = util::get_irq_number("amdgpu");
+//     int power_cap_in_watts = raw_value / 1000000;
 
-  util::debug(log_tag + "gpu irq number: " + std::to_string(gpu_irq));
+//     power_cap->set_value(power_cap_in_watts);
 
-  uint current_core = util::get_irq_affinity(gpu_irq);
+//     util::debug(log_tag + "current power cap: " + std::to_string(power_cap_in_watts) + " W");
+//   }
+// }
 
-  uint n_cores = std::thread::hardware_concurrency();
+// void Amdgpu::read_power_cap_max() {
+//   auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+//                        std::to_string(hwmon_index) + "/power1_cap_max");
 
-  for (uint n = 0; n < n_cores; n++) {
-    auto* radiobutton = Gtk::make_managed<Gtk::RadioButton>(std::to_string(n));
+//   if (!fs::is_regular_file(path)) {
+//     util::debug(log_tag + "file " + path.string() + " does not exist!");
+//     util::debug(log_tag + "could not read the maximum power cap!");
+//   } else {
+//     std::ifstream f;
 
-    if (n > 0) {
-      auto children = irq_affinity_flowbox->get_children();
-      auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(children[0]);
+//     f.open(path, std::ios::in);
 
-      auto* first_radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+//     int raw_value = 0;  // microWatts
 
-      radiobutton->join_group(*first_radiobutton);
-    }
+//     f >> raw_value;
 
-    if (n == current_core) {
-      radiobutton->set_active(true);
-    }
+//     f.close();
 
-    irq_affinity_flowbox->add(*radiobutton);
-  }
-}
+//     int power_cap_in_watts = raw_value / 1000000;
 
-auto Amdgpu::get_performance_level() -> std::string {
-  return performance_level->get_active_text();
-}
+//     power_cap->set_upper(power_cap_in_watts);
 
-void Amdgpu::set_performance_level(const std::string& level) {
-  performance_level->set_active_text(level);
-}
+//     util::debug(log_tag + "maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
+//   }
+// }
 
-auto Amdgpu::get_power_cap() -> int {
-  return static_cast<int>(power_cap->get_value());
-}
+// void Amdgpu::read_performance_level() {
+//   auto path =
+//       fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/power_dpm_force_performance_level");
 
-void Amdgpu::set_power_cap(const int& value) {
-  power_cap->set_value(value);
-}
+//   if (!fs::is_regular_file(path)) {
+//     util::debug(log_tag + "file " + path.string() + " does not exist!");
+//     util::debug(log_tag + "could not change the performance level!");
+//   } else {
+//     std::ifstream f;
 
-auto Amdgpu::get_irq_affinity() const -> int {
-  auto children = irq_affinity_flowbox->get_children();
+//     f.open(path, std::ios::in);
 
-  for (auto& child : children) {
-    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+//     std::string level;
 
-    auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+//     f >> level;
 
-    if (radiobutton->get_active()) {
-      return std::stoi(radiobutton->get_label());
-    }
-  }
+//     f.close();
 
-  return 0;
-}
+//     performance_level->set_active_text(level);
 
-void Amdgpu::set_irq_affinity(const int& core_index) {
-  auto children = irq_affinity_flowbox->get_children();
+//     util::debug(log_tag + "current performance level: " + level);
+//   }
+// }
 
-  for (auto& child : children) {
-    auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+// void Amdgpu::read_irq_affinity() {
+//   int gpu_irq = util::get_irq_number("amdgpu");
 
-    auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+//   util::debug(log_tag + "gpu irq number: " + std::to_string(gpu_irq));
 
-    if (radiobutton->get_label() == std::to_string(core_index)) {
-      radiobutton->set_active(true);
+//   uint current_core = util::get_irq_affinity(gpu_irq);
 
-      break;
-    }
-  }
-}
+//   uint n_cores = std::thread::hardware_concurrency();
+
+//   for (uint n = 0; n < n_cores; n++) {
+//     auto* radiobutton = Gtk::make_managed<Gtk::RadioButton>(std::to_string(n));
+
+//     if (n > 0) {
+//       auto children = irq_affinity_flowbox->get_children();
+//       auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(children[0]);
+
+//       auto* first_radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+//       radiobutton->join_group(*first_radiobutton);
+//     }
+
+//     if (n == current_core) {
+//       radiobutton->set_active(true);
+//     }
+
+//     irq_affinity_flowbox->add(*radiobutton);
+//   }
+// }
+
+// auto Amdgpu::get_performance_level() -> std::string {
+//   return performance_level->get_active_text();
+// }
+
+// void Amdgpu::set_performance_level(const std::string& level) {
+//   performance_level->set_active_text(level);
+// }
+
+// auto Amdgpu::get_power_cap() -> int {
+//   return static_cast<int>(power_cap->get_value());
+// }
+
+// void Amdgpu::set_power_cap(const int& value) {
+//   power_cap->set_value(value);
+// }
+
+// auto Amdgpu::get_irq_affinity() const -> int {
+//   auto children = irq_affinity_flowbox->get_children();
+
+//   for (auto& child : children) {
+//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+//     auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+//     if (radiobutton->get_active()) {
+//       return std::stoi(radiobutton->get_label());
+//     }
+//   }
+
+//   return 0;
+// }
+
+// void Amdgpu::set_irq_affinity(const int& core_index) {
+//   auto children = irq_affinity_flowbox->get_children();
+
+//   for (auto& child : children) {
+//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
+
+//     auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
+
+//     if (radiobutton->get_label() == std::to_string(core_index)) {
+//       radiobutton->set_active(true);
+
+//       break;
+//     }
+//   }
+// }

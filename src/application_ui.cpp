@@ -41,6 +41,8 @@ struct _ApplicationWindow {
 
   ui::memory::Memory* memory;
 
+  ui::amdgpu::Amdgpu* amdgpu;
+
   GSettings* settings;
 
   Data* data;
@@ -413,6 +415,7 @@ void application_window_init(ApplicationWindow* self) {
   self->environment_variables = ui::environment_variables::create();
   self->cpu = ui::cpu::create();
   self->memory = ui::memory::create();
+  self->amdgpu = ui::amdgpu::create();
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
                                              "environment_variables", _("Environment Variables"));
@@ -421,9 +424,12 @@ void application_window_init(ApplicationWindow* self) {
 
   auto* page_memory = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->memory), "memory", _("Memory"));
 
+  auto* page_amdgpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->amdgpu), "amdgpu", _("AMD GPU"));
+
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
   adw_view_stack_page_set_icon_name(page_cpu, "fg-cpu-symbolic");
   adw_view_stack_page_set_icon_name(page_memory, "fg-memory-symbolic");
+  adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");
 
   gtk_menu_button_set_popover(self->presets_menu_button, GTK_WIDGET(self->presetsMenu));
 

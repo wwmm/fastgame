@@ -2,6 +2,7 @@
 
 #include <adwaita.h>
 #include <filesystem>
+#include "amdgpu.hpp"
 #include "cpu.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
@@ -27,14 +28,11 @@ auto create(GApplication* gapp) -> ApplicationWindow*;
 
 }  // namespace ui::application_window
 
-// #include "amdgpu.hpp"
 // #include "application.hpp"
 // #include "disk.hpp"
 // #include "network.hpp"
 
 //   Gtk::Switch* use_dark_theme = nullptr;
-
-//   Amdgpu* amdgpu = nullptr;
 
 //   Disk* disk = nullptr;
 

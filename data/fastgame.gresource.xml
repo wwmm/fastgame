@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/com/github/wwmm/fastgame">
+        <file>ui/amdgpu.ui</file>
         <file>ui/application_window.ui</file>
         <file>ui/cpu.ui</file>
         <file>ui/environment_variables.ui</file>
@@ -12,10 +13,10 @@
         <file>ui/presets_menu.ui</file>
         <file>ui/preset_row.ui</file>
         <file>ui/shortcuts.ui</file>
-        <file>ui/amdgpu.glade</file>
         <file>ui/disk.glade</file>
         <file>ui/network.glade</file>
         <file>icons/scalable/emblems/fg-cpu-symbolic.svg</file>
         <file>icons/scalable/emblems/fg-memory-symbolic.svg</file>
+        <file>icons/scalable/emblems/fg-gpu-symbolic.svg</file>
     </gresource>
 </gresources>

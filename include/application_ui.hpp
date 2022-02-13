@@ -4,6 +4,7 @@
 #include <filesystem>
 #include "amdgpu.hpp"
 #include "cpu.hpp"
+#include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
 #include "presets_menu.hpp"
@@ -28,12 +29,8 @@ auto create(GApplication* gapp) -> ApplicationWindow*;
 
 }  // namespace ui::application_window
 
-// #include "application.hpp"
-// #include "disk.hpp"
 // #include "network.hpp"
 
 //   Gtk::Switch* use_dark_theme = nullptr;
-
-//   Disk* disk = nullptr;
 
 //   Network* network = nullptr;

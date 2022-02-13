@@ -1,82 +1,84 @@
-#ifndef DISK_HPP
-#define DISK_HPP
+#pragma once
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/stack.h>
-#include <gtkmm/switch.h>
+#include <adwaita.h>
 #include <udisks/udisks.h>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include "ui_helpers.hpp"
+#include "util.hpp"
 
-class Disk : public Gtk::Grid {
- public:
-  Disk(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);
-  Disk(const Disk&) = delete;
-  auto operator=(const Disk&) -> Disk& = delete;
-  Disk(const Disk&&) = delete;
-  auto operator=(const Disk&&) -> Disk& = delete;
-  ~Disk() override;
+namespace ui::disk {
 
-  static auto add_to_stack(Gtk::Stack* stack) -> Disk*;
+G_BEGIN_DECLS
 
-  auto get_device() -> std::string;
+#define FG_TYPE_DISK (disk_get_type())
 
-  void set_device(const std::string& value);
+G_DECLARE_FINAL_TYPE(Disk, disk, FG, DISK, GtkBox)
 
-  auto get_scheduler() -> std::string;
+G_END_DECLS
 
-  void set_scheduler(const std::string& value);
+auto create() -> Disk*;
 
-  auto get_readahead() -> int;
+}  // namespace ui::disk
 
-  void set_readahead(const int& value);
+// auto get_device() -> std::string;
 
-  auto get_nr_requests() -> int;
+// void set_device(const std::string& value);
 
-  void set_nr_requests(const int& value);
+// auto get_scheduler() -> std::string;
 
-  auto get_enable_realtime_priority() -> bool;
+// void set_scheduler(const std::string& value);
 
-  void set_enable_realtime_priority(const bool& value);
+// auto get_readahead() -> int;
 
-  auto get_enable_add_random() -> bool;
+// void set_readahead(const int& value);
 
-  void set_enable_add_random(const bool& value);
+// auto get_nr_requests() -> int;
 
-  auto get_drive_id() -> std::string;
+// void set_nr_requests(const int& value);
 
-  auto get_disable_apm() -> bool;
+// auto get_enable_realtime_priority() -> bool;
 
-  void set_disable_apm(const bool& value);
+// void set_enable_realtime_priority(const bool& value);
 
-  auto get_supports_apm() const -> bool;
+// auto get_enable_add_random() -> bool;
 
-  auto get_enable_write_cache() -> bool;
+// void set_enable_add_random(const bool& value);
 
-  void set_enable_write_cache(const bool& value);
+// auto get_drive_id() -> std::string;
 
-  auto get_supports_write_cache() const -> bool;
+// auto get_disable_apm() -> bool;
 
- private:
-  std::string log_tag = "disk: ";
+// void set_disable_apm(const bool& value);
 
-  Gtk::ComboBoxText *device = nullptr, *scheduler = nullptr;
+// auto get_supports_apm() const -> bool;
 
-  Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr, *disable_apm = nullptr,
-              *enable_write_cache = nullptr;
+// auto get_enable_write_cache() -> bool;
 
-  Glib::RefPtr<Gtk::Adjustment> readahead, nr_requests;
+// void set_enable_write_cache(const bool& value);
 
-  UDisksClient* udisks_client = nullptr;
+// auto get_supports_write_cache() const -> bool;
 
-  bool supports_apm = false, supports_write_cache = false;
+//  private:
+//   std::string log_tag = "disk: ";
 
-  std::string drive_id;
+//   Gtk::ComboBoxText *device = nullptr, *scheduler = nullptr;
 
-  void init_scheduler();
+//   Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr, *disable_apm = nullptr,
+//               *enable_write_cache = nullptr;
 
-  void init_udisks_object();
-};
+//   Glib::RefPtr<Gtk::Adjustment> readahead, nr_requests;
 
-#endif
+//   UDisksClient* udisks_client = nullptr;
+
+//   bool supports_apm = false, supports_write_cache = false;
+
+//   std::string drive_id;
+
+//   void init_scheduler();
+
+//   void init_udisks_object();
+// };
+
+// #endif

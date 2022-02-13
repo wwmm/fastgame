@@ -3,6 +3,7 @@ data/schemas/com.github.wwmm.fastgame.gschema.xml
 data/ui/amdgpu.ui
 data/ui/application_window.ui
 data/ui/cpu.ui
+data/ui/disk.ui
 data/ui/environment_variables.ui
 data/ui/factory_column_name.ui
 data/ui/factory_column_value.ui
@@ -11,7 +12,6 @@ data/ui/memory.ui
 data/ui/presets_menu.ui
 data/ui/preset_row.ui
 data/ui/shortcuts.ui
-data/ui/disk.glade
 data/ui/network.glade
 src/application_ui.cpp
 src/presets_menu.cpp

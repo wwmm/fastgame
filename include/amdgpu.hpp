@@ -25,14 +25,8 @@ void set_performance_level(Amdgpu* self, const std::string& name);
 
 auto get_performance_level(Amdgpu* self) -> std::string;
 
+void set_power_cap(Amdgpu* self, const int& value);
+
+auto get_power_cap(Amdgpu* self) -> int;
+
 }  // namespace ui::amdgpu
-
-//   auto get_performance_level() -> std::string;
-
-//   void set_performance_level(const std::string& level);
-
-//   auto get_power_cap() -> int;
-
-//   void set_power_cap(const int& value);
-
-//   auto get_card_index() const -> int;

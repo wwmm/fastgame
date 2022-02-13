@@ -111,6 +111,13 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("memory.transparent-hugepages.defrag", ui::memory::get_thp_defrag(self->memory));
   root.put("memory.transparent-hugepages.shmem_enabled", ui::memory::get_thp_shmem_enabled(self->memory));
 
+  // amdgpu
+
+  if (self->amdgpu != nullptr) {
+    root.put("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu));
+    root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu));
+  }
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -200,6 +207,16 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   ui::memory::set_thp_shmem_enabled(self->memory,
                                     root.get<std::string>("memory.transparent-hugepages.shmem_enabled",
                                                           ui::memory::get_thp_shmem_enabled(self->memory)));
+
+  // amdgpu
+
+  if (self->amdgpu != nullptr) {
+    ui::amdgpu::set_performance_level(
+        self->amdgpu,
+        root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu)));
+
+    ui::amdgpu::set_power_cap(self->amdgpu, root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu)));
+  }
 }
 
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
@@ -424,12 +441,16 @@ void application_window_init(ApplicationWindow* self) {
 
   auto* page_memory = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->memory), "memory", _("Memory"));
 
-  auto* page_amdgpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->amdgpu), "amdgpu", _("AMD GPU"));
-
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
   adw_view_stack_page_set_icon_name(page_cpu, "fg-cpu-symbolic");
+
+  if (util::card_is_amdgpu(0)) {
+    auto* page_amdgpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->amdgpu), "amdgpu", _("AMD GPU"));
+
+    adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");
+  }
+
   adw_view_stack_page_set_icon_name(page_memory, "fg-memory-symbolic");
-  adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");
 
   gtk_menu_button_set_popover(self->presets_menu_button, GTK_WIDGET(self->presetsMenu));
 
@@ -459,10 +480,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 
 //   disk = Disk::add_to_stack(stack);
 
-//   if (util::card_is_amdgpu(0)) {
-//     amdgpu = Amdgpu::add_to_stack(stack);
-//   }
-
 //   network = Network::add_to_stack(stack);
 
 // }
@@ -482,14 +499,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   root.put("disk.udisks.disable-apm", disk->get_disable_apm());
 //   root.put("disk.udisks.supports-write-cache", disk->get_supports_write_cache());
 //   root.put("disk.udisks.enable-write-cache", disk->get_enable_write_cache());
-
-//   // amdgpu
-
-//   if (amdgpu != nullptr) {
-//     root.put("amdgpu.performance-level", amdgpu->get_performance_level());
-//     root.put("amdgpu.power-cap", amdgpu->get_power_cap());
-//     root.put("amdgpu.irq-affinity", amdgpu->get_irq_affinity());
-//   }
 
 //   // network
 
@@ -513,15 +522,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 //   disk->set_enable_add_random(root.get<bool>("disk.add_random", disk->get_enable_add_random()));
 //   disk->set_disable_apm(root.get<bool>("disk.udisks.disable-apm", disk->get_disable_apm()));
 //   disk->set_enable_write_cache(root.get<bool>("disk.udisks.enable-write-cache", disk->get_enable_write_cache()));
-
-//   // amdgpu
-
-//   if (amdgpu != nullptr) {
-//     amdgpu->set_performance_level(root.get<std::string>("amdgpu.performance-level",
-//     amdgpu->get_performance_level())); amdgpu->set_power_cap(root.get<int>("amdgpu.power-cap",
-//     amdgpu->get_power_cap())); amdgpu->set_irq_affinity(root.get<int>("amdgpu.irq-affinity",
-//     amdgpu->get_irq_affinity()));
-//   }
 
 //   // network
 

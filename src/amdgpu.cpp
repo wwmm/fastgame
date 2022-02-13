@@ -6,6 +6,8 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "amdgpu: ";
 
+uint card_index = 0, hwmon_index = 0;
+
 struct _Amdgpu {
   GtkPopover parent_instance;
 
@@ -15,6 +17,104 @@ struct _Amdgpu {
 };
 
 G_DEFINE_TYPE(Amdgpu, amdgpu, GTK_TYPE_BOX)
+
+auto get_card_index(Amdgpu* self) -> int {
+  return card_index;
+}
+
+void set_performance_level(Amdgpu* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), name.c_str());
+}
+
+auto get_performance_level(Amdgpu* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->performance_level);
+}
+
+void set_power_cap(Amdgpu* self, const int& value) {
+  gtk_spin_button_set_value(self->power_cap, value);
+}
+
+auto get_power_cap(Amdgpu* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->power_cap));
+}
+
+void read_power_cap_max(Amdgpu* self) {
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    std::to_string(hwmon_index) + "/power1_cap_max");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug(log_tag + "file "s + path.string() + " does not exist!");
+    util::debug(log_tag + "could not read the maximum power cap!"s);
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    int raw_value = 0;  // microWatts
+
+    f >> raw_value;
+
+    f.close();
+
+    int power_cap_in_watts = raw_value / 1000000;
+
+    auto adj = gtk_spin_button_get_adjustment(self->power_cap);
+
+    gtk_adjustment_set_upper(adj, power_cap_in_watts);
+
+    util::debug(log_tag + "maximum allowed power cap: "s + std::to_string(power_cap_in_watts) + " W");
+  }
+}
+
+void read_power_cap(Amdgpu* self) {
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    std::to_string(hwmon_index) + "/power1_cap");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug(log_tag + "file "s + path.string() + " does not exist!");
+    util::debug(log_tag + "could not change the power cap!"s);
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    int raw_value = 0;  // microWatts
+
+    f >> raw_value;
+
+    f.close();
+
+    int power_cap_in_watts = raw_value / 1000000;
+
+    gtk_spin_button_set_value(self->power_cap, power_cap_in_watts);
+
+    util::debug(log_tag + "current power cap: "s + std::to_string(power_cap_in_watts) + " W");
+  }
+}
+
+void read_performance_level(Amdgpu* self) {
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) +
+                                    "/device/power_dpm_force_performance_level");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug(log_tag + "file "s + path.string() + " does not exist!");
+    util::debug(log_tag + "could not change the performance level!"s);
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    std::string level;
+
+    f >> level;
+
+    f.close();
+
+    gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), level.c_str());
+
+    util::debug(log_tag + "current performance level: "s + level);
+  }
+}
 
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
@@ -46,11 +146,15 @@ void amdgpu_init(Amdgpu* self) {
 
   ui::prepare_spinbutton<"W">(self->power_cap);
 
-  // gtk_spin_button_set_value(self->cache_pressure,
-  //                           std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
+  util::debug(log_tag + "using the card at the index: 0"s);
 
-  // gtk_spin_button_set_value(self->compaction_proactiveness,
-  //                           std::stoi(util::read_system_setting("/proc/sys/vm/compaction_proactiveness")[0]));
+  hwmon_index = util::find_hwmon_index(0);
+
+  util::debug(log_tag + "hwmon device index: "s + std::to_string(hwmon_index));
+
+  read_power_cap_max(self);
+  read_power_cap(self);
+  read_performance_level(self);
 }
 
 auto create() -> Amdgpu* {
@@ -58,184 +162,3 @@ auto create() -> Amdgpu* {
 }
 
 }  // namespace ui::amdgpu
-
-// namespace fs = std::filesystem;
-
-// Amdgpu::Amdgpu(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder) : Gtk::Grid(cobject) {
-//   // loading glade widgets
-
-//   builder->get_widget("performance_level", performance_level);
-//   builder->get_widget("irq_affinity_flowbox", irq_affinity_flowbox);
-
-//   power_cap = Glib::RefPtr<Gtk::Adjustment>::cast_dynamic(builder->get_object("power_cap"));
-
-//   // initializing widgets
-
-//   util::debug(log_tag + "using the card at the index: 0");
-
-//   hwmon_index = util::find_hwmon_index(0);
-
-//   util::debug(log_tag + "hwmon device index: " + std::to_string(hwmon_index));
-
-//   read_power_cap_max();
-//   read_power_cap();
-//   read_performance_level();
-//   read_irq_affinity();
-// }
-
-// auto Amdgpu::get_card_index() const -> int {
-//   return card_index;
-// }
-
-// void Amdgpu::read_power_cap() {
-//   auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-//                        std::to_string(hwmon_index) + "/power1_cap");
-
-//   if (!fs::is_regular_file(path)) {
-//     util::debug(log_tag + "file " + path.string() + " does not exist!");
-//     util::debug(log_tag + "could not change the power cap!");
-//   } else {
-//     std::ifstream f;
-
-//     f.open(path, std::ios::in);
-
-//     int raw_value = 0;  // microWatts
-
-//     f >> raw_value;
-
-//     f.close();
-
-//     int power_cap_in_watts = raw_value / 1000000;
-
-//     power_cap->set_value(power_cap_in_watts);
-
-//     util::debug(log_tag + "current power cap: " + std::to_string(power_cap_in_watts) + " W");
-//   }
-// }
-
-// void Amdgpu::read_power_cap_max() {
-//   auto path = fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-//                        std::to_string(hwmon_index) + "/power1_cap_max");
-
-//   if (!fs::is_regular_file(path)) {
-//     util::debug(log_tag + "file " + path.string() + " does not exist!");
-//     util::debug(log_tag + "could not read the maximum power cap!");
-//   } else {
-//     std::ifstream f;
-
-//     f.open(path, std::ios::in);
-
-//     int raw_value = 0;  // microWatts
-
-//     f >> raw_value;
-
-//     f.close();
-
-//     int power_cap_in_watts = raw_value / 1000000;
-
-//     power_cap->set_upper(power_cap_in_watts);
-
-//     util::debug(log_tag + "maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
-//   }
-// }
-
-// void Amdgpu::read_performance_level() {
-//   auto path =
-//       fs::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/power_dpm_force_performance_level");
-
-//   if (!fs::is_regular_file(path)) {
-//     util::debug(log_tag + "file " + path.string() + " does not exist!");
-//     util::debug(log_tag + "could not change the performance level!");
-//   } else {
-//     std::ifstream f;
-
-//     f.open(path, std::ios::in);
-
-//     std::string level;
-
-//     f >> level;
-
-//     f.close();
-
-//     performance_level->set_active_text(level);
-
-//     util::debug(log_tag + "current performance level: " + level);
-//   }
-// }
-
-// void Amdgpu::read_irq_affinity() {
-//   int gpu_irq = util::get_irq_number("amdgpu");
-
-//   util::debug(log_tag + "gpu irq number: " + std::to_string(gpu_irq));
-
-//   uint current_core = util::get_irq_affinity(gpu_irq);
-
-//   uint n_cores = std::thread::hardware_concurrency();
-
-//   for (uint n = 0; n < n_cores; n++) {
-//     auto* radiobutton = Gtk::make_managed<Gtk::RadioButton>(std::to_string(n));
-
-//     if (n > 0) {
-//       auto children = irq_affinity_flowbox->get_children();
-//       auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(children[0]);
-
-//       auto* first_radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
-
-//       radiobutton->join_group(*first_radiobutton);
-//     }
-
-//     if (n == current_core) {
-//       radiobutton->set_active(true);
-//     }
-
-//     irq_affinity_flowbox->add(*radiobutton);
-//   }
-// }
-
-// auto Amdgpu::get_performance_level() -> std::string {
-//   return performance_level->get_active_text();
-// }
-
-// void Amdgpu::set_performance_level(const std::string& level) {
-//   performance_level->set_active_text(level);
-// }
-
-// auto Amdgpu::get_power_cap() -> int {
-//   return static_cast<int>(power_cap->get_value());
-// }
-
-// void Amdgpu::set_power_cap(const int& value) {
-//   power_cap->set_value(value);
-// }
-
-// auto Amdgpu::get_irq_affinity() const -> int {
-//   auto children = irq_affinity_flowbox->get_children();
-
-//   for (auto& child : children) {
-//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
-
-//     auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
-
-//     if (radiobutton->get_active()) {
-//       return std::stoi(radiobutton->get_label());
-//     }
-//   }
-
-//   return 0;
-// }
-
-// void Amdgpu::set_irq_affinity(const int& core_index) {
-//   auto children = irq_affinity_flowbox->get_children();
-
-//   for (auto& child : children) {
-//     auto* flowbox_child = dynamic_cast<Gtk::FlowBoxChild*>(child);
-
-//     auto* radiobutton = dynamic_cast<Gtk::RadioButton*>(flowbox_child->get_child());
-
-//     if (radiobutton->get_label() == std::to_string(core_index)) {
-//       radiobutton->set_active(true);
-
-//       break;
-//     }
-//   }
-// }

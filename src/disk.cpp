@@ -24,21 +24,37 @@ struct _Disk {
 
 G_DEFINE_TYPE(Disk, disk, GTK_TYPE_BOX)
 
-// void set_performance_level(Disk* self, const std::string& name) {
-//   gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), name.c_str());
-// }
+void set_device(Disk* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->device), name.c_str());
+}
 
-// auto get_performance_level(Disk* self) -> std::string {
-//   return gtk_combo_box_text_get_active_text(self->performance_level);
-// }
+auto get_device(Disk* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->device);
+}
 
-// void set_power_cap(Disk* self, const int& value) {
-//   gtk_spin_button_set_value(self->power_cap, value);
-// }
+void set_scheduler(Disk* self, const std::string& name) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->scheduler), name.c_str());
+}
 
-// auto get_power_cap(Disk* self) -> int {
-//   return static_cast<int>(gtk_spin_button_get_value(self->power_cap));
-// }
+auto get_scheduler(Disk* self) -> std::string {
+  return gtk_combo_box_text_get_active_text(self->scheduler);
+}
+
+void set_readahead(Disk* self, const int& value) {
+  gtk_spin_button_set_value(self->readahead, value);
+}
+
+auto get_readahead(Disk* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->readahead));
+}
+
+void set_nr_requests(Disk* self, const int& value) {
+  gtk_spin_button_set_value(self->nr_requests, value);
+}
+
+auto get_nr_requests(Disk* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->nr_requests));
+}
 
 void init_scheduler(Disk* self, const std::string& active_text) {
   auto scheduler_list = util::read_system_setting(active_text + "/queue/scheduler");
@@ -210,38 +226,6 @@ auto create() -> Disk* {
 }
 
 }  // namespace ui::disk
-
-// auto Disk::get_device() -> std::string {
-//   return device->get_active_text();
-// }
-
-// void Disk::set_device(const std::string& value) {
-//   device->set_active_text(value);
-// }
-
-// auto Disk::get_scheduler() -> std::string {
-//   return scheduler->get_active_text();
-// }
-
-// void Disk::set_scheduler(const std::string& value) {
-//   scheduler->set_active_text(value);
-// }
-
-// auto Disk::get_readahead() -> int {
-//   return static_cast<int>(readahead->get_value());
-// }
-
-// void Disk::set_readahead(const int& value) {
-//   readahead->set_value(value);
-// }
-
-// auto Disk::get_nr_requests() -> int {
-//   return static_cast<int>(nr_requests->get_value());
-// }
-
-// void Disk::set_nr_requests(const int& value) {
-//   nr_requests->set_value(value);
-// }
 
 // auto Disk::get_enable_realtime_priority() -> bool {
 //   return enable_realtime_priority->get_active();

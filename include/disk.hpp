@@ -20,52 +20,20 @@ G_END_DECLS
 
 auto create() -> Disk*;
 
+void set_device(Disk* self, const std::string& name);
+
+auto get_device(Disk* self) -> std::string;
+
+void set_scheduler(Disk* self, const std::string& name);
+
+auto get_scheduler(Disk* self) -> std::string;
+
+void set_readahead(Disk* self, const int& value);
+
+auto get_readahead(Disk* self) -> int;
+
+void set_nr_requests(Disk* self, const int& value);
+
+auto get_nr_requests(Disk* self) -> int;
+
 }  // namespace ui::disk
-
-// auto get_device() -> std::string;
-
-// void set_device(const std::string& value);
-
-// auto get_scheduler() -> std::string;
-
-// void set_scheduler(const std::string& value);
-
-// auto get_readahead() -> int;
-
-// void set_readahead(const int& value);
-
-// auto get_nr_requests() -> int;
-
-// void set_nr_requests(const int& value);
-
-// auto get_enable_realtime_priority() -> bool;
-
-// void set_enable_realtime_priority(const bool& value);
-
-// auto get_enable_add_random() -> bool;
-
-// void set_enable_add_random(const bool& value);
-
-// auto get_drive_id() -> std::string;
-
-// auto get_disable_apm() -> bool;
-
-// void set_disable_apm(const bool& value);
-
-// auto get_supports_apm() const -> bool;
-
-// auto get_enable_write_cache() -> bool;
-
-// void set_enable_write_cache(const bool& value);
-
-// auto get_supports_write_cache() const -> bool;
-
-//  private:
-//
-
-//   void init_scheduler();
-
-//   void init_udisks_object();
-// };
-
-// #endif

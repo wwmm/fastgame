@@ -233,6 +233,28 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
     ui::amdgpu::set_power_cap(self->amdgpu, root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu)));
   }
+
+  // disk
+
+  ui::disk::set_device(self->disk, root.get<std::string>("disk.device", ui::disk::get_device(self->disk)));
+
+  ui::disk::set_scheduler(self->disk, root.get<std::string>("disk.scheduler", ui::disk::get_scheduler(self->disk)));
+
+  ui::disk::set_enable_realtime_priority(
+      self->disk, root.get<bool>("disk.enable-realtime-priority", ui::disk::get_enable_realtime_priority(self->disk)));
+
+  ui::disk::set_readahead(self->disk, root.get<int>("disk.readahead", ui::disk::get_readahead(self->disk)));
+
+  ui::disk::set_nr_requests(self->disk, root.get<int>("disk.nr-requests", ui::disk::get_nr_requests(self->disk)));
+
+  ui::disk::set_enable_add_random(self->disk,
+                                  root.get<bool>("disk.add_random", ui::disk::get_enable_add_random(self->disk)));
+
+  ui::disk::set_disable_apm(self->disk,
+                            root.get<bool>("disk.udisks.disable-apm", ui::disk::get_disable_apm(self->disk)));
+
+  ui::disk::set_enable_write_cache(
+      self->disk, root.get<bool>("disk.udisks.enable-write-cache", ui::disk::get_enable_write_cache(self->disk)));
 }
 
 void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
@@ -515,18 +537,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::load_preset(const std::string& name) {
-
-//   // disk
-
-//   disk->set_device(root.get<std::string>("disk.device", disk->get_device()));
-//   disk->set_scheduler(root.get<std::string>("disk.scheduler", disk->get_scheduler()));
-//   disk->set_enable_realtime_priority(
-//       root.get<bool>("disk.enable-realtime-priority", disk->get_enable_realtime_priority()));
-//   disk->set_readahead(root.get<int>("disk.readahead", disk->get_readahead()));
-//   disk->set_nr_requests(root.get<int>("disk.nr-requests", disk->get_nr_requests()));
-//   disk->set_enable_add_random(root.get<bool>("disk.add_random", disk->get_enable_add_random()));
-//   disk->set_disable_apm(root.get<bool>("disk.udisks.disable-apm", disk->get_disable_apm()));
-//   disk->set_enable_write_cache(root.get<bool>("disk.udisks.enable-write-cache", disk->get_enable_write_cache()));
 
 //   // network
 

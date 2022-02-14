@@ -20,6 +20,7 @@
                                 <child>
                                     <object class="GtkComboBoxText" id="device">
                                         <property name="valign">center</property>
+                                        <signal name="changed" handler="on_device_changed" />
                                     </object>
                                 </child>
                             </object>

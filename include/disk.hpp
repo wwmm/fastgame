@@ -61,20 +61,7 @@ auto create() -> Disk*;
 // auto get_supports_write_cache() const -> bool;
 
 //  private:
-//   std::string log_tag = "disk: ";
-
-//   Gtk::ComboBoxText *device = nullptr, *scheduler = nullptr;
-
-//   Gtk::Switch *enable_realtime_priority = nullptr, *add_random = nullptr, *disable_apm = nullptr,
-//               *enable_write_cache = nullptr;
-
-//   Glib::RefPtr<Gtk::Adjustment> readahead, nr_requests;
-
-//   UDisksClient* udisks_client = nullptr;
-
-//   bool supports_apm = false, supports_write_cache = false;
-
-//   std::string drive_id;
+//
 
 //   void init_scheduler();
 

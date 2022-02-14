@@ -72,11 +72,11 @@ auto get_enable_add_random(Disk* self) -> bool {
   return gtk_switch_get_active(self->add_random);
 }
 
-void set_enable_disable_apm(Disk* self, const bool& value) {
+void set_disable_apm(Disk* self, const bool& value) {
   gtk_switch_set_active(self->disable_apm, value);
 }
 
-auto get_enable_disable_apm(Disk* self) -> bool {
+auto get_disable_apm(Disk* self) -> bool {
   return gtk_switch_get_active(self->disable_apm);
 }
 

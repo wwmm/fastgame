@@ -120,6 +120,20 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
     root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu));
   }
 
+  // disk
+
+  root.put("disk.device", ui::disk::get_device(self->disk));
+  root.put("disk.scheduler", ui::disk::get_scheduler(self->disk));
+  root.put("disk.enable-realtime-priority", ui::disk::get_enable_realtime_priority(self->disk));
+  root.put("disk.readahead", ui::disk::get_readahead(self->disk));
+  root.put("disk.nr-requests", ui::disk::get_nr_requests(self->disk));
+  root.put("disk.add_random", ui::disk::get_enable_add_random(self->disk));
+  root.put("disk.udisks.drive-id", ui::disk::get_drive_id());
+  root.put("disk.udisks.supports-apm", ui::disk::get_supports_apm());
+  root.put("disk.udisks.disable-apm", ui::disk::get_disable_apm(self->disk));
+  root.put("disk.udisks.supports-write-cache", ui::disk::get_supports_write_cache());
+  root.put("disk.udisks.enable-write-cache", ui::disk::get_enable_write_cache(self->disk));
+
   auto output_file = directory / std::filesystem::path{name + ".json"};
 
   boost::property_tree::write_json(output_file, root);
@@ -490,20 +504,6 @@ auto create(GApplication* gapp) -> ApplicationWindow* {
 // }
 
 // void ApplicationUi::save_preset(const std::string& name, const std::filesystem::path& directory) {
-
-//   // disk
-
-//   root.put("disk.device", disk->get_device());
-//   root.put("disk.scheduler", disk->get_scheduler());
-//   root.put("disk.enable-realtime-priority", disk->get_enable_realtime_priority());
-//   root.put("disk.readahead", disk->get_readahead());
-//   root.put("disk.nr-requests", disk->get_nr_requests());
-//   root.put("disk.add_random", disk->get_enable_add_random());
-//   root.put("disk.udisks.drive-id", disk->get_drive_id());
-//   root.put("disk.udisks.supports-apm", disk->get_supports_apm());
-//   root.put("disk.udisks.disable-apm", disk->get_disable_apm());
-//   root.put("disk.udisks.supports-write-cache", disk->get_supports_write_cache());
-//   root.put("disk.udisks.enable-write-cache", disk->get_enable_write_cache());
 
 //   // network
 

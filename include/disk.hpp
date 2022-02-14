@@ -44,9 +44,9 @@ void set_enable_add_random(Disk* self, const bool& value);
 
 auto get_enable_add_random(Disk* self) -> bool;
 
-void set_enable_disable_apm(Disk* self, const bool& value);
+void set_disable_apm(Disk* self, const bool& value);
 
-auto get_enable_disable_apm(Disk* self) -> bool;
+auto get_disable_apm(Disk* self) -> bool;
 
 void set_enable_write_cache(Disk* self, const bool& value);
 

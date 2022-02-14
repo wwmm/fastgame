@@ -56,6 +56,50 @@ auto get_nr_requests(Disk* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->nr_requests));
 }
 
+void set_enable_realtime_priority(Disk* self, const bool& value) {
+  gtk_switch_set_active(self->enable_realtime_priority, value);
+}
+
+auto get_enable_realtime_priority(Disk* self) -> bool {
+  return gtk_switch_get_active(self->enable_realtime_priority);
+}
+
+void set_enable_add_random(Disk* self, const bool& value) {
+  gtk_switch_set_active(self->add_random, value);
+}
+
+auto get_enable_add_random(Disk* self) -> bool {
+  return gtk_switch_get_active(self->add_random);
+}
+
+void set_enable_disable_apm(Disk* self, const bool& value) {
+  gtk_switch_set_active(self->disable_apm, value);
+}
+
+auto get_enable_disable_apm(Disk* self) -> bool {
+  return gtk_switch_get_active(self->disable_apm);
+}
+
+void set_enable_write_cache(Disk* self, const bool& value) {
+  gtk_switch_set_active(self->enable_write_cache, value);
+}
+
+auto get_enable_write_cache(Disk* self) -> bool {
+  return gtk_switch_get_active(self->enable_write_cache);
+}
+
+auto get_supports_apm() -> bool {
+  return supports_apm;
+}
+
+auto get_supports_write_cache() -> bool {
+  return supports_write_cache;
+}
+
+auto get_drive_id() -> std::string {
+  return drive_id;
+}
+
 void init_scheduler(Disk* self, const std::string& active_text) {
   auto scheduler_list = util::read_system_setting(active_text + "/queue/scheduler");
 
@@ -226,47 +270,3 @@ auto create() -> Disk* {
 }
 
 }  // namespace ui::disk
-
-// auto Disk::get_enable_realtime_priority() -> bool {
-//   return enable_realtime_priority->get_active();
-// }
-
-// void Disk::set_enable_realtime_priority(const bool& value) {
-//   enable_realtime_priority->set_active(value);
-// }
-
-// auto Disk::get_enable_add_random() -> bool {
-//   return add_random->get_active();
-// }
-
-// void Disk::set_enable_add_random(const bool& value) {
-//   add_random->set_active(value);
-// }
-
-// auto Disk::get_drive_id() -> std::string {
-//   return drive_id;
-// }
-
-// auto Disk::get_disable_apm() -> bool {
-//   return disable_apm->get_active();
-// }
-
-// void Disk::set_disable_apm(const bool& value) {
-//   disable_apm->set_active(value);
-// }
-
-// auto Disk::get_supports_apm() const -> bool {
-//   return supports_apm;
-// }
-
-// auto Disk::get_enable_write_cache() -> bool {
-//   return enable_write_cache->get_active();
-// }
-
-// void Disk::set_enable_write_cache(const bool& value) {
-//   enable_write_cache->set_active(value);
-// }
-
-// auto Disk::get_supports_write_cache() const -> bool {
-//   return supports_write_cache;
-// }

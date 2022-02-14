@@ -36,4 +36,26 @@ void set_nr_requests(Disk* self, const int& value);
 
 auto get_nr_requests(Disk* self) -> int;
 
+void set_enable_realtime_priority(Disk* self, const bool& value);
+
+auto get_enable_realtime_priority(Disk* self) -> bool;
+
+void set_enable_add_random(Disk* self, const bool& value);
+
+auto get_enable_add_random(Disk* self) -> bool;
+
+void set_enable_disable_apm(Disk* self, const bool& value);
+
+auto get_enable_disable_apm(Disk* self) -> bool;
+
+void set_enable_write_cache(Disk* self, const bool& value);
+
+auto get_enable_write_cache(Disk* self) -> bool;
+
+auto get_supports_apm() -> bool;
+
+auto get_supports_write_cache() -> bool;
+
+auto get_drive_id() -> std::string;
+
 }  // namespace ui::disk

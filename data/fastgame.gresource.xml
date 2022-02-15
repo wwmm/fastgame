@@ -14,7 +14,6 @@
         <file>ui/presets_menu.ui</file>
         <file>ui/preset_row.ui</file>
         <file>ui/shortcuts.ui</file>
-        <file>ui/network.glade</file>
         <file>icons/scalable/emblems/fg-cpu-symbolic.svg</file>
         <file>icons/scalable/emblems/fg-memory-symbolic.svg</file>
         <file>icons/scalable/emblems/fg-gpu-symbolic.svg</file>

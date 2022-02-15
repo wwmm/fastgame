@@ -223,22 +223,6 @@ auto main(int argc, char* argv[]) -> int {
   update_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled",
                         root.get<std::string>("memory.transparent-hugepages.shmem_enabled"));
 
-  // network
-
-  if (root.get<bool>("network.ipv4.use_tcp_mtu_probing", true)) {
-    // Disabled by default, enabled when an ICMP black hole is detected
-    update_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing", 1);
-  } else {
-    update_system_setting("/proc/sys/net/ipv4/tcp_mtu_probing", 0);
-  }
-
-  update_system_setting("/proc/sys/net/ipv4/tcp_congestion_control",
-                        root.get<std::string>("network.ipv4.tcp_congestion_control", "reno"));
-
-  update_system_setting("/proc/sys/net/ipv4/tcp_max_reordering", root.get<int>("network.ipv4.tcp_max_reordering", 300));
-
-  update_system_setting("/proc/sys/net/ipv4/tcp_probe_interval", root.get<int>("network.ipv4.tcp_probe_interval", 600));
-
   // starting the netlink server
 
   int game_pid = -1;

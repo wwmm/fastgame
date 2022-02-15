@@ -12,7 +12,6 @@ data/ui/memory.ui
 data/ui/presets_menu.ui
 data/ui/preset_row.ui
 data/ui/shortcuts.ui
-data/ui/network.glade
 src/application_ui.cpp
 src/presets_menu.cpp
 

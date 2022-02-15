@@ -23,8 +23,8 @@ to the kernel Process Events Connector will be launched. this server applies to 
 affinity, priority scheduler, etc. It will be automatically finished once the main window is closed. So keep FastGame
 window open while playing!
 
-If want to apply environment variables it is necessary to launch the game with `fastgame_launcher`. In Steam all that
-you have to do is putting this `fastgame_launcher %command%` in the launch options.
+If you want to apply environment variables it is necessary to launch the game with `fastgame_launcher`. In Steam all that
+you have to do is putting `fastgame_launcher %command%` in the launch options.
 
 # Features
 
@@ -32,7 +32,7 @@ First of all have in mind that there is no guarantee that the settings exposed b
 performance. Think of FastGame as an easy way to test if they can help you. That being said these are the current
 settings that can be configured through FastGame:
 
-- Set Environment variables like `RADV_PERFTEST`
+- Set Environment variables
 - Game cpu affinity configuration
 - Change the cpu frequency governor
 - Change the process niceness
@@ -49,7 +49,6 @@ settings that can be configured through FastGame:
 - Configure the virtual memory cache pressure
 - Configure the virtual memory compaction proactiveness
 - Configuring transparent hugepages
-- Configuring a few tcp network parameters like: congestion control, mtu probing, etc
 - Saving all the settings above to a preset file that can be easily loaded
 
 # Compilation

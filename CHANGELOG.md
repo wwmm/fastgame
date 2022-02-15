@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Added
+
+- The application was ported from gtkmm3 to gtk4
+
 ## [0.1.3]
 
 ### Added

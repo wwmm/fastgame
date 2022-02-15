@@ -18,8 +18,9 @@ fastgame_sources = [
 	'environment_variable_holder.cpp',
 	'environment_variables.cpp',
 	'memory.cpp',
+	'preferences_general.cpp',
+	'preferences_window.cpp',
 	'presets_menu.cpp',
-	# 'network.cpp',
 	'ui_helpers.cpp',
 	'util.cpp',
 	gresources

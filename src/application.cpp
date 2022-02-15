@@ -71,7 +71,7 @@ void application_class_init(ApplicationClass* klass) {
 }
 
 void application_init(Application* self) {
-  std::array<GActionEntry, 5> entries{};
+  std::array<GActionEntry, 6> entries{};
 
   entries[0] = {
       "quit", [](GSimpleAction* action, GVariant* parameter, gpointer app) { g_application_quit(G_APPLICATION(app)); },
@@ -124,6 +124,17 @@ void application_init(Application* self) {
 
   entries[4] = {"hide_windows",
                 [](GSimpleAction* action, GVariant* parameter, gpointer app) { hide_all_windows(G_APPLICATION(app)); },
+                nullptr, nullptr, nullptr};
+
+  entries[5] = {"preferences",
+                [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
+                  auto* preferences = ui::preferences::window::create();
+
+                  gtk_window_set_transient_for(GTK_WINDOW(preferences),
+                                               GTK_WINDOW(gtk_application_get_active_window(GTK_APPLICATION(gapp))));
+
+                  gtk_window_present(GTK_WINDOW(preferences));
+                },
                 nullptr, nullptr, nullptr};
 
   g_action_map_add_action_entries(G_ACTION_MAP(self), entries.data(), entries.size(), self);

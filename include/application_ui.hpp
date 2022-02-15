@@ -28,9 +28,3 @@ G_END_DECLS
 auto create(GApplication* gapp) -> ApplicationWindow*;
 
 }  // namespace ui::application_window
-
-// #include "network.hpp"
-
-//   Gtk::Switch* use_dark_theme = nullptr;
-
-//   Network* network = nullptr;

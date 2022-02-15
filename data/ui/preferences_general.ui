@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="fastgame">
+    <template class="PreferencesGeneral" parent="AdwPreferencesPage">
+        <property name="icon_name">preferences-system-symbolic</property>
+        <property name="title" translatable="yes">_General</property>
+        <property name="use-underline">True</property>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Style</property>
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Use Dark Theme</property>
+                        <property name="activatable_widget">theme_switch</property>
+                        <child>
+                            <object class="GtkSwitch" id="theme_switch">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Hide Menus on Outside Clicks</property>
+                        <property name="activatable_widget">autohide_popovers</property>
+                        <child>
+                            <object class="GtkSwitch" id="autohide_popovers">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

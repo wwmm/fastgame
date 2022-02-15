@@ -9,9 +9,13 @@ data/ui/factory_column_name.ui
 data/ui/factory_column_value.ui
 data/ui/factory_column_delete.ui
 data/ui/memory.ui
+data/ui/preferences_general.ui
+data/ui/preferences_window.ui
 data/ui/presets_menu.ui
 data/ui/preset_row.ui
 data/ui/shortcuts.ui
 src/application_ui.cpp
 src/presets_menu.cpp
+src/preferences_window.cpp
+src/preferences_general.cpp
 

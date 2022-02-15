@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-15 13:17-0300\n"
+"POT-Creation-Date: 2022-02-15 11:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.github.wwmm.fastgame.desktop.in:3 data/ui/application.glade:213
+#: data/com.github.wwmm.fastgame.desktop.in:3
 msgid "FastGame"
 msgstr ""
 
@@ -33,222 +33,346 @@ msgstr ""
 msgid "system;tweak;game;"
 msgstr ""
 
-#: data/ui/about.glade.in:11
-msgid "Tweak System Settings"
+#: data/ui/amdgpu.ui:15
+msgid "Performance"
 msgstr ""
 
-#: data/ui/application.glade:36 data/ui/environment_variables.glade:39
-msgid "Name"
+#: data/ui/amdgpu.ui:19
+msgid "Level"
 msgstr ""
 
-#: data/ui/application.glade:49
-msgid "Create Preset"
-msgstr ""
-
-#: data/ui/application.glade:67
-msgid "Import Presets"
-msgstr ""
-
-#: data/ui/application.glade:181
-msgid "Executable"
-msgstr ""
-
-#: data/ui/application.glade:220
-msgid "Settings"
-msgstr ""
-
-#: data/ui/application.glade:248
-msgid "Presets"
-msgstr ""
-
-#: data/ui/application.glade:259
-msgid "Apply"
-msgstr ""
-
-#: data/ui/application.glade:305
-msgid "Use Dark Theme"
-msgstr ""
-
-#: data/ui/application.glade:326
-msgid "About"
-msgstr ""
-
-#: data/ui/preset_row.glade:47
-msgid "Load"
-msgstr ""
-
-#: data/ui/preset_row.glade:64
-msgid "Save current settings to this preset file"
-msgstr ""
-
-#: data/ui/preset_row.glade:80
-msgid "Remove this preset file"
-msgstr ""
-
-#: data/ui/environment_variables.glade:53
-msgid "Value"
-msgstr ""
-
-#: data/ui/environment_variables.glade:82
-msgid "Add Line"
-msgstr ""
-
-#: data/ui/environment_variables.glade:98
-msgid "Remove Selection"
-msgstr ""
-
-#: data/ui/amdgpu.glade:33
-msgid "Performance Level"
-msgstr ""
-
-#: data/ui/amdgpu.glade:46
+#: data/ui/amdgpu.ui:25
 msgid "auto"
 msgstr ""
 
-#: data/ui/amdgpu.glade:47
+#: data/ui/amdgpu.ui:26
 msgid "low"
 msgstr ""
 
-#: data/ui/amdgpu.glade:48
+#: data/ui/amdgpu.ui:27
 msgid "high"
 msgstr ""
 
-#: data/ui/amdgpu.glade:49
+#: data/ui/amdgpu.ui:28
 msgid "manual"
 msgstr ""
 
-#: data/ui/amdgpu.glade:50
+#: data/ui/amdgpu.ui:29
 msgid "profile_standard"
 msgstr ""
 
-#: data/ui/amdgpu.glade:51
+#: data/ui/amdgpu.ui:30
 msgid "profile_min_sclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:52
+#: data/ui/amdgpu.ui:31
 msgid "profile_min_mclk"
 msgstr ""
 
-#: data/ui/amdgpu.glade:53
+#: data/ui/amdgpu.ui:32
 msgid "profile_peak"
 msgstr ""
 
-#: data/ui/amdgpu.glade:66
+#: data/ui/amdgpu.ui:41
 msgid "Power Cap"
 msgstr ""
 
-#: data/ui/amdgpu.glade:111
-msgid "IRQ Affinity"
+#: data/ui/application_window.ui:6
+msgid "_Preferences"
 msgstr ""
 
-#: data/ui/amdgpu.glade:124
-msgid "Cores"
+#: data/ui/application_window.ui:10
+msgid "_Shortcuts"
 msgstr ""
 
-#: data/ui/memory.glade:37
-msgid "Transparent HugePages"
+#: data/ui/application_window.ui:16
+msgid "_About FastGame"
 msgstr ""
 
-#: data/ui/memory.glade:50
-msgid "enabled"
+#: data/ui/application_window.ui:33
+msgid "Apply the current settings to the system"
 msgstr ""
 
-#: data/ui/memory.glade:73
-msgid "defrag"
+#: data/ui/application_window.ui:36
+msgid "Apply"
 msgstr ""
 
-#: data/ui/memory.glade:96
-msgid "shmem_enabled"
+#: data/ui/application_window.ui:45
+msgid "Global Bypass"
 msgstr ""
 
-#: data/ui/memory.glade:136
-msgid "Virtual Memory"
+#: data/ui/application_window.ui:63
+msgid "Primary Menu"
 msgstr ""
 
-#: data/ui/memory.glade:150
-msgid "Cache Pressure"
+#: data/ui/application_window.ui:72 src/presets_menu.cpp:102
+msgid "Presets"
 msgstr ""
 
-#: data/ui/memory.glade:176
-msgid "Compaction Proactiveness"
+#: data/ui/application_window.ui:74
+msgid "Presets Menu"
 msgstr ""
 
-#: data/ui/cpu.glade:33
-msgid "Use the Batch Scheduler"
+#: data/ui/application_window.ui:103
+msgid "Configuration sections"
 msgstr ""
 
-#: data/ui/cpu.glade:57
-msgid "Use /dev/cpu_dma_latency"
+#: data/ui/application_window.ui:130
+msgid "Executable"
 msgstr ""
 
-#: data/ui/cpu.glade:96
-msgid "Child Runs First"
+#: data/ui/application_window.ui:147
+msgid "FastGame Window"
 msgstr ""
 
-#: data/ui/cpu.glade:120
-msgid "Realtime Wineserver"
+#: data/ui/cpu.ui:15
+msgid "Scheduler and Priority"
 msgstr ""
 
-#: data/ui/cpu.glade:157
+#: data/ui/cpu.ui:19
 msgid "Frequency Governor"
 msgstr ""
 
-#: data/ui/cpu.glade:195
+#: data/ui/cpu.ui:30
 msgid "Niceness"
 msgstr ""
 
-#: data/ui/cpu.glade:238
-msgid "Game"
+#: data/ui/cpu.ui:52
+msgid "Use the Batch Scheduler"
 msgstr ""
 
-#: data/ui/cpu.glade:268
-msgid "Kernel Workqueue"
+#: data/ui/cpu.ui:64
+msgid "Realtime Wineserver"
 msgstr ""
 
-#: data/ui/cpu.glade:299
+#: data/ui/cpu.ui:77
+msgid "Use /dev/cpu_dma_latency"
+msgstr ""
+
+#: data/ui/cpu.ui:89
+msgid "Child Runs First"
+msgstr ""
+
+#: data/ui/cpu.ui:103
 msgid "Affinity"
 msgstr ""
 
-#: data/ui/cpu.glade:311
+#: data/ui/cpu.ui:107
+msgid "Game"
+msgstr ""
+
+#: data/ui/cpu.ui:123
 msgid "Wineserver"
 msgstr ""
 
-#: data/ui/disk.glade:32
+#: data/ui/disk.ui:15
 msgid "Device"
 msgstr ""
 
-#: data/ui/disk.glade:55
-msgid "Readahead"
+#: data/ui/disk.ui:19
+msgid "Path"
 msgstr ""
 
-#: data/ui/disk.glade:85
+#: data/ui/disk.ui:31
 msgid "Scheduler"
 msgstr ""
 
-#: data/ui/disk.glade:108
-msgid "nr_requests"
+#: data/ui/disk.ui:42
+msgid "Readahead"
 msgstr ""
 
-#: data/ui/disk.glade:134
+#: data/ui/disk.ui:65
+msgid "Maximum Read/Write requests"
+msgstr ""
+
+#: data/ui/disk.ui:89
+msgid "Enable Write Cache"
+msgstr ""
+
+#: data/ui/disk.ui:101
+msgid "Disable APM"
+msgstr ""
+
+#: data/ui/disk.ui:113
 msgid "Realtime Priority"
 msgstr ""
 
-#: data/ui/disk.glade:158
+#: data/ui/disk.ui:125
 msgid "Add Random"
 msgstr ""
 
-#: data/ui/network.glade:33
-msgid "TCP MTU Probing"
+#: data/ui/environment_variables.ui:33 data/ui/presets_menu.ui:29
+msgid "Name"
 msgstr ""
 
-#: data/ui/network.glade:45
-msgid "TCP Maximum Reordering"
+#: data/ui/environment_variables.ui:45
+msgid "Value"
 msgstr ""
 
-#: data/ui/network.glade:86
-msgid "TCP Probe Interval"
+#: data/ui/environment_variables.ui:75
+msgid "Add Line"
 msgstr ""
 
-#: data/ui/network.glade:117
-msgid "TCP Congestion Control"
+#: data/ui/factory_column_delete.ui:5
+msgid "Remove this line"
+msgstr ""
+
+#: data/ui/memory.ui:15
+msgid "Transparent HugePages"
+msgstr ""
+
+#: data/ui/memory.ui:19
+msgid "Enabled"
+msgstr ""
+
+#: data/ui/memory.ui:30
+msgid "Defrag"
+msgstr ""
+
+#: data/ui/memory.ui:41
+msgid "Shared Memory Enabled"
+msgstr ""
+
+#: data/ui/memory.ui:54
+msgid "Virtual"
+msgstr ""
+
+#: data/ui/memory.ui:58
+msgid "Cache Pressure"
+msgstr ""
+
+#: data/ui/memory.ui:79
+msgid "Compaction Proactiveness"
+msgstr ""
+
+#: data/ui/preferences_general.ui:5
+msgid "_General"
+msgstr ""
+
+#: data/ui/preferences_general.ui:10
+msgid "Service"
+msgstr ""
+
+#: data/ui/preferences_general.ui:13
+msgid "Start Service at Login"
+msgstr ""
+
+#: data/ui/preferences_general.ui:26
+msgid "Shutdown on Window Close"
+msgstr ""
+
+#: data/ui/preferences_general.ui:40
+msgid "Audio"
+msgstr ""
+
+#: data/ui/preferences_general.ui:43
+msgid "Process All Outputs"
+msgstr ""
+
+#: data/ui/preferences_general.ui:55
+msgid "Process All Inputs"
+msgstr ""
+
+#: data/ui/preferences_general.ui:67
+msgid "Use Cubic Volume"
+msgstr ""
+
+#: data/ui/preferences_general.ui:79
+msgid "Reset Our Devices Volume on Startup"
+msgstr ""
+
+#: data/ui/preferences_general.ui:93
+msgid "Style"
+msgstr ""
+
+#: data/ui/preferences_general.ui:96
+msgid "Use Dark Theme"
+msgstr ""
+
+#: data/ui/preferences_general.ui:108
+msgid "Hide Menus on Outside Clicks"
+msgstr ""
+
+#: data/ui/presets_menu.ui:33
+msgid "New Output Preset Name"
+msgstr ""
+
+#: data/ui/presets_menu.ui:41
+msgid "Create Preset"
+msgstr ""
+
+#: data/ui/presets_menu.ui:55
+msgid "Import Presets"
+msgstr ""
+
+#: data/ui/presets_menu.ui:71
+msgid "Search"
+msgstr ""
+
+#: data/ui/presets_menu.ui:73
+msgid "Search Preset"
+msgstr ""
+
+#: data/ui/presets_menu.ui:134
+msgid "Presets List"
+msgstr ""
+
+#: data/ui/preset_row.ui:18
+msgid "Load"
+msgstr ""
+
+#: data/ui/preset_row.ui:29
+msgid "Save current settings to this preset file"
+msgstr ""
+
+#: data/ui/preset_row.ui:41
+msgid "Remove this preset file"
+msgstr ""
+
+#: data/ui/shortcuts.ui:11
+msgid "Overview"
+msgstr ""
+
+#: data/ui/shortcuts.ui:16
+msgid "Fullscreen/Restore from fullscreen"
+msgstr ""
+
+#: data/ui/shortcuts.ui:23
+msgid "Close the Window"
+msgstr ""
+
+#: data/ui/shortcuts.ui:30
+msgid "Quit FastGame"
+msgstr ""
+
+#: src/application_ui.cpp:477
+msgid "Environment Variables"
+msgstr ""
+
+#: src/application_ui.cpp:479
+msgid "CPU"
+msgstr ""
+
+#: src/application_ui.cpp:481
+msgid "Memory"
+msgstr ""
+
+#: src/application_ui.cpp:483
+msgid "Disk"
+msgstr ""
+
+#: src/application_ui.cpp:486
+msgid "AMD GPU"
+msgstr ""
+
+#: src/presets_menu.cpp:96
+msgid "Import Preset"
+msgstr ""
+
+#: src/presets_menu.cpp:96
+msgid "Open"
+msgstr ""
+
+#: src/presets_menu.cpp:97
+msgid "Cancel"
 msgstr ""

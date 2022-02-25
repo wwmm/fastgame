@@ -237,16 +237,7 @@ auto main(int argc, char* argv[]) -> int {
       return;
     }
 
-    /*
-      Workaround for Proton games run through Pressure-Vessel. More information at
-      https://github.com/ValveSoftware/steam-runtime/issues/304
-    */
-
-    // if (comm == "pressure-vessel") {
-    //   util::apply_cpu_affinity(pid, game_cpu_affinity);
-
-    //   return;
-    // }
+    util::apply_cpu_affinity(pid, game_cpu_affinity);
 
     if (comm.size() > 4) {
       auto sub_comm = comm.substr(comm.size() - 4);
@@ -311,18 +302,7 @@ auto main(int argc, char* argv[]) -> int {
         // std::cout << "new game fork: " << child_comm << "\t" << std::to_string(child_pid) << std::endl;
 
         if (use_batch_scheduler) {
-          if (child_comm != game_comm) {
-            util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
-
-            /*
-              Sometimes these ":disk$" threads(vkd3d? dxvk?) use a lot of cpu. It is better to let them use any core
-              than force the same affinity as the order game threads
-            */
-
-            if (child_comm.find(":disk$") != std::string::npos) {
-              util::clear_cpu_affinity(child_pid);
-            }
-          }
+          util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
         }
 
         setpriority(PRIO_PROCESS, child_pid, niceness);

@@ -2,6 +2,7 @@
 
 #include <adwaita.h>
 #include <fmt/core.h>
+#include <algorithm>
 #include <sstream>
 #include "string_literal_wrapper.hpp"
 

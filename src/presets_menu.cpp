@@ -288,9 +288,9 @@ void presets_menu_init(PresetsMenu* self) {
 
   self->data = new Data();
 
-  setup_listview(self, self->listview, self->string_list);
-
   create_user_directory();
+
+  setup_listview(self, self->listview, self->string_list);
 
   auto* gfile = g_file_new_for_path(user_presets_dir.c_str());
 

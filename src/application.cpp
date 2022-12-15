@@ -153,7 +153,7 @@ auto application_new() -> GApplication* {
   g_set_application_name("FastGame");
 
   auto* app = g_object_new(FG_TYPE_APPLICATION, "application-id", "com.github.wwmm.fastgame", "flags",
-                           G_APPLICATION_FLAGS_NONE, nullptr);
+                           G_APPLICATION_DEFAULT_FLAGS, nullptr);
 
   return G_APPLICATION(app);
 }

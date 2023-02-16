@@ -20,6 +20,10 @@ Netlink::~Netlink() {
 void Netlink::connect() {
   nl_socket = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
 
+  // int flags = fcntl(nl_socket, F_GETFL, 0);
+
+  // fcntl(nl_socket, F_SETFL, flags | O_NONBLOCK);
+
   if (nl_socket == -1) {
     listen = false;
 
@@ -88,6 +92,8 @@ void Netlink::handle_events() {
 
   while (listen) {
     recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
+
+    std::cout << "netlink" << std::endl;
 
     int pid = 0;
     std::string comm;

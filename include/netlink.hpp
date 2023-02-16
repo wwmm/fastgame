@@ -1,6 +1,7 @@
 #ifndef NETLINK_HPP
 #define NETLINK_HPP
 
+#include <fcntl.h>
 #include <linux/connector.h>
 #include <linux/netlink.h>
 #include <boost/signals2.hpp>
@@ -13,7 +14,7 @@ class Netlink {
   Netlink(const Netlink&) = delete;
   auto operator=(const Netlink&) -> Netlink& = delete;
   Netlink(const Netlink&&) = delete;
-  auto operator=(const Netlink &&) -> Netlink& = delete;
+  auto operator=(const Netlink&&) -> Netlink& = delete;
 
   virtual ~Netlink();
 

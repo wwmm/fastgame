@@ -16,7 +16,7 @@ template <typename T>
 void update_system_setting(const std::string& parameter_path, const T& value) {
   std::ofstream f;
 
-  f.open(parameter_path);
+  f.open(parameter_path, std::ofstream::trunc);
 
   f << value;
 
@@ -175,16 +175,16 @@ auto main(int argc, char* argv[]) -> int {
   // disk
 
   auto disk_device = root.get<std::string>("disk.device");
-  auto disk_scheduler = root.get<std::string>("disk.scheduler");
-  auto enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
   auto disk_readahead = root.get<int>("disk.readahead", 128);
-  auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
   auto enable_add_random = root.get<bool>("disk.add_random", true);
+  auto disk_scheduler = root.get<std::string>("disk.scheduler");
+  auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
+  auto enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
 
-  update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
   update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
-  update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
   update_system_setting(disk_device + "/queue/add_random", enable_add_random);
+  update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
+  update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
 
   apply_udisks_configuration(root);
 
@@ -321,15 +321,23 @@ auto main(int argc, char* argv[]) -> int {
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
+    util::info("The lock file has been removed. Exitting the lock thread.");
+
     nl->listen = false;
   };
 
   if (nl->listen) {
     std::thread t(check_lock_file);
 
-    nl->handle_events();  // This is a blocking call. It has to be started at the end
+    std::thread t_listen([&]() {
+      nl->handle_events();  // This is a blocking call. It has to be started at the end
+    });
+
+    t_listen.detach();
 
     t.join();
+
+    util::info("Netlink event monitor finished.");
   }
 
   if (cpu_dma_ofstream.is_open()) {

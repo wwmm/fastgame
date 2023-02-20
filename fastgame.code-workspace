@@ -92,6 +92,7 @@
       "scoped_allocator": "cpp",
       "filesystem": "cpp"
     },
-    "clangd.arguments": ["-header-insertion=never"]
+    "clangd.arguments": ["-header-insertion=never"],
+    "xml.format.maxLineWidth": 150
   }
 }

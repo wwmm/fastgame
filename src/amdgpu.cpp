@@ -11,7 +11,7 @@ uint card_index = 0, hwmon_index = 0;
 struct _Amdgpu {
   GtkPopover parent_instance;
 
-  GtkComboBoxText* performance_level;
+  GtkComboBoxText *performance_level, *power_profile;
 
   GtkSpinButton* power_cap;
 };
@@ -28,6 +28,14 @@ void set_performance_level(Amdgpu* self, const std::string& name) {
 
 auto get_performance_level(Amdgpu* self) -> std::string {
   return gtk_combo_box_text_get_active_text(self->performance_level);
+}
+
+void set_power_profile(Amdgpu* self, const std::string& id) {
+  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->power_profile), id.c_str());
+}
+
+auto get_power_profile(Amdgpu* self) -> std::string {
+  return gtk_combo_box_get_active_id(GTK_COMBO_BOX(self->power_profile));
 }
 
 void set_power_cap(Amdgpu* self, const int& value) {
@@ -98,7 +106,7 @@ void read_performance_level(Amdgpu* self) {
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "could not change the performance level!"s);
+    util::debug(log_tag + "could not read the power profile!"s);
   } else {
     std::ifstream f;
 
@@ -113,6 +121,81 @@ void read_performance_level(Amdgpu* self) {
     gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), level.c_str());
 
     util::debug(log_tag + "current performance level: "s + level);
+  }
+}
+
+void read_power_profile(Amdgpu* self) {
+  auto path =
+      std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/pp_power_profile_mode");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug(log_tag + "file "s + path.string() + " does not exist!");
+    util::debug(log_tag + "could not change the performance level!"s);
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    std::stringstream buffer;
+
+    buffer << f.rdbuf();
+
+    f.close();
+
+    std::string line;
+
+    std::getline(buffer, line);  // Discarding the header
+
+    while (std::getline(buffer, line)) {
+      if (line.ends_with(":")) {
+        line.pop_back();
+
+        std::istringstream ss(line);
+
+        uint count = 0;
+
+        std::string word;
+        std::string profile;
+        std::string id;
+        bool is_selected = false;
+
+        while (ss >> word) {
+          if (word.ends_with("*")) {
+            word.pop_back();
+
+            util::debug(log_tag + "current power profile: "s + word);
+
+            is_selected = true;
+          }
+
+          if (count == 0) {
+            id = word;
+          }
+
+          if (count == 1) {
+            profile = word;
+          }
+
+          count++;
+        }
+
+        // util::info(id + " -> " + profile);
+
+        gtk_combo_box_text_append(self->power_profile, id.c_str(), profile.c_str());
+
+        if (is_selected) {
+          gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->power_profile), id.c_str());
+        }
+      }
+    }
+  }
+}
+
+void on_performance_level_changed(Amdgpu* self, GtkComboBox* combo) {
+  if (get_performance_level(self) != "manual") {
+    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+  } else {
+    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
   }
 }
 
@@ -138,7 +221,10 @@ void amdgpu_class_init(AmdgpuClass* klass) {
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/amdgpu.ui");
 
   gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_profile);
   gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap);
+
+  gtk_widget_class_bind_template_callback(widget_class, on_performance_level_changed);
 }
 
 void amdgpu_init(Amdgpu* self) {
@@ -155,6 +241,7 @@ void amdgpu_init(Amdgpu* self) {
   read_power_cap_max(self);
   read_power_cap(self);
   read_performance_level(self);
+  read_power_profile(self);
 }
 
 auto create() -> Amdgpu* {

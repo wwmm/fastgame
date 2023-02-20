@@ -77,6 +77,25 @@ auto to_string(const T& num, const std::string def = "0") -> std::string {
   return (result.ec == std::errc()) ? std::string(p_init, result.ptr - p_init) : def;
 }
 
+template <typename T>
+auto str_to_num(const std::string& str, T& num) -> bool {
+  // This is a more robust implementation of `std::from_chars`
+  // so that we don't have to do every time with `std::from_chars_result` structure.
+  // We don't care of error types, so a simple bool is returned on success/fail.
+  // A left trim is performed on strings so that the conversion could success
+  // even if there are leading whitespaces and/or the plus sign.
+
+  auto first_char = str.find_first_not_of(" +\n\r\t");
+
+  if (first_char == std::string::npos) {
+    return false;
+  }
+
+  const auto result = std::from_chars(str.data() + first_char, str.data() + str.size(), num);
+
+  return (result.ec == std::errc());
+}
+
 }  // namespace util
 
 #endif

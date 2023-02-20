@@ -117,6 +117,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   if (self->amdgpu != nullptr) {
     root.put("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu));
+    root.put("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu));
     root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu));
   }
 
@@ -230,6 +231,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
     ui::amdgpu::set_performance_level(
         self->amdgpu,
         root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu)));
+
+    ui::amdgpu::set_power_profile(
+        self->amdgpu, root.get<std::string>("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu)));
 
     ui::amdgpu::set_power_cap(self->amdgpu, root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu)));
   }

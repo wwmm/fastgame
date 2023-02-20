@@ -26,7 +26,7 @@
                                             <item translatable="yes" id="low">low</item>
                                             <item translatable="yes" id="high">high</item>
                                             <item translatable="yes" id="manual">manual</item>
-                                            <item translatable="yes" id="profile_standard"></item>
+                                            <item translatable="yes" id="profile_standard">profile_standard</item>
                                             <item translatable="yes" id="profile_min_sclk">profile_min_sclk</item>
                                             <item translatable="yes" id="profile_min_mclk">profile_min_mclk</item>
                                             <item translatable="yes" id="profile_peak">profile_peak</item>

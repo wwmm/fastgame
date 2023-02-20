@@ -191,8 +191,14 @@ auto main(int argc, char* argv[]) -> int {
   // amdgpu
 
   if (util::card_is_amdgpu(0)) {
-    update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level",
-                          root.get<std::string>("amdgpu.performance-level"));
+    auto performance_level = root.get<std::string>("amdgpu.performance-level");
+
+    update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level", performance_level);
+
+    if (performance_level == "manual") {
+      update_system_setting("/sys/class/drm/card0/device/pp_power_profile_mode",
+                            root.get<std::string>("amdgpu.power-profile"));
+    }
 
     int hwmon_index = util::find_hwmon_index(0);
     int power_cap = 1000000 * root.get<int>("amdgpu.power-cap");  // power must be in microwatts

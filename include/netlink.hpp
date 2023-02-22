@@ -2,8 +2,10 @@
 #define NETLINK_HPP
 
 #include <fcntl.h>
+#include <linux/cn_proc.h>
 #include <linux/connector.h>
 #include <linux/netlink.h>
+#include <sys/uio.h>
 #include <boost/signals2.hpp>
 #include <filesystem>
 #include <iostream>
@@ -35,6 +37,7 @@ class Netlink {
 
   void connect();
   void subscribe();
+  void handle_msg(cn_msg* msg);
 
   static auto get_cmdline(const int& pid) -> std::string;
   static auto get_exe_path(const int& pid) -> std::string;

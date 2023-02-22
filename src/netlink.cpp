@@ -4,7 +4,16 @@
 #include <unistd.h>
 #include <fstream>
 
+/*
+  based on https://gist.github.com/L-P/9487407 and
+  https://nick-black.com/dankwiki/index.php/The_Proc_Connector_and_Socket_Filters
+*/
+
+namespace {
+
 namespace fs = std::filesystem;
+
+}  // namespace
 
 Netlink::Netlink() {
   connect();
@@ -20,10 +29,6 @@ Netlink::~Netlink() {
 void Netlink::connect() {
   nl_socket = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
 
-  // int flags = fcntl(nl_socket, F_GETFL, 0);
-
-  // fcntl(nl_socket, F_SETFL, flags | O_NONBLOCK);
-
   if (nl_socket == -1) {
     listen = false;
 
@@ -31,15 +36,13 @@ void Netlink::connect() {
   } else {
     std::cout << log_tag + "socket created" << std::endl;
 
-    struct sockaddr_nl sa_nl {};
+    sockaddr_nl addr{};
 
-    sa_nl.nl_family = AF_NETLINK;
-    sa_nl.nl_groups = CN_IDX_PROC;
-    sa_nl.nl_pid = getpid();
+    addr.nl_family = AF_NETLINK;
+    addr.nl_groups = CN_IDX_PROC;
+    addr.nl_pid = getpid();
 
-    int rc = -1;
-
-    rc = bind(nl_socket, (struct sockaddr*)&sa_nl, sizeof(sa_nl));
+    auto rc = bind(nl_socket, (sockaddr*)&addr, sizeof(addr));
 
     if (rc == -1) {
       listen = false;
@@ -52,95 +55,150 @@ void Netlink::connect() {
 }
 
 void Netlink::subscribe() {
-  struct __attribute__((aligned(NLMSG_ALIGNTO))) {
-    struct nlmsghdr nl_hdr;
-    struct __attribute__((__packed__)) {
-      enum proc_cn_mcast_op cn_mcast;
-      struct cn_msg cn_msg;
-    };
-  } nlcn_msg{};
+  char buff[NLMSG_LENGTH(0)];
+  cn_msg cnmsg;
+  proc_cn_mcast_op mcast_op;
+  iovec iov[3];
 
-  memset(&nlcn_msg, 0, sizeof(nlcn_msg));
+  auto* nl_hdr = reinterpret_cast<nlmsghdr*>(buff);
 
-  nlcn_msg.nl_hdr.nlmsg_len = sizeof(nlcn_msg);
-  nlcn_msg.nl_hdr.nlmsg_pid = getpid();
-  nlcn_msg.nl_hdr.nlmsg_type = NLMSG_DONE;
+  /* fill the netlink header */
 
-  nlcn_msg.cn_msg.id.idx = CN_IDX_PROC;
-  nlcn_msg.cn_msg.id.val = CN_VAL_PROC;
-  nlcn_msg.cn_msg.len = sizeof(enum proc_cn_mcast_op);
+  nl_hdr->nlmsg_len = NLMSG_LENGTH(sizeof(cn_msg) + sizeof(mcast_op));
+  nl_hdr->nlmsg_type = NLMSG_DONE;
+  nl_hdr->nlmsg_flags = 0;
+  nl_hdr->nlmsg_seq = 0;
+  nl_hdr->nlmsg_pid = getpid();
 
-  nlcn_msg.cn_mcast = PROC_CN_MCAST_LISTEN;
+  iov[0].iov_base = buff;
+  iov[0].iov_len = NLMSG_LENGTH(0);
 
-  int rc = send(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
+  /* fill the connector header */
 
-  if (rc == -1) {
-    listen = false;
+  cnmsg.id.idx = CN_IDX_PROC;
+  cnmsg.id.val = CN_VAL_PROC;
+  cnmsg.seq = 0;
+  cnmsg.ack = 0;
+  cnmsg.len = sizeof(mcast_op);
 
-    std::cout << log_tag + "failed to subscribe failed!" << std::endl;
+  iov[1].iov_base = &cnmsg;
+  iov[1].iov_len = sizeof(cnmsg);
+
+  mcast_op = PROC_CN_MCAST_LISTEN;
+
+  iov[2].iov_base = &mcast_op;
+  iov[2].iov_len = sizeof(mcast_op);
+
+  if (writev(nl_socket, iov, 3) == -1) {
+    std::cout << log_tag + "failed to send PROC_CN_MCAST_LISTEN!" << std::endl;
+  } else {
+    std::cout << log_tag + "sent PROC_CN_MCAST_LISTEN to kernel" << std::endl;
   }
 }
 
 void Netlink::handle_events() {
-  struct __attribute__((aligned(NLMSG_ALIGNTO))) {
-    struct nlmsghdr nl_hdr;
-    struct __attribute__((__packed__)) {
-      struct proc_event proc_ev;
-      struct cn_msg cn_msg;
-    };
-  } nlcn_msg{};
+  char buff[getpagesize()];
+  sockaddr_nl addr{};
+  iovec iov[1];
+
+  iov[0].iov_base = buff;
+  iov[0].iov_len = sizeof(buff);
+
+  msghdr msg_hdr{.msg_name = &addr,
+                 .msg_namelen = sizeof(addr),
+                 .msg_iov = iov,
+                 .msg_iovlen = 1,
+                 .msg_control = nullptr,
+                 .msg_controllen = 0,
+                 .msg_flags = 0};
 
   while (listen) {
-    recv(nl_socket, &nlcn_msg, sizeof(nlcn_msg), 0);
+    auto len = recvmsg(nl_socket, &msg_hdr, 0);
 
-    std::cout << "netlink" << std::endl;
-
-    int pid = 0;
-    std::string comm;
-    std::string cmdline;
-    std::string exe_path;
-    std::string child_comm;
-
-    switch (nlcn_msg.proc_ev.what) {
-      case proc_event::PROC_EVENT_FORK:
-        child_comm = get_comm(nlcn_msg.proc_ev.event_data.fork.child_pid);
-
-        if (!child_comm.empty()) {
-          new_fork(nlcn_msg.proc_ev.event_data.fork.child_tgid, nlcn_msg.proc_ev.event_data.fork.child_pid, child_comm);
-        }
-
-        break;
-      case proc_event::PROC_EVENT_EXEC:
-        pid = nlcn_msg.proc_ev.event_data.exec.process_pid;
-
-        comm = get_comm(pid);
-        cmdline = get_cmdline(pid);
-        exe_path = get_exe_path(pid);
-
-        if (!comm.empty() && !cmdline.empty()) {
-          new_exec(pid, comm, cmdline, exe_path);
-        }
-
-        break;
-      case proc_event::PROC_EVENT_COMM:
-        pid = nlcn_msg.proc_ev.event_data.comm.process_pid;
-
-        comm = get_comm(pid);
-        cmdline = get_cmdline(pid);
-        exe_path = get_exe_path(pid);
-
-        if (!comm.empty() && !cmdline.empty()) {
-          new_exec(pid, comm, cmdline, exe_path);
-        }
-
-        break;
-      case proc_event::PROC_EVENT_EXIT:
-        new_exit(nlcn_msg.proc_ev.event_data.exit.process_pid);
-
-        break;
-      default:
-        break;
+    if (len == -1) {
+      continue;
     }
+
+    if (addr.nl_pid != 0) {  // https://linux.die.net/man/7/netlink
+      continue;
+    }
+
+    auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff);
+
+    while (NLMSG_OK(nlmsg_hdr, len)) {
+      if (nlmsg_hdr->nlmsg_type == NLMSG_NOOP) {
+        continue;
+      }
+
+      if ((nlmsg_hdr->nlmsg_type == NLMSG_ERROR) || (nlmsg_hdr->nlmsg_type == NLMSG_OVERRUN)) {
+        break;
+      }
+
+      auto* cnmsg = static_cast<cn_msg*>(NLMSG_DATA(nlmsg_hdr));
+
+      handle_msg(cnmsg);
+
+      if (nlmsg_hdr->nlmsg_type == NLMSG_DONE) {
+        break;
+      }
+
+      nlmsg_hdr = NLMSG_NEXT(nlmsg_hdr, len);
+    }
+  }
+}
+
+void Netlink::handle_msg(cn_msg* msg) {
+  if ((msg->id.idx != CN_IDX_PROC) || (msg->id.val != CN_VAL_PROC)) {
+    return;
+  }
+
+  auto* event = reinterpret_cast<proc_event*>(msg->data);
+
+  int pid = 0;
+  std::string comm;
+  std::string cmdline;
+  std::string exe_path;
+  std::string child_comm;
+
+  switch (event->what) {
+    case proc_event::PROC_EVENT_FORK:
+      child_comm = get_comm(event->event_data.fork.child_pid);
+
+      if (!child_comm.empty()) {
+        new_fork(event->event_data.fork.child_tgid, event->event_data.fork.child_pid, child_comm);
+      }
+
+      break;
+    case proc_event::PROC_EVENT_EXEC:
+      pid = event->event_data.exec.process_pid;
+
+      comm = get_comm(pid);
+      cmdline = get_cmdline(pid);
+      exe_path = get_exe_path(pid);
+
+      if (!comm.empty() && !cmdline.empty()) {
+        new_exec(pid, comm, cmdline, exe_path);
+      }
+
+      break;
+    case proc_event::PROC_EVENT_COMM:
+      pid = event->event_data.comm.process_pid;
+
+      comm = get_comm(pid);
+      cmdline = get_cmdline(pid);
+      exe_path = get_exe_path(pid);
+
+      if (!comm.empty() && !cmdline.empty()) {
+        new_exec(pid, comm, cmdline, exe_path);
+      }
+
+      break;
+    case proc_event::PROC_EVENT_EXIT:
+      new_exit(event->event_data.exit.process_pid);
+
+      break;
+    default:
+      break;
   }
 }
 

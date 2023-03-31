@@ -17,7 +17,7 @@ struct _Disk {
 
   GtkDropDown *device, *scheduler;
 
-  GtkSpinButton *readahead, *nr_requests, *rq_affinity;
+  GtkSpinButton *readahead, *nr_requests, *rq_affinity, *nomerges;
 
   GtkSwitch *enable_write_cache, *disable_apm, *add_random, *enable_realtime_priority;
 };
@@ -106,6 +106,14 @@ void set_rq_affinity(Disk* self, const int& value) {
 
 auto get_rq_affinity(Disk* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->rq_affinity));
+}
+
+void set_nomerges(Disk* self, const int& value) {
+  gtk_spin_button_set_value(self->nomerges, value);
+}
+
+auto get_nomerges(Disk* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->nomerges));
 }
 
 void set_enable_realtime_priority(Disk* self, const bool& value) {
@@ -280,6 +288,7 @@ void disk_class_init(DiskClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Disk, readahead);
   gtk_widget_class_bind_template_child(widget_class, Disk, nr_requests);
   gtk_widget_class_bind_template_child(widget_class, Disk, rq_affinity);
+  gtk_widget_class_bind_template_child(widget_class, Disk, nomerges);
   gtk_widget_class_bind_template_child(widget_class, Disk, enable_write_cache);
   gtk_widget_class_bind_template_child(widget_class, Disk, disable_apm);
   gtk_widget_class_bind_template_child(widget_class, Disk, add_random);
@@ -314,6 +323,9 @@ void disk_init(Disk* self) {
 
           gtk_spin_button_set_value(self->rq_affinity,
                                     std::stoi(util::read_system_setting(device_path + "/queue/rq_affinity"s)[0]));
+
+          gtk_spin_button_set_value(self->nomerges,
+                                    std::stoi(util::read_system_setting(device_path + "/queue/nomerges"s)[0]));
 
           gtk_spin_button_set_value(self->readahead,
                                     std::stoi(util::read_system_setting(device_path + "/queue/read_ahead_kb"s)[0]));

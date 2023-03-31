@@ -18,9 +18,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Path</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="device">
+                                    <object class="GtkDropDown" id="device">
                                         <property name="valign">center</property>
-                                        <signal name="changed" handler="on_device_changed" />
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>
@@ -30,8 +32,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Scheduler</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="scheduler">
+                                    <object class="GtkDropDown" id="scheduler">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>

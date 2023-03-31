@@ -15,7 +15,7 @@ std::string drive_id;
 struct _Disk {
   GtkPopover parent_instance;
 
-  GtkComboBoxText *device, *scheduler;
+  GtkDropDown *device, *scheduler;
 
   GtkSpinButton *readahead, *nr_requests;
 
@@ -25,19 +25,63 @@ struct _Disk {
 G_DEFINE_TYPE(Disk, disk, GTK_TYPE_BOX)
 
 void set_device(Disk* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->device), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->device));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->device, id);
 }
 
 auto get_device(Disk* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->device);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->device);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_scheduler(Disk* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->scheduler), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->scheduler));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->scheduler, id);
 }
 
 auto get_scheduler(Disk* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->scheduler);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->scheduler);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_readahead(Disk* self, const int& value) {
@@ -105,17 +149,27 @@ void init_scheduler(Disk* self, const std::string& active_text) {
 
   auto scheduler_value = util::get_selected_value(scheduler_list);
 
-  gtk_combo_box_text_remove_all(self->scheduler);
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->scheduler));
 
-  for (auto& value : scheduler_list) {
+  gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
+
+  guint selected_id = 0;
+
+  for (size_t n = 0; n < scheduler_list.size(); n++) {
+    auto value = scheduler_list[n];
+
     if (value.find('[') != std::string::npos) {
       value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
     }
 
-    gtk_combo_box_text_append(self->scheduler, value.c_str(), value.c_str());
+    gtk_string_list_append(model, value.c_str());
+
+    if (value == scheduler_value) {
+      selected_id = n;
+    }
   }
 
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->scheduler), scheduler_value.c_str());
+  gtk_drop_down_set_selected(self->scheduler, selected_id);
 }
 
 void init_udisks_object(Disk* self, const std::string& active_text) {
@@ -192,22 +246,6 @@ void init_udisks_object(Disk* self, const std::string& active_text) {
   }
 }
 
-void on_device_changed(GtkComboBox* combo, Disk* self) {
-  auto active_text = gtk_combo_box_text_get_active_text(self->device);
-
-  init_scheduler(self, active_text);
-  init_udisks_object(self, active_text);
-
-  gtk_spin_button_set_value(self->nr_requests,
-                            std::stoi(util::read_system_setting(active_text + "/queue/nr_requests"s)[0]));
-
-  gtk_spin_button_set_value(self->readahead,
-                            std::stoi(util::read_system_setting(active_text + "/queue/read_ahead_kb"s)[0]));
-
-  gtk_switch_set_active(self->add_random,
-                        static_cast<bool>(std::stoi(util::read_system_setting(active_text + "/queue/add_random"s)[0])));
-}
-
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -237,8 +275,6 @@ void disk_class_init(DiskClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Disk, disable_apm);
   gtk_widget_class_bind_template_child(widget_class, Disk, add_random);
   gtk_widget_class_bind_template_child(widget_class, Disk, enable_realtime_priority);
-
-  gtk_widget_class_bind_template_callback(widget_class, on_device_changed);
 }
 
 void disk_init(Disk* self) {
@@ -256,13 +292,38 @@ void disk_init(Disk* self) {
     g_error_free(error);
   }
 
+  g_signal_connect(
+      self->device, "notify::selected-item", G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Disk* self) {
+        if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
+          auto* device_path = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+
+          init_scheduler(self, device_path);
+          init_udisks_object(self, device_path);
+
+          gtk_spin_button_set_value(self->nr_requests,
+                                    std::stoi(util::read_system_setting(device_path + "/queue/nr_requests"s)[0]));
+
+          gtk_spin_button_set_value(self->readahead,
+                                    std::stoi(util::read_system_setting(device_path + "/queue/read_ahead_kb"s)[0]));
+
+          gtk_switch_set_active(
+              self->add_random,
+              static_cast<bool>(std::stoi(util::read_system_setting(device_path + "/queue/add_random"s)[0])));
+        }
+      }),
+      self);
+
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->device));
+
+  gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
+
   for (const auto& entry : std::filesystem::directory_iterator("/sys/block")) {
     auto path = entry.path().string();
 
-    gtk_combo_box_text_append(self->device, path.c_str(), path.c_str());
+    gtk_string_list_append(model, path.c_str());
   }
 
-  gtk_combo_box_set_active(GTK_COMBO_BOX(self->device), 0);
+  gtk_drop_down_set_selected(self->device, 0);
 }
 
 auto create() -> Disk* {

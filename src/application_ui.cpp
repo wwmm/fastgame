@@ -128,6 +128,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("disk.enable-realtime-priority", ui::disk::get_enable_realtime_priority(self->disk));
   root.put("disk.readahead", ui::disk::get_readahead(self->disk));
   root.put("disk.nr-requests", ui::disk::get_nr_requests(self->disk));
+  root.put("disk.rq-affinity", ui::disk::get_rq_affinity(self->disk));
   root.put("disk.add_random", ui::disk::get_enable_add_random(self->disk));
   root.put("disk.udisks.drive-id", ui::disk::get_drive_id());
   root.put("disk.udisks.supports-apm", ui::disk::get_supports_apm());
@@ -250,6 +251,8 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   ui::disk::set_readahead(self->disk, root.get<int>("disk.readahead", ui::disk::get_readahead(self->disk)));
 
   ui::disk::set_nr_requests(self->disk, root.get<int>("disk.nr-requests", ui::disk::get_nr_requests(self->disk)));
+
+  ui::disk::set_rq_affinity(self->disk, root.get<int>("disk.rq-affinity", ui::disk::get_rq_affinity(self->disk)));
 
   ui::disk::set_enable_add_random(self->disk,
                                   root.get<bool>("disk.add_random", ui::disk::get_enable_add_random(self->disk)));

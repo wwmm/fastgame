@@ -36,6 +36,10 @@ void set_nr_requests(Disk* self, const int& value);
 
 auto get_nr_requests(Disk* self) -> int;
 
+void set_rq_affinity(Disk* self, const int& value);
+
+auto get_rq_affinity(Disk* self) -> int;
+
 void set_enable_realtime_priority(Disk* self, const bool& value);
 
 auto get_enable_realtime_priority(Disk* self) -> bool;

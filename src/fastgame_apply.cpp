@@ -179,12 +179,14 @@ auto main(int argc, char* argv[]) -> int {
   auto enable_add_random = root.get<bool>("disk.add_random", true);
   auto disk_scheduler = root.get<std::string>("disk.scheduler");
   auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
+  auto disk_rq_affinity = root.get<int>("disk.rq-affinity", 1);
   auto enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
 
   update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
   update_system_setting(disk_device + "/queue/add_random", enable_add_random);
   update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
   update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
+  update_system_setting(disk_device + "/queue/rq_affinity", disk_rq_affinity);
 
   apply_udisks_configuration(root);
 

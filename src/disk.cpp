@@ -341,7 +341,7 @@ void disk_init(Disk* self) {
 
   gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
 
-  for (const auto& entry : std::filesystem::directory_iterator("/sys/block")) {
+  for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
     auto path = entry.path().string();
 
     gtk_string_list_append(model, path.c_str());

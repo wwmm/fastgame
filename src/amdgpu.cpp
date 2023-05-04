@@ -280,6 +280,12 @@ void amdgpu_init(Amdgpu* self) {
   read_power_cap(self);
   read_performance_level(self);
   read_power_profile(self);
+
+  if (get_performance_level(self) == "manual") {
+    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
+  } else {
+    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+  }
 }
 
 auto create() -> Amdgpu* {

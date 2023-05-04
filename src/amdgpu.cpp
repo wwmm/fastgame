@@ -11,7 +11,7 @@ uint card_index = 0, hwmon_index = 0;
 struct _Amdgpu {
   GtkPopover parent_instance;
 
-  GtkComboBoxText *performance_level, *power_profile;
+  GtkDropDown *performance_level, *power_profile;
 
   GtkSpinButton* power_cap;
 };
@@ -23,19 +23,45 @@ auto get_card_index(Amdgpu* self) -> int {
 }
 
 void set_performance_level(Amdgpu* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->performance_level));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->performance_level, id);
 }
 
 auto get_performance_level(Amdgpu* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->performance_level);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->performance_level);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_power_profile(Amdgpu* self, const std::string& id) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->power_profile), id.c_str());
+  uint idx = 0;
+
+  util::str_to_num(id, idx);
+
+  gtk_drop_down_set_selected(self->power_profile, idx);
 }
 
 auto get_power_profile(Amdgpu* self) -> std::string {
-  return gtk_combo_box_get_active_id(GTK_COMBO_BOX(self->power_profile));
+  return util::to_string(gtk_drop_down_get_selected(self->power_profile));
 }
 
 void set_power_cap(Amdgpu* self, const int& value) {
@@ -118,7 +144,7 @@ void read_performance_level(Amdgpu* self) {
 
     f.close();
 
-    gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->performance_level), level.c_str());
+    set_performance_level(self, level);
 
     util::debug(log_tag + "current performance level: "s + level);
   }
@@ -142,6 +168,10 @@ void read_power_profile(Amdgpu* self) {
 
     f.close();
 
+    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->power_profile));
+
+    gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
+
     std::string line;
 
     std::getline(buffer, line);  // Discarding the header
@@ -156,7 +186,7 @@ void read_power_profile(Amdgpu* self) {
 
         std::string word;
         std::string profile;
-        std::string id;
+        std::string id_str;
         bool is_selected = false;
 
         while (ss >> word) {
@@ -169,7 +199,7 @@ void read_power_profile(Amdgpu* self) {
           }
 
           if (count == 0) {
-            id = word;
+            id_str = word;
           }
 
           if (count == 1) {
@@ -181,10 +211,14 @@ void read_power_profile(Amdgpu* self) {
 
         // util::info(id + " -> " + profile);
 
-        gtk_combo_box_text_append(self->power_profile, id.c_str(), profile.c_str());
+        gtk_string_list_append(model, profile.c_str());
 
         if (is_selected) {
-          gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->power_profile), id.c_str());
+          uint id = 0;
+
+          util::str_to_num(id_str, id);
+
+          gtk_drop_down_set_selected(self->power_profile, id);
         }
       }
     }

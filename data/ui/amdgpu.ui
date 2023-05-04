@@ -18,21 +18,23 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Level</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="performance_level">
+                                    <object class="GtkDropDown" id="performance_level">
                                         <property name="valign">center</property>
 
-                                        <items>
-                                            <item translatable="yes" id="auto">auto</item>
-                                            <item translatable="yes" id="low">low</item>
-                                            <item translatable="yes" id="high">high</item>
-                                            <item translatable="yes" id="manual">manual</item>
-                                            <item translatable="yes" id="profile_standard">profile_standard</item>
-                                            <item translatable="yes" id="profile_min_sclk">profile_min_sclk</item>
-                                            <item translatable="yes" id="profile_min_mclk">profile_min_mclk</item>
-                                            <item translatable="yes" id="profile_peak">profile_peak</item>
-                                        </items>
-
-                                        <signal name="changed" handler="on_performance_level_changed" object="Amdgpu" />
+                                        <property name="model">
+                                            <object class="GtkStringList">
+                                                <items>
+                                                    <item>auto</item>
+                                                    <item>low</item>
+                                                    <item>high</item>
+                                                    <item>manual</item>
+                                                    <item>profile_standard</item>
+                                                    <item>profile_min_sclk</item>
+                                                    <item>profile_min_mclk</item>
+                                                    <item>profile_peak</item>
+                                                </items>
+                                            </object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>
@@ -42,8 +44,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Power Profile</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="power_profile">
+                                    <object class="GtkDropDown" id="power_profile">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>

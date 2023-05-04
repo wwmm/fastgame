@@ -225,14 +225,6 @@ void read_power_profile(Amdgpu* self) {
   }
 }
 
-void on_performance_level_changed(Amdgpu* self, GtkComboBox* combo) {
-  if (get_performance_level(self) != "manual") {
-    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
-  } else {
-    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
-  }
-}
-
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -257,8 +249,6 @@ void amdgpu_class_init(AmdgpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level);
   gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_profile);
   gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap);
-
-  gtk_widget_class_bind_template_callback(widget_class, on_performance_level_changed);
 }
 
 void amdgpu_init(Amdgpu* self) {
@@ -271,6 +261,20 @@ void amdgpu_init(Amdgpu* self) {
   hwmon_index = util::find_hwmon_index(0);
 
   util::debug(log_tag + "hwmon device index: "s + std::to_string(hwmon_index));
+
+  g_signal_connect(self->performance_level, "notify::selected-item",
+                   G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Amdgpu* self) {
+                     if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
+                       auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+
+                       if (std::strcmp(level, "manual") == 0) {
+                         gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
+                       } else {
+                         gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+                       }
+                     }
+                   }),
+                   self);
 
   read_power_cap_max(self);
   read_power_cap(self);

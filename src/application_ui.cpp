@@ -77,6 +77,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("cpu.use-batch-scheduler", ui::cpu::get_enable_batch_scheduler(self->cpu));
   root.put("cpu.child-runs-first", ui::cpu::get_child_runs_first(self->cpu));
   root.put("cpu.frequency-governor", ui::cpu::get_frequency_governor(self->cpu));
+  root.put("cpu.pcie-aspm-policy", ui::cpu::get_pcie_aspm_policy(self->cpu));
   root.put("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu));
   root.put("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu));
   root.put("cpu.niceness", ui::cpu::get_niceness(self->cpu));
@@ -179,6 +180,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   ui::cpu::set_frequency_governor(
       self->cpu, root.get<std::string>("cpu.frequency-governor", ui::cpu::get_frequency_governor(self->cpu)));
+
+  ui::cpu::set_pcie_aspm_policy(
+      self->cpu, root.get<std::string>("cpu.pcie-aspm-policy", ui::cpu::get_pcie_aspm_policy(self->cpu)));
 
   ui::cpu::set_use_cpu_dma_latency(
       self->cpu, root.get<bool>("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu)));

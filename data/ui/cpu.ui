@@ -12,14 +12,31 @@
                 <property name="hexpand">1</property>
                 <child>
                     <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Scheduler and Priority</property>
+                        <property name="title" translatable="yes">Schedulers and Priorities</property>
 
                         <child>
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Frequency Governor</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="frequency_governor">
+                                    <object class="GtkDropDown" id="frequency_governor">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">PCIe ASPM</property>
+                                <child>
+                                    <object class="GtkDropDown" id="pcie_aspm_policy">
+                                        <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>

@@ -9,7 +9,7 @@ auto constexpr log_tag = "cpu: ";
 struct _Cpu {
   GtkPopover parent_instance;
 
-  GtkComboBoxText* frequency_governor;
+  GtkDropDown *frequency_governor, *pcie_aspm_policy;
 
   GtkSpinButton* niceness;
 
@@ -61,11 +61,63 @@ auto get_niceness(Cpu* self) -> int {
 }
 
 void set_frequency_governor(Cpu* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->frequency_governor), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->frequency_governor));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->frequency_governor, id);
 }
 
 auto get_frequency_governor(Cpu* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->frequency_governor);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->frequency_governor);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+}
+
+void set_pcie_aspm_policy(Cpu* self, const std::string& name) {
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->pcie_aspm_policy));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->pcie_aspm_policy, id);
+}
+
+auto get_pcie_aspm_policy(Cpu* self) -> std::string {
+  auto* selected_item = gtk_drop_down_get_selected_item(self->pcie_aspm_policy);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_cores(Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& list) {
@@ -118,6 +170,38 @@ auto get_wineserver_cores(Cpu* self) -> std::vector<std::string> {
   return get_cores(self, self->flowbox_wineserver_affinity);
 }
 
+void init_pcie_aspm(Cpu* self) {
+  auto list_policies = util::read_system_setting("/sys/module/pcie_aspm/parameters/policy");
+
+  auto selected_policy = util::get_selected_value(list_policies);
+
+  util::debug(log_tag + "The current pcie_aspm policy is: "s + selected_policy);
+
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->pcie_aspm_policy));
+
+  guint selected_id = 0;
+
+  for (size_t n = 0; n < list_policies.size(); n++) {
+    auto value = list_policies[n];
+
+    if (value.empty()) {
+      continue;
+    }
+
+    if (value.find('[') != std::string::npos) {
+      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    }
+
+    gtk_string_list_append(model, value.c_str());
+
+    if (value == selected_policy) {
+      selected_id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->pcie_aspm_policy, selected_id);
+}
+
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -140,6 +224,7 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/cpu.ui");
 
   gtk_widget_class_bind_template_child(widget_class, Cpu, frequency_governor);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, pcie_aspm_policy);
   gtk_widget_class_bind_template_child(widget_class, Cpu, niceness);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
@@ -163,36 +248,42 @@ void cpu_init(Cpu* self) {
 
   auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
 
-  for (auto& value : list_governors) {
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->frequency_governor));
+
+  guint selected_id = 0;
+
+  for (size_t n = 0; n < list_governors.size(); n++) {
+    auto value = list_governors[n];
+
     if (value.empty()) {
       continue;
     }
 
-    gtk_combo_box_text_append(self->frequency_governor, value.c_str(), value.c_str());
+    gtk_string_list_append(model, value.c_str());
+
+    if (value == selected_governor) {
+      selected_id = n;
+    }
   }
 
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->frequency_governor), selected_governor.c_str());
+  gtk_drop_down_set_selected(self->frequency_governor, selected_id);
 
   auto n_cores = std::thread::hardware_concurrency();
 
   util::debug(log_tag + "number of cores: "s + std::to_string(n_cores));
 
   for (uint n = 0; n < n_cores; n++) {
-    //     auto* checkbutton3 = Gtk::make_managed<Gtk::CheckButton>(std::to_string(n));
-
     auto* checkbutton1 = gtk_check_button_new_with_label(std::to_string(n).c_str());
     auto* checkbutton2 = gtk_check_button_new_with_label(std::to_string(n).c_str());
 
     gtk_check_button_set_active(GTK_CHECK_BUTTON(checkbutton1), 1);
     gtk_check_button_set_active(GTK_CHECK_BUTTON(checkbutton2), 1);
 
-    //     checkbutton3->set_active(true);
-
     gtk_flow_box_append(self->flowbox_game_affinity, checkbutton1);
     gtk_flow_box_append(self->flowbox_wineserver_affinity, checkbutton2);
-
-    //     wineserver_affinity_flowbox->add(*checkbutton3);
   }
+
+  init_pcie_aspm(self);
 }
 
 auto create() -> Cpu* {

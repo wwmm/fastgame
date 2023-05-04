@@ -43,6 +43,10 @@ auto get_frequency_governor(Cpu* self) -> std::string;
 
 void set_frequency_governor(Cpu* self, const std::string& name);
 
+auto get_pcie_aspm_policy(Cpu* self) -> std::string;
+
+void set_pcie_aspm_policy(Cpu* self, const std::string& name);
+
 void set_game_cores(Cpu* self, const std::vector<std::string>& list);
 
 auto get_game_cores(Cpu* self) -> std::vector<std::string>;

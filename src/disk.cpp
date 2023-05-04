@@ -344,7 +344,9 @@ void disk_init(Disk* self) {
   for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
     auto path = entry.path().string();
 
-    gtk_string_list_append(model, path.c_str());
+    if (std::filesystem::is_regular_file(path + "/queue/scheduler")) {
+      gtk_string_list_append(model, path.c_str());
+    }
   }
 
   gtk_drop_down_set_selected(self->device, 0);

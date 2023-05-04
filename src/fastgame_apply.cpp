@@ -164,6 +164,9 @@ auto main(int argc, char* argv[]) -> int {
 
   update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first", false));
 
+  update_system_setting("/sys/module/pcie_aspm/parameters/policy",
+                        root.get<std::string>("cpu.pcie-aspm-policy", "default"));
+
   update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor", "schedutil"));
 
   if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {

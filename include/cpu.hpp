@@ -1,10 +1,12 @@
 #pragma once
 
 #include <adwaita.h>
+#include <sys/prctl.h>
 #include <filesystem>
 #include <fstream>
 #include <string>
 #include <thread>
+#include "ui_helpers.hpp"
 #include "util.hpp"
 
 namespace ui::cpu {
@@ -38,6 +40,10 @@ void set_use_realtime_wineserver(Cpu* self, const bool& state);
 auto get_niceness(Cpu* self) -> int;
 
 void set_niceness(Cpu* self, const int& value);
+
+void set_timer_slack(Cpu* self, const int& value);
+
+auto get_timer_slack(Cpu* self) -> int;
 
 auto get_frequency_governor(Cpu* self) -> std::string;
 

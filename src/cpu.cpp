@@ -11,7 +11,7 @@ struct _Cpu {
 
   GtkDropDown *frequency_governor, *pcie_aspm_policy;
 
-  GtkSpinButton* niceness;
+  GtkSpinButton *niceness, *timer_slack;
 
   GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first;
 
@@ -58,6 +58,14 @@ void set_niceness(Cpu* self, const int& value) {
 
 auto get_niceness(Cpu* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->niceness));
+}
+
+void set_timer_slack(Cpu* self, const int& value) {
+  gtk_spin_button_set_value(self->timer_slack, value);
+}
+
+auto get_timer_slack(Cpu* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->timer_slack));
 }
 
 void set_frequency_governor(Cpu* self, const std::string& name) {
@@ -226,6 +234,7 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Cpu, frequency_governor);
   gtk_widget_class_bind_template_child(widget_class, Cpu, pcie_aspm_policy);
   gtk_widget_class_bind_template_child(widget_class, Cpu, niceness);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, timer_slack);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_cpu_dma_latency);
@@ -236,6 +245,12 @@ void cpu_class_init(CpuClass* klass) {
 
 void cpu_init(Cpu* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
+
+  ui::prepare_spinbutton<"ns">(self->timer_slack);
+
+  int timer_slack_ns = prctl(PR_GET_TIMERSLACK, &timer_slack_ns, 0, 0, 0);
+
+  gtk_spin_button_set_value(self->timer_slack, timer_slack_ns);
 
   gtk_switch_set_active(self->child_runs_first,
                         std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0]) != 0);

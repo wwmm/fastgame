@@ -1,3 +1,4 @@
+#include <sys/prctl.h>
 #include <unistd.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -52,6 +53,12 @@ auto main(int argc, char* argv[]) -> int {
 
   if (root.get<bool>("cpu.use-batch-scheduler")) {
     util::set_process_scheduler(0, SCHED_BATCH, 0);
+  }
+
+  int timer_slack_ns = root.get<int>("cpu.timer-slack", 50000);
+
+  if (prctl(PR_SET_TIMERSLACK, timer_slack_ns, 0, 0, 0) != 0) {
+    util::warning("fastgame_launcher: could not set the timer slack value");
   }
 
   // Assuming that the game executable is the only argument passed as option

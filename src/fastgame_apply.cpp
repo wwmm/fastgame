@@ -225,6 +225,9 @@ auto main(int argc, char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/compaction_proactiveness",
                         root.get<int>("memory.virtual-memory.compaction-proactiveness", 20));
 
+  update_system_setting("/proc/sys/vm/page_lock_unfairness",
+                        root.get<int>("memory.virtual-memory.page-lock-unfairness", 5));
+
   // transparent hugepages
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/enabled",

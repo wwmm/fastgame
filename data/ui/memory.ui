@@ -18,8 +18,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Enabled</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="thp_enabled">
+                                    <object class="GtkDropDown" id="thp_enabled">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>
@@ -29,8 +32,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Defrag</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="thp_defrag">
+                                    <object class="GtkDropDown" id="thp_defrag">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>
@@ -40,8 +46,11 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Shared Memory Enabled</property>
                                 <child>
-                                    <object class="GtkComboBoxText" id="thp_shmem_enabled">
+                                    <object class="GtkDropDown" id="thp_shmem_enabled">
                                         <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
                                     </object>
                                 </child>
                             </object>

@@ -9,7 +9,7 @@ auto constexpr log_tag = "memory: ";
 struct _Memory {
   GtkPopover parent_instance;
 
-  GtkComboBoxText *thp_enabled, *thp_defrag, *thp_shmem_enabled;
+  GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
   GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness;
 };
@@ -41,83 +41,197 @@ auto get_page_lock_unfairness(Memory* self) -> int {
 }
 
 void set_thp_enabled(Memory* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_enabled), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_enabled));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->thp_enabled, id);
 }
 
 auto get_thp_enabled(Memory* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->thp_enabled);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->thp_enabled);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_thp_defrag(Memory* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_defrag), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_defrag));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->thp_defrag, id);
 }
 
 auto get_thp_defrag(Memory* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->thp_defrag);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->thp_defrag);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void set_thp_shmem_enabled(Memory* self, const std::string& name) {
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_shmem_enabled), name.c_str());
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_shmem_enabled));
+
+  guint id = 0;
+
+  for (guint n = 0U; n < g_list_model_get_n_items(G_LIST_MODEL(model)); n++) {
+    auto label = gtk_string_list_get_string(model, n);
+
+    if (label == nullptr) {
+      continue;
+    }
+
+    if (label == name) {
+      id = n;
+    }
+  }
+
+  gtk_drop_down_set_selected(self->thp_shmem_enabled, id);
 }
 
 auto get_thp_shmem_enabled(Memory* self) -> std::string {
-  return gtk_combo_box_text_get_active_text(self->thp_shmem_enabled);
+  auto* selected_item = gtk_drop_down_get_selected_item(self->thp_shmem_enabled);
+
+  if (selected_item == nullptr) {
+    return "";
+  }
+
+  return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
 void read_transparent_huge_page_values(Memory* self) {
   // parameter: enabled
 
-  auto enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/enabled");
+  {
+    auto enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/enabled");
 
-  auto enabled_value = util::get_selected_value(enabled_list);
+    auto enabled_value = util::get_selected_value(enabled_list);
 
-  util::debug(log_tag + "transparent huge pages state: "s + enabled_value);
+    util::debug(log_tag + "transparent huge pages state: "s + enabled_value);
 
-  for (auto& value : enabled_list) {
-    if (value.find('[') != std::string::npos) {
-      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_enabled));
+
+    guint selected_id = 0;
+
+    for (size_t n = 0; n < enabled_list.size(); n++) {
+      auto value = enabled_list[n];
+
+      if (value.empty()) {
+        continue;
+      }
+
+      if (value.find('[') != std::string::npos) {
+        value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+      }
+
+      gtk_string_list_append(model, value.c_str());
+
+      if (value == enabled_value) {
+        selected_id = n;
+      }
     }
 
-    gtk_combo_box_text_append(self->thp_enabled, value.c_str(), value.c_str());
+    gtk_drop_down_set_selected(self->thp_enabled, selected_id);
   }
-
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_enabled), enabled_value.c_str());
 
   // parameter: defrag
 
-  auto defrag_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/defrag");
+  {
+    auto defrag_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/defrag");
 
-  auto defrag_value = util::get_selected_value(defrag_list);
+    auto defrag_value = util::get_selected_value(defrag_list);
 
-  util::debug(log_tag + "transparent huge pages defrag: "s + defrag_value);
+    util::debug(log_tag + "transparent huge pages defrag: "s + defrag_value);
 
-  for (auto& value : defrag_list) {
-    if (value.find('[') != std::string::npos) {
-      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_defrag));
+
+    guint selected_id = 0;
+
+    for (size_t n = 0; n < defrag_list.size(); n++) {
+      auto value = defrag_list[n];
+
+      if (value.empty()) {
+        continue;
+      }
+
+      if (value.find('[') != std::string::npos) {
+        value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+      }
+
+      gtk_string_list_append(model, value.c_str());
+
+      if (value == defrag_value) {
+        selected_id = n;
+      }
     }
 
-    gtk_combo_box_text_append(self->thp_defrag, value.c_str(), value.c_str());
+    gtk_drop_down_set_selected(self->thp_defrag, selected_id);
   }
-
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_defrag), defrag_value.c_str());
 
   // parameter: shmem_enabled
 
-  auto shmem_enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled");
+  {
+    auto shmem_enabled_list = util::read_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled");
 
-  auto shmem_enabled_value = util::get_selected_value(shmem_enabled_list);
+    auto shmem_enabled_value = util::get_selected_value(shmem_enabled_list);
 
-  util::debug(log_tag + "transparent huge pages state: "s + shmem_enabled_value);
+    util::debug(log_tag + "transparent huge pages state: "s + shmem_enabled_value);
 
-  for (auto& value : shmem_enabled_list) {
-    if (value.find('[') != std::string::npos) {
-      value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->thp_shmem_enabled));
+
+    guint selected_id = 0;
+
+    for (size_t n = 0; n < shmem_enabled_list.size(); n++) {
+      auto value = shmem_enabled_list[n];
+
+      if (value.empty()) {
+        continue;
+      }
+
+      if (value.find('[') != std::string::npos) {
+        value = value.erase(0, 1).erase(value.size() - 1, 1);  // removing the [] characters
+      }
+
+      gtk_string_list_append(model, value.c_str());
+
+      if (value == shmem_enabled_value) {
+        selected_id = n;
+      }
     }
 
-    gtk_combo_box_text_append(self->thp_shmem_enabled, value.c_str(), value.c_str());
+    gtk_drop_down_set_selected(self->thp_shmem_enabled, selected_id);
   }
-
-  gtk_combo_box_set_active_id(GTK_COMBO_BOX(self->thp_shmem_enabled), shmem_enabled_value.c_str());
 }
 
 void dispose(GObject* object) {

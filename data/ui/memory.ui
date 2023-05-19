@@ -125,6 +125,28 @@
                                 </child>
                             </object>
                         </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Per-CPU Page List Fraction</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="percpu_pagelist_high_fraction">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">0</property>
+                                                <property name="upper">1000</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">10</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
                     </object>
                 </child>
             </object>

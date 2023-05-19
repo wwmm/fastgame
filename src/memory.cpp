@@ -11,7 +11,7 @@ struct _Memory {
 
   GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
-  GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness;
+  GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness, *percpu_pagelist_high_fraction;
 };
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
@@ -38,6 +38,14 @@ void set_page_lock_unfairness(Memory* self, const int& value) {
 
 auto get_page_lock_unfairness(Memory* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->page_lock_unfairness));
+}
+
+void set_percpu_pagelist_high_fraction(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->percpu_pagelist_high_fraction, value);
+}
+
+auto get_percpu_pagelist_high_fraction(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->percpu_pagelist_high_fraction));
 }
 
 void set_thp_enabled(Memory* self, const std::string& name) {
@@ -261,6 +269,7 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, cache_pressure);
   gtk_widget_class_bind_template_child(widget_class, Memory, compaction_proactiveness);
   gtk_widget_class_bind_template_child(widget_class, Memory, page_lock_unfairness);
+  gtk_widget_class_bind_template_child(widget_class, Memory, percpu_pagelist_high_fraction);
 }
 
 void memory_init(Memory* self) {
@@ -274,6 +283,9 @@ void memory_init(Memory* self) {
 
   gtk_spin_button_set_value(self->page_lock_unfairness,
                             std::stoi(util::read_system_setting("/proc/sys/vm/page_lock_unfairness")[0]));
+
+  gtk_spin_button_set_value(self->percpu_pagelist_high_fraction,
+                            std::stoi(util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction")[0]));
 
   read_transparent_huge_page_values(self);
 }

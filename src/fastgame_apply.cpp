@@ -234,6 +234,9 @@ auto main(int argc, char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/page_lock_unfairness",
                         root.get<int>("memory.virtual-memory.page-lock-unfairness", 5));
 
+  update_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction",
+                        root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", 0));
+
   // transparent hugepages
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/enabled",

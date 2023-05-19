@@ -30,6 +30,10 @@ void set_page_lock_unfairness(Memory* self, const int& value);
 
 auto get_page_lock_unfairness(Memory* self) -> int;
 
+void set_percpu_pagelist_high_fraction(Memory* self, const int& value);
+
+auto get_percpu_pagelist_high_fraction(Memory* self) -> int;
+
 void set_thp_enabled(Memory* self, const std::string& name);
 
 auto get_thp_enabled(Memory* self) -> std::string;

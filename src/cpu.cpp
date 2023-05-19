@@ -252,8 +252,9 @@ void cpu_init(Cpu* self) {
 
   gtk_spin_button_set_value(self->timer_slack, timer_slack_ns);
 
-  gtk_switch_set_active(self->child_runs_first,
-                        std::stoi(util::read_system_setting("/proc/sys/kernel/sched_child_runs_first")[0]) != 0);
+  if (const auto list = util::read_system_setting("/proc/sys/kernel/sched_child_runs_first"); !list.empty()) {
+    gtk_switch_set_active(self->child_runs_first, std::stoi(list[0]) != 0);
+  }
 
   /* We assume that all cores are set to the same frequency governor and that the system has at least one core. In
      this case reading the core 0 property should be enough

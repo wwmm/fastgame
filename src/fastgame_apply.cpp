@@ -14,6 +14,12 @@
 
 template <typename T>
 void update_system_setting(const std::string& parameter_path, const T& value) {
+  if (!std::filesystem::exists(parameter_path)) {
+    util::debug("the file " + parameter_path + " does not exist!. Aborting the write to it.");
+
+    return;
+  }
+
   std::ofstream f;
 
   f.open(parameter_path, std::ofstream::trunc);

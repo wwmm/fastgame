@@ -74,6 +74,12 @@ auto find_hwmon_index(const int& card_index) -> int {
   int index = 0;
   auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/");
 
+  if (!std::filesystem::is_directory(path)) {
+    util::debug("The directory " + path.string() + " does not exist!");
+
+    return index;
+  }
+
   for (const auto& entry : std::filesystem::directory_iterator(path)) {
     auto child_directory = std::filesystem::path(entry).filename().string();
 

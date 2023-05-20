@@ -149,6 +149,34 @@
                         </child>
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Multi-Gen LRU</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">min_ttl_ms</property>
+                                <child>
+                                    <object class="GtkSpinButton" id="mglru_min_ttl_ms">
+                                        <property name="valign">center</property>
+                                        <property name="width-chars">10</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">0</property>
+                                                <property name="upper">60000</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">10</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
     </template>

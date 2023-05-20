@@ -237,6 +237,10 @@ auto main(int argc, char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction",
                         root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", 0));
 
+  // mglru
+
+  update_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms", root.get<int>("memory.mglru.min_ttl_ms", 0));
+
   // transparent hugepages
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/enabled",

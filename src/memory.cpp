@@ -11,7 +11,8 @@ struct _Memory {
 
   GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
-  GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness, *percpu_pagelist_high_fraction;
+  GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness, *percpu_pagelist_high_fraction,
+      *mglru_min_ttl_ms;
 };
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
@@ -46,6 +47,14 @@ void set_percpu_pagelist_high_fraction(Memory* self, const int& value) {
 
 auto get_percpu_pagelist_high_fraction(Memory* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->percpu_pagelist_high_fraction));
+}
+
+void set_mglru_min_ttl_ms(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->mglru_min_ttl_ms, value);
+}
+
+auto get_mglru_min_ttl_ms(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->mglru_min_ttl_ms));
 }
 
 void set_thp_enabled(Memory* self, const std::string& name) {
@@ -270,10 +279,13 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, compaction_proactiveness);
   gtk_widget_class_bind_template_child(widget_class, Memory, page_lock_unfairness);
   gtk_widget_class_bind_template_child(widget_class, Memory, percpu_pagelist_high_fraction);
+  gtk_widget_class_bind_template_child(widget_class, Memory, mglru_min_ttl_ms);
 }
 
 void memory_init(Memory* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
+
+  ui::prepare_spinbutton<"ms">(self->mglru_min_ttl_ms);
 
   gtk_spin_button_set_value(self->cache_pressure,
                             std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
@@ -286,6 +298,10 @@ void memory_init(Memory* self) {
 
   gtk_spin_button_set_value(self->percpu_pagelist_high_fraction,
                             std::stoi(util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction")[0]));
+
+  if (const auto list = util::read_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms"); !list.empty()) {
+    gtk_spin_button_set_value(self->mglru_min_ttl_ms, std::stoi(list[0]));
+  }
 
   read_transparent_huge_page_values(self);
 }

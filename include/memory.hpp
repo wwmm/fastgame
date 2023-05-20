@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include "ui_helpers.hpp"
 #include "util.hpp"
 
 namespace ui::memory {
@@ -33,6 +34,10 @@ auto get_page_lock_unfairness(Memory* self) -> int;
 void set_percpu_pagelist_high_fraction(Memory* self, const int& value);
 
 auto get_percpu_pagelist_high_fraction(Memory* self) -> int;
+
+void set_mglru_min_ttl_ms(Memory* self, const int& value);
+
+auto get_mglru_min_ttl_ms(Memory* self) -> int;
 
 void set_thp_enabled(Memory* self, const std::string& name);
 

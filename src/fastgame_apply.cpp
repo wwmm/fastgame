@@ -226,6 +226,8 @@ auto main(int argc, char* argv[]) -> int {
 
   // virtual memory
 
+  update_system_setting("/proc/sys/vm/swappiness", root.get<int>("memory.virtual-memory.swappiness", 100));
+
   update_system_setting("/proc/sys/vm/vfs_cache_pressure", root.get<int>("memory.virtual-memory.cache-pressure", 100));
 
   update_system_setting("/proc/sys/vm/compaction_proactiveness",

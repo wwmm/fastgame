@@ -109,12 +109,15 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   // memory
 
+  root.put("memory.virtual-memory.swappiness", ui::memory::get_swappiness(self->memory));
   root.put("memory.virtual-memory.cache-pressure", ui::memory::get_cache_pressure(self->memory));
   root.put("memory.virtual-memory.compaction-proactiveness", ui::memory::get_compaction_proactiveness(self->memory));
   root.put("memory.virtual-memory.page-lock-unfairness", ui::memory::get_page_lock_unfairness(self->memory));
   root.put("memory.virtual-memory.percpu-pagelist-high-fraction",
            ui::memory::get_percpu_pagelist_high_fraction(self->memory));
+
   root.put("memory.mglru.min_ttl_ms", ui::memory::get_mglru_min_ttl_ms(self->memory));
+
   root.put("memory.transparent-hugepages.enabled", ui::memory::get_thp_enabled(self->memory));
   root.put("memory.transparent-hugepages.defrag", ui::memory::get_thp_defrag(self->memory));
   root.put("memory.transparent-hugepages.shmem_enabled", ui::memory::get_thp_shmem_enabled(self->memory));
@@ -220,6 +223,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   }
 
   // memory
+
+  ui::memory::set_swappiness(
+      self->memory, root.get<int>("memory.virtual-memory.swappiness", ui::memory::get_swappiness(self->memory)));
 
   ui::memory::set_cache_pressure(self->memory, root.get<int>("memory.virtual-memory.cache-pressure",
                                                              ui::memory::get_cache_pressure(self->memory)));

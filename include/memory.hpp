@@ -19,6 +19,10 @@ G_END_DECLS
 
 auto create() -> Memory*;
 
+void set_swappiness(Memory* self, const int& value);
+
+auto get_swappiness(Memory* self) -> int;
+
 void set_cache_pressure(Memory* self, const int& value);
 
 auto get_cache_pressure(Memory* self) -> int;

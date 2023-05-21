@@ -11,11 +11,19 @@ struct _Memory {
 
   GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
-  GtkSpinButton *cache_pressure, *compaction_proactiveness, *page_lock_unfairness, *percpu_pagelist_high_fraction,
-      *mglru_min_ttl_ms;
+  GtkSpinButton *swappiness, *cache_pressure, *compaction_proactiveness, *page_lock_unfairness,
+      *percpu_pagelist_high_fraction, *mglru_min_ttl_ms;
 };
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
+
+void set_swappiness(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->swappiness, value);
+}
+
+auto get_swappiness(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->swappiness));
+}
 
 void set_cache_pressure(Memory* self, const int& value) {
   gtk_spin_button_set_value(self->cache_pressure, value);
@@ -275,6 +283,7 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, thp_enabled);
   gtk_widget_class_bind_template_child(widget_class, Memory, thp_defrag);
   gtk_widget_class_bind_template_child(widget_class, Memory, thp_shmem_enabled);
+  gtk_widget_class_bind_template_child(widget_class, Memory, swappiness);
   gtk_widget_class_bind_template_child(widget_class, Memory, cache_pressure);
   gtk_widget_class_bind_template_child(widget_class, Memory, compaction_proactiveness);
   gtk_widget_class_bind_template_child(widget_class, Memory, page_lock_unfairness);
@@ -286,6 +295,8 @@ void memory_init(Memory* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
   ui::prepare_spinbutton<"ms">(self->mglru_min_ttl_ms);
+
+  gtk_spin_button_set_value(self->swappiness, std::stoi(util::read_system_setting("/proc/sys/vm/swappiness")[0]));
 
   gtk_spin_button_set_value(self->cache_pressure,
                             std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));

@@ -50,6 +50,14 @@ fastgame_apply_deps = [
 	dependency('udisks2')
 ]
 
+subdir('nvidia')
+
+linkwith = []
+
+if libxnvctrl.found()
+	linkwith += fastgame_nvidia
+endif
+
 executable(
 	'fastgame_launcher',
 	fastgame_launcher_sources,
@@ -63,7 +71,8 @@ executable(
 	fastgame_sources,
 	include_directories : [include_dir,config_h_dir],
 	dependencies : fastgame_deps,
-	install: true
+	install: true,
+	link_with: linkwith
 )
 
 executable(
@@ -71,5 +80,6 @@ executable(
 	fastgame_apply_sources,
 	include_directories : [include_dir,config_h_dir],
 	dependencies : fastgame_apply_deps,
-	install: true
+	install: true,
+	link_with: linkwith
 )

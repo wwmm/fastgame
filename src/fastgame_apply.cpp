@@ -12,6 +12,8 @@
 #include "netlink.hpp"
 #include "util.hpp"
 
+using namespace std::string_literals;
+
 template <typename T>
 void update_system_setting(const std::string& parameter_path, const T& value) {
   if (!std::filesystem::exists(parameter_path)) {
@@ -127,6 +129,31 @@ void apply_udisks_configuration(const boost::property_tree::ptree& root) {
   }
 }
 
+void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const int& card_index) {
+  if (util::card_is_amdgpu(card_index)) {
+    auto section = (card_index == 0) ? "amdgpu" : "amdgpu.card1";
+
+    auto performance_level = root.get<std::string>(section + ".performance-level"s);
+
+    update_system_setting(
+        "/sys/class/drm/card" + util::to_string(card_index) + "/device/power_dpm_force_performance_level",
+        performance_level);
+
+    if (performance_level == "manual") {
+      update_system_setting("/sys/class/drm/card" + util::to_string(card_index) + "/device/pp_power_profile_mode",
+                            root.get<std::string>(section + ".power-profile"s));
+    }
+
+    int hwmon_index = util::find_hwmon_index(card_index);
+
+    int power_cap = 1000000 * root.get<int>(section + ".power-cap"s);  // power must be in microwatts
+
+    update_system_setting("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/hwmon" +
+                              util::to_string(hwmon_index) + "/power1_cap",
+                          power_cap);
+  }
+}
+
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
@@ -203,26 +230,8 @@ auto main(int argc, char* argv[]) -> int {
 
   // amdgpu
 
-  if (util::card_is_amdgpu(0)) {
-    auto performance_level = root.get<std::string>("amdgpu.performance-level");
-
-    update_system_setting("/sys/class/drm/card0/device/power_dpm_force_performance_level", performance_level);
-
-    if (performance_level == "manual") {
-      update_system_setting("/sys/class/drm/card0/device/pp_power_profile_mode",
-                            root.get<std::string>("amdgpu.power-profile"));
-    }
-
-    int hwmon_index = util::find_hwmon_index(0);
-    int power_cap = 1000000 * root.get<int>("amdgpu.power-cap");  // power must be in microwatts
-    int gpu_irq = util::get_irq_number("amdgpu");
-    int irq_affinity = root.get<int>("amdgpu.irq-affinity", 0);
-
-    update_system_setting("/sys/class/drm/card0/device/hwmon/hwmon" + std::to_string(hwmon_index) + "/power1_cap",
-                          power_cap);
-
-    update_system_setting("/proc/irq/" + std::to_string(gpu_irq) + "/smp_affinity_list", irq_affinity);
-  }
+  apply_amdgpu_configuration(root, 0);
+  apply_amdgpu_configuration(root, 1);
 
   // virtual memory
 

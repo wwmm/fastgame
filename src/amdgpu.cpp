@@ -334,10 +334,12 @@ void amdgpu_init(Amdgpu* self) {
           if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
             auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 
+            auto* dropdown = (data->idx == 0) ? data->self->power_profile0 : data->self->power_profile1;
+
             if (std::strcmp(level, "manual") == 0) {
-              gtk_widget_set_sensitive(GTK_WIDGET(data->self->power_profile0), 1);
+              gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 1);
             } else {
-              gtk_widget_set_sensitive(GTK_WIDGET(data->self->power_profile1), 0);
+              gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 0);
             }
           }
         }),

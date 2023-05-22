@@ -6,24 +6,46 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "amdgpu: ";
 
-uint card_index = 0, hwmon_index = 0;
+uint n_cards = 0;
 
 struct _Amdgpu {
   GtkPopover parent_instance;
 
-  GtkDropDown *performance_level, *power_profile;
+  GtkDropDown *performance_level0, *power_profile0, *performance_level1, *power_profile1;
 
-  GtkSpinButton* power_cap;
+  GtkSpinButton *power_cap0, *power_cap1;
 };
 
 G_DEFINE_TYPE(Amdgpu, amdgpu, GTK_TYPE_BOX)
 
-auto get_card_index(Amdgpu* self) -> int {
-  return card_index;
+auto get_n_cards() -> int {
+  return n_cards;
 }
 
-void set_performance_level(Amdgpu* self, const std::string& name) {
-  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->performance_level));
+void count_cards() {
+  n_cards = 0;
+
+  uint n_subfolders = 0;
+
+  auto dir_path = std::filesystem::path("/sys/class/drm/");
+
+  if (std::filesystem::is_directory(dir_path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(dir_path)) {
+      if (std::filesystem::is_directory(entry)) {
+        if (util::card_is_amdgpu(n_subfolders)) {
+          n_cards++;
+        }
+
+        n_subfolders++;
+      }
+    }
+  }
+}
+
+void set_performance_level(Amdgpu* self, const std::string& name, const int& card_index) {
+  auto* dropdown = (card_index == 0) ? self->performance_level0 : self->performance_level1;
+
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(dropdown));
 
   guint id = 0;
 
@@ -39,11 +61,13 @@ void set_performance_level(Amdgpu* self, const std::string& name) {
     }
   }
 
-  gtk_drop_down_set_selected(self->performance_level, id);
+  gtk_drop_down_set_selected(dropdown, id);
 }
 
-auto get_performance_level(Amdgpu* self) -> std::string {
-  auto* selected_item = gtk_drop_down_get_selected_item(self->performance_level);
+auto get_performance_level(Amdgpu* self, const int& card_index) -> std::string {
+  auto* dropdown = (card_index == 0) ? self->performance_level0 : self->performance_level1;
+
+  auto* selected_item = gtk_drop_down_get_selected_item(dropdown);
 
   if (selected_item == nullptr) {
     return "";
@@ -52,27 +76,37 @@ auto get_performance_level(Amdgpu* self) -> std::string {
   return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
-void set_power_profile(Amdgpu* self, const std::string& id) {
+void set_power_profile(Amdgpu* self, const std::string& id, const int& card_index) {
+  auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+
   uint idx = 0;
 
   util::str_to_num(id, idx);
 
-  gtk_drop_down_set_selected(self->power_profile, idx);
+  gtk_drop_down_set_selected(dropdown, idx);
 }
 
-auto get_power_profile(Amdgpu* self) -> std::string {
-  return util::to_string(gtk_drop_down_get_selected(self->power_profile));
+auto get_power_profile(Amdgpu* self, const int& card_index) -> std::string {
+  auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+
+  return util::to_string(gtk_drop_down_get_selected(dropdown));
 }
 
-void set_power_cap(Amdgpu* self, const int& value) {
-  gtk_spin_button_set_value(self->power_cap, value);
+void set_power_cap(Amdgpu* self, const int& value, const int& card_index) {
+  auto* button = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+
+  gtk_spin_button_set_value(button, value);
 }
 
-auto get_power_cap(Amdgpu* self) -> int {
-  return static_cast<int>(gtk_spin_button_get_value(self->power_cap));
+auto get_power_cap(Amdgpu* self, const int& card_index) -> int {
+  auto* button = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+
+  return static_cast<int>(gtk_spin_button_get_value(button));
 }
 
-void read_power_cap_max(Amdgpu* self) {
+void read_power_cap_max(Amdgpu* self, const int& card_index) {
+  auto hwmon_index = util::find_hwmon_index(card_index);
+
   auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
                                     std::to_string(hwmon_index) + "/power1_cap_max");
 
@@ -92,7 +126,15 @@ void read_power_cap_max(Amdgpu* self) {
 
     int power_cap_in_watts = raw_value / 1000000;
 
-    auto adj = gtk_spin_button_get_adjustment(self->power_cap);
+    GtkAdjustment* adj = nullptr;
+
+    switch (card_index) {
+      case 0:
+        adj = gtk_spin_button_get_adjustment(self->power_cap0);
+
+      case 1:
+        adj = gtk_spin_button_get_adjustment(self->power_cap1);
+    }
 
     gtk_adjustment_set_upper(adj, power_cap_in_watts);
 
@@ -100,11 +142,17 @@ void read_power_cap_max(Amdgpu* self) {
   }
 }
 
-void read_power_cap(Amdgpu* self) {
+void read_power_cap(Amdgpu* self, const int& card_index) {
+  auto* spinbutton = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+
+  auto hwmon_index = util::find_hwmon_index(card_index);
+
   auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
                                     std::to_string(hwmon_index) + "/power1_cap");
 
   if (!std::filesystem::is_regular_file(path)) {
+    gtk_widget_set_sensitive(GTK_WIDGET(spinbutton), 0);
+
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
     util::debug(log_tag + "could not change the power cap!"s);
   } else {
@@ -120,13 +168,13 @@ void read_power_cap(Amdgpu* self) {
 
     int power_cap_in_watts = raw_value / 1000000;
 
-    gtk_spin_button_set_value(self->power_cap, power_cap_in_watts);
+    gtk_spin_button_set_value(spinbutton, power_cap_in_watts);
 
     util::debug(log_tag + "current power cap: "s + std::to_string(power_cap_in_watts) + " W");
   }
 }
 
-void read_performance_level(Amdgpu* self) {
+void read_performance_level(Amdgpu* self, const int& card_index) {
   auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) +
                                     "/device/power_dpm_force_performance_level");
 
@@ -150,11 +198,15 @@ void read_performance_level(Amdgpu* self) {
   }
 }
 
-void read_power_profile(Amdgpu* self) {
+void read_power_profile(Amdgpu* self, const int& card_index) {
   auto path =
       std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/pp_power_profile_mode");
 
+  auto dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+
   if (!std::filesystem::is_regular_file(path)) {
+    gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 0);
+
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
     util::debug(log_tag + "could not change the performance level!"s);
   } else {
@@ -168,7 +220,7 @@ void read_power_profile(Amdgpu* self) {
 
     f.close();
 
-    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->power_profile));
+    auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(dropdown));
 
     gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
 
@@ -218,7 +270,7 @@ void read_power_profile(Amdgpu* self) {
 
           util::str_to_num(id_str, id);
 
-          gtk_drop_down_set_selected(self->power_profile, id);
+          gtk_drop_down_set_selected(dropdown, id);
         }
       }
     }
@@ -246,45 +298,53 @@ void amdgpu_class_init(AmdgpuClass* klass) {
 
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/amdgpu.ui");
 
-  gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level);
-  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_profile);
-  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level0);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_profile0);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap0);
+
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, performance_level1);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_profile1);
+  gtk_widget_class_bind_template_child(widget_class, Amdgpu, power_cap1);
 }
 
 void amdgpu_init(Amdgpu* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
-  ui::prepare_spinbutton<"W">(self->power_cap);
+  ui::prepare_spinbuttons<"W">(self->power_cap0, self->power_cap1);
 
-  util::debug(log_tag + "using the card at the index: 0"s);
+  count_cards();
 
-  hwmon_index = util::find_hwmon_index(0);
+  util::debug(log_tag + "number of amdgpu cards: "s + util::to_string(n_cards));
 
-  util::debug(log_tag + "hwmon device index: "s + std::to_string(hwmon_index));
+  for (uint n = 0; n < n_cards; n++) {
+    auto* performance_level = (n == 0) ? self->performance_level0 : self->performance_level1;
 
-  g_signal_connect(self->performance_level, "notify::selected-item",
-                   G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Amdgpu* self) {
-                     if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
-                       auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+    g_signal_connect(performance_level, "notify::selected-item",
+                     G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Amdgpu* self) {
+                       if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
+                         auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 
-                       if (std::strcmp(level, "manual") == 0) {
-                         gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
-                       } else {
-                         gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+                         if (std::strcmp(level, "manual") == 0) {
+                           //  gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
+                         } else {
+                           //  gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+                         }
                        }
-                     }
-                   }),
-                   self);
+                     }),
+                     self);
 
-  read_power_cap_max(self);
-  read_power_cap(self);
-  read_performance_level(self);
-  read_power_profile(self);
+    read_power_cap_max(self, n);
+    read_power_cap(self, n);
+    read_performance_level(self, n);
+    read_power_profile(self, n);
 
-  if (get_performance_level(self) == "manual") {
-    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
-  } else {
-    gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
+    auto* power_profile = (n == 0) ? self->power_profile0 : self->power_profile1;
+
+    if (get_performance_level(self, n) == "manual") {
+      gtk_widget_set_sensitive(GTK_WIDGET(power_profile), 1);
+    } else {
+      gtk_widget_set_sensitive(GTK_WIDGET(power_profile), 0);
+    }
   }
 }
 

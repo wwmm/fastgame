@@ -132,10 +132,20 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
 }
 
 auto card_is_amdgpu(const int& card_index) -> bool {
-  // that is probably not the best way to find out if a amdgpu card is present...
+  auto path =
+      std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/driver/module/drivers/");
 
-  return std::filesystem::is_regular_file("/sys/class/drm/card" + std::to_string(card_index) +
-                                          "/device/power_dpm_force_performance_level");
+  if (std::filesystem::is_directory(path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(path)) {
+      if (std::filesystem::is_directory(entry)) {
+        if (std::filesystem::path(entry).filename().string().find("amdgpu") != std::string::npos) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
 }
 
 auto get_irq_number(const std::string& name) -> int {

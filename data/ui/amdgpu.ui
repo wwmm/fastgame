@@ -12,13 +12,13 @@
                 <property name="hexpand">1</property>
                 <child>
                     <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Performance</property>
+                        <property name="title" translatable="yes">Card 0</property>
 
                         <child>
                             <object class="AdwActionRow">
-                                <property name="title" translatable="yes">Level</property>
+                                <property name="title" translatable="yes">Performance Level</property>
                                 <child>
-                                    <object class="GtkDropDown" id="performance_level">
+                                    <object class="GtkDropDown" id="performance_level0">
                                         <property name="valign">center</property>
 
                                         <property name="model">
@@ -44,7 +44,7 @@
                             <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Power Profile</property>
                                 <child>
-                                    <object class="GtkDropDown" id="power_profile">
+                                    <object class="GtkDropDown" id="power_profile0">
                                         <property name="valign">center</property>
                                         <property name="model">
                                             <object class="GtkStringList"></object>
@@ -59,7 +59,76 @@
                                 <property name="title" translatable="yes">Power Cap</property>
 
                                 <child>
-                                    <object class="GtkSpinButton" id="power_cap">
+                                    <object class="GtkSpinButton" id="power_cap0">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="upper">1000</property>
+                                                <property name="value">100</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">1</property>
+                                            </object>
+                                        </property>
+                                        <property name="width-chars">10</property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Card 1</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Performance Level</property>
+                                <child>
+                                    <object class="GtkDropDown" id="performance_level1">
+                                        <property name="valign">center</property>
+
+                                        <property name="model">
+                                            <object class="GtkStringList">
+                                                <items>
+                                                    <item>auto</item>
+                                                    <item>low</item>
+                                                    <item>high</item>
+                                                    <item>manual</item>
+                                                    <item>profile_standard</item>
+                                                    <item>profile_min_sclk</item>
+                                                    <item>profile_min_mclk</item>
+                                                    <item>profile_peak</item>
+                                                </items>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Power Profile</property>
+                                <child>
+                                    <object class="GtkDropDown" id="power_profile1">
+                                        <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Power Cap</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="power_cap1">
                                         <property name="valign">center</property>
                                         <property name="adjustment">
                                             <object class="GtkAdjustment">

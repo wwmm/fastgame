@@ -321,19 +321,27 @@ void amdgpu_init(Amdgpu* self) {
   for (uint n = 0; n < n_cards; n++) {
     auto* performance_level = (n == 0) ? self->performance_level0 : self->performance_level1;
 
-    g_signal_connect(performance_level, "notify::selected-item",
-                     G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Amdgpu* self) {
-                       if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
-                         auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+    struct Data {
+      uint idx;
+      Amdgpu* self;
+    };
 
-                         if (std::strcmp(level, "manual") == 0) {
-                           //  gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 1);
-                         } else {
-                           //  gtk_widget_set_sensitive(GTK_WIDGET(self->power_profile), 0);
-                         }
-                       }
-                     }),
-                     self);
+    auto* data = new Data{.idx = n, .self = self};
+
+    g_signal_connect_data(
+        performance_level, "notify::selected-item",
+        G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Data* data) {
+          if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
+            auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+
+            if (std::strcmp(level, "manual") == 0) {
+              gtk_widget_set_sensitive(GTK_WIDGET(data->self->power_profile0), 1);
+            } else {
+              gtk_widget_set_sensitive(GTK_WIDGET(data->self->power_profile1), 0);
+            }
+          }
+        }),
+        data, (GClosureNotify) + [](Data* data, GClosure* closure) { delete data; }, G_CONNECT_DEFAULT);
 
     read_power_cap_max(self, n);
     read_power_cap(self, n);

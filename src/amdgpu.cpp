@@ -112,7 +112,7 @@ void read_power_cap_max(Amdgpu* self, const int& card_index) {
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "could not read the maximum power cap!"s);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " could not read the maximum power cap!"s);
   } else {
     std::ifstream f;
 
@@ -138,7 +138,8 @@ void read_power_cap_max(Amdgpu* self, const int& card_index) {
 
     gtk_adjustment_set_upper(adj, power_cap_in_watts);
 
-    util::debug(log_tag + "maximum allowed power cap: "s + std::to_string(power_cap_in_watts) + " W");
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " maximum allowed power cap: "s +
+                std::to_string(power_cap_in_watts) + " W");
   }
 }
 
@@ -154,7 +155,7 @@ void read_power_cap(Amdgpu* self, const int& card_index) {
     gtk_widget_set_sensitive(GTK_WIDGET(spinbutton), 0);
 
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "could not change the power cap!"s);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " could not change the power cap!"s);
   } else {
     std::ifstream f;
 
@@ -170,7 +171,8 @@ void read_power_cap(Amdgpu* self, const int& card_index) {
 
     gtk_spin_button_set_value(spinbutton, power_cap_in_watts);
 
-    util::debug(log_tag + "current power cap: "s + std::to_string(power_cap_in_watts) + " W");
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " current power cap: "s +
+                std::to_string(power_cap_in_watts) + " W");
   }
 }
 
@@ -180,7 +182,7 @@ void read_performance_level(Amdgpu* self, const int& card_index) {
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "could not read the power profile!"s);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " could not read the power profile!"s);
   } else {
     std::ifstream f;
 
@@ -194,7 +196,7 @@ void read_performance_level(Amdgpu* self, const int& card_index) {
 
     set_performance_level(self, level);
 
-    util::debug(log_tag + "current performance level: "s + level);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " current performance level: "s + level);
   }
 }
 
@@ -208,7 +210,7 @@ void read_power_profile(Amdgpu* self, const int& card_index) {
     gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 0);
 
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "could not change the performance level!"s);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " could not change the performance level!"s);
   } else {
     std::ifstream f;
 
@@ -245,7 +247,7 @@ void read_power_profile(Amdgpu* self, const int& card_index) {
           if (word.ends_with("*")) {
             word.pop_back();
 
-            util::debug(log_tag + "current power profile: "s + word);
+            util::debug(log_tag + "card "s + util::to_string(card_index) + " current power profile: "s + word);
 
             is_selected = true;
           }

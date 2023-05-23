@@ -126,7 +126,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   // amdgpu
 
-  if (self->amdgpu != nullptr) {
+  if (ui::amdgpu::get_n_cards() > 0) {
     root.put("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu));
     root.put("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu));
     root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu));
@@ -136,6 +136,12 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
       root.put("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, 1));
       root.put("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, 1));
     }
+  }
+
+  // nvidia
+
+  if (ui::nvidia::has_gpu()) {
+    root.put("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia));
   }
 
   // disk
@@ -264,7 +270,7 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   // amdgpu
 
-  if (self->amdgpu != nullptr) {
+  if (ui::amdgpu::get_n_cards() > 0) {
     ui::amdgpu::set_performance_level(
         self->amdgpu,
         root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu)));
@@ -287,6 +293,13 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
       ui::amdgpu::set_power_cap(self->amdgpu,
                                 root.get<int>("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, 1)), 1);
     }
+  }
+
+  // nvidia
+
+  if (ui::nvidia::has_gpu()) {
+    ui::nvidia::set_powermize_mode(
+        self->nvidia, root.get<std::string>("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia)));
   }
 
   // disk
@@ -542,7 +555,7 @@ void application_window_init(ApplicationWindow* self) {
 
   auto* page_disk = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->disk), "disk", _("Disk"));
 
-  if (util::card_is_amdgpu(0)) {
+  if (ui::amdgpu::get_n_cards() > 0) {
     auto* page_amdgpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->amdgpu), "amdgpu", _("AMD GPU"));
 
     adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");

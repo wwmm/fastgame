@@ -23,15 +23,9 @@ auto create() -> Nvidia*;
 
 auto has_gpu() -> bool;
 
-auto get_n_cards() -> int;
+void set_powermize_mode(Nvidia* self, const std::string& name, const int& card_index = 0);
 
-void set_performance_level(Nvidia* self, const std::string& name, const int& card_index = 0);
-
-auto get_performance_level(Nvidia* self, const int& card_index = 0) -> std::string;
-
-void set_power_profile(Nvidia* self, const std::string& id, const int& card_index = 0);
-
-auto get_power_profile(Nvidia* self, const int& card_index = 0) -> std::string;
+auto get_powermize_mode(Nvidia* self, const int& card_index = 0) -> std::string;
 
 void set_power_cap(Nvidia* self, const int& value, const int& card_index = 0);
 

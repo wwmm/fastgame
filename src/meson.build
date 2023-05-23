@@ -51,14 +51,7 @@ fastgame_apply_deps = [
 	dependency('udisks2')
 ]
 
-cxx = meson.get_compiler('cpp')
 
-libxnvctrl = cxx.find_library('XNVCtrl', required: false)
-libdl = cxx.find_library('dl', required: false)
-
-if libxnvctrl.found() and libdl.found()
-    conf.set('USE_NVIDIA', 1)
-endif
 
 subdir('nvidia')
 

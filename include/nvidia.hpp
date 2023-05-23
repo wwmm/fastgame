@@ -5,9 +5,12 @@
 #include <fstream>
 #include <string>
 #include "config.h"
-#include "nvidia/nvidia.hpp"
 #include "ui_helpers.hpp"
 #include "util.hpp"
+
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
 
 namespace ui::nvidia {
 

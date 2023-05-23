@@ -12,6 +12,10 @@
 #include "netlink.hpp"
 #include "util.hpp"
 
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
+
 using namespace std::string_literals;
 
 template <typename T>
@@ -133,7 +137,7 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const i
   if (util::card_is_amdgpu(card_index)) {
     auto section = (card_index == 0) ? "amdgpu" : "amdgpu.card1";
 
-    auto performance_level = root.get<std::string>(section + ".performance-level"s);
+    auto performance_level = root.get<std::string>(section + ".performance-level"s, "auto");
 
     update_system_setting(
         "/sys/class/drm/card" + util::to_string(card_index) + "/device/power_dpm_force_performance_level",
@@ -159,13 +163,18 @@ void apply_nvidia_configuration() {
   // if (nvidia->has_gpu()) {
   //   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
   //   auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
-  //   auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.default", "auto");
   //   auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
 
-  //   nvidia->set_powermizer_mode(0, powermizer_mode);
   //   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
   //   nvidia->nvml->set_power_limit(0, power_limit);
   // }
+
+  std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper;
+
+  if (nv_wrapper->has_gpu()) {
+    nv_wrapper->set_powermizer_mode(0, root.get<int>("nvidia.powermize-mode", 0));
+  }
+
 #endif
 }
 

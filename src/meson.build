@@ -51,8 +51,6 @@ fastgame_apply_deps = [
 	dependency('udisks2')
 ]
 
-
-
 subdir('nvidia')
 
 linkwith = []

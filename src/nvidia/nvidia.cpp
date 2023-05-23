@@ -1,6 +1,6 @@
 #include "nvidia.hpp"
-#include <algorithm>
-#include "NVCtrl/NVCtrlLib.h"
+
+namespace nvidia_wrapper {
 
 Nvidia::Nvidia() {
   dpy = XOpenDisplay(nullptr);
@@ -135,3 +135,5 @@ void Nvidia::set_powermizer_mode(const int& gpu_index, const std::string& mode_n
     std::cout << log_tag + "failed to set powermizer to mode " << mode_name << std::endl;
   }
 }
+
+}  // namespace nvidia_wrapper

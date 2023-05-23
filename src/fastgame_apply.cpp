@@ -154,6 +154,21 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const i
   }
 }
 
+void apply_nvidia_configuration() {
+#ifdef USE_NVIDIA
+  // if (nvidia->has_gpu()) {
+  //   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
+  //   auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
+  //   auto powermizer_mode = cfg->get_key<std::string>("general.nvidia.powermizer-mode.default", "auto");
+  //   auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
+
+  //   nvidia->set_powermizer_mode(0, powermizer_mode);
+  //   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
+  //   nvidia->nvml->set_power_limit(0, power_limit);
+  // }
+#endif
+}
+
 auto main(int argc, char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 

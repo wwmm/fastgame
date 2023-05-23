@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="fastgame">
+    <template class="Nvidia" parent="GtkBox">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <child>
+            <object class="AdwPreferencesPage">
+                <property name="hexpand">1</property>
+                <child>
+                    <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Performance</property>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Level</property>
+                                <child>
+                                    <object class="GtkDropDown" id="performance_level0">
+                                        <property name="valign">center</property>
+
+                                        <property name="model">
+                                            <object class="GtkStringList">
+                                                <items>
+                                                    <item>auto</item>
+                                                    <item>low</item>
+                                                    <item>high</item>
+                                                    <item>manual</item>
+                                                    <item>profile_standard</item>
+                                                    <item>profile_min_sclk</item>
+                                                    <item>profile_min_mclk</item>
+                                                    <item>profile_peak</item>
+                                                </items>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Power Profile</property>
+                                <child>
+                                    <object class="GtkDropDown" id="power_profile0">
+                                        <property name="valign">center</property>
+                                        <property name="model">
+                                            <object class="GtkStringList"></object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Power Cap</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="power_cap0">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="upper">1000</property>
+                                                <property name="value">100</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">1</property>
+                                            </object>
+                                        </property>
+                                        <property name="width-chars">10</property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

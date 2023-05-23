@@ -1,11 +1,14 @@
-#ifndef NVIDIA_HPP
-#define NVIDIA_HPP
+#pragma once
 
 #include <NVCtrl/NVCtrl.h>
 #include <X11/Xlib.h>
+#include <algorithm>
 #include <iostream>
 #include <memory>
+#include "NVCtrl/NVCtrlLib.h"
 #include "nvml.hpp"
+
+namespace nvidia_wrapper {
 
 class Nvidia {
  public:
@@ -29,4 +32,4 @@ class Nvidia {
   void get_valid_clock_offset_values(const int& gpu_index);
 };
 
-#endif
+}  // namespace nvidia_wrapper

@@ -1,7 +1,4 @@
-cxx = meson.get_compiler('cpp')
 
-libxnvctrl = cxx.find_library('XNVCtrl', required: false)
-libdl = cxx.find_library('dl', required: false)
 
 nvidia_sources = [
 	'nvidia.cpp',

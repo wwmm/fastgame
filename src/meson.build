@@ -18,6 +18,7 @@ fastgame_sources = [
 	'environment_variable_holder.cpp',
 	'environment_variables.cpp',
 	'memory.cpp',
+	'nvidia.cpp',
 	'preferences_general.cpp',
 	'preferences_window.cpp',
 	'presets_menu.cpp',
@@ -49,6 +50,15 @@ fastgame_apply_deps = [
 	dependency('threads'),
 	dependency('udisks2')
 ]
+
+cxx = meson.get_compiler('cpp')
+
+libxnvctrl = cxx.find_library('XNVCtrl', required: false)
+libdl = cxx.find_library('dl', required: false)
+
+if libxnvctrl.found() and libdl.found()
+    conf.set('USE_NVIDIA', 1)
+endif
 
 subdir('nvidia')
 

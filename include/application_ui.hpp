@@ -7,6 +7,7 @@
 #include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
+#include "nvidia.hpp"
 #include "presets_menu.hpp"
 
 #include <boost/process.hpp>

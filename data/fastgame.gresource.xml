@@ -11,6 +11,7 @@
         <file>ui/factory_column_delete.ui</file>
         <file>ui/factory_sections_listview.ui</file>
         <file>ui/memory.ui</file>
+        <file>ui/nvidia.ui</file>
         <file>ui/preferences_general.ui</file>
         <file>ui/preferences_window.ui</file>
         <file>ui/presets_menu.ui</file>

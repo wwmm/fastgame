@@ -43,6 +43,8 @@ struct _ApplicationWindow {
 
   ui::amdgpu::Amdgpu* amdgpu;
 
+  ui::nvidia::Nvidia* nvidia;
+
   ui::disk::Disk* disk;
 
   GSettings* settings;
@@ -528,6 +530,7 @@ void application_window_init(ApplicationWindow* self) {
   self->cpu = ui::cpu::create();
   self->memory = ui::memory::create();
   self->amdgpu = ui::amdgpu::create();
+  self->nvidia = ui::nvidia::create();
   self->disk = ui::disk::create();
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
@@ -543,6 +546,12 @@ void application_window_init(ApplicationWindow* self) {
     auto* page_amdgpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->amdgpu), "amdgpu", _("AMD GPU"));
 
     adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");
+  }
+
+  if (ui::nvidia::has_gpu()) {
+    auto* page_nvidia = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->nvidia), "nvidia", _("NVIDIA GPU"));
+
+    adw_view_stack_page_set_icon_name(page_nvidia, "fg-gpu-symbolic");
   }
 
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");

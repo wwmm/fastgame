@@ -142,6 +142,8 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   if (ui::nvidia::has_gpu()) {
     root.put("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia));
+    root.put("nvidia.clock-offset.gpu", ui::nvidia::get_gpu_clock_offset(self->nvidia));
+    root.put("nvidia.clock-offset.memory", ui::nvidia::get_memory_clock_offset(self->nvidia));
   }
 
   // disk
@@ -275,8 +277,8 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
         self->amdgpu,
         root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu)));
 
-    ui::amdgpu::set_power_profile(
-        self->amdgpu, root.get<std::string>("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu)));
+    ui::amdgpu::set_power_profile(self->amdgpu,
+                                  root.get<int>("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu)));
 
     ui::amdgpu::set_power_cap(self->amdgpu, root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu)));
 
@@ -287,8 +289,7 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
           1);
 
       ui::amdgpu::set_power_profile(
-          self->amdgpu,
-          root.get<std::string>("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, 1)), 1);
+          self->amdgpu, root.get<int>("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, 1)), 1);
 
       ui::amdgpu::set_power_cap(self->amdgpu,
                                 root.get<int>("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, 1)), 1);
@@ -299,7 +300,13 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   if (ui::nvidia::has_gpu()) {
     ui::nvidia::set_powermize_mode(
-        self->nvidia, root.get<std::string>("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia)));
+        self->nvidia, root.get<int>("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia)));
+
+    ui::nvidia::set_gpu_clock_offset(
+        self->nvidia, root.get<int>("nvidia.clock-offset.gpu", ui::nvidia::get_gpu_clock_offset(self->nvidia)));
+
+    ui::nvidia::set_memory_clock_offset(
+        self->nvidia, root.get<int>("nvidia.clock-offset.memory", ui::nvidia::get_memory_clock_offset(self->nvidia)));
   }
 
   // disk

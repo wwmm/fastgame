@@ -76,20 +76,16 @@ auto get_performance_level(Amdgpu* self, const int& card_index) -> std::string {
   return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
-void set_power_profile(Amdgpu* self, const std::string& id, const int& card_index) {
+void set_power_profile(Amdgpu* self, const int& id, const int& card_index) {
   auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
 
-  uint idx = 0;
-
-  util::str_to_num(id, idx);
-
-  gtk_drop_down_set_selected(dropdown, idx);
+  gtk_drop_down_set_selected(dropdown, id);
 }
 
-auto get_power_profile(Amdgpu* self, const int& card_index) -> std::string {
+auto get_power_profile(Amdgpu* self, const int& card_index) -> int {
   auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
 
-  return util::to_string(gtk_drop_down_get_selected(dropdown));
+  return gtk_drop_down_get_selected(dropdown);
 }
 
 void set_power_cap(Amdgpu* self, const int& value, const int& card_index) {

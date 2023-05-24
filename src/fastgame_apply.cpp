@@ -161,11 +161,8 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const i
 void apply_nvidia_configuration() {
 #ifdef USE_NVIDIA
   // if (nvidia->has_gpu()) {
-  //   auto gpu_offset = cfg->get_key("general.nvidia.clock-offset.gpu.default", 0);
-  //   auto memory_offset = cfg->get_key("general.nvidia.clock-offset.memory.default", 0);
   //   auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
 
-  //   nvidia->set_clock_offset(0, gpu_offset, memory_offset);
   //   nvidia->nvml->set_power_limit(0, power_limit);
   // }
 
@@ -173,6 +170,11 @@ void apply_nvidia_configuration() {
 
   if (nv_wrapper->has_gpu()) {
     nv_wrapper->set_powermizer_mode(0, root.get<int>("nvidia.powermize-mode", 0));
+
+    auto gpu_offset = root.get<int>("nvidia.clock-offset.gpu", 0);
+    auto memory_offset = root.get<int>("nvidia.clock-offset.memory", 0);
+
+    nv_wrapper->set_clock_offset(0, gpu_offset, memory_offset);
   }
 
 #endif
@@ -256,6 +258,10 @@ auto main(int argc, char* argv[]) -> int {
 
   apply_amdgpu_configuration(root, 0);
   apply_amdgpu_configuration(root, 1);
+
+  // nvidia
+
+  apply_nvidia_configuration();
 
   // virtual memory
 

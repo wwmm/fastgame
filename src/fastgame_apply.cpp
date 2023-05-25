@@ -12,10 +12,6 @@
 #include "netlink.hpp"
 #include "util.hpp"
 
-#ifdef USE_NVIDIA
-#include "nvidia/nvidia.hpp"
-#endif
-
 using namespace std::string_literals;
 
 template <typename T>
@@ -158,7 +154,7 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const i
   }
 }
 
-void apply_nvidia_configuration() {
+void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
 #ifdef USE_NVIDIA
   // if (nvidia->has_gpu()) {
   //   auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
@@ -261,7 +257,7 @@ auto main(int argc, char* argv[]) -> int {
 
   // nvidia
 
-  apply_nvidia_configuration();
+  apply_nvidia_configuration(root);
 
   // virtual memory
 

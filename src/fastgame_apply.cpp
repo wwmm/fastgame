@@ -8,8 +8,10 @@
 #include <filesystem>
 #include <string>
 #include <thread>
+#include "config.h"
 #include "ioprio.hpp"
 #include "netlink.hpp"
+#include "nvidia/nvidia.hpp"
 #include "util.hpp"
 
 using namespace std::string_literals;

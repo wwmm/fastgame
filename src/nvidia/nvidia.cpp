@@ -6,13 +6,13 @@ Nvidia::Nvidia() {
   dpy = XOpenDisplay(nullptr);
 
   if (!dpy) {
-    util::debug("failed to open disaplay");
+    util::warning("failed to open display");
   }
 
   int major, minor;
 
   if (!XNVCTRLQueryVersion(dpy, &major, &minor)) {
-    util::debug("The NV-CONTROL X extension does not exist ");
+    util::warning("The NV-CONTROL X extension does not exist ");
 
     found_gpu = false;
   } else {
@@ -52,7 +52,7 @@ void Nvidia::get_valid_clock_offset_values(const int& gpu_index) {
                                                    max_performance_mode,  // performance level
                                                    NV_CTRL_GPU_NVCLOCK_OFFSET, &valid_values);
   if (!ret) {
-    util::debug("Unable to query the valid values for NV_CTRL_GPU_NVCLOCK_OFFSET");
+    util::warning("Unable to query the valid values for NV_CTRL_GPU_NVCLOCK_OFFSET");
   } else {
     min_gpu_clock_offset = valid_values.u.range.min;
     max_gpu_clock_offset = valid_values.u.range.max;
@@ -65,7 +65,7 @@ void Nvidia::get_valid_clock_offset_values(const int& gpu_index) {
                                                max_performance_mode,  // performance level
                                                NV_CTRL_GPU_MEM_TRANSFER_RATE_OFFSET, &valid_values);
   if (!ret) {
-    util::debug("Unable to query the valid values for NV_CTRL_GPU_MEM_TRANSFER_RATE_OFFSET");
+    util::warning("Unable to query the valid values for NV_CTRL_GPU_MEM_TRANSFER_RATE_OFFSET");
   } else {
     min_memory_clock_offset = valid_values.u.range.min;
     max_memory_clock_offset = valid_values.u.range.max;
@@ -89,7 +89,7 @@ void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const
       if (s) {
         util::debug("setting a gpu overclock offset of " + util::to_string(gpu_offset));
       } else {
-        util::debug("failed to set a gpu overclock offset of " + util::to_string(gpu_offset));
+        util::warning("failed to set a gpu overclock offset of " + util::to_string(gpu_offset));
       }
     }
   }
@@ -106,7 +106,7 @@ void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const
       if (s) {
         util::debug("setting a memory overclock offset of " + util::to_string(memory_offset));
       } else {
-        util::debug("failed to set a memory overclock offset of " + util::to_string(memory_offset));
+        util::warning("failed to set a memory overclock offset of " + util::to_string(memory_offset));
       }
     }
   }
@@ -153,7 +153,7 @@ void Nvidia::set_powermizer_mode(const int& gpu_index, const int& mode_id) {
   if (s) {
     util::debug("setting powermizer to mode " + mode_name);
   } else {
-    util::debug("failed to set powermizer to mode " + mode_name);
+    util::warning("failed to set powermizer to mode " + mode_name);
   }
 }
 

@@ -144,6 +144,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
     root.put("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia));
     root.put("nvidia.clock-offset.gpu", ui::nvidia::get_gpu_clock_offset(self->nvidia));
     root.put("nvidia.clock-offset.memory", ui::nvidia::get_memory_clock_offset(self->nvidia));
+    root.put("nvidia.power-limit", ui::nvidia::get_power_limit(self->nvidia));
   }
 
   // disk
@@ -307,6 +308,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
     ui::nvidia::set_memory_clock_offset(
         self->nvidia, root.get<int>("nvidia.clock-offset.memory", ui::nvidia::get_memory_clock_offset(self->nvidia)));
+
+    ui::nvidia::set_power_limit(self->nvidia,
+                                root.get<int>("nvidia.power-limit", ui::nvidia::get_power_limit(self->nvidia)));
   }
 
   // disk

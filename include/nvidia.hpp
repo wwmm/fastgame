@@ -38,4 +38,8 @@ void set_memory_clock_offset(Nvidia* self, const int& value, const int& card_ind
 
 auto get_memory_clock_offset(Nvidia* self, const int& card_index = 0) -> int;
 
+void set_power_limit(Nvidia* self, const int& value, const int& card_index = 0);
+
+auto get_power_limit(Nvidia* self, const int& card_index = 0) -> int;
+
 }  // namespace ui::nvidia

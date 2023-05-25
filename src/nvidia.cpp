@@ -15,7 +15,7 @@ struct _Nvidia {
 
   GtkDropDown* powermize_mode0;
 
-  GtkSpinButton *gpu_clock_offset0, *memory_clock_offset0;
+  GtkSpinButton *gpu_clock_offset0, *memory_clock_offset0, *power_limit;
 };
 
 G_DEFINE_TYPE(Nvidia, nvidia, GTK_TYPE_BOX)
@@ -54,6 +54,14 @@ auto get_memory_clock_offset(Nvidia* self, const int& card_index) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->memory_clock_offset0));
 }
 
+void set_power_limit(Nvidia* self, const int& value, const int& card_index) {
+  gtk_spin_button_set_value(self->power_limit, value);
+}
+
+auto get_power_limit(Nvidia* self, const int& card_index) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->power_limit));
+}
+
 void dispose(GObject* object) {
   util::debug(log_tag + "disposed"s);
 
@@ -78,12 +86,15 @@ void nvidia_class_init(NvidiaClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Nvidia, powermize_mode0);
   gtk_widget_class_bind_template_child(widget_class, Nvidia, gpu_clock_offset0);
   gtk_widget_class_bind_template_child(widget_class, Nvidia, memory_clock_offset0);
+  gtk_widget_class_bind_template_child(widget_class, Nvidia, power_limit);
 }
 
 void nvidia_init(Nvidia* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
   ui::prepare_spinbuttons<"MHz">(self->gpu_clock_offset0, self->memory_clock_offset0);
+
+  ui::prepare_spinbutton<"W">(self->power_limit);
 
 #ifdef USE_NVIDIA
   nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();

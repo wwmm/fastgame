@@ -21,7 +21,7 @@ Nvml::Nvml() {
 }
 
 void Nvml::set_power_limit(const int& gpu_index, const int& value) {
-  if (handle && value != -1) {
+  if (handle && value > 0) {
     nvmlDevice_t device;
 
     nvmlReturn_t r = nvmlDeviceGetHandleByIndex(gpu_index, &device);

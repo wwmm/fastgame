@@ -158,16 +158,12 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const i
 
 void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
 #ifdef USE_NVIDIA
-  // if (nvidia->has_gpu()) {
-  //   auto power_limit = cfg->get_key("general.nvidia.power-limit.default", -1);
-
-  //   nvidia->nvml->set_power_limit(0, power_limit);
-  // }
-
   std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();
 
   if (nv_wrapper->has_gpu()) {
     nv_wrapper->set_powermizer_mode(0, root.get<int>("nvidia.powermize-mode", 0));
+
+    nv_wrapper->nvml->set_power_limit(0, root.get<int>("nvidia.power-limit", 0));
 
     auto gpu_offset = root.get<int>("nvidia.clock-offset.gpu", 0);
     auto memory_offset = root.get<int>("nvidia.clock-offset.memory", 0);

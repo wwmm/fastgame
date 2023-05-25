@@ -166,7 +166,7 @@ void apply_nvidia_configuration() {
   //   nvidia->nvml->set_power_limit(0, power_limit);
   // }
 
-  std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper;
+  std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();
 
   if (nv_wrapper->has_gpu()) {
     nv_wrapper->set_powermizer_mode(0, root.get<int>("nvidia.powermize-mode", 0));

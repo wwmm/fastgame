@@ -83,7 +83,7 @@ void nvidia_class_init(NvidiaClass* klass) {
 void nvidia_init(Nvidia* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
-  ui::prepare_spinbuttons<"Hz">(self->gpu_clock_offset0, self->memory_clock_offset0);
+  ui::prepare_spinbuttons<"MHz">(self->gpu_clock_offset0, self->memory_clock_offset0);
 
 #ifdef USE_NVIDIA
   nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();

@@ -197,7 +197,7 @@ void init_udisks_object(Disk* self, const std::string& active_text) {
   gtk_widget_set_sensitive(GTK_WIDGET(self->enable_write_cache), 0);
 
   if (udisks_client != nullptr) {
-    auto selected_device = active_text.substr(11);
+    auto selected_device = active_text.substr(17);
 
     auto* objects = g_dbus_object_manager_get_objects(udisks_client_get_object_manager(udisks_client));
 

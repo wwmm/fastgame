@@ -72,6 +72,7 @@ auto get_selected_value(const std::vector<std::string>& list) -> std::string {
 
 auto find_hwmon_index(const int& card_index) -> int {
   int index = 0;
+
   auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/");
 
   if (!std::filesystem::is_directory(path)) {
@@ -146,6 +147,36 @@ auto card_is_amdgpu(const int& card_index) -> bool {
   }
 
   return false;
+}
+
+auto get_amdgpu_indices() -> std::vector<int> {
+  std::vector<int> card_indices;
+
+  auto dir_path = std::filesystem::path("/sys/class/drm/");
+
+  if (std::filesystem::is_directory(dir_path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(dir_path)) {
+      if (std::filesystem::is_directory(entry)) {
+        auto folder_name = entry.path().filename().string();
+
+        int idx = 0;
+
+        if (folder_name.starts_with("card") &&
+            folder_name.size() == 5) {  // name is "card" plus a number between 0 and 9
+
+          idx = static_cast<int>(folder_name.back() - '0');
+
+          if (util::card_is_amdgpu(idx)) {
+            card_indices.emplace_back(idx);
+
+            // util::warning(folder_name + " -> " + folder_name.back() + " -> " + util::to_string(idx));
+          }
+        }
+      }
+    }
+  }
+
+  return card_indices;
 }
 
 auto remove_filename_extension(const std::string& basename) -> std::string {

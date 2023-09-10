@@ -12,7 +12,7 @@
                 <property name="hexpand">1</property>
                 <child>
                     <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Card 0</property>
+                        <property name="title" translatable="yes">First Card</property>
 
                         <child>
                             <object class="AdwActionRow">
@@ -81,7 +81,7 @@
 
                 <child>
                     <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Card 1</property>
+                        <property name="title" translatable="yes">Second Card</property>
 
                         <child>
                             <object class="AdwActionRow">

@@ -127,14 +127,20 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   // amdgpu
 
   if (ui::amdgpu::get_n_cards() > 0) {
-    root.put("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu));
-    root.put("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu));
-    root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu));
+    auto card_indices = ui::amdgpu::get_card_indices();
 
-    if (ui::amdgpu::get_n_cards() == 2) {
-      root.put("amdgpu.card1.performance-level", ui::amdgpu::get_performance_level(self->amdgpu, 1));
-      root.put("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, 1));
-      root.put("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, 1));
+    auto card0 = card_indices[0];
+
+    root.put("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu, card0));
+    root.put("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, card0));
+    root.put("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, card0));
+
+    if (ui::amdgpu::get_n_cards() >= 2) {
+      auto card1 = card_indices[1];
+
+      root.put("amdgpu.card1.performance-level", ui::amdgpu::get_performance_level(self->amdgpu, card1));
+      root.put("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, card1));
+      root.put("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, card1));
     }
   }
 
@@ -274,26 +280,35 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   // amdgpu
 
   if (ui::amdgpu::get_n_cards() > 0) {
+    auto card_indices = ui::amdgpu::get_card_indices();
+
+    auto card0 = card_indices[0];
+
     ui::amdgpu::set_performance_level(
         self->amdgpu,
-        root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu)));
+        root.get<std::string>("amdgpu.performance-level", ui::amdgpu::get_performance_level(self->amdgpu, card0)),
+        card0);
 
-    ui::amdgpu::set_power_profile(self->amdgpu,
-                                  root.get<int>("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu)));
+    ui::amdgpu::set_power_profile(
+        self->amdgpu, root.get<int>("amdgpu.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, card0)), card0);
 
-    ui::amdgpu::set_power_cap(self->amdgpu, root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu)));
+    ui::amdgpu::set_power_cap(self->amdgpu,
+                              root.get<int>("amdgpu.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, card0)), card0);
 
-    if (ui::amdgpu::get_n_cards() == 2) {
-      ui::amdgpu::set_performance_level(
-          self->amdgpu,
-          root.get<std::string>("amdgpu.card1.performance-level", ui::amdgpu::get_performance_level(self->amdgpu, 1)),
-          1);
+    if (ui::amdgpu::get_n_cards() >= 2) {
+      auto card1 = card_indices[1];
+
+      ui::amdgpu::set_performance_level(self->amdgpu,
+                                        root.get<std::string>("amdgpu.card1.performance-level",
+                                                              ui::amdgpu::get_performance_level(self->amdgpu, card1)),
+                                        card1);
 
       ui::amdgpu::set_power_profile(
-          self->amdgpu, root.get<int>("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, 1)), 1);
+          self->amdgpu, root.get<int>("amdgpu.card1.power-profile", ui::amdgpu::get_power_profile(self->amdgpu, card1)),
+          card1);
 
-      ui::amdgpu::set_power_cap(self->amdgpu,
-                                root.get<int>("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, 1)), 1);
+      ui::amdgpu::set_power_cap(
+          self->amdgpu, root.get<int>("amdgpu.card1.power-cap", ui::amdgpu::get_power_cap(self->amdgpu, card1)), card1);
     }
   }
 

@@ -131,26 +131,27 @@ void apply_udisks_configuration(const boost::property_tree::ptree& root) {
   }
 }
 
-void apply_amdgpu_configuration(const boost::property_tree::ptree& root, const int& card_index) {
-  if (util::card_is_amdgpu(card_index)) {
-    auto section = (card_index == 0) ? "amdgpu" : "amdgpu.card1";
+void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
+  auto card_indices = util::get_amdgpu_indices();
+
+  for (const auto& idx : card_indices) {
+    auto section = (idx == card_indices.front()) ? "amdgpu" : "amdgpu.card1";
 
     auto performance_level = root.get<std::string>(section + ".performance-level"s, "auto");
 
-    update_system_setting(
-        "/sys/class/drm/card" + util::to_string(card_index) + "/device/power_dpm_force_performance_level",
-        performance_level);
+    update_system_setting("/sys/class/drm/card" + util::to_string(idx) + "/device/power_dpm_force_performance_level",
+                          performance_level);
 
     if (performance_level == "manual") {
-      update_system_setting("/sys/class/drm/card" + util::to_string(card_index) + "/device/pp_power_profile_mode",
+      update_system_setting("/sys/class/drm/card" + util::to_string(idx) + "/device/pp_power_profile_mode",
                             root.get<std::string>(section + ".power-profile"s));
     }
 
-    int hwmon_index = util::find_hwmon_index(card_index);
+    int hwmon_index = util::find_hwmon_index(idx);
 
     int power_cap = 1000000 * root.get<int>(section + ".power-cap"s);  // power must be in microwatts
 
-    update_system_setting("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/hwmon" +
+    update_system_setting("/sys/class/drm/card" + util::to_string(idx) + "/device/hwmon/hwmon" +
                               util::to_string(hwmon_index) + "/power1_cap",
                           power_cap);
   }
@@ -250,8 +251,7 @@ auto main(int argc, char* argv[]) -> int {
 
   // amdgpu
 
-  apply_amdgpu_configuration(root, 0);
-  apply_amdgpu_configuration(root, 1);
+  apply_amdgpu_configuration(root);
 
   // nvidia
 

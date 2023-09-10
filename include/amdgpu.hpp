@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "ui_helpers.hpp"
 #include "util.hpp"
 
@@ -21,16 +22,18 @@ auto create() -> Amdgpu*;
 
 auto get_n_cards() -> int;
 
-void set_performance_level(Amdgpu* self, const std::string& name, const int& card_index = 0);
+auto get_card_indices() -> std::vector<int>;
 
-auto get_performance_level(Amdgpu* self, const int& card_index = 0) -> std::string;
+void set_performance_level(Amdgpu* self, const std::string& name, const int& card_index);
 
-void set_power_profile(Amdgpu* self, const int& id, const int& card_index = 0);
+auto get_performance_level(Amdgpu* self, const int& card_index) -> std::string;
 
-auto get_power_profile(Amdgpu* self, const int& card_index = 0) -> int;
+void set_power_profile(Amdgpu* self, const int& id, const int& card_index);
 
-void set_power_cap(Amdgpu* self, const int& value, const int& card_index = 0);
+auto get_power_profile(Amdgpu* self, const int& card_index) -> int;
 
-auto get_power_cap(Amdgpu* self, const int& card_index = 0) -> int;
+void set_power_cap(Amdgpu* self, const int& value, const int& card_index);
+
+auto get_power_cap(Amdgpu* self, const int& card_index) -> int;
 
 }  // namespace ui::amdgpu

@@ -48,6 +48,8 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
 
 auto card_is_amdgpu(const int& card_index) -> bool;
 
+auto get_amdgpu_indices() -> std::vector<int>;
+
 auto remove_filename_extension(const std::string& basename) -> std::string;
 
 template <typename T>

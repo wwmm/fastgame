@@ -3,6 +3,8 @@ build
 .vscode
 profiles
 node_modules
+package-lock.json
+package.json
 compile_commands.json
 .clangd
 .cache

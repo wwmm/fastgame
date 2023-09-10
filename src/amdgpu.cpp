@@ -6,7 +6,7 @@ using namespace std::string_literals;
 
 auto constexpr log_tag = "amdgpu: ";
 
-uint n_cards = 0;
+std::vector<int> card_indices;  // sometimes the kernel does not start from zero so we have to save the right index
 
 struct _Amdgpu {
   GtkPopover parent_instance;
@@ -19,31 +19,15 @@ struct _Amdgpu {
 G_DEFINE_TYPE(Amdgpu, amdgpu, GTK_TYPE_BOX)
 
 auto get_n_cards() -> int {
-  return n_cards;
+  return card_indices.size();
 }
 
-void count_cards() {
-  n_cards = 0;
-
-  uint n_subfolders = 0;
-
-  auto dir_path = std::filesystem::path("/sys/class/drm/");
-
-  if (std::filesystem::is_directory(dir_path)) {
-    for (const auto& entry : std::filesystem::directory_iterator(dir_path)) {
-      if (std::filesystem::is_directory(entry)) {
-        if (util::card_is_amdgpu(n_subfolders)) {
-          n_cards++;
-        }
-
-        n_subfolders++;
-      }
-    }
-  }
+auto get_card_indices() -> std::vector<int> {
+  return card_indices;
 }
 
 void set_performance_level(Amdgpu* self, const std::string& name, const int& card_index) {
-  auto* dropdown = (card_index == 0) ? self->performance_level0 : self->performance_level1;
+  auto* dropdown = (card_index == card_indices.front()) ? self->performance_level0 : self->performance_level1;
 
   auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(dropdown));
 
@@ -65,7 +49,7 @@ void set_performance_level(Amdgpu* self, const std::string& name, const int& car
 }
 
 auto get_performance_level(Amdgpu* self, const int& card_index) -> std::string {
-  auto* dropdown = (card_index == 0) ? self->performance_level0 : self->performance_level1;
+  auto* dropdown = (card_index == card_indices.front()) ? self->performance_level0 : self->performance_level1;
 
   auto* selected_item = gtk_drop_down_get_selected_item(dropdown);
 
@@ -77,25 +61,25 @@ auto get_performance_level(Amdgpu* self, const int& card_index) -> std::string {
 }
 
 void set_power_profile(Amdgpu* self, const int& id, const int& card_index) {
-  auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+  auto* dropdown = (card_index == card_indices.front()) ? self->power_profile0 : self->power_profile1;
 
   gtk_drop_down_set_selected(dropdown, id);
 }
 
 auto get_power_profile(Amdgpu* self, const int& card_index) -> int {
-  auto* dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+  auto* dropdown = (card_index == card_indices.front()) ? self->power_profile0 : self->power_profile1;
 
   return gtk_drop_down_get_selected(dropdown);
 }
 
 void set_power_cap(Amdgpu* self, const int& value, const int& card_index) {
-  auto* button = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+  auto* button = (card_index == card_indices.front()) ? self->power_cap0 : self->power_cap1;
 
   gtk_spin_button_set_value(button, value);
 }
 
 auto get_power_cap(Amdgpu* self, const int& card_index) -> int {
-  auto* button = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+  auto* button = (card_index == card_indices.front()) ? self->power_cap0 : self->power_cap1;
 
   return static_cast<int>(gtk_spin_button_get_value(button));
 }
@@ -140,7 +124,7 @@ void read_power_cap_max(Amdgpu* self, const int& card_index) {
 }
 
 void read_power_cap(Amdgpu* self, const int& card_index) {
-  auto* spinbutton = (card_index == 0) ? self->power_cap0 : self->power_cap1;
+  auto* spinbutton = (card_index == card_indices.front()) ? self->power_cap0 : self->power_cap1;
 
   auto hwmon_index = util::find_hwmon_index(card_index);
 
@@ -190,7 +174,7 @@ void read_performance_level(Amdgpu* self, const int& card_index) {
 
     f.close();
 
-    set_performance_level(self, level);
+    set_performance_level(self, level, card_index);
 
     util::debug(log_tag + "card "s + util::to_string(card_index) + " current performance level: "s + level);
   }
@@ -200,13 +184,13 @@ void read_power_profile(Amdgpu* self, const int& card_index) {
   auto path =
       std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/pp_power_profile_mode");
 
-  auto dropdown = (card_index == 0) ? self->power_profile0 : self->power_profile1;
+  auto dropdown = (card_index == card_indices.front()) ? self->power_profile0 : self->power_profile1;
 
   if (!std::filesystem::is_regular_file(path)) {
     gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 0);
 
     util::debug(log_tag + "file "s + path.string() + " does not exist!");
-    util::debug(log_tag + "card "s + util::to_string(card_index) + " could not change the performance level!"s);
+    util::debug(log_tag + "card "s + util::to_string(card_index) + " can not change the performance level!"s);
   } else {
     std::ifstream f;
 
@@ -310,15 +294,15 @@ void amdgpu_init(Amdgpu* self) {
 
   ui::prepare_spinbuttons<"W">(self->power_cap0, self->power_cap1);
 
-  count_cards();
+  card_indices = util::get_amdgpu_indices();
 
-  util::debug(log_tag + "number of amdgpu cards: "s + util::to_string(n_cards));
+  util::debug(log_tag + "number of amdgpu cards: "s + util::to_string(card_indices.size()));
 
-  for (uint n = 0; n < n_cards; n++) {
-    auto* performance_level = (n == 0) ? self->performance_level0 : self->performance_level1;
+  for (auto n : card_indices) {
+    auto* performance_level = (n == card_indices.front()) ? self->performance_level0 : self->performance_level1;
 
     struct Data {
-      uint idx;
+      int idx;
       Amdgpu* self;
     };
 
@@ -330,7 +314,8 @@ void amdgpu_init(Amdgpu* self) {
           if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
             auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 
-            auto* dropdown = (data->idx == 0) ? data->self->power_profile0 : data->self->power_profile1;
+            auto* dropdown =
+                (data->idx == card_indices.front()) ? data->self->power_profile0 : data->self->power_profile1;
 
             if (std::strcmp(level, "manual") == 0) {
               gtk_widget_set_sensitive(GTK_WIDGET(dropdown), 1);
@@ -346,7 +331,7 @@ void amdgpu_init(Amdgpu* self) {
     read_performance_level(self, n);
     read_power_profile(self, n);
 
-    auto* power_profile = (n == 0) ? self->power_profile0 : self->power_profile1;
+    auto* power_profile = (n == card_indices.front()) ? self->power_profile0 : self->power_profile1;
 
     if (get_performance_level(self, n) == "manual") {
       gtk_widget_set_sensitive(GTK_WIDGET(power_profile), 1);

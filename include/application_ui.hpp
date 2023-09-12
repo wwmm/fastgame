@@ -7,8 +7,11 @@
 #include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
-#include "nvidia.hpp"
 #include "presets_menu.hpp"
+
+#ifdef USE_NVIDIA
+#include "nvidia.hpp"
+#endif
 
 #include <boost/process.hpp>
 #include <boost/process/search_path.hpp>

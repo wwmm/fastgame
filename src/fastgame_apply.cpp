@@ -11,8 +11,11 @@
 #include "config.h"
 #include "ioprio.hpp"
 #include "netlink.hpp"
-#include "nvidia/nvidia.hpp"
 #include "util.hpp"
+
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
 
 using namespace std::string_literals;
 

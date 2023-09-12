@@ -43,7 +43,9 @@ struct _ApplicationWindow {
 
   ui::amdgpu::Amdgpu* amdgpu;
 
+#ifdef USE_NVIDIA
   ui::nvidia::Nvidia* nvidia;
+#endif
 
   ui::disk::Disk* disk;
 
@@ -146,12 +148,16 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   // nvidia
 
+#ifdef USE_NVIDIA
+
   if (ui::nvidia::has_gpu()) {
     root.put("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia));
     root.put("nvidia.clock-offset.gpu", ui::nvidia::get_gpu_clock_offset(self->nvidia));
     root.put("nvidia.clock-offset.memory", ui::nvidia::get_memory_clock_offset(self->nvidia));
     root.put("nvidia.power-limit", ui::nvidia::get_power_limit(self->nvidia));
   }
+
+#endif
 
   // disk
 
@@ -314,6 +320,8 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   // nvidia
 
+#ifdef USE_NVIDIA
+
   if (ui::nvidia::has_gpu()) {
     ui::nvidia::set_powermize_mode(
         self->nvidia, root.get<int>("nvidia.powermize-mode", ui::nvidia::get_powermize_mode(self->nvidia)));
@@ -327,6 +335,8 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
     ui::nvidia::set_power_limit(self->nvidia,
                                 root.get<int>("nvidia.power-limit", ui::nvidia::get_power_limit(self->nvidia)));
   }
+
+#endif
 
   // disk
 
@@ -569,7 +579,11 @@ void application_window_init(ApplicationWindow* self) {
   self->cpu = ui::cpu::create();
   self->memory = ui::memory::create();
   self->amdgpu = ui::amdgpu::create();
+
+#ifdef USE_NVIDIA
   self->nvidia = ui::nvidia::create();
+#endif
+
   self->disk = ui::disk::create();
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
@@ -587,11 +601,15 @@ void application_window_init(ApplicationWindow* self) {
     adw_view_stack_page_set_icon_name(page_amdgpu, "fg-gpu-symbolic");
   }
 
+#ifdef USE_NVIDIA
+
   if (ui::nvidia::has_gpu()) {
     auto* page_nvidia = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->nvidia), "nvidia", _("NVIDIA GPU"));
 
     adw_view_stack_page_set_icon_name(page_nvidia, "fg-gpu-symbolic");
   }
+
+#endif
 
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
   adw_view_stack_page_set_icon_name(page_cpu, "fg-cpu-symbolic");

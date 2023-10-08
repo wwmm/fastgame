@@ -75,7 +75,7 @@
                                         <property name="adjustment">
                                             <object class="GtkAdjustment">
                                                 <property name="lower">32</property>
-                                                <property name="upper">2048</property>
+                                                <property name="upper">4096</property>
                                                 <property name="value">64</property>
                                                 <property name="step-increment">1</property>
                                                 <property name="page-increment">1</property>

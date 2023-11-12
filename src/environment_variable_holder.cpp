@@ -45,7 +45,7 @@ void environment_variable_get_property(GObject* object, guint prop_id, GValue* v
 void environment_variable_holder_finalize(GObject* object) {
   auto* self = FG_ENVIRONMENT_VARIABLE_HOLDER(object);
 
-  util::debug(log_tag + self->data->name + " finalized"s);
+  util::debug(log_tag + self->data->name + " holder object finalized"s);
 
   delete self->data;
 

@@ -1,5 +1,4 @@
 #include "application_ui.hpp"
-#include "presets_menu.hpp"
 
 namespace ui::application_window {
 
@@ -36,6 +35,8 @@ struct _ApplicationWindow {
   ui::presets_menu::PresetsMenu* presetsMenu;
 
   ui::environment_variables::EnvironmentVariables* environment_variables;
+
+  ui::command_line_arguments::CommandLineArguments* command_line_arguments;
 
   ui::cpu::Cpu* cpu;
 
@@ -75,6 +76,18 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   }
 
   root.add_child("environment-variables", node);
+
+  // command line arguments
+
+  for (const auto& v : ui::command_line_arguments::get_list()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v);
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("command-line-arguments", node);
 
   // cpu
 
@@ -205,6 +218,20 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
     ui::environment_variables::add_list(variables_list);
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning(log_tag + "error when parsing the environmental variables list"s);
+  }
+
+  // command line arguments
+
+  try {
+    std::vector<std::string> arguments_list;
+
+    for (const auto& c : root.get_child("command-line-arguments")) {
+      arguments_list.emplace_back(c.second.data());
+    }
+
+    ui::command_line_arguments::add_list(arguments_list);
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning(log_tag + "error when parsing the command line arguments list"s);
   }
 
   // cpu
@@ -576,6 +603,7 @@ void application_window_init(ApplicationWindow* self) {
 
   self->presetsMenu = ui::presets_menu::create();
   self->environment_variables = ui::environment_variables::create();
+  self->command_line_arguments = ui::command_line_arguments::create();
   self->cpu = ui::cpu::create();
   self->memory = ui::memory::create();
   self->amdgpu = ui::amdgpu::create();
@@ -588,6 +616,9 @@ void application_window_init(ApplicationWindow* self) {
 
   auto* page_env = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->environment_variables),
                                              "environment_variables", _("Environment Variables"));
+
+  auto* page_cmd = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->command_line_arguments),
+                                             "command_line_arguments", _("Command Line Arguments"));
 
   auto* page_cpu = adw_view_stack_add_titled(self->stack, GTK_WIDGET(self->cpu), "cpu", _("CPU"));
 
@@ -612,6 +643,7 @@ void application_window_init(ApplicationWindow* self) {
 #endif
 
   adw_view_stack_page_set_icon_name(page_env, "text-x-generic-symbolic");
+  adw_view_stack_page_set_icon_name(page_cmd, "application-x-executable-symbolic");
   adw_view_stack_page_set_icon_name(page_cpu, "fg-cpu-symbolic");
   adw_view_stack_page_set_icon_name(page_memory, "fg-memory-symbolic");
   adw_view_stack_page_set_icon_name(page_disk, "drive-harddisk-symbolic");

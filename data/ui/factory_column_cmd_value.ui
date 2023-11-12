@@ -1,0 +1,17 @@
+<interface domain="fastgame">
+    <template class="GtkListItem">
+        <property name="child">
+            <object class="GtkEditableLabel">
+                <property name="xalign">0</property>
+
+                <binding name="text">
+                    <lookup name="value" type="CommandLineArgumentHolder">
+                        <lookup name="item">GtkListItem</lookup>
+                    </lookup>
+                </binding>
+
+                <signal name="notify::text" handler="on_value_changed" />
+            </object>
+        </property>
+    </template>
+</interface>

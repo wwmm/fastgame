@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="fastgame">
+    <template class="CommandLineArguments" parent="GtkBox">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+
+        <child>
+            <object class="GtkFrame">
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <child>
+                    <object class="GtkScrolledWindow">
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <child>
+                            <object class="GtkColumnView" id="columnview">
+                                <property name="reorderable">0</property>
+                                <property name="show-column-separators">1</property>
+                                <property name="show-row-separators">1</property>
+
+                                <style>
+                                    <class name="data-table" />
+                                </style>
+
+                                <child>
+                                    <object class="GtkColumnViewColumn" id="value_column">
+                                        <property name="title" translatable="yes">Value</property>
+                                        <property name="expand">1</property>
+
+                                        <property name="factory">
+                                            <object class="GtkBuilderListItemFactory">
+                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_column_cmd_value.ui</property>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+
+                                <child>
+                                    <object class="GtkColumnViewColumn">
+                                        <property name="factory">
+                                            <object class="GtkBuilderListItemFactory">
+                                                <property name="resource">/com/github/wwmm/fastgame/ui/factory_column_delete.ui</property>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkButton" id="button_add">
+                <property name="halign">center</property>
+                <property name="label" translatable="yes">Add Line</property>
+
+                <signal name="clicked" handler="on_add_line" object="CommandLineArguments" />
+
+                <style>
+                    <class name="suggested-action" />
+                </style>
+            </object>
+        </child>
+    </template>
+</interface>

@@ -3,8 +3,10 @@ data/schemas/com.github.wwmm.fastgame.gschema.xml
 data/ui/amdgpu.ui
 data/ui/application_window.ui
 data/ui/cpu.ui
+data/ui/command_line_arguments.ui
 data/ui/disk.ui
 data/ui/environment_variables.ui
+data/ui/factory_column_cmd_value.ui
 data/ui/factory_column_name.ui
 data/ui/factory_column_value.ui
 data/ui/factory_column_delete.ui

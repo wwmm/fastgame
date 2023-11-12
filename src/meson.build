@@ -14,6 +14,8 @@ fastgame_sources = [
 	'application.cpp',
 	'application_ui.cpp',
 	'cpu.cpp',
+	'command_line_argument_holder.cpp',
+	'command_line_arguments.cpp',
 	'disk.cpp',
 	'environment_variable_holder.cpp',
 	'environment_variables.cpp',

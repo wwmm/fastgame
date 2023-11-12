@@ -3,6 +3,7 @@
 #include <adwaita.h>
 #include <filesystem>
 #include "amdgpu.hpp"
+#include "command_line_arguments.hpp"
 #include "cpu.hpp"
 #include "disk.hpp"
 #include "environment_variables.hpp"

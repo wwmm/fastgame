@@ -34,6 +34,18 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_launcher: error when parsing the environmental variables list");
   }
 
+  // game's command line arguments
+
+  std::vector<std::string> game_cmd_arguments;
+
+  try {
+    for (const auto& c : root.get_child("command-line-arguments")) {
+      game_cmd_arguments.emplace_back(c.second.data());
+    }
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("fastgame_launcher: error when parsing the game's command line arguments list");
+  }
+
   // setting the initial cpu affinity and priority scheduler
 
   std::vector<int> cpu_affinity;
@@ -61,7 +73,7 @@ auto main(int argc, char* argv[]) -> int {
     util::warning("fastgame_launcher: could not set the timer slack value");
   }
 
-  // Assuming that the game executable is the only argument passed as option
+  // Assuming that the game executable is the first argument passed as option to fastgame_laucher
 
   std::vector<char*> arguments;
 
@@ -70,6 +82,10 @@ auto main(int argc, char* argv[]) -> int {
       // std::cout << argv[n] << std::endl;
 
       arguments.push_back(argv[n]);
+    }
+
+    for (auto& arg : game_cmd_arguments) {
+      arguments.push_back(&arg.front());
     }
 
     arguments.push_back(nullptr);

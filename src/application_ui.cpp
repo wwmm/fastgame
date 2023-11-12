@@ -79,6 +79,8 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   // command line arguments
 
+  node.clear();
+
   for (const auto& v : ui::command_line_arguments::get_list()) {
     boost::property_tree::ptree local_node;
 

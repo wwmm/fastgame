@@ -66,6 +66,28 @@
 
                         <child>
                             <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Autogroup Niceness</property>
+
+                                <child>
+                                    <object class="GtkSpinButton" id="autogroup_niceness">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">-20</property>
+                                                <property name="upper">19</property>
+                                                <property name="step-increment">1</property>
+                                                <property name="page-increment">1</property>
+                                            </object>
+                                        </property>
+                                        <property name="digits">0</property>
+                                        <property name="update-policy">if-valid</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow">
                                 <property name="title" translatable="yes">Timer Slack</property>
 
                                 <child>

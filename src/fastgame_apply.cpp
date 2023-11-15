@@ -218,6 +218,7 @@ auto main(int argc, char* argv[]) -> int {
   auto use_batch_scheduler = root.get<bool>("cpu.use-batch-scheduler", false);
   auto use_realtime_wineserver = root.get<bool>("cpu.use-realtime-wineserver", false);
   int niceness = root.get<int>("cpu.niceness", 0);
+  int autogroup_niceness = root.get<int>("cpu.autogroup-niceness", 0);
 
   update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first", false));
 
@@ -346,6 +347,8 @@ auto main(int argc, char* argv[]) -> int {
       std::cout << "fastgame_apply: " << msg << std::endl;
 
       setpriority(PRIO_PROCESS, game_pid, niceness);
+
+      update_system_setting("/proc/" + util::to_string(game_pid) + "/autogroup", autogroup_niceness);
 
       if (enable_realtime_io_priority) {
         ioprio_set_realtime(game_pid, 7);

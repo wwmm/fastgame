@@ -100,6 +100,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu));
   root.put("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu));
   root.put("cpu.niceness", ui::cpu::get_niceness(self->cpu));
+  root.put("cpu.autogroup-niceness", ui::cpu::get_autogroup_niceness(self->cpu));
   root.put("cpu.timer-slack", ui::cpu::get_timer_slack(self->cpu));
 
   node.clear();
@@ -257,6 +258,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
       self->cpu, root.get<bool>("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu)));
 
   ui::cpu::set_niceness(self->cpu, root.get<int>("cpu.niceness", ui::cpu::get_niceness(self->cpu)));
+
+  ui::cpu::set_autogroup_niceness(self->cpu,
+                                  root.get<int>("cpu.autogroup-niceness", ui::cpu::get_autogroup_niceness(self->cpu)));
 
   ui::cpu::set_timer_slack(self->cpu, root.get<int>("cpu.timer-slack", ui::cpu::get_timer_slack(self->cpu)));
 

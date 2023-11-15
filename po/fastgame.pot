@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 11:35-0300\n"
+"POT-Creation-Date: 2023-11-15 12:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,47 +34,23 @@ msgid "system;tweak;game;"
 msgstr ""
 
 #: data/ui/amdgpu.ui:15
-msgid "Performance"
+msgid "First Card"
 msgstr ""
 
-#: data/ui/amdgpu.ui:19
-msgid "Level"
+#: data/ui/amdgpu.ui:19 data/ui/amdgpu.ui:88
+msgid "Performance Level"
 msgstr ""
 
-#: data/ui/amdgpu.ui:25
-msgid "auto"
+#: data/ui/amdgpu.ui:45 data/ui/amdgpu.ui:114
+msgid "Power Profile"
 msgstr ""
 
-#: data/ui/amdgpu.ui:26
-msgid "low"
-msgstr ""
-
-#: data/ui/amdgpu.ui:27
-msgid "high"
-msgstr ""
-
-#: data/ui/amdgpu.ui:28
-msgid "manual"
-msgstr ""
-
-#: data/ui/amdgpu.ui:29
-msgid "profile_standard"
-msgstr ""
-
-#: data/ui/amdgpu.ui:30
-msgid "profile_min_sclk"
-msgstr ""
-
-#: data/ui/amdgpu.ui:31
-msgid "profile_min_mclk"
-msgstr ""
-
-#: data/ui/amdgpu.ui:32
-msgid "profile_peak"
-msgstr ""
-
-#: data/ui/amdgpu.ui:41
+#: data/ui/amdgpu.ui:59 data/ui/amdgpu.ui:128
 msgid "Power Cap"
+msgstr ""
+
+#: data/ui/amdgpu.ui:84
+msgid "Second Card"
 msgstr ""
 
 #: data/ui/application_window.ui:6
@@ -105,7 +81,7 @@ msgstr ""
 msgid "Primary Menu"
 msgstr ""
 
-#: data/ui/application_window.ui:72 src/presets_menu.cpp:102
+#: data/ui/application_window.ui:72 src/presets_menu.cpp:106
 msgid "Presets"
 msgstr ""
 
@@ -126,43 +102,63 @@ msgid "FastGame Window"
 msgstr ""
 
 #: data/ui/cpu.ui:15
-msgid "Scheduler and Priority"
+msgid "Schedulers and Priorities"
 msgstr ""
 
 #: data/ui/cpu.ui:19
 msgid "Frequency Governor"
 msgstr ""
 
-#: data/ui/cpu.ui:30
+#: data/ui/cpu.ui:33
+msgid "PCIe ASPM"
+msgstr ""
+
+#: data/ui/cpu.ui:47
 msgid "Niceness"
 msgstr ""
 
-#: data/ui/cpu.ui:52
+#: data/ui/cpu.ui:69
+msgid "Autogroup Niceness"
+msgstr ""
+
+#: data/ui/cpu.ui:91
+msgid "Timer Slack"
+msgstr ""
+
+#: data/ui/cpu.ui:115
 msgid "Use the Batch Scheduler"
 msgstr ""
 
-#: data/ui/cpu.ui:64
+#: data/ui/cpu.ui:127
 msgid "Realtime Wineserver"
 msgstr ""
 
-#: data/ui/cpu.ui:77
+#: data/ui/cpu.ui:140
 msgid "Use /dev/cpu_dma_latency"
 msgstr ""
 
-#: data/ui/cpu.ui:89
+#: data/ui/cpu.ui:152
 msgid "Child Runs First"
 msgstr ""
 
-#: data/ui/cpu.ui:103
+#: data/ui/cpu.ui:166
 msgid "Affinity"
 msgstr ""
 
-#: data/ui/cpu.ui:107
+#: data/ui/cpu.ui:170
 msgid "Game"
 msgstr ""
 
-#: data/ui/cpu.ui:123
+#: data/ui/cpu.ui:186
 msgid "Wineserver"
+msgstr ""
+
+#: data/ui/command_line_arguments.ui:33 data/ui/environment_variables.ui:45
+msgid "Value"
+msgstr ""
+
+#: data/ui/command_line_arguments.ui:63 data/ui/environment_variables.ui:75
+msgid "Add Line"
 msgstr ""
 
 #: data/ui/disk.ui:15
@@ -173,44 +169,44 @@ msgstr ""
 msgid "Path"
 msgstr ""
 
-#: data/ui/disk.ui:31
+#: data/ui/disk.ui:33
 msgid "Scheduler"
 msgstr ""
 
-#: data/ui/disk.ui:42
+#: data/ui/disk.ui:47
 msgid "Readahead"
 msgstr ""
 
-#: data/ui/disk.ui:65
+#: data/ui/disk.ui:70
 msgid "Maximum Read/Write requests"
 msgstr ""
 
-#: data/ui/disk.ui:89
+#: data/ui/disk.ui:94
+msgid "RQ Affinity"
+msgstr ""
+
+#: data/ui/disk.ui:118
+msgid "No Merges"
+msgstr ""
+
+#: data/ui/disk.ui:142
 msgid "Enable Write Cache"
 msgstr ""
 
-#: data/ui/disk.ui:101
+#: data/ui/disk.ui:154
 msgid "Disable APM"
 msgstr ""
 
-#: data/ui/disk.ui:113
+#: data/ui/disk.ui:166
 msgid "Realtime Priority"
 msgstr ""
 
-#: data/ui/disk.ui:125
+#: data/ui/disk.ui:178
 msgid "Add Random"
 msgstr ""
 
 #: data/ui/environment_variables.ui:33 data/ui/presets_menu.ui:29
 msgid "Name"
-msgstr ""
-
-#: data/ui/environment_variables.ui:45
-msgid "Value"
-msgstr ""
-
-#: data/ui/environment_variables.ui:75
-msgid "Add Line"
 msgstr ""
 
 #: data/ui/factory_column_delete.ui:5
@@ -225,24 +221,44 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: data/ui/memory.ui:30
+#: data/ui/memory.ui:33
 msgid "Defrag"
 msgstr ""
 
-#: data/ui/memory.ui:41
+#: data/ui/memory.ui:47
 msgid "Shared Memory Enabled"
 msgstr ""
 
-#: data/ui/memory.ui:54
+#: data/ui/memory.ui:63
 msgid "Virtual"
 msgstr ""
 
-#: data/ui/memory.ui:58
+#: data/ui/memory.ui:67
+msgid "Swappiness"
+msgstr ""
+
+#: data/ui/memory.ui:89
 msgid "Cache Pressure"
 msgstr ""
 
-#: data/ui/memory.ui:79
+#: data/ui/memory.ui:110
 msgid "Compaction Proactiveness"
+msgstr ""
+
+#: data/ui/memory.ui:131
+msgid "Page Lock Unfairness"
+msgstr ""
+
+#: data/ui/memory.ui:153
+msgid "Per-CPU Page List Fraction"
+msgstr ""
+
+#: data/ui/memory.ui:177
+msgid "Multi-Gen LRU"
+msgstr ""
+
+#: data/ui/memory.ui:181
+msgid "min_ttl_ms"
 msgstr ""
 
 #: data/ui/preferences_general.ui:5
@@ -250,46 +266,14 @@ msgid "_General"
 msgstr ""
 
 #: data/ui/preferences_general.ui:10
-msgid "Service"
-msgstr ""
-
-#: data/ui/preferences_general.ui:13
-msgid "Start Service at Login"
-msgstr ""
-
-#: data/ui/preferences_general.ui:26
-msgid "Shutdown on Window Close"
-msgstr ""
-
-#: data/ui/preferences_general.ui:40
-msgid "Audio"
-msgstr ""
-
-#: data/ui/preferences_general.ui:43
-msgid "Process All Outputs"
-msgstr ""
-
-#: data/ui/preferences_general.ui:55
-msgid "Process All Inputs"
-msgstr ""
-
-#: data/ui/preferences_general.ui:67
-msgid "Use Cubic Volume"
-msgstr ""
-
-#: data/ui/preferences_general.ui:79
-msgid "Reset Our Devices Volume on Startup"
-msgstr ""
-
-#: data/ui/preferences_general.ui:93
 msgid "Style"
 msgstr ""
 
-#: data/ui/preferences_general.ui:96
+#: data/ui/preferences_general.ui:13
 msgid "Use Dark Theme"
 msgstr ""
 
-#: data/ui/preferences_general.ui:108
+#: data/ui/preferences_general.ui:25
 msgid "Hide Menus on Outside Clicks"
 msgstr ""
 
@@ -345,34 +329,38 @@ msgstr ""
 msgid "Quit FastGame"
 msgstr ""
 
-#: src/application_ui.cpp:477
+#: src/application_ui.cpp:624
 msgid "Environment Variables"
 msgstr ""
 
-#: src/application_ui.cpp:479
+#: src/application_ui.cpp:627
+msgid "Command Line Arguments"
+msgstr ""
+
+#: src/application_ui.cpp:629
 msgid "CPU"
 msgstr ""
 
-#: src/application_ui.cpp:481
+#: src/application_ui.cpp:631
 msgid "Memory"
 msgstr ""
 
-#: src/application_ui.cpp:483
+#: src/application_ui.cpp:633
 msgid "Disk"
 msgstr ""
 
-#: src/application_ui.cpp:486
+#: src/application_ui.cpp:636
 msgid "AMD GPU"
 msgstr ""
 
-#: src/presets_menu.cpp:96
+#: src/application_ui.cpp:644
+msgid "NVIDIA GPU"
+msgstr ""
+
+#: src/presets_menu.cpp:98
 msgid "Import Preset"
 msgstr ""
 
-#: src/presets_menu.cpp:96
+#: src/presets_menu.cpp:99
 msgid "Open"
-msgstr ""
-
-#: src/presets_menu.cpp:97
-msgid "Cancel"
 msgstr ""

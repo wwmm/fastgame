@@ -41,6 +41,10 @@ auto get_niceness(Cpu* self) -> int;
 
 void set_niceness(Cpu* self, const int& value);
 
+auto get_autogroup_niceness(Cpu* self) -> int;
+
+void set_autogroup_niceness(Cpu* self, const int& value);
+
 void set_timer_slack(Cpu* self, const int& value);
 
 auto get_timer_slack(Cpu* self) -> int;

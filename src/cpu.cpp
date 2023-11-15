@@ -11,7 +11,7 @@ struct _Cpu {
 
   GtkDropDown *frequency_governor, *pcie_aspm_policy;
 
-  GtkSpinButton *niceness, *timer_slack;
+  GtkSpinButton *niceness, *autogroup_niceness, *timer_slack;
 
   GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first;
 
@@ -58,6 +58,14 @@ void set_niceness(Cpu* self, const int& value) {
 
 auto get_niceness(Cpu* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->niceness));
+}
+
+void set_autogroup_niceness(Cpu* self, const int& value) {
+  gtk_spin_button_set_value(self->autogroup_niceness, value);
+}
+
+auto get_autogroup_niceness(Cpu* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->autogroup_niceness));
 }
 
 void set_timer_slack(Cpu* self, const int& value) {
@@ -234,6 +242,7 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Cpu, frequency_governor);
   gtk_widget_class_bind_template_child(widget_class, Cpu, pcie_aspm_policy);
   gtk_widget_class_bind_template_child(widget_class, Cpu, niceness);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, autogroup_niceness);
   gtk_widget_class_bind_template_child(widget_class, Cpu, timer_slack);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);

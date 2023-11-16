@@ -12,14 +12,14 @@ are applied to the game process.
 
 # Application usage
 
-When the window is opened it will show the value of the system parameters. This is a good momento to open
-our presets menu and saving the current settings in a profile named `default` or whatever name you prefer. This will
+When the window is opened it will show the value of the system parameters. This is a good moment to open
+the presets menu and saving the current settings in a profile named `default` or whatever name you prefer. This will
 make it easier to recover your system default settings while doing tests.
 
 Once you have configured the parameters click on the `Apply` button in the window top left corner. After a few seconds
 an authentication window should be shown by your system. A few of the available settings can only be changed with root
-access. After authentication the settings that can be immediately applied will be applied. And a server that listen
-to the kernel Process Events Connector will be launched. this server applies to the game process settings like cpu
+access. After authentication the settings that can be immediately applied will be applied. And a server that listens
+to the kernel Process Events Connector will be launched. This server applies to the game process settings like cpu
 affinity, priority scheduler, etc. It will be automatically finished once the main window is closed. So keep FastGame
 window open while playing!
 
@@ -33,6 +33,7 @@ performance. Think of FastGame as an easy way to test if they can help you. That
 settings that can be configured through FastGame:
 
 - Set Environment variables
+- Pass command line arguments to the game executable
 - Game cpu affinity configuration
 - Change the cpu frequency governor
 - Change the process niceness
@@ -46,6 +47,7 @@ settings that can be configured through FastGame:
 - Enable the disk write cache and disable APM
 - Apply the Realtime IO priority to the game process
 - Set amdgpu performance level, power cap and irq affinity
+- Set Nvidia powermize and clock offset state
 - Configure the virtual memory cache pressure
 - Configure the virtual memory compaction proactiveness
 - Configuring transparent hugepages

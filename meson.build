@@ -2,8 +2,16 @@ project(
 	'fastgame',
 	'c',
 	'cpp',
-	default_options : ['cpp_std=c++20','buildtype=debugoptimized'],
-	version: '0.2.0',
+	default_options : [
+		'cpp_std=c++20',
+		'buildtype=debugoptimized',
+		# 1: -Wall
+		# 2: -Wall -Wextra
+		# 3: -Wall -Wextra -Wpedantic
+		'warning_level=2'
+	],
+	license: 'GPL-3-or-later',
+	version: '0.3.0',
 	meson_version: '>= 0.51.0'
 )
 

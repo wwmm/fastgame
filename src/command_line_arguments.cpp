@@ -16,7 +16,7 @@ struct _CommandLineArguments {
 
 G_DEFINE_TYPE(CommandLineArguments, command_line_arguments, GTK_TYPE_BOX)
 
-void on_add_line(CommandLineArguments* self, GtkButton* btn) {
+void on_add_line([[maybe_unused]] CommandLineArguments* self, [[maybe_unused]] GtkButton* btn) {
   auto* holder = ui::holders::create_cmd_holder("");
 
   g_list_store_append(model, holder);
@@ -24,7 +24,7 @@ void on_add_line(CommandLineArguments* self, GtkButton* btn) {
   g_object_unref(holder);
 }
 
-void on_value_changed(GtkEditableLabel* label, GParamSpec* pspec, GtkListItem* item) {
+void on_value_changed(GtkEditableLabel* label, [[maybe_unused]] GParamSpec* pspec, GtkListItem* item) {
   auto* text = gtk_editable_get_text(GTK_EDITABLE(label));
 
   auto child_item = gtk_list_item_get_item(item);
@@ -34,7 +34,7 @@ void on_value_changed(GtkEditableLabel* label, GParamSpec* pspec, GtkListItem* i
   holder->data->value = text;
 }
 
-void on_remove_line(GtkListItem* self, GtkButton* btn) {
+void on_remove_line(GtkListItem* self, [[maybe_unused]] GtkButton* btn) {
   auto child_item = gtk_list_item_get_item(self);
 
   auto* holder = static_cast<ui::holders::CommandLineArgumentHolder*>(child_item);

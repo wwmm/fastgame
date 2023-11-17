@@ -30,35 +30,35 @@ auto has_gpu() -> bool {
   return found;
 }
 
-void set_powermize_mode(Nvidia* self, const int& mode_id, const int& card_index) {
+void set_powermize_mode(Nvidia* self, const int& mode_id, [[maybe_unused]] const int& card_index) {
   gtk_drop_down_set_selected(self->powermize_mode0, mode_id);
 }
 
-auto get_powermize_mode(Nvidia* self, const int& card_index) -> int {
+auto get_powermize_mode(Nvidia* self, [[maybe_unused]] const int& card_index) -> int {
   return gtk_drop_down_get_selected(self->powermize_mode0);
 }
 
-void set_gpu_clock_offset(Nvidia* self, const int& value, const int& card_index) {
+void set_gpu_clock_offset(Nvidia* self, const int& value, [[maybe_unused]] const int& card_index) {
   gtk_spin_button_set_value(self->gpu_clock_offset0, value);
 }
 
-auto get_gpu_clock_offset(Nvidia* self, const int& card_index) -> int {
+auto get_gpu_clock_offset(Nvidia* self, [[maybe_unused]] const int& card_index) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->gpu_clock_offset0));
 }
 
-void set_memory_clock_offset(Nvidia* self, const int& value, const int& card_index) {
+void set_memory_clock_offset(Nvidia* self, const int& value, [[maybe_unused]] const int& card_index) {
   gtk_spin_button_set_value(self->memory_clock_offset0, value);
 }
 
-auto get_memory_clock_offset(Nvidia* self, const int& card_index) -> int {
+auto get_memory_clock_offset(Nvidia* self, [[maybe_unused]] const int& card_index) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->memory_clock_offset0));
 }
 
-void set_power_limit(Nvidia* self, const int& value, const int& card_index) {
+void set_power_limit(Nvidia* self, const int& value, [[maybe_unused]] const int& card_index) {
   gtk_spin_button_set_value(self->power_limit, value);
 }
 
-auto get_power_limit(Nvidia* self, const int& card_index) -> int {
+auto get_power_limit(Nvidia* self, [[maybe_unused]] const int& card_index) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->power_limit));
 }
 

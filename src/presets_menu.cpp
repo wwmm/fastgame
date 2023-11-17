@@ -58,7 +58,7 @@ auto get_presets_names() -> std::vector<std::string> {
   return names;
 }
 
-void create_preset(PresetsMenu* self, GtkButton* button) {
+void create_preset(PresetsMenu* self, [[maybe_unused]] GtkButton* button) {
   auto name = std::string(g_utf8_make_valid(gtk_editable_get_text(GTK_EDITABLE(self->preset_name)), -1));
 
   if (name.empty()) {
@@ -115,7 +115,7 @@ void import_preset(PresetsMenu* self) {
 
   gtk_file_dialog_open(
       dialog, active_window, nullptr,
-      +[](GObject* source_object, GAsyncResult* result, gpointer user_data) {
+      +[](GObject* source_object, GAsyncResult* result, [[maybe_unused]] gpointer user_data) {
         auto* dialog = GTK_FILE_DIALOG(source_object);
 
         auto* file = gtk_file_dialog_open_finish(dialog, result, nullptr);
@@ -144,66 +144,68 @@ void setup_listview(PresetsMenu* self, GtkListView* listview, GtkStringList* str
 
   // setting the factory callbacks
 
-  g_signal_connect(factory, "setup",
-                   G_CALLBACK(+[](GtkSignalListItemFactory* factory, GtkListItem* item, PresetsMenu* self) {
-                     auto builder = gtk_builder_new_from_resource("/com/github/wwmm/fastgame/ui/preset_row.ui");
+  g_signal_connect(
+      factory, "setup",
+      G_CALLBACK(+[]([[maybe_unused]] GtkSignalListItemFactory* factory, GtkListItem* item, PresetsMenu* self) {
+        auto builder = gtk_builder_new_from_resource("/com/github/wwmm/fastgame/ui/preset_row.ui");
 
-                     auto* top_box = gtk_builder_get_object(builder, "top_box");
-                     auto* apply = gtk_builder_get_object(builder, "apply");
-                     auto* save = gtk_builder_get_object(builder, "save");
-                     auto* remove = gtk_builder_get_object(builder, "remove");
+        auto* top_box = gtk_builder_get_object(builder, "top_box");
+        auto* apply = gtk_builder_get_object(builder, "apply");
+        auto* save = gtk_builder_get_object(builder, "save");
+        auto* remove = gtk_builder_get_object(builder, "remove");
 
-                     g_object_set_data(G_OBJECT(item), "name", gtk_builder_get_object(builder, "name"));
-                     g_object_set_data(G_OBJECT(item), "apply", apply);
-                     g_object_set_data(G_OBJECT(item), "save", save);
-                     g_object_set_data(G_OBJECT(item), "remove", remove);
+        g_object_set_data(G_OBJECT(item), "name", gtk_builder_get_object(builder, "name"));
+        g_object_set_data(G_OBJECT(item), "apply", apply);
+        g_object_set_data(G_OBJECT(item), "save", save);
+        g_object_set_data(G_OBJECT(item), "remove", remove);
 
-                     gtk_list_item_set_activatable(item, 0);
-                     gtk_list_item_set_child(item, GTK_WIDGET(top_box));
+        gtk_list_item_set_activatable(item, 0);
+        gtk_list_item_set_child(item, GTK_WIDGET(top_box));
 
-                     g_signal_connect(apply, "clicked", G_CALLBACK(+[](GtkButton* button, PresetsMenu* self) {
-                                        if (auto* string_object =
-                                                GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
-                                            string_object != nullptr) {
-                                          auto* name = gtk_string_object_get_string(string_object);
+        g_signal_connect(
+            apply, "clicked", G_CALLBACK(+[](GtkButton* button, [[maybe_unused]] PresetsMenu* self) {
+              if (auto* string_object = GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
+                  string_object != nullptr) {
+                auto* name = gtk_string_object_get_string(string_object);
 
-                                          load_preset.emit(name);
-                                        }
-                                      }),
-                                      self);
+                load_preset.emit(name);
+              }
+            }),
+            self);
 
-                     g_signal_connect(save, "clicked", G_CALLBACK(+[](GtkButton* button, PresetsMenu* self) {
-                                        if (auto* string_object =
-                                                GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
-                                            string_object != nullptr) {
-                                          auto* name = gtk_string_object_get_string(string_object);
+        g_signal_connect(
+            save, "clicked", G_CALLBACK(+[](GtkButton* button, [[maybe_unused]] PresetsMenu* self) {
+              if (auto* string_object = GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
+                  string_object != nullptr) {
+                auto* name = gtk_string_object_get_string(string_object);
 
-                                          save_preset.emit(name);
-                                        }
-                                      }),
-                                      self);
+                save_preset.emit(name);
+              }
+            }),
+            self);
 
-                     g_signal_connect(remove, "clicked", G_CALLBACK(+[](GtkButton* button, PresetsMenu* self) {
-                                        if (auto* string_object =
-                                                GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
-                                            string_object != nullptr) {
-                                          auto* name = gtk_string_object_get_string(string_object);
+        g_signal_connect(
+            remove, "clicked", G_CALLBACK(+[](GtkButton* button, [[maybe_unused]] PresetsMenu* self) {
+              if (auto* string_object = GTK_STRING_OBJECT(g_object_get_data(G_OBJECT(button), "string-object"));
+                  string_object != nullptr) {
+                auto* name = gtk_string_object_get_string(string_object);
 
-                                          auto file_path = user_presets_dir / std::filesystem::path{name + ".json"s};
+                auto file_path = user_presets_dir / std::filesystem::path{name + ".json"s};
 
-                                          std::filesystem::remove(file_path);
+                std::filesystem::remove(file_path);
 
-                                          util::debug(log_tag + "removed preset file: "s + file_path.string());
-                                        }
-                                      }),
-                                      self);
+                util::debug(log_tag + "removed preset file: "s + file_path.string());
+              }
+            }),
+            self);
 
-                     g_object_unref(builder);
-                   }),
-                   self);
+        g_object_unref(builder);
+      }),
+      self);
 
   g_signal_connect(factory, "bind",
-                   G_CALLBACK(+[](GtkSignalListItemFactory* factory, GtkListItem* item, PresetsMenu* self) {
+                   G_CALLBACK(+[]([[maybe_unused]] GtkSignalListItemFactory* factory, GtkListItem* item,
+                                  [[maybe_unused]] PresetsMenu* self) {
                      auto* label = static_cast<GtkLabel*>(g_object_get_data(G_OBJECT(item), "name"));
                      auto* apply = static_cast<GtkLabel*>(g_object_get_data(G_OBJECT(item), "apply"));
                      auto* save = static_cast<GtkLabel*>(g_object_get_data(G_OBJECT(item), "save"));
@@ -305,8 +307,8 @@ void presets_menu_init(PresetsMenu* self) {
   g_object_unref(gfile);
 
   g_signal_connect(self->dir_monitor, "changed",
-                   G_CALLBACK(+[](GFileMonitor* monitor, GFile* file, GFile* other_file, GFileMonitorEvent event_type,
-                                  PresetsMenu* self) {
+                   G_CALLBACK(+[]([[maybe_unused]] GFileMonitor* monitor, GFile* file,
+                                  [[maybe_unused]] GFile* other_file, GFileMonitorEvent event_type, PresetsMenu* self) {
                      switch (event_type) {
                        case G_FILE_MONITOR_EVENT_CREATED: {
                          const auto preset_name = util::remove_filename_extension(g_file_get_basename(file));

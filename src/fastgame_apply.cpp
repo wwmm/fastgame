@@ -178,7 +178,7 @@ void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
 #endif
 }
 
-auto main(int argc, char* argv[]) -> int {
+auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
   if (!std::filesystem::is_regular_file(input_file)) {

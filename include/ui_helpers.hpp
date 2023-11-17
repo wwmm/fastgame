@@ -14,12 +14,13 @@ auto parse_spinbutton_input(GtkSpinButton* button, double* new_value) -> int;
 
 template <StringLiteralWrapper sl_wrapper>
 void prepare_spinbutton(GtkSpinButton* button) {
-  g_signal_connect(button, "output", G_CALLBACK(+[](GtkSpinButton* button, gpointer user_data) {
+  g_signal_connect(button, "output", G_CALLBACK(+[](GtkSpinButton* button, [[maybe_unused]] gpointer user_data) {
                      return parse_spinbutton_output(button, sl_wrapper.msg.data());
                    }),
                    nullptr);
 
-  g_signal_connect(button, "input", G_CALLBACK(+[](GtkSpinButton* button, gdouble* new_value, gpointer user_data) {
+  g_signal_connect(button, "input",
+                   G_CALLBACK(+[](GtkSpinButton* button, gdouble* new_value, [[maybe_unused]] gpointer user_data) {
                      return parse_spinbutton_input(button, new_value);
                    }),
                    nullptr);

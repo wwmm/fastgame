@@ -73,12 +73,17 @@ void application_class_init(ApplicationClass* klass) {
 void application_init(Application* self) {
   std::array<GActionEntry, 6> entries{};
 
-  entries[0] = {
-      "quit", [](GSimpleAction* action, GVariant* parameter, gpointer app) { g_application_quit(G_APPLICATION(app)); },
-      nullptr, nullptr, nullptr};
+  entries[0] = {"quit",
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer app) {
+                  g_application_quit(G_APPLICATION(app));
+                },
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   entries[1] = {"about",
-                [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer gapp) {
                   std::array<const char*, 2> authors = {"Wellington Wallace", nullptr};
 
                   gtk_show_about_dialog(gtk_application_get_active_window(GTK_APPLICATION(gapp)), "program-name",
@@ -87,10 +92,13 @@ void application_init(Application* self) {
                                         "logo-icon-name", "fastgame", "license-type", GTK_LICENSE_GPL_3_0, "website",
                                         "https://github.com/wwmm/fastgame", nullptr);
                 },
-                nullptr, nullptr, nullptr};
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   entries[2] = {"fullscreen",
-                [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer gapp) {
                   auto* self = FG_APP(gapp);
 
                   auto state = g_settings_get_boolean(self->settings, "window-fullscreen") != 0;
@@ -105,10 +113,13 @@ void application_init(Application* self) {
                     g_settings_set_boolean(self->settings, "window-fullscreen", 1);
                   }
                 },
-                nullptr, nullptr, nullptr};
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   entries[3] = {"shortcuts",
-                [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer gapp) {
                   auto* builder = gtk_builder_new_from_resource("/com/github/wwmm/fastgame/ui/shortcuts.ui");
 
                   auto* window = GTK_SHORTCUTS_WINDOW(gtk_builder_get_object(builder, "window"));
@@ -120,14 +131,22 @@ void application_init(Application* self) {
 
                   g_object_unref(builder);
                 },
-                nullptr, nullptr, nullptr};
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   entries[4] = {"hide_windows",
-                [](GSimpleAction* action, GVariant* parameter, gpointer app) { hide_all_windows(G_APPLICATION(app)); },
-                nullptr, nullptr, nullptr};
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer app) {
+                  hide_all_windows(G_APPLICATION(app));
+                },
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   entries[5] = {"preferences",
-                [](GSimpleAction* action, GVariant* parameter, gpointer gapp) {
+                []([[maybe_unused]] GSimpleAction* action, [[maybe_unused]] GVariant* parameter, gpointer gapp) {
                   auto* preferences = ui::preferences::window::create();
 
                   gtk_window_set_transient_for(GTK_WINDOW(preferences),
@@ -135,7 +154,10 @@ void application_init(Application* self) {
 
                   gtk_window_present(GTK_WINDOW(preferences));
                 },
-                nullptr, nullptr, nullptr};
+                nullptr,
+                nullptr,
+                nullptr,
+                {0, 0, 0}};
 
   g_action_map_add_action_entries(G_ACTION_MAP(self), entries.data(), entries.size(), self);
 

@@ -398,7 +398,7 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
       self->disk, root.get<bool>("disk.udisks.enable-write-cache", ui::disk::get_enable_write_cache(self->disk)));
 }
 
-void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
+void on_apply_settings(ApplicationWindow* self, [[maybe_unused]] GtkButton* btn) {
   gtk_spinner_start(self->spinner);
 
   // First we remove the file in case a server instance is already running. This will make it exit.
@@ -434,6 +434,8 @@ void on_apply_settings(ApplicationWindow* self, GtkButton* btn) {
 
                             util::warning(log_tag + std::string(e.what()));
                           }
+
+                          return G_SOURCE_REMOVE;
                         }),
                         self);
 }
@@ -659,7 +661,8 @@ void application_window_init(ApplicationWindow* self) {
   g_settings_bind(self->settings, "autohide-popovers", self->presetsMenu, "autohide", G_SETTINGS_BIND_DEFAULT);
 
   g_signal_connect(self->settings, "changed::use-dark-theme",
-                   G_CALLBACK(+[](GSettings* settings, char* key, ApplicationWindow* self) { init_theme_color(self); }),
+                   G_CALLBACK(+[]([[maybe_unused]] GSettings* settings, [[maybe_unused]] char* key,
+                                  ApplicationWindow* self) { init_theme_color(self); }),
                    self);
 
   ui::presets_menu::save_preset.connect(

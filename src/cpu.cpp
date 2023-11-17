@@ -136,7 +136,7 @@ auto get_pcie_aspm_policy(Cpu* self) -> std::string {
   return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
-void set_cores(Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& list) {
+void set_cores([[maybe_unused]] Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& list) {
   for (auto child = gtk_widget_get_first_child(GTK_WIDGET(flowbox)); child != nullptr;) {
     auto* next_child = gtk_widget_get_next_sibling(child);
 
@@ -152,7 +152,7 @@ void set_cores(Cpu* self, GtkFlowBox* flowbox, const std::vector<std::string>& l
   }
 }
 
-auto get_cores(Cpu* self, GtkFlowBox* flowbox) -> std::vector<std::string> {
+auto get_cores([[maybe_unused]] Cpu* self, GtkFlowBox* flowbox) -> std::vector<std::string> {
   std::vector<std::string> list;
 
   for (auto child = gtk_widget_get_first_child(GTK_WIDGET(flowbox)); child != nullptr;) {

@@ -111,9 +111,14 @@ void read_power_cap_max(Amdgpu* self, const int& card_index) {
     switch (card_index) {
       case 0:
         adj = gtk_spin_button_get_adjustment(self->power_cap0);
-
+        break;
       case 1:
         adj = gtk_spin_button_get_adjustment(self->power_cap1);
+        break;
+    }
+
+    if (adj == nullptr) {
+      util::warning("wrong card_index");
     }
 
     gtk_adjustment_set_upper(adj, power_cap_in_watts);
@@ -310,7 +315,7 @@ void amdgpu_init(Amdgpu* self) {
 
     g_signal_connect_data(
         performance_level, "notify::selected-item",
-        G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Data* data) {
+        G_CALLBACK(+[](GtkDropDown* dropdown, [[maybe_unused]] GParamSpec* pspec, Data* data) {
           if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
             auto* level = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 
@@ -324,7 +329,8 @@ void amdgpu_init(Amdgpu* self) {
             }
           }
         }),
-        data, (GClosureNotify) + [](Data* data, GClosure* closure) { delete data; }, G_CONNECT_DEFAULT);
+        data, (GClosureNotify) + [](Data* data, [[maybe_unused]] GClosure* closure) { delete data; },
+        G_CONNECT_DEFAULT);
 
     read_power_cap_max(self, n);
     read_power_cap(self, n);

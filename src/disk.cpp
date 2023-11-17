@@ -311,7 +311,8 @@ void disk_init(Disk* self) {
   }
 
   g_signal_connect(
-      self->device, "notify::selected-item", G_CALLBACK(+[](GtkDropDown* dropdown, GParamSpec* pspec, Disk* self) {
+      self->device, "notify::selected-item",
+      G_CALLBACK(+[](GtkDropDown* dropdown, [[maybe_unused]] GParamSpec* pspec, Disk* self) {
         if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
           auto* device_path = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 

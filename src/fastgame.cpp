@@ -3,7 +3,7 @@
 #include "application_ui.hpp"
 #include "config.h"
 
-auto sigterm(void* data) -> bool {
+auto sigterm(void* data) -> int {
   auto* app = G_APPLICATION(data);
 
   app::hide_all_windows(app);

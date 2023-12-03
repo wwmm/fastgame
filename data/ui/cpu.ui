@@ -134,6 +134,17 @@
                             </object>
                         </child>
 
+                        <child>
+                            <object class="AdwActionRow">
+                                <property name="title" translatable="yes">Enable Watchdog</property>
+                                <property name="activatable_widget">enable_watchdog</property>
+                                <child>
+                                    <object class="GtkSwitch" id="enable_watchdog">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
 
                         <child>
                             <object class="AdwActionRow">

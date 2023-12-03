@@ -99,6 +99,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("cpu.pcie-aspm-policy", ui::cpu::get_pcie_aspm_policy(self->cpu));
   root.put("cpu.use-cpu-dma-latency", ui::cpu::get_use_cpu_dma_latency(self->cpu));
   root.put("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu));
+  root.put("cpu.enable-watchdog", ui::cpu::get_enable_watchdog(self->cpu));
   root.put("cpu.niceness", ui::cpu::get_niceness(self->cpu));
   root.put("cpu.autogroup-niceness", ui::cpu::get_autogroup_niceness(self->cpu));
   root.put("cpu.timer-slack", ui::cpu::get_timer_slack(self->cpu));
@@ -256,6 +257,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   ui::cpu::set_use_realtime_wineserver(
       self->cpu, root.get<bool>("cpu.use-realtime-wineserver", ui::cpu::get_use_realtime_wineserver(self->cpu)));
+
+  ui::cpu::set_enable_watchdog(self->cpu,
+                               root.get<bool>("cpu.enable-watchdog", ui::cpu::get_enable_watchdog(self->cpu)));
 
   ui::cpu::set_niceness(self->cpu, root.get<int>("cpu.niceness", ui::cpu::get_niceness(self->cpu)));
 

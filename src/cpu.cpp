@@ -13,7 +13,7 @@ struct _Cpu {
 
   GtkSpinButton *niceness, *autogroup_niceness, *timer_slack;
 
-  GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first;
+  GtkSwitch *use_sched_batch, *realtime_wineserver, *use_cpu_dma_latency, *child_runs_first, *enable_watchdog;
 
   GtkFlowBox *flowbox_game_affinity, *flowbox_wineserver_affinity;
 };
@@ -50,6 +50,14 @@ void set_use_realtime_wineserver(Cpu* self, const bool& state) {
 
 auto get_use_realtime_wineserver(Cpu* self) -> bool {
   return gtk_switch_get_active(self->realtime_wineserver);
+}
+
+void set_enable_watchdog(Cpu* self, const bool& state) {
+  gtk_switch_set_active(self->enable_watchdog, state != 0);
+}
+
+auto get_enable_watchdog(Cpu* self) -> bool {
+  return gtk_switch_get_active(self->enable_watchdog);
 }
 
 void set_niceness(Cpu* self, const int& value) {
@@ -246,6 +254,7 @@ void cpu_class_init(CpuClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Cpu, timer_slack);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_sched_batch);
   gtk_widget_class_bind_template_child(widget_class, Cpu, realtime_wineserver);
+  gtk_widget_class_bind_template_child(widget_class, Cpu, enable_watchdog);
   gtk_widget_class_bind_template_child(widget_class, Cpu, use_cpu_dma_latency);
   gtk_widget_class_bind_template_child(widget_class, Cpu, child_runs_first);
   gtk_widget_class_bind_template_child(widget_class, Cpu, flowbox_game_affinity);
@@ -263,6 +272,10 @@ void cpu_init(Cpu* self) {
 
   if (const auto list = util::read_system_setting("/proc/sys/kernel/sched_child_runs_first"); !list.empty()) {
     gtk_switch_set_active(self->child_runs_first, std::stoi(list[0]) != 0);
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/kernel/watchdog"); !list.empty()) {
+    gtk_switch_set_active(self->enable_watchdog, std::stoi(list[0]) != 0);
   }
 
   /* We assume that all cores are set to the same frequency governor and that the system has at least one core. In

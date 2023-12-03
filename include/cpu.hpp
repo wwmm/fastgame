@@ -37,6 +37,10 @@ auto get_use_realtime_wineserver(Cpu* self) -> bool;
 
 void set_use_realtime_wineserver(Cpu* self, const bool& state);
 
+auto get_enable_watchdog(Cpu* self) -> bool;
+
+void set_enable_watchdog(Cpu* self, const bool& state);
+
 auto get_niceness(Cpu* self) -> int;
 
 void set_niceness(Cpu* self, const int& value);

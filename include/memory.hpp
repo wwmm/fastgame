@@ -31,6 +31,10 @@ void set_compaction_proactiveness(Memory* self, const int& value);
 
 auto get_compaction_proactiveness(Memory* self) -> int;
 
+void set_min_free_kbytes(Memory* self, const int& value);
+
+auto get_min_free_kbytes(Memory* self) -> int;
+
 void set_page_lock_unfairness(Memory* self, const int& value);
 
 auto get_page_lock_unfairness(Memory* self) -> int;

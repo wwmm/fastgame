@@ -133,6 +133,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("memory.virtual-memory.swappiness", ui::memory::get_swappiness(self->memory));
   root.put("memory.virtual-memory.cache-pressure", ui::memory::get_cache_pressure(self->memory));
   root.put("memory.virtual-memory.compaction-proactiveness", ui::memory::get_compaction_proactiveness(self->memory));
+  root.put("memory.virtual-memory.min-free-kbytes", ui::memory::get_min_free_kbytes(self->memory));
   root.put("memory.virtual-memory.page-lock-unfairness", ui::memory::get_page_lock_unfairness(self->memory));
   root.put("memory.virtual-memory.percpu-pagelist-high-fraction",
            ui::memory::get_percpu_pagelist_high_fraction(self->memory));
@@ -299,6 +300,9 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   ui::memory::set_compaction_proactiveness(self->memory,
                                            root.get<int>("memory.virtual-memory.compaction-proactiveness",
                                                          ui::memory::get_compaction_proactiveness(self->memory)));
+
+  ui::memory::set_min_free_kbytes(self->memory, root.get<int>("memory.virtual-memory.min-free-kbytes",
+                                                              ui::memory::get_min_free_kbytes(self->memory)));
 
   ui::memory::set_page_lock_unfairness(self->memory, root.get<int>("memory.virtual-memory.page-lock-unfairness",
                                                                    ui::memory::get_page_lock_unfairness(self->memory)));

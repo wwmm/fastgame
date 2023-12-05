@@ -12,7 +12,7 @@ struct _Memory {
   GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
   GtkSpinButton *swappiness, *cache_pressure, *compaction_proactiveness, *page_lock_unfairness,
-      *percpu_pagelist_high_fraction, *mglru_min_ttl_ms;
+      *percpu_pagelist_high_fraction, *mglru_min_ttl_ms, *min_free_kbytes;
 };
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
@@ -39,6 +39,14 @@ void set_compaction_proactiveness(Memory* self, const int& value) {
 
 auto get_compaction_proactiveness(Memory* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->compaction_proactiveness));
+}
+
+void set_min_free_kbytes(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->min_free_kbytes, value);
+}
+
+auto get_min_free_kbytes(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->min_free_kbytes));
 }
 
 void set_page_lock_unfairness(Memory* self, const int& value) {
@@ -289,26 +297,38 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, page_lock_unfairness);
   gtk_widget_class_bind_template_child(widget_class, Memory, percpu_pagelist_high_fraction);
   gtk_widget_class_bind_template_child(widget_class, Memory, mglru_min_ttl_ms);
+  gtk_widget_class_bind_template_child(widget_class, Memory, min_free_kbytes);
 }
 
 void memory_init(Memory* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
   ui::prepare_spinbutton<"ms">(self->mglru_min_ttl_ms);
+  ui::prepare_spinbutton<"KB">(self->min_free_kbytes);
 
-  gtk_spin_button_set_value(self->swappiness, std::stoi(util::read_system_setting("/proc/sys/vm/swappiness")[0]));
+  if (const auto list = util::read_system_setting("/proc/sys/vm/swappiness"); !list.empty()) {
+    gtk_spin_button_set_value(self->swappiness, std::stoi(list[0]));
+  }
 
-  gtk_spin_button_set_value(self->cache_pressure,
-                            std::stoi(util::read_system_setting("/proc/sys/vm/vfs_cache_pressure")[0]));
+  if (const auto list = util::read_system_setting("/proc/sys/vm/vfs_cache_pressure"); !list.empty()) {
+    gtk_spin_button_set_value(self->cache_pressure, std::stoi(list[0]));
+  }
 
-  gtk_spin_button_set_value(self->compaction_proactiveness,
-                            std::stoi(util::read_system_setting("/proc/sys/vm/compaction_proactiveness")[0]));
+  if (const auto list = util::read_system_setting("/proc/sys/vm/compaction_proactiveness"); !list.empty()) {
+    gtk_spin_button_set_value(self->compaction_proactiveness, std::stoi(list[0]));
+  }
 
-  gtk_spin_button_set_value(self->page_lock_unfairness,
-                            std::stoi(util::read_system_setting("/proc/sys/vm/page_lock_unfairness")[0]));
+  if (const auto list = util::read_system_setting("/proc/sys/vm/min_free_kbytes"); !list.empty()) {
+    gtk_spin_button_set_value(self->min_free_kbytes, std::stoi(list[0]));
+  }
 
-  gtk_spin_button_set_value(self->percpu_pagelist_high_fraction,
-                            std::stoi(util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction")[0]));
+  if (const auto list = util::read_system_setting("/proc/sys/vm/page_lock_unfairness"); !list.empty()) {
+    gtk_spin_button_set_value(self->page_lock_unfairness, std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction"); !list.empty()) {
+    gtk_spin_button_set_value(self->percpu_pagelist_high_fraction, std::stoi(list[0]));
+  }
 
   if (const auto list = util::read_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms"); !list.empty()) {
     gtk_spin_button_set_value(self->mglru_min_ttl_ms, std::stoi(list[0]));

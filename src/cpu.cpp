@@ -266,9 +266,7 @@ void cpu_init(Cpu* self) {
 
   ui::prepare_spinbutton<"ns">(self->timer_slack);
 
-  int timer_slack_ns = prctl(PR_GET_TIMERSLACK, &timer_slack_ns, 0, 0, 0);
-
-  gtk_spin_button_set_value(self->timer_slack, timer_slack_ns);
+  gtk_spin_button_set_value(self->timer_slack, prctl(PR_GET_TIMERSLACK));
 
   if (const auto list = util::read_system_setting("/proc/sys/kernel/sched_child_runs_first"); !list.empty()) {
     gtk_switch_set_active(self->child_runs_first, std::stoi(list[0]) != 0);

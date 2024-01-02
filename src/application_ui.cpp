@@ -143,6 +143,8 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
   root.put("memory.transparent-hugepages.enabled", ui::memory::get_thp_enabled(self->memory));
   root.put("memory.transparent-hugepages.defrag", ui::memory::get_thp_defrag(self->memory));
   root.put("memory.transparent-hugepages.shmem_enabled", ui::memory::get_thp_shmem_enabled(self->memory));
+  root.put("memory.transparent-hugepages.scan-sleep", ui::memory::get_scan_sleep(self->memory));
+  root.put("memory.transparent-hugepages.alloc-sleep", ui::memory::get_alloc_sleep(self->memory));
 
   // amdgpu
 
@@ -323,6 +325,12 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
   ui::memory::set_thp_shmem_enabled(self->memory,
                                     root.get<std::string>("memory.transparent-hugepages.shmem_enabled",
                                                           ui::memory::get_thp_shmem_enabled(self->memory)));
+
+  ui::memory::set_scan_sleep(
+      self->memory, root.get<int>("memory.transparent-hugepages.scan-sleep", ui::memory::get_scan_sleep(self->memory)));
+
+  ui::memory::set_alloc_sleep(self->memory, root.get<int>("memory.transparent-hugepages.alloc-sleep",
+                                                          ui::memory::get_alloc_sleep(self->memory)));
 
   // amdgpu
 

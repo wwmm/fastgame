@@ -12,7 +12,7 @@ struct _Memory {
   GtkDropDown *thp_enabled, *thp_defrag, *thp_shmem_enabled;
 
   GtkSpinButton *swappiness, *cache_pressure, *compaction_proactiveness, *page_lock_unfairness,
-      *percpu_pagelist_high_fraction, *mglru_min_ttl_ms, *min_free_kbytes;
+      *percpu_pagelist_high_fraction, *mglru_min_ttl_ms, *min_free_kbytes, *scan_sleep, *alloc_sleep;
 };
 
 G_DEFINE_TYPE(Memory, memory, GTK_TYPE_BOX)
@@ -163,6 +163,22 @@ auto get_thp_shmem_enabled(Memory* self) -> std::string {
   return gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
 }
 
+void set_scan_sleep(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->scan_sleep, value);
+}
+
+auto get_scan_sleep(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->scan_sleep));
+}
+
+void set_alloc_sleep(Memory* self, const int& value) {
+  gtk_spin_button_set_value(self->alloc_sleep, value);
+}
+
+auto get_alloc_sleep(Memory* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->alloc_sleep));
+}
+
 void read_transparent_huge_page_values(Memory* self) {
   // parameter: enabled
 
@@ -265,6 +281,18 @@ void read_transparent_huge_page_values(Memory* self) {
 
     gtk_drop_down_set_selected(self->thp_shmem_enabled, selected_id);
   }
+
+  if (const auto list =
+          util::read_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs");
+      !list.empty()) {
+    gtk_spin_button_set_value(self->scan_sleep, std::stoi(list[0]));
+  }
+
+  if (const auto list =
+          util::read_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs");
+      !list.empty()) {
+    gtk_spin_button_set_value(self->alloc_sleep, std::stoi(list[0]));
+  }
 }
 
 void dispose(GObject* object) {
@@ -298,12 +326,14 @@ void memory_class_init(MemoryClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Memory, percpu_pagelist_high_fraction);
   gtk_widget_class_bind_template_child(widget_class, Memory, mglru_min_ttl_ms);
   gtk_widget_class_bind_template_child(widget_class, Memory, min_free_kbytes);
+  gtk_widget_class_bind_template_child(widget_class, Memory, scan_sleep);
+  gtk_widget_class_bind_template_child(widget_class, Memory, alloc_sleep);
 }
 
 void memory_init(Memory* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
-  ui::prepare_spinbutton<"ms">(self->mglru_min_ttl_ms);
+  ui::prepare_spinbuttons<"ms">(self->mglru_min_ttl_ms, self->scan_sleep, self->alloc_sleep);
   ui::prepare_spinbutton<"KB">(self->min_free_kbytes);
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/swappiness"); !list.empty()) {

@@ -59,4 +59,12 @@ void set_thp_shmem_enabled(Memory* self, const std::string& name);
 
 auto get_thp_shmem_enabled(Memory* self) -> std::string;
 
+void set_scan_sleep(Memory* self, const int& value);
+
+auto get_scan_sleep(Memory* self) -> int;
+
+void set_alloc_sleep(Memory* self, const int& value);
+
+auto get_alloc_sleep(Memory* self) -> int;
+
 }  // namespace ui::memory

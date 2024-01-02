@@ -36,7 +36,7 @@ settings that can be configured through FastGame:
 - Pass command line arguments to the game executable
 - Game cpu affinity configuration
 - Change the cpu frequency governor
-- Change the process niceness
+- Change the process niceness (autogroup supported)
 - Use /dev/cpu_dma_latency to avoid deep C-States
 - Apply the SCHED_BATCH priority scheduler to the game process
 - Apply the SCHED_RR priority scheduler to the wineserver process

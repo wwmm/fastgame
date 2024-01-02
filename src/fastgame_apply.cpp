@@ -265,6 +265,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   // virtual memory
 
+  update_system_setting("/proc/sys/vm/compact_memory", 1);
+
   update_system_setting("/proc/sys/vm/swappiness", root.get<int>("memory.virtual-memory.swappiness", 100));
 
   update_system_setting("/proc/sys/vm/vfs_cache_pressure", root.get<int>("memory.virtual-memory.cache-pressure", 100));
@@ -294,6 +296,12 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/shmem_enabled",
                         root.get<std::string>("memory.transparent-hugepages.shmem_enabled"));
+
+  update_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs",
+                        root.get<int>("memory.transparent-hugepages.scan-sleep", 10000));
+
+  update_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs",
+                        root.get<int>("memory.transparent-hugepages.alloc-sleep", 60000));
 
   // starting the netlink server
 

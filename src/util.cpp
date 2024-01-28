@@ -207,19 +207,20 @@ auto mounting_path_to_sys_class_path(const std::string& mounting_path) -> std::s
 
   while (infile >> psm_dev_path >> psm_mounting_point) {
     if (psm_mounting_point == mounting_path) {
-      // Assuming /dev/ as the start of the path
-      auto psm_dev_name = psm_dev_path.substr(5);
+      if (psm_dev_path.starts_with("/dev/")) {
+        auto psm_dev_name = psm_dev_path.substr(5);
 
-      for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
-        auto path = entry.path().string();
+        for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
+          auto path = entry.path().string();
 
-        // this is the actual device and not a partition
-        if (std::filesystem::is_regular_file(path + "/queue/scheduler")) {
-          // Assuming /sys/class/block/ as the start of the path
-          auto dev_name = path.substr(17);
+          // this is the actual device and not a partition
+          if (std::filesystem::is_regular_file(path + "/queue/scheduler")) {
+            // Assuming /sys/class/block/ as the start of the path
+            auto dev_name = path.substr(17);
 
-          if (psm_dev_name.starts_with(dev_name)) {
-            return path;
+            if (psm_dev_name.starts_with(dev_name)) {
+              return path;
+            }
           }
         }
       }

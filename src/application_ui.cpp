@@ -181,7 +181,7 @@ void save_preset(ApplicationWindow* self, const std::string& name, const std::fi
 
   // disk
 
-  root.put("disk.device", ui::disk::get_device(self->disk));
+  root.put("disk.mounting-path", ui::disk::get_device(self->disk));
   root.put("disk.scheduler", ui::disk::get_scheduler(self->disk));
   root.put("disk.enable-realtime-priority", ui::disk::get_enable_realtime_priority(self->disk));
   root.put("disk.readahead", ui::disk::get_readahead(self->disk));
@@ -389,7 +389,7 @@ void load_preset(ApplicationWindow* self, const std::string& name) {
 
   // disk
 
-  ui::disk::set_device(self->disk, root.get<std::string>("disk.device", ui::disk::get_device(self->disk)));
+  ui::disk::set_device(self->disk, root.get<std::string>("disk.mounting-path", ui::disk::get_device(self->disk)));
 
   ui::disk::set_scheduler(self->disk, root.get<std::string>("disk.scheduler", ui::disk::get_scheduler(self->disk)));
 

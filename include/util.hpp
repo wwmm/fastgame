@@ -52,6 +52,10 @@ auto get_amdgpu_indices() -> std::vector<int>;
 
 auto remove_filename_extension(const std::string& basename) -> std::string;
 
+auto sys_class_path_to_mounting_path(const std::string& sys_class_path) -> std::string;
+
+auto mounting_path_to_sys_class_path(const std::string& mounting_path) -> std::string;
+
 template <typename T>
 auto to_string(const T& num, const std::string def = "0") -> std::string {
   // This is used to replace `std::to_string` as a locale independent

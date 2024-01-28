@@ -314,7 +314,8 @@ void disk_init(Disk* self) {
       self->device, "notify::selected-item",
       G_CALLBACK(+[](GtkDropDown* dropdown, [[maybe_unused]] GParamSpec* pspec, Disk* self) {
         if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
-          auto* device_path = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+          auto* mounting_path = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
+          auto device_path = util::mounting_path_to_sys_class_path(mounting_path);
 
           init_scheduler(self, device_path);
           init_udisks_object(self, device_path);
@@ -342,11 +343,13 @@ void disk_init(Disk* self) {
 
   gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
 
-  for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
-    auto path = entry.path().string();
+  std::ifstream infile("/proc/self/mounts");
 
-    if (std::filesystem::is_regular_file(path + "/queue/scheduler")) {
-      gtk_string_list_append(model, path.c_str());
+  std::string psm_dev_path, mounting_path;
+
+  while (infile >> psm_dev_path >> mounting_path) {
+    if (psm_dev_path.starts_with("/dev/")) {
+      gtk_string_list_append(model, mounting_path.c_str());
     }
   }
 

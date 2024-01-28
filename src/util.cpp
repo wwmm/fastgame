@@ -183,4 +183,50 @@ auto remove_filename_extension(const std::string& basename) -> std::string {
   return basename.substr(0, basename.find_last_of('.'));
 }
 
+auto sys_class_path_to_mounting_path(const std::string& sys_class_path) -> std::string {
+  // Assuming /sys/class/block as root path
+  auto dev_path = "/dev/" + sys_class_path.substr(17);
+
+  std::ifstream infile("/proc/self/mounts");
+
+  std::string psm_dev_path, mounting_point;
+
+  while (infile >> psm_dev_path >> mounting_point) {
+    if (psm_dev_path.starts_with(dev_path)) {
+      return mounting_point;
+    }
+  }
+
+  return "";
+}
+
+auto mounting_path_to_sys_class_path(const std::string& mounting_path) -> std::string {
+  std::ifstream infile("/proc/self/mounts");
+
+  std::string psm_dev_path, psm_mounting_point;
+
+  while (infile >> psm_dev_path >> psm_mounting_point) {
+    if (psm_mounting_point == mounting_path) {
+      // Assuming /dev/ as the start of the path
+      auto psm_dev_name = psm_dev_path.substr(5);
+
+      for (const auto& entry : std::filesystem::directory_iterator("/sys/class/block")) {
+        auto path = entry.path().string();
+
+        // this is the actual device and not a partition
+        if (std::filesystem::is_regular_file(path + "/queue/scheduler")) {
+          // Assuming /sys/class/block/ as the start of the path
+          auto dev_name = path.substr(17);
+
+          if (psm_dev_name.starts_with(dev_name)) {
+            return path;
+          }
+        }
+      }
+    }
+  }
+
+  return "";
+}
+
 }  // namespace util

@@ -15,7 +15,7 @@ std::string drive_id;
 struct _Disk {
   GtkPopover parent_instance;
 
-  GtkDropDown *device, *scheduler;
+  GtkDropDown *mounting_path, *scheduler;
 
   GtkSpinButton *readahead, *nr_requests, *rq_affinity, *nomerges;
 
@@ -24,8 +24,8 @@ struct _Disk {
 
 G_DEFINE_TYPE(Disk, disk, GTK_TYPE_BOX)
 
-void set_device(Disk* self, const std::string& name) {
-  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->device));
+void set_mounting_path(Disk* self, const std::string& name) {
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->mounting_path));
 
   guint id = 0;
 
@@ -41,11 +41,11 @@ void set_device(Disk* self, const std::string& name) {
     }
   }
 
-  gtk_drop_down_set_selected(self->device, id);
+  gtk_drop_down_set_selected(self->mounting_path, id);
 }
 
-auto get_device(Disk* self) -> std::string {
-  auto* selected_item = gtk_drop_down_get_selected_item(self->device);
+auto get_mounting_path(Disk* self) -> std::string {
+  auto* selected_item = gtk_drop_down_get_selected_item(self->mounting_path);
 
   if (selected_item == nullptr) {
     return "";
@@ -283,7 +283,7 @@ void disk_class_init(DiskClass* klass) {
 
   gtk_widget_class_set_template_from_resource(widget_class, "/com/github/wwmm/fastgame/ui/disk.ui");
 
-  gtk_widget_class_bind_template_child(widget_class, Disk, device);
+  gtk_widget_class_bind_template_child(widget_class, Disk, mounting_path);
   gtk_widget_class_bind_template_child(widget_class, Disk, scheduler);
   gtk_widget_class_bind_template_child(widget_class, Disk, readahead);
   gtk_widget_class_bind_template_child(widget_class, Disk, nr_requests);
@@ -311,7 +311,7 @@ void disk_init(Disk* self) {
   }
 
   g_signal_connect(
-      self->device, "notify::selected-item",
+      self->mounting_path, "notify::selected-item",
       G_CALLBACK(+[](GtkDropDown* dropdown, [[maybe_unused]] GParamSpec* pspec, Disk* self) {
         if (auto selected_item = gtk_drop_down_get_selected_item(dropdown); selected_item != nullptr) {
           auto* mounting_path = gtk_string_object_get_string(GTK_STRING_OBJECT(selected_item));
@@ -339,7 +339,7 @@ void disk_init(Disk* self) {
       }),
       self);
 
-  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->device));
+  auto* model = reinterpret_cast<GtkStringList*>(gtk_drop_down_get_model(self->mounting_path));
 
   gtk_string_list_splice(model, 0, g_list_model_get_n_items(G_LIST_MODEL(model)), nullptr);
 
@@ -353,7 +353,7 @@ void disk_init(Disk* self) {
     }
   }
 
-  gtk_drop_down_set_selected(self->device, 0);
+  gtk_drop_down_set_selected(self->mounting_path, 0);
 }
 
 auto create() -> Disk* {

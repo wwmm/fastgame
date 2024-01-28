@@ -16,9 +16,9 @@
 
                         <child>
                             <object class="AdwActionRow">
-                                <property name="title" translatable="yes">Path</property>
+                                <property name="title" translatable="yes">Mounting Path</property>
                                 <child>
-                                    <object class="GtkDropDown" id="device">
+                                    <object class="GtkDropDown" id="mounting_path">
                                         <property name="valign">center</property>
                                         <property name="model">
                                             <object class="GtkStringList"></object>

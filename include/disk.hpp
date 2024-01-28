@@ -20,9 +20,9 @@ G_END_DECLS
 
 auto create() -> Disk*;
 
-void set_device(Disk* self, const std::string& name);
+void set_mounting_path(Disk* self, const std::string& name);
 
-auto get_device(Disk* self) -> std::string;
+auto get_mounting_path(Disk* self) -> std::string;
 
 void set_scheduler(Disk* self, const std::string& name);
 

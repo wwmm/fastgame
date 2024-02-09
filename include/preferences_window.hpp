@@ -1,6 +1,7 @@
 #pragma once
 
-#include "preferences_general.hpp"
+// #include "preferences_general.hpp"
+#include <adwaita.h>
 
 namespace ui::preferences::window {
 

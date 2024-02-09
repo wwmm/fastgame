@@ -5,9 +5,6 @@
 #include <sigc++/sigc++.h>
 #include <filesystem>
 #include <string>
-#include "config.h"
-#include "preferences_window.hpp"
-#include "util.hpp"
 
 namespace app {
 

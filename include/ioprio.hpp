@@ -7,7 +7,6 @@
 
 #include <sys/syscall.h>
 #include <unistd.h>
-#include <iostream>
 
 #define IOPRIO_CLASS_SHIFT (13)
 #define IOPRIO_PRIO_VALUE(class, data) (((class) << IOPRIO_CLASS_SHIFT) | data)

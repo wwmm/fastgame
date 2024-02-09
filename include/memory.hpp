@@ -1,11 +1,7 @@
 #pragma once
 
 #include <adwaita.h>
-#include <filesystem>
-#include <fstream>
-#include <string>
-#include "ui_helpers.hpp"
-#include "util.hpp"
+#include <iostream>
 
 namespace ui::memory {
 

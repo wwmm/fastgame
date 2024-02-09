@@ -1,7 +1,7 @@
 #include <glib-unix.h>
 #include "application.hpp"
-#include "application_ui.hpp"
 #include "config.h"
+#include "util.hpp"
 
 auto sigterm(void* data) -> int {
   auto* app = G_APPLICATION(data);

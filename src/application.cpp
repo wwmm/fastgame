@@ -1,5 +1,8 @@
 #include "application.hpp"
 #include "application_ui.hpp"
+#include "config.h"
+#include "preferences_window.hpp"
+#include "util.hpp"
 
 namespace app {
 

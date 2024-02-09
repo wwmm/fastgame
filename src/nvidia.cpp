@@ -1,4 +1,10 @@
 #include "nvidia.hpp"
+#include "config.h"
+#include "ui_helpers.hpp"
+
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
 
 namespace ui::nvidia {
 

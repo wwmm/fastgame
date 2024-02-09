@@ -1,9 +1,6 @@
 #pragma once
 
 #include <adwaita.h>
-#include <string>
-#include "ui_helpers.hpp"
-#include "util.hpp"
 
 namespace ui::preferences::general {
 

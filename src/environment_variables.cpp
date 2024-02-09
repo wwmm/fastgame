@@ -1,4 +1,6 @@
 #include "environment_variables.hpp"
+#include "environment_variable_holder.hpp"
+#include "util.hpp"
 
 namespace ui::environment_variables {
 

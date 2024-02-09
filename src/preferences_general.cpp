@@ -1,4 +1,6 @@
 #include "preferences_general.hpp"
+#include "ui_helpers.hpp"
+#include "util.hpp"
 
 namespace ui::preferences::general {
 

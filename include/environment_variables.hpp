@@ -1,9 +1,8 @@
 #pragma once
 
 #include <adwaita.h>
-#include <filesystem>
-#include "application.hpp"
-#include "environment_variable_holder.hpp"
+#include <iostream>
+#include <vector>
 
 namespace ui::environment_variables {
 

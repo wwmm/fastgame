@@ -6,8 +6,7 @@
 #include <fstream>
 #include <string>
 #include <thread>
-#include "ui_helpers.hpp"
-#include "util.hpp"
+#include <vector>
 
 namespace ui::cpu {
 

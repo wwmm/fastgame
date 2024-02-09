@@ -1,4 +1,6 @@
 #include "preferences_window.hpp"
+#include "preferences_general.hpp"
+#include "util.hpp"
 
 namespace ui::preferences::window {
 

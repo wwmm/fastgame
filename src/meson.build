@@ -84,5 +84,6 @@ executable(
 	include_directories : [include_dir,config_h_dir],
 	dependencies : fastgame_apply_deps,
 	install: true,
-	link_with: linkwith
+	link_with: linkwith,
+	cpp_args : '-fpermissive'
 )

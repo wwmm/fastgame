@@ -1,5 +1,6 @@
 #include "netlink.hpp"
 #include <linux/cn_proc.h>
+#include <linux/netlink.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fstream>

@@ -1,24 +1,6 @@
 #pragma once
 
 #include <adwaita.h>
-#include <filesystem>
-#include "amdgpu.hpp"
-#include "command_line_arguments.hpp"
-#include "cpu.hpp"
-#include "disk.hpp"
-#include "environment_variables.hpp"
-#include "memory.hpp"
-#include "presets_menu.hpp"
-
-#ifdef USE_NVIDIA
-#include "nvidia.hpp"
-#endif
-
-#include <boost/process.hpp>
-#include <boost/process/search_path.hpp>
-#include <boost/process/spawn.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 
 namespace ui::application_window {
 

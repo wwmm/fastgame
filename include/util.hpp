@@ -12,17 +12,9 @@
 #include <thread>
 #include <vector>
 
-#ifdef __clang__
-#include <experimental/source_location>
-#endif
-
 namespace util {
 
-#ifdef __clang__
-using source_location = std::experimental::source_location;
-#else
 using source_location = std::source_location;
-#endif
 
 void debug(const std::string& s, source_location location = source_location::current());
 

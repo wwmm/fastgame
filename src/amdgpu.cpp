@@ -1,4 +1,6 @@
 #include "amdgpu.hpp"
+#include "ui_helpers.hpp"
+#include "util.hpp"
 
 namespace ui::amdgpu {
 

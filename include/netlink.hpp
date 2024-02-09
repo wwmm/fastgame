@@ -2,9 +2,7 @@
 #define NETLINK_HPP
 
 #include <fcntl.h>
-#include <linux/cn_proc.h>
 #include <linux/connector.h>
-#include <linux/netlink.h>
 #include <sys/uio.h>
 #include <boost/signals2.hpp>
 #include <filesystem>

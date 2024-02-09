@@ -5,8 +5,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "ui_helpers.hpp"
-#include "util.hpp"
 
 namespace ui::amdgpu {
 

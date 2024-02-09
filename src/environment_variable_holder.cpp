@@ -1,4 +1,5 @@
 #include "environment_variable_holder.hpp"
+#include "util.hpp"
 
 namespace ui::holders {
 

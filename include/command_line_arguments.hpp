@@ -2,8 +2,7 @@
 
 #include <adwaita.h>
 #include <filesystem>
-#include "application.hpp"
-#include "command_line_argument_holder.hpp"
+#include <vector>
 
 namespace ui::command_line_arguments {
 

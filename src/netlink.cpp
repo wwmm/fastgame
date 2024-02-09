@@ -161,7 +161,7 @@ void Netlink::handle_msg(cn_msg* msg) {
   std::string child_comm;
 
   switch (event->what) {
-    case proc_event::PROC_EVENT_FORK:
+    case PROC_EVENT_FORK:
       child_comm = get_comm(event->event_data.fork.child_pid);
 
       if (!child_comm.empty()) {
@@ -169,7 +169,7 @@ void Netlink::handle_msg(cn_msg* msg) {
       }
 
       break;
-    case proc_event::PROC_EVENT_EXEC:
+    case PROC_EVENT_EXEC:
       pid = event->event_data.exec.process_pid;
 
       comm = get_comm(pid);
@@ -181,7 +181,7 @@ void Netlink::handle_msg(cn_msg* msg) {
       }
 
       break;
-    case proc_event::PROC_EVENT_COMM:
+    case PROC_EVENT_COMM:
       pid = event->event_data.comm.process_pid;
 
       comm = get_comm(pid);
@@ -193,7 +193,7 @@ void Netlink::handle_msg(cn_msg* msg) {
       }
 
       break;
-    case proc_event::PROC_EVENT_EXIT:
+    case PROC_EVENT_EXIT:
       new_exit(event->event_data.exit.process_pid);
 
       break;

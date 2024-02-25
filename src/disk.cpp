@@ -19,7 +19,7 @@ struct _Disk {
 
   GtkDropDown *mounting_path, *scheduler;
 
-  GtkSpinButton *readahead, *nr_requests, *rq_affinity, *nomerges;
+  GtkSpinButton *readahead, *nr_requests, *rq_affinity, *nomerges, *wbt_lat_usec;
 
   GtkSwitch *enable_write_cache, *disable_apm, *add_random, *enable_realtime_priority;
 };
@@ -116,6 +116,14 @@ void set_nomerges(Disk* self, const int& value) {
 
 auto get_nomerges(Disk* self) -> int {
   return static_cast<int>(gtk_spin_button_get_value(self->nomerges));
+}
+
+void set_wbt_lat_usec(Disk* self, const int& value) {
+  gtk_spin_button_set_value(self->wbt_lat_usec, value);
+}
+
+auto get_wbt_lat_usec(Disk* self) -> int {
+  return static_cast<int>(gtk_spin_button_get_value(self->wbt_lat_usec));
 }
 
 void set_enable_realtime_priority(Disk* self, const bool& value) {
@@ -291,6 +299,7 @@ void disk_class_init(DiskClass* klass) {
   gtk_widget_class_bind_template_child(widget_class, Disk, nr_requests);
   gtk_widget_class_bind_template_child(widget_class, Disk, rq_affinity);
   gtk_widget_class_bind_template_child(widget_class, Disk, nomerges);
+  gtk_widget_class_bind_template_child(widget_class, Disk, wbt_lat_usec);
   gtk_widget_class_bind_template_child(widget_class, Disk, enable_write_cache);
   gtk_widget_class_bind_template_child(widget_class, Disk, disable_apm);
   gtk_widget_class_bind_template_child(widget_class, Disk, add_random);
@@ -301,6 +310,7 @@ void disk_init(Disk* self) {
   gtk_widget_init_template(GTK_WIDGET(self));
 
   ui::prepare_spinbutton<"KB">(self->readahead);
+  ui::prepare_spinbutton<"us">(self->wbt_lat_usec);
 
   GError* error = nullptr;
 
@@ -322,17 +332,25 @@ void disk_init(Disk* self) {
           init_scheduler(self, device_path);
           init_udisks_object(self, device_path);
 
-          gtk_spin_button_set_value(self->nr_requests,
-                                    std::stoi(util::read_system_setting(device_path + "/queue/nr_requests"s)[0]));
+          if (const auto list = util::read_system_setting(device_path + "/queue/nr_requests"s); !list.empty()) {
+            gtk_spin_button_set_value(self->nr_requests, std::stoi(list[0]));
+          }
 
-          gtk_spin_button_set_value(self->rq_affinity,
-                                    std::stoi(util::read_system_setting(device_path + "/queue/rq_affinity"s)[0]));
+          if (const auto list = util::read_system_setting(device_path + "/queue/rq_affinity"s); !list.empty()) {
+            gtk_spin_button_set_value(self->rq_affinity, std::stoi(list[0]));
+          }
 
-          gtk_spin_button_set_value(self->nomerges,
-                                    std::stoi(util::read_system_setting(device_path + "/queue/nomerges"s)[0]));
+          if (const auto list = util::read_system_setting(device_path + "/queue/nomerges"s); !list.empty()) {
+            gtk_spin_button_set_value(self->nomerges, std::stoi(list[0]));
+          }
 
-          gtk_spin_button_set_value(self->readahead,
-                                    std::stoi(util::read_system_setting(device_path + "/queue/read_ahead_kb"s)[0]));
+          if (const auto list = util::read_system_setting(device_path + "/queue/read_ahead_kb"s); !list.empty()) {
+            gtk_spin_button_set_value(self->readahead, std::stoi(list[0]));
+          }
+
+          if (const auto list = util::read_system_setting(device_path + "/queue/wbt_lat_usec"s); !list.empty()) {
+            gtk_spin_button_set_value(self->wbt_lat_usec, std::stoi(list[0]));
+          }
 
           gtk_switch_set_active(
               self->add_random,

@@ -42,6 +42,10 @@ void set_nomerges(Disk* self, const int& value);
 
 auto get_nomerges(Disk* self) -> int;
 
+void set_wbt_lat_usec(Disk* self, const int& value);
+
+auto get_wbt_lat_usec(Disk* self) -> int;
+
 void set_enable_realtime_priority(Disk* self, const bool& value);
 
 auto get_enable_realtime_priority(Disk* self) -> bool;

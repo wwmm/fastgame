@@ -250,6 +250,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
       auto disk_nr_requests = root.get<int>("disk.nr-requests", 64);
       auto disk_rq_affinity = root.get<int>("disk.rq-affinity", 1);
       auto disk_nomerges = root.get<int>("disk.nomerges", 0);
+      auto disk_wbt_lat_usec = root.get<int>("disk.wbt-lat-usec", -1);
 
       enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
 
@@ -258,6 +259,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
       update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
       update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
       update_system_setting(disk_device + "/queue/nomerges", disk_nomerges);
+      update_system_setting(disk_device + "/queue/wbt_lat_usec", disk_wbt_lat_usec);
       update_system_setting(disk_device + "/queue/rq_affinity", disk_rq_affinity);
 
       apply_udisks_configuration(root);

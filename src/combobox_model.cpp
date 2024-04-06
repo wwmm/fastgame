@@ -1,31 +1,22 @@
-#include "command_line_arguments.hpp"
+#include "combobox_model.hpp"
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
 #include <qhash.h>
 #include <qnamespace.h>
-#include <qobject.h>
-#include <qqml.h>
+#include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
 #include <iterator>
 
-namespace cmdargs {
-
-Model cmdLineArgsModel;
-
-Model::Model(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<cmdargs::Model>("CppModelCmdLineArgs", 1, 0, "CppModelCmdLineArgs", this);
-}
-
-int Model::rowCount(const QModelIndex& /*parent*/) const {
+int ComboBoxModel::rowCount(const QModelIndex& /*parent*/) const {
   return list.size();
 }
 
-QHash<int, QByteArray> Model::roleNames() const {
+QHash<int, QByteArray> ComboBoxModel::roleNames() const {
   return {{Roles::Value, "value"}};
 }
 
-QVariant Model::data(const QModelIndex& index, int role) const {
+QVariant ComboBoxModel::data(const QModelIndex& index, int role) const {
   if (list.empty()) {
     return "";
   }
@@ -40,7 +31,7 @@ QVariant Model::data(const QModelIndex& index, int role) const {
   }
 }
 
-bool Model::setData(const QModelIndex& index, const QVariant& value, int role) {
+bool ComboBoxModel::setData(const QModelIndex& index, const QVariant& value, int role) {
   if (!value.canConvert<QString>() && role != Qt::EditRole) {
     return false;
   }
@@ -62,7 +53,11 @@ bool Model::setData(const QModelIndex& index, const QVariant& value, int role) {
   return true;
 }
 
-void Model::append(const QString& value) {
+auto ComboBoxModel::getValue(const int& id) -> QString {
+  return list[id];
+}
+
+void ComboBoxModel::append(const QString& value) {
   int pos = list.empty() ? 0 : list.size() - 1;
 
   beginInsertRows(QModelIndex(), pos, pos);
@@ -74,7 +69,7 @@ void Model::append(const QString& value) {
   emit dataChanged(index(0), index(list.size() - 1));
 }
 
-void Model::remove(const int& rowIndex) {
+void ComboBoxModel::remove(const int& rowIndex) {
   beginRemoveRows(QModelIndex(), rowIndex, rowIndex);
 
   list.remove(rowIndex);
@@ -83,5 +78,3 @@ void Model::remove(const int& rowIndex) {
 
   emit dataChanged(index(0), index(list.size() - 1));
 }
-
-}  // namespace cmdargs

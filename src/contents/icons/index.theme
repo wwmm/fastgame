@@ -1,0 +1,14 @@
+[Icon Theme]
+Name=fgtheme
+Comment=FastGame Icon Theme
+Inherits=gnome,hicolor,Numix,breeze
+
+PanelDefault=22
+PanelSizes=22
+
+Directories=actions/22,
+
+[actions/22]
+Size=22
+Context=Actions
+Type=Scalable

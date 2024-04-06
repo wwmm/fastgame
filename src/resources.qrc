@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file alias="CommandLineArguments.qml">contents/ui/CommandLineArguments.qml</file>
+        <file alias="Cpu.qml">contents/ui/Cpu.qml</file>
+        <file alias="EnvironmentVariables.qml">contents/ui/EnvironmentVariables.qml</file>
+        <file alias="FgSpinBox.qml">contents/ui/FgSpinBox.qml</file>
+        <file alias="main.qml">contents/ui/main.qml</file>
+    </qresource>
+
+    <qresource prefix="/icons">
+        <file alias="fg-cpu-symbolic">contents/icons/fg-cpu-symbolic.svg</file>
+        <file alias="fg-cpu-symbolic">contents/icons/fg-cpu-symbolic.svg</file>
+        <file alias="fg-memory-symbolic">contents/icons/fg-memory-symbolic.svg</file>
+    </qresource>
+</RCC>

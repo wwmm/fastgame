@@ -1,33 +1,45 @@
 #include "util.hpp"
+#include <bits/types/struct_sched_param.h>
+#include <qdebug.h>
+#include <qlogging.h>
+#include <sched.h>
+#include <sys/types.h>
+#include <algorithm>
+#include <ext/string_conversions.h>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace util {
 
 auto prepare_debug_message(const std::string& message, source_location location) -> std::string {
   auto file_path = std::filesystem::path{location.file_name()};
 
-  std::string msg = "\t" + file_path.filename().string() + ":" + to_string(location.line()) + "\t" + message;
+  std::string msg = file_path.filename().string() + ":" + to_string(location.line()) + "\t" + message;
 
   return msg;
 }
 
 void debug(const std::string& s, source_location location) {
-  g_debug(prepare_debug_message(s, location).c_str(), "%s");
+  qDebug().noquote() << prepare_debug_message(s, location);
 }
 
-void error(const std::string& s, source_location location) {
-  g_error(prepare_debug_message(s, location).c_str(), "%s");
+void fatal(const std::string& s, source_location location) {
+  qFatal().noquote() << prepare_debug_message(s, location);
 }
 
 void critical(const std::string& s, source_location location) {
-  g_critical(prepare_debug_message(s, location).c_str(), "%s");
+  qCritical().noquote() << prepare_debug_message(s, location);
 }
 
 void warning(const std::string& s, source_location location) {
-  g_warning(prepare_debug_message(s, location).c_str(), "%s");
+  qWarning().noquote() << prepare_debug_message(s, location);
 }
 
 void info(const std::string& s, source_location location) {
-  g_info(prepare_debug_message(s, location).c_str(), "%s");
+  qInfo().noquote() << prepare_debug_message(s, location);
 }
 
 auto read_system_setting(const std::string& path_str) -> std::vector<std::string> {
@@ -189,7 +201,8 @@ auto sys_class_path_to_mounting_path(const std::string& sys_class_path) -> std::
 
   std::ifstream infile("/proc/self/mounts");
 
-  std::string psm_dev_path, mounting_point;
+  std::string psm_dev_path;
+  std::string mounting_point;
 
   while (infile >> psm_dev_path >> mounting_point) {
     if (psm_dev_path.starts_with(dev_path)) {
@@ -203,7 +216,8 @@ auto sys_class_path_to_mounting_path(const std::string& sys_class_path) -> std::
 auto mounting_path_to_sys_class_path(const std::string& mounting_path) -> std::string {
   std::ifstream infile("/proc/self/mounts");
 
-  std::string psm_dev_path, psm_mounting_point;
+  std::string psm_dev_path;
+  std::string psm_mounting_point;
 
   while (infile >> psm_dev_path >> psm_mounting_point) {
     if (psm_mounting_point == mounting_path && psm_dev_path.starts_with("/dev/")) {

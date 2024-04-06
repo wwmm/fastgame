@@ -1,5 +1,0 @@
-meson setup _build --prefix=/tmp/fg -Db_sanitize=address,undefined
-
-G_SLICE=always-malloc G_DEBUG=gc-friendly ./fastgame
-
-export LSAN_OPTIONS="print_suppressions=false:suppressions=/path/to/fastgame-lsan-suppressions.txt"

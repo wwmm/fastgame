@@ -51,7 +51,7 @@ Kirigami.ScrollablePage {
             FgSpinBox {
                 id: niceness
 
-                label: "Niceness"
+                label: i18n("Niceness")
                 from: -20
                 to: 19
                 value: 0
@@ -62,7 +62,7 @@ Kirigami.ScrollablePage {
             FgSpinBox {
                 id: autogroupNiceness
 
-                label: "Autogroup Niceness"
+                label: i18n("Autogroup Niceness")
                 from: -20
                 to: 19
                 value: 0
@@ -73,7 +73,7 @@ Kirigami.ScrollablePage {
             FgSpinBox {
                 id: timerSlack
 
-                label: "Timer Slack"
+                label: i18n("Timer Slack")
                 unit: "ns"
                 from: 1
                 to: 1e+08
@@ -154,7 +154,7 @@ Kirigami.ScrollablePage {
             FormCard.FormTextFieldDelegate {
                 id: gameAffinity
 
-                label: "Game Affinity"
+                label: i18n("Game Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
                 text: FGCpuBackend.gameAffinity
 
@@ -167,7 +167,7 @@ Kirigami.ScrollablePage {
             FormCard.FormTextFieldDelegate {
                 id: wineServerAffinity
 
-                label: "Wine Server Affinity"
+                label: i18n("Wine Server Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
                 text: FGCpuBackend.wineServerAffinity
 

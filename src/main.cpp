@@ -15,6 +15,7 @@
 #include "config.h"
 #include "cpu.hpp"
 #include "environment_variables.hpp"
+#include "memory.hpp"
 
 void construct_about_window() {
   KAboutData aboutData(
@@ -58,6 +59,7 @@ int main(int argc, char* argv[]) {
   envvars::Model envVarsModel;
   cmdargs::Model cmdArgsModel;
   cpu::Backend cpuBackend;
+  memory::Backend memoryBackend;
 
   QQmlApplicationEngine engine;
 

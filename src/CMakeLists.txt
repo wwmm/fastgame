@@ -5,11 +5,10 @@ add_executable(fastgame)
 target_sources(fastgame PRIVATE
     combobox_model.cpp
     command_line_arguments.cpp
-    command_line_arguments.hpp
     cpu.cpp
     main.cpp
+    memory.cpp
     environment_variables.cpp
-    environment_variables.hpp
     util.cpp
     resources.qrc
 )

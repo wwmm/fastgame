@@ -28,10 +28,9 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
-    Kirigami.Page {
+    Memory {
         id: memory
 
-        title: i18n("Memory")
         visible: false
     }
 

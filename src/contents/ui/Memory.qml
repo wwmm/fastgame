@@ -41,7 +41,7 @@ Kirigami.ScrollablePage {
 
                 text: i18n("Defrag")
                 displayMode: FormCard.FormComboBoxDelegate.ComboBox
-                currentIndex: 0
+                currentIndex: FGMemoryBackend.thpDefrag
                 editable: false
                 model: FGModelThpDefrag
 
@@ -58,7 +58,7 @@ Kirigami.ScrollablePage {
 
                 text: i18n("Shared Memory Enabled")
                 displayMode: FormCard.FormComboBoxDelegate.ComboBox
-                currentIndex: 0
+                currentIndex: FGMemoryBackend.thpShmemEnabled
                 editable: false
                 model: FGModelThpShmemEnabled
 

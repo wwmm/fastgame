@@ -69,6 +69,16 @@ void ComboBoxModel::append(const QString& value) {
   emit dataChanged(index(0), index(list.size() - 1));
 }
 
+void ComboBoxModel::reset() {
+  beginResetModel();
+
+  list.clear();
+
+  endResetModel();
+
+  // emit dataChanged(index(0), index(current_size - 1));
+}
+
 void ComboBoxModel::remove(const int& rowIndex) {
   beginRemoveRows(QModelIndex(), rowIndex, rowIndex);
 

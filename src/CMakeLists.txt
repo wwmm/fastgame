@@ -6,6 +6,7 @@ target_sources(fastgame PRIVATE
     combobox_model.cpp
     command_line_arguments.cpp
     cpu.cpp
+    disk.cpp
     main.cpp
     memory.cpp
     environment_variables.cpp

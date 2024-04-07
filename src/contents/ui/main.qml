@@ -34,10 +34,9 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
-    Kirigami.Page {
+    Disk {
         id: disk
 
-        title: i18n("Disk")
         visible: false
     }
 

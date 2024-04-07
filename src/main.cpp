@@ -14,6 +14,7 @@
 #include "command_line_arguments.hpp"
 #include "config.h"
 #include "cpu.hpp"
+#include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
 
@@ -60,6 +61,7 @@ int main(int argc, char* argv[]) {
   cmdargs::Model cmdArgsModel;
   cpu::Backend cpuBackend;
   memory::Backend memoryBackend;
+  disk::Backend diskBackend;
 
   QQmlApplicationEngine engine;
 

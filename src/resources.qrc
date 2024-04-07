@@ -2,6 +2,7 @@
     <qresource prefix="/ui">
         <file alias="CommandLineArguments.qml">contents/ui/CommandLineArguments.qml</file>
         <file alias="Cpu.qml">contents/ui/Cpu.qml</file>
+        <file alias="Disk.qml">contents/ui/Disk.qml</file>
         <file alias="EnvironmentVariables.qml">contents/ui/EnvironmentVariables.qml</file>
         <file alias="FgSpinBox.qml">contents/ui/FgSpinBox.qml</file>
         <file alias="main.qml">contents/ui/main.qml</file>

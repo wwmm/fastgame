@@ -41,6 +41,10 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
 
 find_package(Threads REQUIRED)
 
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(UDISKS2 REQUIRED udisks2 gio-2.0 gobject-2.0 glib-2.0)
+# include_directories(${UDISKS2_INCLUDE_DIRS})
+
 add_subdirectory(src)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

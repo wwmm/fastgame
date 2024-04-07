@@ -25,6 +25,11 @@ class Backend : public QObject {
 
   Q_PROPERTY(int timerSlack READ timerSlack WRITE setTimerSlack NOTIFY timerSlackChanged)
 
+  Q_PROPERTY(QString gameAffinity READ gameAffinity WRITE setGameAffinity NOTIFY gameAffinityChanged)
+
+  Q_PROPERTY(
+      QString wineServerAffinity READ wineServerAffinity WRITE setWineServerAffinity NOTIFY wineServerAffinityChanged)
+
  public:
   explicit Backend(QObject* parent = nullptr);
 
@@ -35,6 +40,8 @@ class Backend : public QObject {
   [[nodiscard]] auto frequencyGovernor() const -> int;
   [[nodiscard]] auto pcieAspmPolicy() const -> int;
   [[nodiscard]] auto timerSlack() const -> int;
+  [[nodiscard]] auto gameAffinity() const -> QString;
+  [[nodiscard]] auto wineServerAffinity() const -> QString;
 
   void setUseSchedBatch(const bool& value);
   void setRealtimeWineserver(const bool& value);
@@ -43,6 +50,8 @@ class Backend : public QObject {
   void setFrequencyGovernor(const int& value);
   void setPcieAspmPolicy(const int& value);
   void setTimerSlack(const int& value);
+  void setGameAffinity(const QString& value);
+  void setWineServerAffinity(const QString& value);
 
  signals:
   void useSchedBatchChanged();
@@ -52,6 +61,8 @@ class Backend : public QObject {
   void frequencyGovernorChanged();
   void pcieAspmPolicyChanged();
   void timerSlackChanged();
+  void gameAffinityChanged();
+  void wineServerAffinityChanged();
 
  private:
   bool _useSchedBatch = false;
@@ -62,6 +73,9 @@ class Backend : public QObject {
   int _frequencyGovernor;
   int _pcieAspmPolicy;
   int _timerSlack;
+
+  QString _gameAffinity;
+  QString _wineServerAffinity;
 
   ComboBoxModel frequencyGovernorModel;
   ComboBoxModel pciAspmPolicyModel;

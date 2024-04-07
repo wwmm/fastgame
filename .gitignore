@@ -1,10 +1,65 @@
+__pycache__
 _build
 build
+build-dir
+locale
+gschemas.compiled
+obj-*-linux-gnu
 .vscode
-profiles
 node_modules
 package-lock.json
-package.json
 compile_commands.json
 .clangd
 .cache
+
+# Compiled python modules.
+*.pyc
+
+# binary language files
+*.mo
+
+# patches
+*.patch
+
+\.python-version
+
+# exclude debian building logs and other junk
+debian/*
+!debian/changelog
+!debian/changelog.tpl
+!debian/compat
+!debian/control
+!debian/copyright
+!debian/docs
+!debian/pycompat
+!debian/rules
+!debian/source/format
+!debian/build-ppa.sh
+!debian/*.install
+!debian/*lintian-overrides
+!debian/watch
+!debian/patches
+!debian/patches/*.patch
+!debian/source
+
+/build-ppa.sh
+
+# Dolphin file manager creates the file .directory to save some folder-specific settings
+*.directory
+
+*-build-deps*.deb
+
+.build-tools.cson
+
+ppastats
+.autobuild
+
+# exclude flatpak build directories
+build-dir
+util/flatpak/repo
+.flatpak
+.flatpak-builder
+
+# explictly include flatpak patch/shared-modules directory which includes usually ignored patch files
+!util/flatpak/patch/**/*.patch
+!util/flatpak/shared-modules/linux-audio/**/*.patch

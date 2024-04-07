@@ -105,6 +105,26 @@ void Backend::setTimerSlack(const int& value) {
   Q_EMIT timerSlackChanged();
 }
 
+auto Backend::gameAffinity() const -> QString {
+  return _gameAffinity;
+}
+
+void Backend::setGameAffinity(const QString& value) {
+  _gameAffinity = value;
+
+  Q_EMIT gameAffinityChanged();
+}
+
+auto Backend::wineServerAffinity() const -> QString {
+  return _wineServerAffinity;
+}
+
+void Backend::setWineServerAffinity(const QString& value) {
+  _wineServerAffinity = value;
+
+  Q_EMIT wineServerAffinityChanged();
+}
+
 void Backend::initFreqGovernor() {
   /* We assume that all cores are set to the same frequency governor and that the system has at least one core. In
      this case reading the core 0 property should be enough

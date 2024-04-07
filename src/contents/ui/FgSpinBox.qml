@@ -10,6 +10,7 @@ https://bugreports.qt.io/browse/QTBUG-67349
 
  */
 
+import "Common.js" as Common
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -33,10 +34,6 @@ FormCard.AbstractFormDelegate {
     property int boxWidth: 10 * Kirigami.Units.gridUnit
 
     signal valueModified()
-
-    function isEmpty(str) {
-        return (!str || str.length === 0);
-    }
 
     focusPolicy: Kirigami.Settings.isMobile ? Qt.StrongFocus : Qt.NoFocus
     background: null
@@ -79,7 +76,7 @@ FormCard.AbstractFormDelegate {
                 editable: control.editable
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 textFromValue: (value, locale) => {
-                    let unit_str = (isEmpty(unit)) ? "" : " " + unit;
+                    let unit_str = (Common.isEmpty(unit)) ? "" : " " + unit;
                     // console.log(locale.numberOptions);
                     locale.numberOptions = Locale.OmitGroupSeparator;
                     return Number(value / spinbox.decimalFactor).toLocaleString(locale, 'f', control.decimals) + unit_str;

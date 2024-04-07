@@ -150,6 +150,35 @@ Kirigami.ScrollablePage {
 
         }
 
+        FormCard.FormCard {
+            FormCard.FormTextFieldDelegate {
+                id: gameAffinity
+
+                label: "Game Affinity"
+                placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
+                text: FGCpuBackend.gameAffinity
+
+                validator: RegularExpressionValidator {
+                    regularExpression: /^[,0-9]+$/
+                }
+
+            }
+
+            FormCard.FormTextFieldDelegate {
+                id: wineServerAffinity
+
+                label: "Wine Server Affinity"
+                placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
+                text: FGCpuBackend.wineServerAffinity
+
+                validator: RegularExpressionValidator {
+                    regularExpression: /^[,0-9]+$/
+                }
+
+            }
+
+        }
+
     }
 
 }

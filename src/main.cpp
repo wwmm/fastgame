@@ -1,6 +1,6 @@
 #include <kaboutdata.h>
 #include <klocalizedcontext.h>
-#include <qcoreapplication.h>
+#include <qobject.h>
 #include <qqml.h>
 #include <qqmlapplicationengine.h>
 #include <qquickstyle.h>
@@ -9,7 +9,7 @@
 #include <qurl.h>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QtQml>
 #include "command_line_arguments.hpp"
 #include "config.h"
@@ -43,13 +43,12 @@ void construct_about_window() {
 }
 
 int main(int argc, char* argv[]) {
-  QGuiApplication app(argc, argv);
+  QApplication app(argc, argv);
 
   KLocalizedString::setApplicationDomain(APPLICATION_DOMAIN);
   QCoreApplication::setOrganizationName(QStringLiteral(ORGANIZATION_NAME));
   QCoreApplication::setOrganizationDomain(QStringLiteral(ORGANIZATION_DOMAIN));
   QCoreApplication::setApplicationName(QStringLiteral("FastGame"));
-  QGuiApplication::setApplicationDisplayName(QStringLiteral("FastGame"));
 
   if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
     QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
@@ -72,5 +71,5 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  return QGuiApplication::exec();
+  return QApplication::exec();
 }

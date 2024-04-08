@@ -49,14 +49,22 @@ Kirigami.ScrollablePage {
             }
 
             FgSpinBox {
-                id: niceness
+                id: readahead
 
-                label: i18n("Niceness")
-                from: -20
-                to: 19
-                value: 0
+                label: i18n("Readahead")
+                from: 0
+                to: 1e+06
+                value: FGDiskBackend.readahead
                 decimals: 0
                 stepSize: 1
+                unit: "KB"
+
+                Binding {
+                    target: FGDiskBackend
+                    property: "readahead"
+                    value: readahead.value
+                }
+
             }
 
             FgSpinBox {
@@ -93,86 +101,40 @@ Kirigami.ScrollablePage {
 
         FormCard.FormCard {
             FormCard.FormSwitchDelegate {
-                id: useSchedBatch
+                id: enableRealtimePriority
 
-                text: i18n("Use the Batch Scheduler")
-                checked: FGDiskBackend.useSchedBatch
+                text: i18n("Realtime Priority")
+                checked: FGDiskBackend.enableRealtimePriority
 
                 Binding {
                     target: FGDiskBackend
-                    property: "useSchedBatch"
-                    value: useSchedBatch.checked
+                    property: "enableRealtimePriority"
+                    value: enableRealtimePriority.checked
                 }
 
             }
 
             FormCard.FormSwitchDelegate {
-                id: realtimeWineserver
+                id: addRandom
 
-                text: i18n("Realtime Wineserver")
-                checked: FGDiskBackend.realtimeWineserver
-
-                Binding {
-                    target: FGDiskBackend
-                    property: "realtimeWineserver"
-                    value: realtimeWineserver.checked
-                }
-
-            }
-
-            FormCard.FormSwitchDelegate {
-                id: enableWatchdog
-
-                text: i18n("Enable Watchdog")
-                checked: FGDiskBackend.enableWatchdog
+                text: i18n("Add Random")
+                checked: FGDiskBackend.addRandom
 
                 Binding {
                     target: FGDiskBackend
-                    property: "enableWatchdog"
-                    value: enableWatchdog.checked
+                    property: "addRandom"
+                    value: addRandom.checked
                 }
 
             }
 
-            FormCard.FormSwitchDelegate {
-                id: useDiskDmaLatency
-
-                text: i18n("Use /dev/disk_dma_latency")
-                checked: FGDiskBackend.useDiskDmaLatency
+            Controls.Switch {
+                checked: FGDiskBackend.addRandom
 
                 Binding {
                     target: FGDiskBackend
-                    property: "useDiskDmaLatency"
-                    value: useDiskDmaLatency.checked
-                }
-
-            }
-
-        }
-
-        FormCard.FormCard {
-            FormCard.FormTextFieldDelegate {
-                id: gameAffinity
-
-                label: i18n("Game Affinity")
-                placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                text: FGDiskBackend.gameAffinity
-
-                validator: RegularExpressionValidator {
-                    regularExpression: /^[,0-9]+$/
-                }
-
-            }
-
-            FormCard.FormTextFieldDelegate {
-                id: wineServerAffinity
-
-                label: i18n("Wine Server Affinity")
-                placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                text: FGDiskBackend.wineServerAffinity
-
-                validator: RegularExpressionValidator {
-                    regularExpression: /^[,0-9]+$/
+                    property: "addRandom"
+                    value: addRandom.checked
                 }
 
             }

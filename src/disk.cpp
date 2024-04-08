@@ -36,39 +36,61 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     }
   }
 
-  connect(this, &Backend::mountingPathChanged, [this]() { init_scheduler(); });
+  connect(this, &Backend::mountingPathChanged, [this]() {
+    auto sys_class_path =
+        util::mounting_path_to_sys_class_path(mountingPathModel.getValue(_mountingPath).toStdString());
+
+    init_scheduler(sys_class_path);
+
+    setAddRandom(false);
+    util::warning(sys_class_path);
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"s); !list.empty()) {
+      setReadahead(std::stoi(list[0]));
+    }
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/add_random"s); !list.empty()) {
+      setAddRandom(static_cast<bool>(std::stoi(list[0])));
+    } else {
+      // setAddRandom(false);
+    }
+  });
 
   setMountingPath(0);
 }
 
-auto Backend::useSchedBatch() const -> bool {
-  return _useSchedBatch;
+auto Backend::readahead() const -> int {
+  return _readahead;
 }
 
-void Backend::setUseSchedBatch(const bool& value) {
-  _useSchedBatch = value;
+void Backend::setReadahead(const int& value) {
+  _readahead = value;
 
-  Q_EMIT useSchedBatchChanged();
+  Q_EMIT readaheadChanged();
 }
 
-auto Backend::realtimeWineserver() const -> bool {
-  return _realtimeWineserver;
+auto Backend::enableRealtimePriority() const -> bool {
+  return _enableRealtimePriority;
 }
 
-void Backend::setRealtimeWineserver(const bool& value) {
-  _realtimeWineserver = value;
+void Backend::setEnableRealtimePriority(const bool& value) {
+  _enableRealtimePriority = value;
 
-  Q_EMIT realtimeWineserverChanged();
+  Q_EMIT enableRealtimePriorityChanged();
 }
 
-auto Backend::enableWatchdog() const -> bool {
-  return _enableWatchdog;
+auto Backend::addRandom() const -> bool {
+  return _addRandom;
 }
 
-void Backend::setEnableWatchdog(const bool& value) {
-  _enableWatchdog = value;
+void Backend::setAddRandom(const bool& value) {
+  // if (_addRandom == value) {
+  //   return;
+  // }
 
-  Q_EMIT enableWatchdogChanged();
+  _addRandom = value;
+
+  Q_EMIT addRandomChanged();
 }
 
 auto Backend::useDiskDmaLatency() const -> bool {
@@ -139,9 +161,7 @@ void Backend::setWineServerAffinity(const QString& value) {
   Q_EMIT wineServerAffinityChanged();
 }
 
-void Backend::init_scheduler() {
-  auto sys_class_path = util::mounting_path_to_sys_class_path(mountingPathModel.getValue(_mountingPath).toStdString());
-
+void Backend::init_scheduler(const std::string& sys_class_path) {
   auto scheduler_list = util::read_system_setting(sys_class_path + "/queue/scheduler");
 
   auto scheduler_value = util::get_selected_value(scheduler_list);

@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
+#include <string>
 #include "combobox_model.hpp"
 
 namespace disk {
@@ -14,12 +15,12 @@ class Backend : public QObject {
 
   Q_PROPERTY(int scheduler READ scheduler WRITE setScheduler NOTIFY schedulerChanged)
 
-  Q_PROPERTY(bool useSchedBatch READ useSchedBatch WRITE setUseSchedBatch NOTIFY useSchedBatchChanged)
+  Q_PROPERTY(int readahead READ readahead WRITE setReadahead NOTIFY readaheadChanged)
 
-  Q_PROPERTY(
-      bool realtimeWineserver READ realtimeWineserver WRITE setRealtimeWineserver NOTIFY realtimeWineserverChanged)
+  Q_PROPERTY(bool enableRealtimePriority READ enableRealtimePriority WRITE setEnableRealtimePriority NOTIFY
+                 enableRealtimePriorityChanged)
 
-  Q_PROPERTY(bool enableWatchdog READ enableWatchdog WRITE setEnableWatchdog NOTIFY enableWatchdogChanged)
+  Q_PROPERTY(bool addRandom READ addRandom WRITE setAddRandom NOTIFY addRandomChanged)
 
   Q_PROPERTY(bool useDiskDmaLatency READ useDiskDmaLatency WRITE setUseDiskDmaLatency NOTIFY useDiskDmaLatencyChanged)
 
@@ -35,9 +36,9 @@ class Backend : public QObject {
 
   [[nodiscard]] auto mountingPath() const -> int;
   [[nodiscard]] auto scheduler() const -> int;
-  [[nodiscard]] auto useSchedBatch() const -> bool;
-  [[nodiscard]] auto realtimeWineserver() const -> bool;
-  [[nodiscard]] auto enableWatchdog() const -> bool;
+  [[nodiscard]] auto readahead() const -> int;
+  [[nodiscard]] auto enableRealtimePriority() const -> bool;
+  [[nodiscard]] auto addRandom() const -> bool;
   [[nodiscard]] auto useDiskDmaLatency() const -> bool;
   [[nodiscard]] auto timerSlack() const -> int;
   [[nodiscard]] auto gameAffinity() const -> QString;
@@ -45,9 +46,9 @@ class Backend : public QObject {
 
   void setMountingPath(const int& value);
   void setScheduler(const int& value);
-  void setUseSchedBatch(const bool& value);
-  void setRealtimeWineserver(const bool& value);
-  void setEnableWatchdog(const bool& value);
+  void setReadahead(const int& value);
+  void setEnableRealtimePriority(const bool& value);
+  void setAddRandom(const bool& value);
   void setUseDiskDmaLatency(const bool& value);
   void setTimerSlack(const int& value);
   void setGameAffinity(const QString& value);
@@ -56,22 +57,22 @@ class Backend : public QObject {
  signals:
   void mountingPathChanged();
   void schedulerChanged();
-  void useSchedBatchChanged();
-  void realtimeWineserverChanged();
-  void enableWatchdogChanged();
+  void readaheadChanged();
+  void enableRealtimePriorityChanged();
+  void addRandomChanged();
   void useDiskDmaLatencyChanged();
   void timerSlackChanged();
   void gameAffinityChanged();
   void wineServerAffinityChanged();
 
  private:
-  bool _useSchedBatch = false;
-  bool _realtimeWineserver = false;
-  bool _enableWatchdog = false;
+  bool _enableRealtimePriority = false;
+  bool _addRandom = false;
   bool _useDiskDmaLatency = false;
 
   int _mountingPath = -1;
   int _scheduler;
+  int _readahead;
   int _timerSlack;
 
   QString _gameAffinity;
@@ -80,7 +81,7 @@ class Backend : public QObject {
   ComboBoxModel mountingPathModel;
   ComboBoxModel schedulerModel;
 
-  void init_scheduler();
+  void init_scheduler(const std::string& sys_class_path);
 };
 
 }  // namespace disk

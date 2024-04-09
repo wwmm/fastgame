@@ -42,9 +42,6 @@ Backend::Backend(QObject* parent) : QObject(parent) {
 
     init_scheduler(sys_class_path);
 
-    setAddRandom(false);
-    util::warning(sys_class_path);
-
     if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"s); !list.empty()) {
       setReadahead(std::stoi(list[0]));
     }
@@ -52,7 +49,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     if (const auto list = util::read_system_setting(sys_class_path + "/queue/add_random"s); !list.empty()) {
       setAddRandom(static_cast<bool>(std::stoi(list[0])));
     } else {
-      // setAddRandom(false);
+      setAddRandom(false);
     }
   });
 
@@ -84,10 +81,6 @@ auto Backend::addRandom() const -> bool {
 }
 
 void Backend::setAddRandom(const bool& value) {
-  // if (_addRandom == value) {
-  //   return;
-  // }
-
   _addRandom = value;
 
   Q_EMIT addRandomChanged();
@@ -122,10 +115,6 @@ auto Backend::scheduler() const -> int {
 }
 
 void Backend::setScheduler(const int& value) {
-  if (_scheduler == value) {
-    return;
-  }
-
   _scheduler = value;
 
   Q_EMIT schedulerChanged();

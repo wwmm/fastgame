@@ -39,13 +39,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGDiskBackend.scheduler
                 editable: false
                 model: FGModelScheduler
+                onActivated: (idx) => {
+                    if (idx !== FGDiskBackend.scheduler)
+                        FGDiskBackend.scheduler = idx;
 
-                Binding {
-                    target: FGDiskBackend
-                    property: "scheduler"
-                    value: scheduler.currentIndex
                 }
-
             }
 
             FgSpinBox {
@@ -65,17 +63,6 @@ Kirigami.ScrollablePage {
                     value: readahead.value
                 }
 
-            }
-
-            FgSpinBox {
-                id: autogroupNiceness
-
-                label: i18n("Autogroup Niceness")
-                from: -20
-                to: 19
-                value: 0
-                decimals: 0
-                stepSize: 1
             }
 
             FgSpinBox {
@@ -100,43 +87,28 @@ Kirigami.ScrollablePage {
         }
 
         FormCard.FormCard {
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: enableRealtimePriority
 
-                text: i18n("Realtime Priority")
+                label: i18n("Realtime Priority")
                 checked: FGDiskBackend.enableRealtimePriority
+                onCheckedChanged: {
+                    if (checked !== FGDiskBackend.enableRealtimePriority)
+                        FGDiskBackend.enableRealtimePriority = checked;
 
-                Binding {
-                    target: FGDiskBackend
-                    property: "enableRealtimePriority"
-                    value: enableRealtimePriority.checked
                 }
-
             }
 
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: addRandom
 
-                text: i18n("Add Random")
-                checked: FGDiskBackend.addRandom
+                label: i18n("Add Random")
+                isChecked: FGDiskBackend.addRandom
+                onCheckedChanged: {
+                    if (isChecked !== FGDiskBackend.addRandom)
+                        FGDiskBackend.addRandom = isChecked;
 
-                Binding {
-                    target: FGDiskBackend
-                    property: "addRandom"
-                    value: addRandom.checked
                 }
-
-            }
-
-            Controls.Switch {
-                checked: FGDiskBackend.addRandom
-
-                Binding {
-                    target: FGDiskBackend
-                    property: "addRandom"
-                    value: addRandom.checked
-                }
-
             }
 
         }

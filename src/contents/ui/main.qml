@@ -58,7 +58,7 @@ Kirigami.ApplicationWindow {
 
     globalDrawer: Kirigami.GlobalDrawer {
         drawerOpen: true
-        modal: false
+        modal: Kirigami.Settings.isMobile ? true : false
         actions: [
             Kirigami.Action {
                 text: environmentVariables.title

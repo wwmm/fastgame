@@ -5,6 +5,7 @@
         <file alias="Disk.qml">contents/ui/Disk.qml</file>
         <file alias="EnvironmentVariables.qml">contents/ui/EnvironmentVariables.qml</file>
         <file alias="FgSpinBox.qml">contents/ui/FgSpinBox.qml</file>
+        <file alias="FgSwitch.qml">contents/ui/FgSwitch.qml</file>
         <file alias="main.qml">contents/ui/main.qml</file>
         <file alias="Memory.qml">contents/ui/Memory.qml</file>
         <file alias="Common.js">contents/ui/Common.js</file>

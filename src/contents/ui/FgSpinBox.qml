@@ -1,6 +1,6 @@
 /*
   It is really bizarre that qml does not have a dedicated double spinbox... It is necessary to do a hack
-  solution based on the in spinbox... Our custom spinbox code was inspired by:
+  solution based on the int spinbox... Our custom spinbox code was inspired by:
 
 https://doc.qt.io/Qt-6/qml-qtquick-controls-spinbox.html
 https://github.com/LeonnardoVerol/example-double-spinbox-component-qt-qml/blob/main/src/ui/DoubleSpinBox.qml

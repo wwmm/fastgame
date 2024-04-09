@@ -92,60 +92,52 @@ Kirigami.ScrollablePage {
         }
 
         FormCard.FormCard {
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: useSchedBatch
 
-                text: i18n("Use the Batch Scheduler")
-                checked: FGCpuBackend.useSchedBatch
+                label: i18n("Use the Batch Scheduler")
+                isChecked: FGCpuBackend.useSchedBatch
+                onCheckedChanged: {
+                    if (isChecked !== FGCpuBackend.useSchedBatch)
+                        FGCpuBackend.useSchedBatch = isChecked;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "useSchedBatch"
-                    value: useSchedBatch.checked
                 }
-
             }
 
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: realtimeWineserver
 
-                text: i18n("Realtime Wineserver")
-                checked: FGCpuBackend.realtimeWineserver
+                label: i18n("Realtime Wineserver")
+                isChecked: FGCpuBackend.realtimeWineserver
+                onCheckedChanged: {
+                    if (isChecked !== FGCpuBackend.realtimeWineserver)
+                        FGCpuBackend.realtimeWineserver = isChecked;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "realtimeWineserver"
-                    value: realtimeWineserver.checked
                 }
-
             }
 
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: enableWatchdog
 
-                text: i18n("Enable Watchdog")
-                checked: FGCpuBackend.enableWatchdog
+                label: i18n("Enable Watchdog")
+                isChecked: FGCpuBackend.enableWatchdog
+                onCheckedChanged: {
+                    if (isChecked !== FGCpuBackend.enableWatchdog)
+                        FGCpuBackend.enableWatchdog = isChecked;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "enableWatchdog"
-                    value: enableWatchdog.checked
                 }
-
             }
 
-            FormCard.FormSwitchDelegate {
+            FgSwitch {
                 id: useCpuDmaLatency
 
-                text: i18n("Use /dev/cpu_dma_latency")
-                checked: FGCpuBackend.useCpuDmaLatency
+                label: i18n("Use /dev/cpu_dma_latency")
+                isChecked: FGCpuBackend.useCpuDmaLatency
+                onCheckedChanged: {
+                    if (isChecked !== FGCpuBackend.useCpuDmaLatency)
+                        FGCpuBackend.useCpuDmaLatency = isChecked;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "useCpuDmaLatency"
-                    value: useCpuDmaLatency.checked
                 }
-
             }
 
         }

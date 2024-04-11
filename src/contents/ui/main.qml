@@ -3,12 +3,13 @@ import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import org.kde.kirigamiaddons.formcard as FormCard
 
 Kirigami.ApplicationWindow {
     id: root
 
-    title: i18nc("@title:window", "FastGame")
     pageStack.initialPage: environmentVariables
+    title: i18nc("@title:window", "FastGame")
 
     EnvironmentVariables {
         id: environmentVariables
@@ -47,22 +48,50 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
-    Component {
-        id: aboutPage
+    Kirigami.Dialog {
+        id: aboutDialog
 
         Kirigami.AboutPage {
+            implicitWidth: Kirigami.Units.gridUnit * 24
+            implicitHeight: Kirigami.Units.gridUnit * 21
             aboutData: AboutFG
         }
 
     }
 
+    Kirigami.OverlayDrawer {
+        id: presetsDrawer
+
+        edge: Qt.TopEdge
+
+        contentItem: ColumnLayout {
+            Controls.Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTr("A modal top drawer will span for the whole application window width and will darken the rest of the app. Clicking on the darkened area will dismiss the drawer.")
+            }
+
+            Controls.Button {
+                Layout.alignment: Qt.AlignRight
+                text: qsTr("Close")
+                onClicked: presetsDrawer.close()
+            }
+
+        }
+
+    }
+
     globalDrawer: Kirigami.GlobalDrawer {
+        id: globalDrawer
+
         drawerOpen: true
+        showHeaderWhenCollapsed: true
+        collapsible: true
         modal: Kirigami.Settings.isMobile ? true : false
         actions: [
             Kirigami.Action {
                 text: environmentVariables.title
-                icon.name: "text-csv"
+                icon.name: "document-properties-symbolic"
                 checked: environmentVariables.visible
                 onTriggered: {
                     if (!environmentVariables.visible) {
@@ -116,6 +145,79 @@ Kirigami.ApplicationWindow {
                 }
             }
         ]
+
+        header: Controls.GroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 0
+
+            Kirigami.ActionToolBar {
+                anchors.fill: parent
+                Layout.alignment: Qt.AlignTop
+                actions: [
+                    Kirigami.Action {
+                        text: i18n("Apply")
+                        icon.name: "dialog-ok-apply-symbolic"
+                        displayHint: Kirigami.DisplayHint.KeepVisible
+                        onTriggered: showPassiveNotification("Apply!")
+                    },
+                    Kirigami.Action {
+                        text: i18n("Presets")
+                        icon.name: "file-library-symbolic"
+                        displayHint: Kirigami.DisplayHint.KeepVisible
+                        onTriggered: {
+                            showPassiveNotification("Presets!");
+                            presetsDrawer.open();
+                        }
+                    },
+                    Kirigami.Action {
+                        text: i18n("Preferences")
+                        icon.name: "gtk-preferences"
+                        displayHint: Kirigami.DisplayHint.AlwaysHide
+                    },
+                    Kirigami.Action {
+                        text: i18n("About FastGame")
+                        icon.name: "fastgame"
+                        displayHint: Kirigami.DisplayHint.AlwaysHide
+                        onTriggered: {
+                            aboutDialog.open();
+                        }
+                    }
+                ]
+            }
+
+            background: Rectangle {
+                anchors.fill: parent
+                Kirigami.Theme.inherit: false
+                Kirigami.Theme.colorSet: Kirigami.Theme.Header
+                color: Kirigami.Theme.backgroundColor
+            }
+
+        }
+
+        footer: Controls.ToolBar {
+
+            contentItem: RowLayout {
+                Kirigami.ActionTextField {
+                    id: executableName
+
+                    visible: !globalDrawer.collapsed
+                    Layout.fillWidth: true
+                    placeholderText: i18n("Executable Name")
+                    rightActions: [
+                        Kirigami.Action {
+                            icon.name: "edit-clear"
+                            onTriggered: {
+                                executableName.text = "";
+                                executableName.accepted();
+                            }
+                        }
+                    ]
+                }
+
+            }
+
+        }
+
     }
 
 }

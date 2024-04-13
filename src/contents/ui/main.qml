@@ -65,17 +65,17 @@ Kirigami.ApplicationWindow {
 
         parent: applicationWindow().overlay
         showCloseButton: false
+        implicitWidth: Kirigami.Units.gridUnit * 30
+        implicitHeight: root.height * 0.75
 
         ListView {
             id: presetsListView
-
-            implicitWidth: Kirigami.Units.gridUnit * 30
 
             model: ListModel {
                 id: listModel
 
                 Component.onCompleted: {
-                    for (var i = 0; i < 200; ++i) {
+                    for (var i = 0; i < 100; ++i) {
                         listModel.append({
                             "title": "Item " + i
                         });
@@ -94,8 +94,9 @@ Kirigami.ApplicationWindow {
             delegate: Kirigami.SwipeListItem {
                 id: listItem
 
-                // separatorVisible: true
+                separatorVisible: true
                 // alternatingBackground: true
+                backgroundColor: Kirigami.Theme.neutralBackgroundColor
                 width: ListView.view ? ListView.view.width : implicitWidth
                 actions: [
                     Kirigami.Action {
@@ -121,10 +122,6 @@ Kirigami.ApplicationWindow {
 
         }
 
-        background: Rectangle {
-            color: Kirigami.Theme.backgroundColor
-        }
-
         header: Controls.ToolBar {
 
             contentItem: ColumnLayout {
@@ -134,24 +131,54 @@ Kirigami.ApplicationWindow {
                     visible: !globalDrawer.collapsed
                     Layout.fillWidth: true
                     placeholderText: i18n("New Preset Name")
+                    // based on https://github.com/KDE/kirigami/blob/master/src/controls/SearchField.qml
+                    leftPadding: {
+                        if (effectiveHorizontalAlignment === TextInput.AlignRight)
+                            return _rightActionsRow.width + Kirigami.Units.smallSpacing;
+                        else
+                            return presetCreationIcon.width + Kirigami.Units.smallSpacing * 3;
+                    }
+                    rightPadding: {
+                        if (effectiveHorizontalAlignment === TextInput.AlignRight)
+                            return presetCreationIcon.width + Kirigami.Units.smallSpacing * 3;
+                        else
+                            return _rightActionsRow.width + Kirigami.Units.smallSpacing;
+                    }
                     rightActions: [
                         Kirigami.Action {
-                            icon.name: "gtk-add-symbolic"
-                            onTriggered: {
-                                presetName.text = "";
-                                presetName.accepted();
-                                showPassiveNotification("New Preset Created!");
-                            }
-                        },
-                        Kirigami.Action {
+                            text: i18n("Import Preset File")
                             icon.name: "document-import-symbolic"
                             onTriggered: {
                                 presetName.text = "";
                                 presetName.accepted();
-                                showPassiveNotification("Preset file imported!");
+                                showPassiveNotification(i18n("Preset file imported!"));
+                            }
+                        },
+                        Kirigami.Action {
+                            text: i18n("Create Preset")
+                            icon.name: "list-add-symbolic"
+                            onTriggered: {
+                                presetName.text = "";
+                                presetName.accepted();
+                                showPassiveNotification(i18n("New Preset Created!"));
                             }
                         }
                     ]
+
+                    Kirigami.Icon {
+                        id: presetCreationIcon
+
+                        LayoutMirroring.enabled: presetName.effectiveHorizontalAlignment === TextInput.AlignRight
+                        anchors.left: presetName.left
+                        anchors.leftMargin: Kirigami.Units.smallSpacing * 2
+                        anchors.verticalCenter: presetName.verticalCenter
+                        anchors.verticalCenterOffset: Math.round((presetName.topPadding - presetName.bottomPadding) / 2)
+                        implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
+                        implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
+                        color: presetName.placeholderTextColor
+                        source: "bookmarks-symbolic"
+                    }
+
                 }
 
                 Kirigami.SearchField {
@@ -261,7 +288,7 @@ Kirigami.ApplicationWindow {
                     },
                     Kirigami.Action {
                         text: i18n("Presets")
-                        icon.name: "file-library-symbolic"
+                        icon.name: "bookmarks-symbolic"
                         displayHint: Kirigami.DisplayHint.KeepVisible
                         onTriggered: {
                             presetsSheet.open();

@@ -60,22 +60,131 @@ Kirigami.ApplicationWindow {
 
     }
 
-    Kirigami.OverlayDrawer {
-        id: presetsDrawer
+    Kirigami.OverlaySheet {
+        id: presetsSheet
 
-        edge: Qt.TopEdge
+        parent: applicationWindow().overlay
 
-        contentItem: ColumnLayout {
-            Controls.Label {
-                Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                text: qsTr("A modal top drawer will span for the whole application window width and will darken the rest of the app. Clicking on the darkened area will dismiss the drawer.")
+        ListView {
+            id: presetsListView
+
+            implicitWidth: Kirigami.Units.gridUnit * 30
+
+            model: ListModel {
+                id: listModel
+
+                Component.onCompleted: {
+                    for (var i = 0; i < 200; ++i) {
+                        listModel.append({
+                            "title": "Item " + i
+                        });
+                    }
+                }
             }
 
-            Controls.Button {
-                Layout.alignment: Qt.AlignRight
-                text: qsTr("Close")
-                onClicked: presetsDrawer.close()
+            moveDisplaced: Transition {
+                YAnimator {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+
+            }
+
+            delegate: Kirigami.SwipeListItem {
+                id: listItem
+
+                // separatorVisible: true
+                // alternatingBackground: true
+                width: ListView.view ? ListView.view.width : implicitWidth
+                actions: [
+                    Kirigami.Action {
+                        icon.name: "document-save"
+                        onTriggered: print("saved")
+                    },
+                    Kirigami.Action {
+                        icon.name: "delete"
+                        onTriggered: print("removed")
+                    }
+                ]
+
+                contentItem: RowLayout {
+                    Kirigami.ListItemDragHandle {
+                        listItem: listItem
+                        listView: presetsListView
+                        onMoveRequested: (oldIndex, newIndex) => {
+                            listModel.move(oldIndex, newIndex, 1);
+                        }
+                    }
+
+                    Controls.Label {
+                        Layout.fillWidth: true
+                        height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
+                        text: model.title
+                    }
+
+                }
+
+            }
+
+        }
+
+        background: Rectangle {
+            color: Kirigami.Theme.backgroundColor
+        }
+
+        header: Controls.ToolBar {
+
+            contentItem: ColumnLayout {
+                Kirigami.ActionTextField {
+                    id: presetName
+
+                    visible: !globalDrawer.collapsed
+                    Layout.fillWidth: true
+                    placeholderText: i18n("New Preset Name")
+                    rightActions: [
+                        Kirigami.Action {
+                            icon.name: "gtk-add-symbolic"
+                            onTriggered: {
+                                presetName.text = "";
+                                presetName.accepted();
+                                showPassiveNotification("New Preset Created!");
+                            }
+                        },
+                        Kirigami.Action {
+                            icon.name: "document-import-symbolic"
+                            onTriggered: {
+                                presetName.text = "";
+                                presetName.accepted();
+                                showPassiveNotification("Preset file imported!");
+                            }
+                        }
+                    ]
+                }
+
+                Kirigami.SearchField {
+                    id: presetSearch
+
+                    visible: !globalDrawer.collapsed
+                    Layout.fillWidth: true
+                    placeholderText: i18n("Preset Name")
+                    rightActions: [
+                        Kirigami.Action {
+                            icon.name: "edit-clear"
+                            onTriggered: {
+                                executableName.text = "";
+                                executableName.accepted();
+                            }
+                        }
+                    ]
+                }
+
+            }
+
+        }
+
+        footer: RowLayout {
+            Controls.Label {
+                text: qsTr("Last used Preset:")
             }
 
         }
@@ -162,8 +271,7 @@ Kirigami.ApplicationWindow {
                         icon.name: "file-library-symbolic"
                         displayHint: Kirigami.DisplayHint.KeepVisible
                         onTriggered: {
-                            showPassiveNotification("Presets!");
-                            presetsDrawer.open();
+                            presetsSheet.open();
                         }
                     },
                     Kirigami.Action {

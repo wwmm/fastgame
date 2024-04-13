@@ -22,14 +22,13 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool addRandom READ addRandom WRITE setAddRandom NOTIFY addRandomChanged)
 
-  Q_PROPERTY(bool useDiskDmaLatency READ useDiskDmaLatency WRITE setUseDiskDmaLatency NOTIFY useDiskDmaLatencyChanged)
+  Q_PROPERTY(int nrRequests READ nrRequests WRITE setNrRequests NOTIFY nrRequestsChanged)
 
-  Q_PROPERTY(int timerSlack READ timerSlack WRITE setTimerSlack NOTIFY timerSlackChanged)
+  Q_PROPERTY(int rqAffinity READ rqAffinity WRITE setRqAffinity NOTIFY rqAffinityChanged)
 
-  Q_PROPERTY(QString gameAffinity READ gameAffinity WRITE setGameAffinity NOTIFY gameAffinityChanged)
+  Q_PROPERTY(int noMerges READ noMerges WRITE setNoMerges NOTIFY noMergesChanged)
 
-  Q_PROPERTY(
-      QString wineServerAffinity READ wineServerAffinity WRITE setWineServerAffinity NOTIFY wineServerAffinityChanged)
+  Q_PROPERTY(int wbtLatUsec READ wbtLatUsec WRITE setWbtLatUsec NOTIFY wbtLatUsecChanged)
 
  public:
   explicit Backend(QObject* parent = nullptr);
@@ -39,20 +38,20 @@ class Backend : public QObject {
   [[nodiscard]] auto readahead() const -> int;
   [[nodiscard]] auto enableRealtimePriority() const -> bool;
   [[nodiscard]] auto addRandom() const -> bool;
-  [[nodiscard]] auto useDiskDmaLatency() const -> bool;
-  [[nodiscard]] auto timerSlack() const -> int;
-  [[nodiscard]] auto gameAffinity() const -> QString;
-  [[nodiscard]] auto wineServerAffinity() const -> QString;
+  [[nodiscard]] auto nrRequests() const -> int;
+  [[nodiscard]] auto rqAffinity() const -> int;
+  [[nodiscard]] auto noMerges() const -> int;
+  [[nodiscard]] auto wbtLatUsec() const -> int;
 
   void setMountingPath(const int& value);
   void setScheduler(const int& value);
   void setReadahead(const int& value);
   void setEnableRealtimePriority(const bool& value);
   void setAddRandom(const bool& value);
-  void setUseDiskDmaLatency(const bool& value);
-  void setTimerSlack(const int& value);
-  void setGameAffinity(const QString& value);
-  void setWineServerAffinity(const QString& value);
+  void setNrRequests(const int& value);
+  void setRqAffinity(const int& value);
+  void setNoMerges(const int& value);
+  void setWbtLatUsec(const int& value);
 
  signals:
   void mountingPathChanged();
@@ -60,23 +59,22 @@ class Backend : public QObject {
   void readaheadChanged();
   void enableRealtimePriorityChanged();
   void addRandomChanged();
-  void useDiskDmaLatencyChanged();
-  void timerSlackChanged();
-  void gameAffinityChanged();
-  void wineServerAffinityChanged();
+  void nrRequestsChanged();
+  void rqAffinityChanged();
+  void noMergesChanged();
+  void wbtLatUsecChanged();
 
  private:
   bool _enableRealtimePriority = false;
   bool _addRandom = false;
-  bool _useDiskDmaLatency = false;
 
   int _mountingPath = -1;
   int _scheduler;
   int _readahead;
-  int _timerSlack;
-
-  QString _gameAffinity;
-  QString _wineServerAffinity;
+  int _nrRequests;
+  int _rqAffinity;
+  int _noMerges;
+  int _wbtLatUsec;
 
   ComboBoxModel mountingPathModel;
   ComboBoxModel schedulerModel;

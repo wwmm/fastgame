@@ -51,6 +51,22 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     } else {
       setAddRandom(false);
     }
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nr_requests"s); !list.empty()) {
+      setNrRequests(std::stoi(list[0]));
+    }
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/rq_affinity"s); !list.empty()) {
+      setRqAffinity(std::stoi(list[0]));
+    }
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nomerges"s); !list.empty()) {
+      setNoMerges(std::stoi(list[0]));
+    }
+
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/wbt_lat_usec"s); !list.empty()) {
+      setWbtLatUsec(std::stoi(list[0]));
+    }
   });
 
   setMountingPath(0);
@@ -86,14 +102,14 @@ void Backend::setAddRandom(const bool& value) {
   Q_EMIT addRandomChanged();
 }
 
-auto Backend::useDiskDmaLatency() const -> bool {
-  return _useDiskDmaLatency;
+auto Backend::rqAffinity() const -> int {
+  return _rqAffinity;
 }
 
-void Backend::setUseDiskDmaLatency(const bool& value) {
-  _useDiskDmaLatency = value;
+void Backend::setRqAffinity(const int& value) {
+  _rqAffinity = value;
 
-  Q_EMIT useDiskDmaLatencyChanged();
+  Q_EMIT rqAffinityChanged();
 }
 
 auto Backend::mountingPath() const -> int {
@@ -120,34 +136,34 @@ void Backend::setScheduler(const int& value) {
   Q_EMIT schedulerChanged();
 }
 
-auto Backend::timerSlack() const -> int {
-  return _timerSlack;
+auto Backend::nrRequests() const -> int {
+  return _nrRequests;
 }
 
-void Backend::setTimerSlack(const int& value) {
-  _timerSlack = value;
+void Backend::setNrRequests(const int& value) {
+  _nrRequests = value;
 
-  Q_EMIT timerSlackChanged();
+  Q_EMIT nrRequestsChanged();
 }
 
-auto Backend::gameAffinity() const -> QString {
-  return _gameAffinity;
+auto Backend::noMerges() const -> int {
+  return _noMerges;
 }
 
-void Backend::setGameAffinity(const QString& value) {
-  _gameAffinity = value;
+void Backend::setNoMerges(const int& value) {
+  _noMerges = value;
 
-  Q_EMIT gameAffinityChanged();
+  Q_EMIT noMergesChanged();
 }
 
-auto Backend::wineServerAffinity() const -> QString {
-  return _wineServerAffinity;
+auto Backend::wbtLatUsec() const -> int {
+  return _wbtLatUsec;
 }
 
-void Backend::setWineServerAffinity(const QString& value) {
-  _wineServerAffinity = value;
+void Backend::setWbtLatUsec(const int& value) {
+  _wbtLatUsec = value;
 
-  Q_EMIT wineServerAffinityChanged();
+  Q_EMIT wbtLatUsecChanged();
 }
 
 void Backend::init_scheduler(const std::string& sys_class_path) {

@@ -80,13 +80,9 @@ Kirigami.ScrollablePage {
                 value: FGCpuBackend.timerSlack
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGCpuBackend
-                    property: "timerSlack"
-                    value: timerSlack.value
+                onValueModified: (v) => {
+                    FGCpuBackend.timerSlack = v;
                 }
-
             }
 
         }

@@ -56,32 +56,65 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "KB"
-
-                Binding {
-                    target: FGDiskBackend
-                    property: "readahead"
-                    value: readahead.value
+                onValueModified: (v) => {
+                    FGDiskBackend.readahead = v;
                 }
-
             }
 
             FgSpinBox {
-                id: timerSlack
+                id: nrRequests
 
-                label: i18n("Timer Slack")
-                unit: "ns"
-                from: 1
-                to: 1e+08
-                value: FGDiskBackend.timerSlack
+                label: i18n("Maximum Read/Write requests")
+                from: 32
+                to: 4096
+                value: FGDiskBackend.nrRequests
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGDiskBackend
-                    property: "timerSlack"
-                    value: timerSlack.value
+                onValueModified: (v) => {
+                    FGDiskBackend.nrRequests = v;
                 }
+            }
 
+            FgSpinBox {
+                id: rqAffinity
+
+                label: i18n("RQ Affinity")
+                from: 1
+                to: 2
+                value: FGDiskBackend.rqAffinity
+                decimals: 0
+                stepSize: 1
+                onValueModified: (v) => {
+                    FGDiskBackend.rqAffinity = v;
+                }
+            }
+
+            FgSpinBox {
+                id: noMerges
+
+                label: i18n("No Merges")
+                from: 0
+                to: 2
+                value: FGDiskBackend.noMerges
+                decimals: 0
+                stepSize: 1
+                onValueModified: (v) => {
+                    FGDiskBackend.noMerges = v;
+                }
+            }
+
+            FgSpinBox {
+                id: wbtLatUsec
+
+                label: i18n("Writeback Throttling Latency")
+                from: -1
+                to: 1e+06
+                value: FGDiskBackend.wbtLatUsec
+                decimals: 0
+                stepSize: 1
+                onValueModified: (v) => {
+                    FGDiskBackend.wbtLatUsec = v;
+                }
             }
 
         }

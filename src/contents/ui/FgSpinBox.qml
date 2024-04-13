@@ -33,7 +33,7 @@ FormCard.AbstractFormDelegate {
     property string statusMessage: ""
     property int boxWidth: 10 * Kirigami.Units.gridUnit
 
-    signal valueModified()
+    signal valueModified(real value)
 
     focusPolicy: Kirigami.Settings.isMobile ? Qt.StrongFocus : Qt.NoFocus
     background: null
@@ -66,8 +66,7 @@ FormCard.AbstractFormDelegate {
                 focusPolicy: control.focusPolicy
                 wheelEnabled: true
                 onValueModified: {
-                    control.value = spinbox.value * 1 / spinbox.decimalFactor;
-                    control.valueModified();
+                    control.valueModified(spinbox.value * 1 / spinbox.decimalFactor);
                 }
                 stepSize: spinbox.decimalToInt(control.stepSize)
                 value: spinbox.decimalToInt(control.value)
@@ -77,9 +76,11 @@ FormCard.AbstractFormDelegate {
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 textFromValue: (value, locale) => {
                     let unit_str = (Common.isEmpty(unit)) ? "" : " " + unit;
-                    // console.log(locale.numberOptions);
+                    // console.log(value);
                     locale.numberOptions = Locale.OmitGroupSeparator;
-                    return Number(value / spinbox.decimalFactor).toLocaleString(locale, 'f', control.decimals) + unit_str;
+                    let t = Number(value / spinbox.decimalFactor).toLocaleString(locale, 'f', control.decimals) + unit_str;
+                    textInputSpinBox.text = t;
+                    return t;
                 }
                 valueFromText: (text, locale) => {
                     let re = /-?\d*[.,]?\d*/;
@@ -90,22 +91,24 @@ FormCard.AbstractFormDelegate {
                     return v;
                 }
 
-                validator: DoubleValidator {
-                    notation: DoubleValidator.StandardNotation
-                    decimals: control.decimals
-                    bottom: Math.min(spinbox.from, spinbox.to) * spinbox.decimalFactor
-                    top: Math.max(spinbox.from, spinbox.to) * spinbox.decimalFactor
-                }
-
                 contentItem: TextInput {
-                    // z: 2
-                    text: spinbox.textFromValue(spinbox.value, spinbox.locale)
+                    id: textInputSpinBox
+
+                    z: 2
                     font: spinbox.font
                     color: control.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
                     selectionColor: Kirigami.Theme.highlightColor
                     readOnly: !spinbox.editable
                     validator: spinbox.validator
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
+                }
+
+                validator: DoubleValidator {
+                    locale: control.locale.name
+                    notation: DoubleValidator.StandardNotation
+                    decimals: control.decimals
+                    bottom: Math.min(spinbox.from, spinbox.to) * spinbox.decimalFactor
+                    top: Math.max(spinbox.from, spinbox.to) * spinbox.decimalFactor
                 }
 
             }

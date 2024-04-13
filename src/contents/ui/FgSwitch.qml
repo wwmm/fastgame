@@ -32,7 +32,7 @@ FormCard.AbstractFormDelegate {
             id: qtSwitch
 
             onCheckedChanged: {
-                control.onCheckedChanged();
+                control.checkedChanged();
             }
             Layout.leftMargin: Kirigami.Units.largeSpacing + Kirigami.Units.smallSpacing
             enabled: control.enabled

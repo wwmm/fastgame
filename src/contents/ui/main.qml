@@ -9,6 +9,7 @@ Kirigami.ApplicationWindow {
     id: root
 
     pageStack.initialPage: environmentVariables
+    pageStack.globalToolBar.style: Kirigami.Settings.isMobile ? Kirigami.ApplicationHeaderStyle.Titles : Kirigami.ApplicationHeaderStyle.Auto
     title: i18nc("@title:window", "FastGame")
 
     EnvironmentVariables {
@@ -146,13 +147,9 @@ Kirigami.ApplicationWindow {
             }
         ]
 
-        header: Controls.GroupBox {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 0
+        header: Kirigami.AbstractApplicationHeader {
 
-            Kirigami.ActionToolBar {
-                anchors.fill: parent
-                Layout.alignment: Qt.AlignTop
+            contentItem: Kirigami.ActionToolBar {
                 actions: [
                     Kirigami.Action {
                         text: i18n("Apply")
@@ -183,13 +180,14 @@ Kirigami.ApplicationWindow {
                         }
                     }
                 ]
-            }
 
-            background: Rectangle {
-                anchors.fill: parent
-                Kirigami.Theme.inherit: false
-                Kirigami.Theme.colorSet: Kirigami.Theme.Header
-                color: Kirigami.Theme.backgroundColor
+                anchors {
+                    left: parent.left
+                    leftMargin: Kirigami.Units.smallSpacing
+                    right: parent.right
+                    rightMargin: Kirigami.Units.smallSpacing
+                }
+
             }
 
         }

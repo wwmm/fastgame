@@ -80,13 +80,9 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "ms"
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "scanSleep"
-                    value: scanSleep.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.scanSleep = v;
                 }
-
             }
 
             FgSpinBox {
@@ -99,13 +95,9 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "ms"
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "allocSleep"
-                    value: allocSleep.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.allocSleep = v;
                 }
-
             }
 
         }
@@ -125,13 +117,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.mglruMinTtlMs
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "mglruMinTtlMs"
-                    value: mglruMinTtlMs.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.mglruMinTtlMs = v;
                 }
-
             }
 
         }
@@ -150,13 +138,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.swappiness
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "swappiness"
-                    value: swappiness.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.swappiness = v;
                 }
-
             }
 
             FgSpinBox {
@@ -168,13 +152,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.cachePressure
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "cachePressure"
-                    value: cachePressure.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.cachePressure = v;
                 }
-
             }
 
             FgSpinBox {
@@ -186,13 +166,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.compactionProactiveness
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "compactionProactiveness"
-                    value: compactionProactiveness.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.compactionProactiveness = v;
                 }
-
             }
 
             FgSpinBox {
@@ -205,13 +181,9 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "KB"
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "minFreeKbytes"
-                    value: minFreeKbytes.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.minFreeKbytes = v;
                 }
-
             }
 
             FgSpinBox {
@@ -223,13 +195,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.pageLockUnfairness
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "pageLockUnfairness"
-                    value: pageLockUnfairness.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.pageLockUnfairness = v;
                 }
-
             }
 
             FgSpinBox {
@@ -241,13 +209,9 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.perCpuPagelistHighFraction
                 decimals: 0
                 stepSize: 1
-
-                Binding {
-                    target: FGMemoryBackend
-                    property: "perCpuPagelistHighFraction"
-                    value: perCpuPagelistHighFraction.value
+                onValueModified: (v) => {
+                    FGMemoryBackend.perCpuPagelistHighFraction = v;
                 }
-
             }
 
         }

@@ -14,8 +14,6 @@
 
 namespace disk {
 
-using namespace std::string_literals;
-
 Backend::Backend(QObject* parent) : QObject(parent) {
   qmlRegisterSingletonInstance<Backend>("FGDiskBackend", PROJECT_VERSION_MAJOR, 0, "FGDiskBackend", this);
 
@@ -42,29 +40,29 @@ Backend::Backend(QObject* parent) : QObject(parent) {
 
     init_scheduler(sys_class_path);
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"); !list.empty()) {
       setReadahead(std::stoi(list[0]));
     }
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/add_random"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/add_random"); !list.empty()) {
       setAddRandom(static_cast<bool>(std::stoi(list[0])));
     } else {
       setAddRandom(false);
     }
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nr_requests"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nr_requests"); !list.empty()) {
       setNrRequests(std::stoi(list[0]));
     }
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/rq_affinity"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/rq_affinity"); !list.empty()) {
       setRqAffinity(std::stoi(list[0]));
     }
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nomerges"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/nomerges"); !list.empty()) {
       setNoMerges(std::stoi(list[0]));
     }
 
-    if (const auto list = util::read_system_setting(sys_class_path + "/queue/wbt_lat_usec"s); !list.empty()) {
+    if (const auto list = util::read_system_setting(sys_class_path + "/queue/wbt_lat_usec"); !list.empty()) {
       setWbtLatUsec(std::stoi(list[0]));
     }
   });

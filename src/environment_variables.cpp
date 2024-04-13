@@ -9,13 +9,12 @@
 #include <qvariant.h>
 #include <iterator>
 #include <utility>
+#include "config.h"
 
 namespace envvars {
 
-Model envVarsModel;
-
 Model::Model(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<envvars::Model>("CppModelEnvVars", 1, 0, "CppModelEnvVars", this);
+  qmlRegisterSingletonInstance<envvars::Model>("CppModelEnvVars", PROJECT_VERSION_MAJOR, 0, "CppModelEnvVars", this);
 }
 
 int Model::rowCount(const QModelIndex& /*parent*/) const {

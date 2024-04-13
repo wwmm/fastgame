@@ -10,6 +10,7 @@ target_sources(fastgame PRIVATE
     main.cpp
     memory.cpp
     environment_variables.cpp
+    presets_manager.cpp
     util.cpp
     resources.qrc
 )

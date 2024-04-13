@@ -8,13 +8,13 @@
 #include <qtmetamacros.h>
 #include <qvariant.h>
 #include <iterator>
+#include "config.h"
 
 namespace cmdargs {
 
-Model cmdLineArgsModel;
-
 Model::Model(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<cmdargs::Model>("CppModelCmdLineArgs", 1, 0, "CppModelCmdLineArgs", this);
+  qmlRegisterSingletonInstance<cmdargs::Model>("CppModelCmdLineArgs", PROJECT_VERSION_MAJOR, 0, "CppModelCmdLineArgs",
+                                               this);
 }
 
 int Model::rowCount(const QModelIndex& /*parent*/) const {

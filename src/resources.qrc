@@ -8,6 +8,7 @@
         <file alias="FgSwitch.qml">contents/ui/FgSwitch.qml</file>
         <file alias="main.qml">contents/ui/main.qml</file>
         <file alias="Memory.qml">contents/ui/Memory.qml</file>
+        <file alias="PresetsMenu.qml">contents/ui/PresetsMenu.qml</file>
         <file alias="Common.js">contents/ui/Common.js</file>
     </qresource>
 

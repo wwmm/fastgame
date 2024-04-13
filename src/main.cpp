@@ -17,6 +17,7 @@
 #include "disk.hpp"
 #include "environment_variables.hpp"
 #include "memory.hpp"
+#include "presets_manager.hpp"
 
 void construct_about_window() {
   KAboutData aboutData(
@@ -56,11 +57,13 @@ int main(int argc, char* argv[]) {
 
   construct_about_window();
 
-  envvars::Model envVarsModel;
   cmdargs::Model cmdArgsModel;
+  envvars::Model envVarsModel;
+
   cpu::Backend cpuBackend;
-  memory::Backend memoryBackend;
   disk::Backend diskBackend;
+  memory::Backend memoryBackend;
+  presets::Backend presetsBackend;
 
   QQmlApplicationEngine engine;
 

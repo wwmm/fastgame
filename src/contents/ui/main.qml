@@ -64,6 +64,7 @@ Kirigami.ApplicationWindow {
         id: presetsSheet
 
         parent: applicationWindow().overlay
+        showCloseButton: false
 
         ListView {
             id: presetsListView
@@ -108,14 +109,6 @@ Kirigami.ApplicationWindow {
                 ]
 
                 contentItem: RowLayout {
-                    Kirigami.ListItemDragHandle {
-                        listItem: listItem
-                        listView: presetsListView
-                        onMoveRequested: (oldIndex, newIndex) => {
-                            listModel.move(oldIndex, newIndex, 1);
-                        }
-                    }
-
                     Controls.Label {
                         Layout.fillWidth: true
                         height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)

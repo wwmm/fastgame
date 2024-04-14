@@ -1,0 +1,71 @@
+#pragma once
+
+#include <qdebug.h>
+#include <qobject.h>
+#include <qtmetamacros.h>
+#include <vector>
+#include "combobox_model.hpp"
+
+namespace amdgpu {
+
+class Backend : public QObject {
+  Q_OBJECT
+
+  Q_PROPERTY(int performanceLevel0 READ performanceLevel0 WRITE setPerformanceLevel0 NOTIFY performanceLevel0Changed)
+
+  Q_PROPERTY(int powerProfile0 READ powerProfile0 WRITE setPowerProfile0 NOTIFY powerProfile0Changed)
+
+  Q_PROPERTY(int powerCap0 READ powerCap0 WRITE setPowerCap0 NOTIFY powerCap0Changed)
+
+  Q_PROPERTY(int performanceLevel1 READ performanceLevel1 WRITE setPerformanceLevel1 NOTIFY performanceLevel1Changed)
+
+  Q_PROPERTY(int powerProfile1 READ powerProfile1 WRITE setPowerProfile1 NOTIFY powerProfile1Changed)
+
+  Q_PROPERTY(int powerCap1 READ powerCap1 WRITE setPowerCap1 NOTIFY powerCap1Changed)
+
+ public:
+  explicit Backend(QObject* parent = nullptr);
+
+  [[nodiscard]] auto performanceLevel0() const -> int;
+  [[nodiscard]] auto powerProfile0() const -> int;
+  [[nodiscard]] auto powerCap0() const -> int;
+  [[nodiscard]] auto performanceLevel1() const -> int;
+  [[nodiscard]] auto powerProfile1() const -> int;
+  [[nodiscard]] auto powerCap1() const -> int;
+
+  void setPerformanceLevel0(const int& value);
+  void setPowerProfile0(const int& value);
+  void setPowerCap0(const int& value);
+  void setPerformanceLevel1(const int& value);
+  void setPowerProfile1(const int& value);
+  void setPowerCap1(const int& value);
+
+  auto get_n_cards() -> int;
+  auto get_card_indices() -> std::vector<int>;
+  void set_performance_level(const QString& name, const int& card_index);
+
+ signals:
+  void performanceLevel0Changed();
+  void powerProfile0Changed();
+  void powerCap0Changed();
+  void performanceLevel1Changed();
+  void powerProfile1Changed();
+  void powerCap1Changed();
+
+ private:
+  int _performanceLevel0 = -1;
+  int _powerProfile0;
+  int _powerCap0;
+  int _performanceLevel1 = -1;
+  int _powerProfile1;
+  int _powerCap1;
+
+  ComboBoxModel performanceLevel0Model;
+  ComboBoxModel performanceLevel1Model;
+  ComboBoxModel powerProfile0Model;
+  ComboBoxModel powerProfile1Model;
+
+  std::vector<int> card_indices;
+};
+
+}  // namespace amdgpu

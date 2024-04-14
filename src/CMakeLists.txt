@@ -3,13 +3,15 @@ configure_file(config.h.in config.h)
 add_executable(fastgame)
 
 target_sources(fastgame PRIVATE
+    amdgpu.cpp
     combobox_model.cpp
     command_line_arguments.cpp
     cpu.cpp
     disk.cpp
+    environment_variables.cpp
     main.cpp
     memory.cpp
-    environment_variables.cpp
+    nvidia.cpp
     presets_manager.cpp
     util.cpp
     resources.qrc

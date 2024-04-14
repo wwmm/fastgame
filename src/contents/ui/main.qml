@@ -42,7 +42,7 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
-    Kirigami.Page {
+    Amdgpu {
         id: amdgpu
 
         title: i18n("AMDGPU")
@@ -96,7 +96,7 @@ Kirigami.ApplicationWindow {
             },
             Kirigami.Action {
                 text: cpu.title
-                icon.name: "computer"
+                icon.name: "show-gpu-effects-symbolic"
                 checked: cpu.visible
                 onTriggered: {
                     if (!cpu.visible) {
@@ -124,6 +124,17 @@ Kirigami.ApplicationWindow {
                     if (!disk.visible) {
                         while (pageStack.depth > 0)pageStack.pop()
                         pageStack.push(disk);
+                    }
+                }
+            },
+            Kirigami.Action {
+                text: amdgpu.title
+                icon.name: "show-gpu-effects-symbolic"
+                checked: amdgpu.visible
+                onTriggered: {
+                    if (!amdgpu.visible) {
+                        while (pageStack.depth > 0)pageStack.pop()
+                        pageStack.push(amdgpu);
                     }
                 }
             }

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/ui">
         <file alias="CommandLineArguments.qml">contents/ui/CommandLineArguments.qml</file>
+        <file alias="Amdgpu.qml">contents/ui/Amdgpu.qml</file>
         <file alias="Cpu.qml">contents/ui/Cpu.qml</file>
         <file alias="Disk.qml">contents/ui/Disk.qml</file>
         <file alias="EnvironmentVariables.qml">contents/ui/EnvironmentVariables.qml</file>
@@ -8,6 +9,7 @@
         <file alias="FgSwitch.qml">contents/ui/FgSwitch.qml</file>
         <file alias="main.qml">contents/ui/main.qml</file>
         <file alias="Memory.qml">contents/ui/Memory.qml</file>
+        <file alias="Nvidia.qml">contents/ui/Nvidia.qml</file>
         <file alias="PresetsMenu.qml">contents/ui/PresetsMenu.qml</file>
         <file alias="Common.js">contents/ui/Common.js</file>
     </qresource>

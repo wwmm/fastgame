@@ -22,13 +22,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGCpuBackend.frequencyGovernor
                 editable: false
                 model: FGModelFreqGovernor
+                onActivated: (idx) => {
+                    if (idx !== FGCpuBackend.frequencyGovernor)
+                        FGCpuBackend.frequencyGovernor = idx;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "frequencyGovernor"
-                    value: frequencyGovernor.currentIndex
                 }
-
             }
 
             FormCard.FormComboBoxDelegate {
@@ -39,13 +37,11 @@ Kirigami.ScrollablePage {
                 currentIndex: 0
                 editable: false
                 model: FGModelPcieAspm
+                onActivated: (idx) => {
+                    if (idx !== FGCpuBackend.pcieAspmPolicy)
+                        FGCpuBackend.pcieAspmPolicy = idx;
 
-                Binding {
-                    target: FGCpuBackend
-                    property: "pcieAspmPolicy"
-                    value: pcieAspmPolicy.currentIndex
                 }
-
             }
 
             FgSpinBox {

@@ -27,13 +27,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpEnabled
                 editable: false
                 model: FGModelThpEnabled
+                onActivated: (idx) => {
+                    if (idx !== FGMemoryBackend.thpEnabled)
+                        FGMemoryBackend.thpEnabled = idx;
 
-                Binding {
-                    target: FGMemoryBackend
-                    property: "thpEnabled"
-                    value: thpEnabled.currentIndex
                 }
-
             }
 
             FormCard.FormComboBoxDelegate {
@@ -44,13 +42,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpDefrag
                 editable: false
                 model: FGModelThpDefrag
+                onActivated: (idx) => {
+                    if (idx !== FGMemoryBackend.thpDefrag)
+                        FGMemoryBackend.thpDefrag = idx;
 
-                Binding {
-                    target: FGMemoryBackend
-                    property: "thpDefrag"
-                    value: thpDefrag.currentIndex
                 }
-
             }
 
             FormCard.FormComboBoxDelegate {
@@ -61,13 +57,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpShmemEnabled
                 editable: false
                 model: FGModelThpShmemEnabled
+                onActivated: (idx) => {
+                    if (idx !== FGMemoryBackend.thpShmemEnabled)
+                        FGMemoryBackend.thpShmemEnabled = idx;
 
-                Binding {
-                    target: FGMemoryBackend
-                    property: "thpShmemEnabled"
-                    value: thpShmemEnabled.currentIndex
                 }
-
             }
 
             FgSpinBox {

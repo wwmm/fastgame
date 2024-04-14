@@ -22,13 +22,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGDiskBackend.mountingPath
                 editable: false
                 model: FGModelMountingPath
+                onActivated: (idx) => {
+                    if (idx !== FGDiskBackend.mountingPath)
+                        FGDiskBackend.mountingPath = idx;
 
-                Binding {
-                    target: FGDiskBackend
-                    property: "mountingPath"
-                    value: mountingPath.currentIndex
                 }
-
             }
 
             FormCard.FormComboBoxDelegate {

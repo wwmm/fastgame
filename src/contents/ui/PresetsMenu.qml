@@ -123,7 +123,7 @@ Kirigami.OverlaySheet {
             Layout.fillWidth: true
             placeholderText: i18n("Search")
             onAccepted: {
-                console.log(presetSearch.text);
+                PresetsMenuModel.filterRegularExpression = RegExp(presetSearch.text, "i");
             }
         }
 

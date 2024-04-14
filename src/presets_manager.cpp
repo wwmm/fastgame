@@ -5,6 +5,7 @@
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qqml.h>
+#include <qsortfilterproxymodel.h>
 #include <qstandardpaths.h>
 #include <qstring.h>
 #include <qtmetamacros.h>
@@ -20,9 +21,7 @@ namespace presets {
 std::filesystem::path user_presets_dir =
     (QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/fastgame").toStdString();
 
-MenuModel::MenuModel(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<MenuModel>("PresetsMenuModel", PROJECT_VERSION_MAJOR, 0, "PresetsMenuModel", this);
-}
+MenuModel::MenuModel(QObject* parent) : QAbstractListModel(parent) {}
 
 int MenuModel::rowCount(const QModelIndex& /*parent*/) const {
   return list.size();
@@ -92,6 +91,17 @@ void MenuModel::remove(const int& rowIndex) {
 }
 
 Backend::Backend(QObject* parent) : QObject(parent) {
+  auto* proxyModel = new QSortFilterProxyModel(this);
+
+  proxyModel->setSourceModel(&menuModel);
+  proxyModel->setFilterRole(MenuModel::Roles::Name);
+  proxyModel->setSortRole(MenuModel::Roles::Name);
+  proxyModel->setDynamicSortFilter(true);
+  proxyModel->sort(0);
+
+  qmlRegisterSingletonInstance<QSortFilterProxyModel>("PresetsMenuModel", PROJECT_VERSION_MAJOR, 0, "PresetsMenuModel",
+                                                      proxyModel);
+
   qmlRegisterSingletonInstance<Backend>("FGPresetsMenuBackend", PROJECT_VERSION_MAJOR, 0, "FGPresetsMenuBackend", this);
 
   if (!std::filesystem::is_directory(user_presets_dir)) {

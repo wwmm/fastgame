@@ -1,6 +1,9 @@
-import PresetsMenuModel
+import FGPresetsMenuBackend
+import FGPresetsMenuModel
+import QtCore
 import QtQuick
 import QtQuick.Controls as Controls
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
@@ -20,45 +23,84 @@ Kirigami.OverlaySheet {
     ListView {
         id: presetsListView
 
-        model: PresetsMenuModel
+        Layout.fillWidth: true
+        clip: true
+        model: FGPresetsMenuModel
+        delegate: listDelegate
 
-        moveDisplaced: Transition {
-            YAnimator {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
+        Kirigami.PlaceholderMessage {
+            anchors.centerIn: parent
+            width: parent.width - (Kirigami.Units.largeSpacing * 4)
+            visible: presetsListView.count === 0
+            text: i18n("No Preset")
+        }
+
+    }
+
+    Component {
+        id: listDelegate
+
+        Controls.ItemDelegate {
+            id: listItemDelegate
+
+            property string presetName: model.name
+            property int wrapMode: Text.WrapAnywhere
+            property int elide: Text.ElideRight
+            property bool selected: listItemDelegate.highlighted || listItemDelegate.down
+            property color color: selected ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
+
+            hoverEnabled: true
+            width: parent ? parent.width : implicitWidth
+            onClicked: {
+                showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded"));
+                presetsMenuFooter.lastUsedPreset = presetName;
+            }
+
+            contentItem: Kirigami.ActionToolBar {
+                actions: [
+                    Kirigami.Action {
+                        text: presetName
+                        enabled: false
+                        displayHint: Kirigami.DisplayHint.KeepVisible
+                    },
+                    Kirigami.Action {
+                        text: i18n("Save Settings to this Preset")
+                        icon.name: "document-save-symbolic"
+                        displayHint: Kirigami.DisplayHint.AlwaysHide
+                        onTriggered: {
+                            showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
+                        }
+                    },
+                    Kirigami.Action {
+                        text: i18n("Delete this Preset")
+                        icon.name: "delete"
+                        displayHint: Kirigami.DisplayHint.AlwaysHide
+                        onTriggered: {
+                            showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
+                        }
+                    }
+                ]
+
+                anchors {
+                    left: parent.left
+                    leftMargin: Kirigami.Units.smallSpacing
+                    right: parent.right
+                    rightMargin: Kirigami.Units.smallSpacing
+                }
+
             }
 
         }
 
-        delegate: Kirigami.SwipeListItem {
-            id: listItem
+    }
 
-            separatorVisible: true
-            // alternatingBackground: true
-            backgroundColor: Kirigami.Theme.neutralBackgroundColor
-            width: ListView.view ? ListView.view.width : implicitWidth
-            actions: [
-                Kirigami.Action {
-                    icon.name: "document-save"
-                    onTriggered: print("saved:" + model.name)
-                },
-                Kirigami.Action {
-                    icon.name: "delete"
-                    onTriggered: print("removed: " + model.name)
-                }
-            ]
+    FileDialog {
+        id: fileDialog
 
-            contentItem: RowLayout {
-                Controls.Label {
-                    Layout.fillWidth: true
-                    height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
-                    text: model.name
-                }
-
-            }
-
-        }
-
+        fileMode: FileDialog.OpenFile
+        currentFolder: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
+        nameFilters: ["JSON files (*.json)"]
+        onAccepted: showPresetsMenuStatus(i18n("Preset file imported!"))
     }
 
     header: ColumnLayout {
@@ -87,7 +129,7 @@ Kirigami.OverlaySheet {
                     onTriggered: {
                         presetName.text = "";
                         presetName.accepted();
-                        showPresetsMenuStatus(i18n("Preset file imported!"));
+                        fileDialog.open();
                     }
                 },
                 Kirigami.Action {
@@ -123,13 +165,17 @@ Kirigami.OverlaySheet {
             Layout.fillWidth: true
             placeholderText: i18n("Search")
             onAccepted: {
-                PresetsMenuModel.filterRegularExpression = RegExp(presetSearch.text, "i");
+                FGPresetsMenuModel.filterRegularExpression = RegExp(presetSearch.text, "i");
             }
         }
 
     }
 
     footer: ColumnLayout {
+        id: presetsMenuFooter
+
+        property string lastUsedPreset
+
         Kirigami.InlineMessage {
             id: presetsMenuStatus
 
@@ -149,7 +195,8 @@ Kirigami.OverlaySheet {
 
         Controls.Label {
             Layout.fillWidth: true
-            text: i18n("Last used Preset:")
+            text: i18n("Last Used Preset:    ") + presetsMenuFooter.lastUsedPreset
+            color: Kirigami.Theme.disabledTextColor
         }
 
     }

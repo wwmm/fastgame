@@ -99,8 +99,8 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   proxyModel->setDynamicSortFilter(true);
   proxyModel->sort(0);
 
-  qmlRegisterSingletonInstance<QSortFilterProxyModel>("PresetsMenuModel", PROJECT_VERSION_MAJOR, 0, "PresetsMenuModel",
-                                                      proxyModel);
+  qmlRegisterSingletonInstance<QSortFilterProxyModel>("FGPresetsMenuModel", PROJECT_VERSION_MAJOR, 0,
+                                                      "FGPresetsMenuModel", proxyModel);
 
   qmlRegisterSingletonInstance<Backend>("FGPresetsMenuBackend", PROJECT_VERSION_MAJOR, 0, "FGPresetsMenuBackend", this);
 

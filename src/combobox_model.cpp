@@ -2,6 +2,7 @@
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
 #include <qhash.h>
+#include <qlist.h>
 #include <qnamespace.h>
 #include <qstring.h>
 #include <qtmetamacros.h>
@@ -55,6 +56,14 @@ bool ComboBoxModel::setData(const QModelIndex& index, const QVariant& value, int
 
 auto ComboBoxModel::getValue(const int& id) -> QString {
   return list[id];
+}
+
+auto ComboBoxModel::getId(const QString& name) -> int {
+  return static_cast<int>(list.indexOf(name));
+}
+
+auto ComboBoxModel::getList() -> QList<QString> {
+  return list;
 }
 
 void ComboBoxModel::append(const QString& value) {

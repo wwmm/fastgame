@@ -55,11 +55,12 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Power Cap")
                 from: 0
-                to: 1000
+                to: FGAmdgpuBackend.maxPowerCap0
                 value: FGAmdgpuBackend.powerCap0
                 decimals: 0
                 stepSize: 1
                 unit: "W"
+                enabled: (FGAmdgpuBackend.maxPowerCap0 == 0) ? false : true
                 onValueModified: (v) => {
                     FGAmdgpuBackend.powerCap0 = v;
                 }
@@ -107,11 +108,12 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Power Cap")
                 from: 0
-                to: 1000
+                to: FGAmdgpuBackend.maxPowerCap1
                 value: FGAmdgpuBackend.powerCap1
                 decimals: 0
                 stepSize: 1
                 unit: "W"
+                enabled: (FGAmdgpuBackend.maxPowerCap1 == 0) ? false : true
                 onValueModified: (v) => {
                     FGAmdgpuBackend.powerCap1 = v;
                 }

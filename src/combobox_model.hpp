@@ -24,6 +24,10 @@ class ComboBoxModel : public QAbstractListModel {
 
   auto getValue(const int& id) -> QString;
 
+  auto getList() -> QList<QString>;
+
+  auto getId(const QString& name) -> int;
+
   void reset();
 
   Q_INVOKABLE void append(const QString& value);

@@ -5,9 +5,14 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <sys/prctl.h>
+#include <filesystem>
+#include <fstream>
+#include <ios>
+#include <string>
 #include <vector>
 #include "combobox_model.hpp"
 #include "config.h"
+#include "util.hpp"
 
 namespace amdgpu {
 
@@ -33,31 +38,28 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     // if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"); !list.empty()) {
     //   setPowerCap0(std::stoi(list[0]));
     // }
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/add_random"); !list.empty()) {
-    //   setAddRandom(static_cast<bool>(std::stoi(list[0])));
-    // } else {
-    //   setAddRandom(false);
-    // }
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/nr_requests"); !list.empty()) {
-    //   setNrRequests(std::stoi(list[0]));
-    // }
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/rq_affinity"); !list.empty()) {
-    //   setRqAffinity(std::stoi(list[0]));
-    // }
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/nomerges"); !list.empty()) {
-    //   setNoMerges(std::stoi(list[0]));
-    // }
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/wbt_lat_usec"); !list.empty()) {
-    //   setWbtLatUsec(std::stoi(list[0]));
-    // }
   });
 
-  setPerformanceLevel0(0);
+  card_indices = util::get_amdgpu_indices();
+
+  util::debug("number of amdgpu cards: " + util::to_string(card_indices.size()));
+
+  for (auto n : card_indices) {
+    auto* model = (n == card_indices.front()) ? &performanceLevel0Model : &performanceLevel1Model;
+
+    model->append("auto");
+    model->append("low");
+    model->append("high");
+    model->append("manual");
+    model->append("profile_standard");
+    model->append("profile_min_sclk");
+    model->append("profile_min_mclk");
+    model->append("profile_peak");
+
+    read_power_cap_max(n);
+    read_power_cap(n);
+    read_performance_level(n);
+  }
 }
 
 auto Backend::performanceLevel0() const -> int {
@@ -90,6 +92,16 @@ void Backend::setPowerCap0(const int& value) {
   Q_EMIT powerCap0Changed();
 }
 
+auto Backend::maxPowerCap0() const -> int {
+  return _maxPowerCap0;
+}
+
+void Backend::setMaxPowerCap0(const int& value) {
+  _maxPowerCap0 = value;
+
+  Q_EMIT maxPowerCap0Changed();
+}
+
 auto Backend::performanceLevel1() const -> int {
   return _performanceLevel1;
 }
@@ -120,6 +132,16 @@ void Backend::setPowerCap1(const int& value) {
   Q_EMIT powerCap1Changed();
 }
 
+auto Backend::maxPowerCap1() const -> int {
+  return _maxPowerCap1;
+}
+
+void Backend::setMaxPowerCap1(const int& value) {
+  _maxPowerCap1 = value;
+
+  Q_EMIT maxPowerCap1Changed();
+}
+
 auto Backend::get_n_cards() -> int {
   return card_indices.size();
 }
@@ -128,6 +150,142 @@ auto Backend::get_card_indices() -> std::vector<int> {
   return card_indices;
 }
 
-void Backend::set_performance_level(const QString& name, const int& card_index) {}
+void Backend::set_performance_level(const QString& name, const int& card_index) {
+  if (card_index == card_indices.front()) {
+    setPerformanceLevel0(performanceLevel0Model.getId(name));
+  } else {
+    setPerformanceLevel1(performanceLevel1Model.getId(name));
+  }
+}
+
+auto Backend::get_performance_level(const int& card_index) -> QString {
+  if (card_index == card_indices.front()) {
+    return performanceLevel0Model.getValue(_performanceLevel0);
+  } else {
+    return performanceLevel1Model.getValue(_performanceLevel1);
+  }
+}
+
+void Backend::set_power_profile(const int& id, const int& card_index) {
+  if (card_index == card_indices.front()) {
+    setPowerProfile0(id);
+  } else {
+    setPowerProfile1(id);
+  }
+}
+
+auto Backend::get_power_profile(const int& card_index) -> int {
+  if (card_index == card_indices.front()) {
+    return _powerProfile0;
+  } else {
+    return _powerProfile1;
+  }
+}
+
+void Backend::set_power_cap(const int& value, const int& card_index) {
+  if (card_index == card_indices.front()) {
+    setPowerCap0(value);
+  } else {
+    setPowerCap1(value);
+  }
+}
+
+auto Backend::get_power_cap(const int& card_index) -> int {
+  if (card_index == card_indices.front()) {
+    return _powerCap0;
+  } else {
+    return _powerCap1;
+  }
+}
+
+void Backend::read_power_cap_max(const int& card_index) {
+  auto hwmon_index = util::find_hwmon_index(card_index);
+
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    std::to_string(hwmon_index) + "/power1_cap_max");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug("file " + path.string() + " does not exist!");
+    util::debug("card " + util::to_string(card_index) + " could not read the maximum power cap!");
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    int raw_value = 0;  // microWatts
+
+    f >> raw_value;
+
+    f.close();
+
+    int power_cap_in_watts = raw_value / 1000000;
+
+    if (card_index == card_indices.front()) {
+      setMaxPowerCap0(power_cap_in_watts);
+    } else {
+      setMaxPowerCap1(power_cap_in_watts);
+    }
+
+    util::debug("card " + util::to_string(card_index) +
+                " maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
+  }
+}
+
+void Backend::read_power_cap(const int& card_index) {
+  auto hwmon_index = util::find_hwmon_index(card_index);
+
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    std::to_string(hwmon_index) + "/power1_cap");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug("file " + path.string() + " does not exist!");
+    util::debug("card " + util::to_string(card_index) + " can not change the power cap!");
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    int raw_value = 0;  // microWatts
+
+    f >> raw_value;
+
+    f.close();
+
+    int power_cap_in_watts = raw_value / 1000000;
+
+    if (card_index == card_indices.front()) {
+      setPowerCap0(power_cap_in_watts);
+    } else {
+      setPowerCap1(power_cap_in_watts);
+    }
+
+    util::debug("card " + util::to_string(card_index) + " current power cap: " + std::to_string(power_cap_in_watts) +
+                " W");
+  }
+}
+
+void Backend::read_performance_level(const int& card_index) {
+  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) +
+                                    "/device/power_dpm_force_performance_level");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug("file " + path.string() + " does not exist!");
+    util::debug("card " + util::to_string(card_index) + " could not read the power profile!");
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    std::string level;
+
+    f >> level;
+
+    f.close();
+
+    set_performance_level(QString::fromStdString(level), card_index);
+
+    util::debug("card " + util::to_string(card_index) + " current performance level: " + level);
+  }
+}
 
 }  // namespace amdgpu

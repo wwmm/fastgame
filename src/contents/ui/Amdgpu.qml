@@ -43,6 +43,7 @@ Kirigami.ScrollablePage {
                 currentIndex: FGAmdgpuBackend.powerProfile0
                 editable: false
                 model: FGModelPowerProfile0
+                enabled: FGModelPowerProfile0.rowCount() > 0 && performanceLevel0.currentIndex === 3 // manual
                 onActivated: (idx) => {
                     if (idx !== FGAmdgpuBackend.powerProfile0)
                         FGAmdgpuBackend.powerProfile0 = idx;
@@ -60,7 +61,7 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "W"
-                enabled: (FGAmdgpuBackend.maxPowerCap0 == 0) ? false : true
+                enabled: (FGAmdgpuBackend.maxPowerCap0 == -1) ? false : true
                 onValueModified: (v) => {
                     FGAmdgpuBackend.powerCap0 = v;
                 }
@@ -96,6 +97,7 @@ Kirigami.ScrollablePage {
                 currentIndex: FGAmdgpuBackend.powerProfile1
                 editable: false
                 model: FGModelPowerProfile1
+                enabled: FGModelPowerProfile1.rowCount() > 0 && performanceLevel1.currentIndex === 3 // manual
                 onActivated: (idx) => {
                     if (idx !== FGAmdgpuBackend.powerProfile1)
                         FGAmdgpuBackend.powerProfile1 = idx;
@@ -113,7 +115,7 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "W"
-                enabled: (FGAmdgpuBackend.maxPowerCap1 == 0) ? false : true
+                enabled: (FGAmdgpuBackend.maxPowerCap1 == -1) ? false : true
                 onValueModified: (v) => {
                     FGAmdgpuBackend.powerCap1 = v;
                 }

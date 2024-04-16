@@ -4,10 +4,12 @@
 #include <qqml.h>
 #include <qstring.h>
 #include <qtmetamacros.h>
+#include <qtypes.h>
 #include <sys/prctl.h>
 #include <filesystem>
 #include <fstream>
 #include <ios>
+#include <sstream>
 #include <string>
 #include <vector>
 #include "combobox_model.hpp"
@@ -59,6 +61,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     read_power_cap_max(n);
     read_power_cap(n);
     read_performance_level(n);
+    read_power_profile(n);
   }
 }
 
@@ -285,6 +288,91 @@ void Backend::read_performance_level(const int& card_index) {
     set_performance_level(QString::fromStdString(level), card_index);
 
     util::debug("card " + util::to_string(card_index) + " current performance level: " + level);
+  }
+}
+
+void Backend::read_power_profile(const int& card_index) {
+  auto path =
+      std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/pp_power_profile_mode");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug("file " + path.string() + " does not exist!");
+    util::debug("card " + util::to_string(card_index) + " can not change the performance level!");
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    std::stringstream buffer;
+
+    buffer << f.rdbuf();
+
+    f.close();
+
+    if (card_index == card_indices.front()) {
+      powerProfile0Model.reset();
+    } else {
+      powerProfile1Model.reset();
+    }
+
+    std::string line;
+
+    std::getline(buffer, line);  // Discarding the header
+
+    while (std::getline(buffer, line)) {
+      if (line.ends_with(":")) {
+        line.pop_back();
+
+        std::istringstream ss(line);
+
+        uint count = 0;
+
+        std::string word;
+        std::string profile;
+        std::string id_str;
+        bool is_selected = false;
+
+        while (ss >> word) {
+          if (word.ends_with("*")) {
+            word.pop_back();
+
+            util::debug("card " + util::to_string(card_index) + " current power profile: " + word);
+
+            is_selected = true;
+          }
+
+          if (count == 0) {
+            id_str = word;
+          }
+
+          if (count == 1) {
+            profile = word;
+          }
+
+          count++;
+        }
+
+        // util::info(id + " -> " + profile);
+
+        if (card_index == card_indices.front()) {
+          powerProfile0Model.append(QString::fromStdString(profile));
+        } else {
+          powerProfile1Model.append(QString::fromStdString(profile));
+        }
+
+        if (is_selected) {
+          uint id = 0;
+
+          util::str_to_num(id_str, id);
+
+          if (card_index == card_indices.front()) {
+            setPowerProfile0(id);
+          } else {
+            setPowerProfile1(id);
+          }
+        }
+      }
+    }
   }
 }
 

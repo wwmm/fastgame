@@ -64,6 +64,32 @@ Kirigami.ApplicationWindow {
         id: presetsMenu
     }
 
+    Kirigami.OverlayDrawer {
+        id: progressBottomDrawer
+
+        edge: Qt.BottomEdge
+        modal: false
+        parent: applicationWindow().overlay
+        drawerOpen: false
+
+        contentItem: RowLayout {
+            Controls.ProgressBar {
+                from: 0
+                to: 100
+                indeterminate: true
+                Layout.fillWidth: true
+            }
+
+            Controls.Button {
+                Layout.alignment: Qt.AlignRight
+                text: i18n("Close")
+                onClicked: progressBottomDrawer.close()
+            }
+
+        }
+
+    }
+
     globalDrawer: Kirigami.GlobalDrawer {
         id: globalDrawer
 
@@ -148,7 +174,9 @@ Kirigami.ApplicationWindow {
                         text: i18n("Apply")
                         icon.name: "dialog-ok-apply-symbolic"
                         displayHint: Kirigami.DisplayHint.KeepVisible
-                        onTriggered: showPassiveNotification("Apply!")
+                        onTriggered: {
+                            progressBottomDrawer.open();
+                        }
                     },
                     Kirigami.Action {
                         text: i18n("Presets")

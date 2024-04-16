@@ -69,13 +69,13 @@ class Backend : public QObject {
 
  private:
   int _performanceLevel0 = -1;
-  int _powerProfile0;
+  int _powerProfile0 = -1;
   int _powerCap0;
-  int _maxPowerCap0 = 0;
+  int _maxPowerCap0 = -1;
   int _performanceLevel1 = -1;
-  int _powerProfile1;
+  int _powerProfile1 = -1;
   int _powerCap1;
-  int _maxPowerCap1 = 0;
+  int _maxPowerCap1 = -1;
 
   ComboBoxModel performanceLevel0Model;
   ComboBoxModel performanceLevel1Model;
@@ -87,6 +87,7 @@ class Backend : public QObject {
   void read_power_cap_max(const int& card_index);
   void read_power_cap(const int& card_index);
   void read_performance_level(const int& card_index);
+  void read_power_profile(const int& card_index);
 };
 
 }  // namespace amdgpu

@@ -33,15 +33,6 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowerProfile1", PROJECT_VERSION_MAJOR, 0, "FGModelPowerProfile1",
                                               &powerProfile1Model);
 
-  connect(this, &Backend::performanceLevel0Changed, []() {
-    // auto sys_class_path =
-    //     util::mounting_path_to_sys_class_path(performanceLevel0Model.getValue(_performanceLevel0).toStdString());
-
-    // if (const auto list = util::read_system_setting(sys_class_path + "/queue/read_ahead_kb"); !list.empty()) {
-    //   setPowerCap0(std::stoi(list[0]));
-    // }
-  });
-
   card_indices = util::get_amdgpu_indices();
 
   util::debug("number of amdgpu cards: " + util::to_string(card_indices.size()));

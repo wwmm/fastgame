@@ -115,10 +115,6 @@ auto Backend::mountingPath() const -> int {
 }
 
 void Backend::setMountingPath(const int& value) {
-  if (_mountingPath == value) {
-    return;
-  }
-
   _mountingPath = value;
 
   Q_EMIT mountingPathChanged();

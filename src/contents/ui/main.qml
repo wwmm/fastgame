@@ -49,6 +49,13 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
+    Nvidia {
+        id: nvidia
+
+        title: i18n("Nvidia")
+        visible: false
+    }
+
     Kirigami.Dialog {
         id: aboutDialog
 
@@ -161,6 +168,19 @@ Kirigami.ApplicationWindow {
                     if (!amdgpu.visible) {
                         while (pageStack.depth > 0)pageStack.pop()
                         pageStack.push(amdgpu);
+                    }
+                }
+            },
+            Kirigami.Action {
+                text: nvidia.title
+                icon.name: "show-gpu-effects-symbolic"
+                checked: nvidia.visible
+                // enabled: false
+                // visible: false
+                onTriggered: {
+                    if (!nvidia.visible) {
+                        while (pageStack.depth > 0)pageStack.pop()
+                        pageStack.push(nvidia);
                     }
                 }
             }

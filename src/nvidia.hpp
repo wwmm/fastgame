@@ -5,78 +5,62 @@
 #include <qtmetamacros.h>
 #include "combobox_model.hpp"
 
+#ifdef USE_NVIDIA
+#include "nvidia/nvidia.hpp"
+#endif
+
 namespace nvidia {
 
 class Backend : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(int mountingPath READ mountingPath WRITE setMountingPath NOTIFY mountingPathChanged)
+  Q_PROPERTY(int powermizeMode0 MEMBER _powermizeMode0 NOTIFY powermizeMode0Changed)
 
-  Q_PROPERTY(int scheduler READ scheduler WRITE setScheduler NOTIFY schedulerChanged)
+  Q_PROPERTY(int powerLimit MEMBER _powerLimit NOTIFY powerLimitChanged)
 
-  Q_PROPERTY(int readahead READ readahead WRITE setReadahead NOTIFY readaheadChanged)
+  Q_PROPERTY(int gpuClockOffset0 MEMBER _gpuClockOffset0 NOTIFY gpuClockOffset0Changed)
 
-  Q_PROPERTY(bool enableRealtimePriority READ enableRealtimePriority WRITE setEnableRealtimePriority NOTIFY
-                 enableRealtimePriorityChanged)
+  Q_PROPERTY(int gpuClockOffset0Max MEMBER _gpuClockOffset0Max NOTIFY gpuClockOffset0MaxChanged)
 
-  Q_PROPERTY(bool addRandom READ addRandom WRITE setAddRandom NOTIFY addRandomChanged)
+  Q_PROPERTY(int gpuClockOffset0Min MEMBER _gpuClockOffset0Min NOTIFY gpuClockOffset0MinChanged)
 
-  Q_PROPERTY(int nrRequests READ nrRequests WRITE setNrRequests NOTIFY nrRequestsChanged)
+  Q_PROPERTY(int memoryClockOffset0 MEMBER _memoryClockOffset0 NOTIFY memoryClockOffset0Changed)
 
-  Q_PROPERTY(int rqAffinity READ rqAffinity WRITE setRqAffinity NOTIFY rqAffinityChanged)
+  Q_PROPERTY(int memoryClockOffset0Min MEMBER _memoryClockOffset0Min NOTIFY memoryClockOffset0MinChanged)
 
-  Q_PROPERTY(int noMerges READ noMerges WRITE setNoMerges NOTIFY noMergesChanged)
-
-  Q_PROPERTY(int wbtLatUsec READ wbtLatUsec WRITE setWbtLatUsec NOTIFY wbtLatUsecChanged)
+  Q_PROPERTY(int memoryClockOffset0Max MEMBER _memoryClockOffset0Max NOTIFY memoryClockOffset0MaxChanged)
 
  public:
   explicit Backend(QObject* parent = nullptr);
 
-  [[nodiscard]] auto mountingPath() const -> int;
-  [[nodiscard]] auto scheduler() const -> int;
-  [[nodiscard]] auto readahead() const -> int;
-  [[nodiscard]] auto enableRealtimePriority() const -> bool;
-  [[nodiscard]] auto addRandom() const -> bool;
-  [[nodiscard]] auto nrRequests() const -> int;
-  [[nodiscard]] auto rqAffinity() const -> int;
-  [[nodiscard]] auto noMerges() const -> int;
-  [[nodiscard]] auto wbtLatUsec() const -> int;
-
-  void setMountingPath(const int& value);
-  void setScheduler(const int& value);
-  void setReadahead(const int& value);
-  void setEnableRealtimePriority(const bool& value);
-  void setAddRandom(const bool& value);
-  void setNrRequests(const int& value);
-  void setRqAffinity(const int& value);
-  void setNoMerges(const int& value);
-  void setWbtLatUsec(const int& value);
-
  signals:
-  void mountingPathChanged();
-  void schedulerChanged();
-  void readaheadChanged();
-  void enableRealtimePriorityChanged();
-  void addRandomChanged();
-  void nrRequestsChanged();
-  void rqAffinityChanged();
-  void noMergesChanged();
-  void wbtLatUsecChanged();
+  void powermizeMode0Changed();
+  void powerLimitChanged();
+  void gpuClockOffset0Changed();
+  void gpuClockOffset0MaxChanged();
+  void gpuClockOffset0MinChanged();
+  void memoryClockOffset0Changed();
+  void memoryClockOffset0MinChanged();
+  void memoryClockOffset0MaxChanged();
 
  private:
-  bool _enableRealtimePriority = false;
-  bool _addRandom = false;
-
-  int _mountingPath = -1;
+  int _powermizeMode0 = -1;
   int _scheduler;
-  int _readahead;
-  int _nrRequests;
-  int _rqAffinity;
-  int _noMerges;
-  int _wbtLatUsec;
+  int _powerLimit;
+  int _gpuClockOffset0;
+  int _gpuClockOffset0Min;
+  int _gpuClockOffset0Max;
+  int _memoryClockOffset0;
+  int _memoryClockOffset0Min;
+  int _memoryClockOffset0Max;
 
-  ComboBoxModel mountingPathModel;
-  ComboBoxModel schedulerModel;
+  ComboBoxModel powermizeMode0Model;
+
+#ifdef USE_NVIDIA
+  std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper;
+#endif
+
+  auto has_gpu() -> bool;
 };
 
 }  // namespace nvidia

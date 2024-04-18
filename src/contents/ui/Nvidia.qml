@@ -9,6 +9,8 @@ import org.kde.kirigamiaddons.formcard as FormCard
 Kirigami.ScrollablePage {
     id: nvidia
 
+    property bool available: FGNvidiaBackend.available
+
     title: i18n("Nvidia GPU")
 
     ColumnLayout {

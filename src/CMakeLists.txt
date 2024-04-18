@@ -1,5 +1,7 @@
 configure_file(config.h.in config.h)
 
+add_subdirectory(nvidia)
+
 add_executable(fastgame)
 
 target_sources(fastgame PRIVATE
@@ -27,5 +29,9 @@ target_link_libraries(fastgame
     KF${QT_MAJOR_VERSION}::I18n
     KF${QT_MAJOR_VERSION}::CoreAddons
 )
+
+if(XNVCTRL)
+    target_link_libraries(fastgame fastgame_nvidia)
+endif()
 
 install(TARGETS fastgame ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

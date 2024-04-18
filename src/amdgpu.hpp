@@ -11,6 +11,8 @@ namespace amdgpu {
 class Backend : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(bool available MEMBER _available NOTIFY availableChanged)
+
   Q_PROPERTY(int performanceLevel0 READ performanceLevel0 WRITE setPerformanceLevel0 NOTIFY performanceLevel0Changed)
 
   Q_PROPERTY(int powerProfile0 READ powerProfile0 WRITE setPowerProfile0 NOTIFY powerProfile0Changed)
@@ -58,6 +60,7 @@ class Backend : public QObject {
   auto get_power_cap(const int& card_index) -> int;
 
  signals:
+  void availableChanged();
   void performanceLevel0Changed();
   void powerProfile0Changed();
   void powerCap0Changed();
@@ -68,6 +71,8 @@ class Backend : public QObject {
   void maxPowerCap1Changed();
 
  private:
+  bool _available = true;
+
   int _performanceLevel0 = -1;
   int _powerProfile0 = -1;
   int _powerCap0;

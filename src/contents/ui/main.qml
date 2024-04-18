@@ -164,6 +164,7 @@ Kirigami.ApplicationWindow {
                 text: amdgpu.title
                 icon.name: "show-gpu-effects-symbolic"
                 checked: amdgpu.visible
+                enabled: amdgpu.available
                 onTriggered: {
                     if (!amdgpu.visible) {
                         while (pageStack.depth > 0)pageStack.pop()
@@ -175,7 +176,7 @@ Kirigami.ApplicationWindow {
                 text: nvidia.title
                 icon.name: "show-gpu-effects-symbolic"
                 checked: nvidia.visible
-                // enabled: false
+                enabled: nvidia.available
                 // visible: false
                 onTriggered: {
                     if (!nvidia.visible) {

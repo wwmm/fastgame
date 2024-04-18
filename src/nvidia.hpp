@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
+#include <memory>
 #include "combobox_model.hpp"
 
 #ifdef USE_NVIDIA
@@ -13,6 +14,8 @@ namespace nvidia {
 
 class Backend : public QObject {
   Q_OBJECT
+
+  Q_PROPERTY(bool available MEMBER _available NOTIFY availableChanged)
 
   Q_PROPERTY(int powermizeMode0 MEMBER _powermizeMode0 NOTIFY powermizeMode0Changed)
 
@@ -34,6 +37,7 @@ class Backend : public QObject {
   explicit Backend(QObject* parent = nullptr);
 
  signals:
+  void availableChanged();
   void powermizeMode0Changed();
   void powerLimitChanged();
   void gpuClockOffset0Changed();
@@ -44,6 +48,8 @@ class Backend : public QObject {
   void memoryClockOffset0MaxChanged();
 
  private:
+  bool _available = true;
+
   int _powermizeMode0 = -1;
   int _scheduler;
   int _powerLimit;

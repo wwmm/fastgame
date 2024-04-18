@@ -1,13 +1,8 @@
 #pragma once
 
-#include <NVCtrl/NVCtrl.h>
-#include <X11/Xlib.h>
-#include <algorithm>
-#include <iostream>
 #include <memory>
-#include "NVCtrl/NVCtrlLib.h"
+#include <utility>
 #include "nvml.hpp"
-#include "util.hpp"
 
 namespace nvidia_wrapper {
 
@@ -17,9 +12,9 @@ class Nvidia {
 
   std::unique_ptr<Nvml> nvml;
 
-  void set_clock_offset(const int& gpu_index, const int& gpu_offset, const int& memory_offset);
-  void set_powermizer_mode(const int& gpu_index, const int& mode_id);
-  bool has_gpu();
+  void set_clock_offset(const int& gpu_index, const int& gpu_offset, const int& memory_offset) const;
+  void set_powermizer_mode(const int& gpu_index, const int& mode_id) const;
+  [[nodiscard]] bool has_gpu() const;
 
   auto get_gpu_clock_offset_range() -> std::pair<int, int>;
 
@@ -28,7 +23,6 @@ class Nvidia {
  private:
   bool found_gpu = false;
 
-  Display* dpy;
   int max_performance_mode = 3, min_gpu_clock_offset = 0, max_gpu_clock_offset = 0, min_memory_clock_offset = 0,
       max_memory_clock_offset = 0;
 

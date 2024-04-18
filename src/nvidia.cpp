@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <sys/prctl.h>
+#include <memory>
 #include "combobox_model.hpp"
 #include "config.h"
 
@@ -40,6 +41,9 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   }
 
 #endif
+
+  _available = has_gpu();
+  Q_EMIT availableChanged();
 }
 
 // NOLINTNEXTLINE

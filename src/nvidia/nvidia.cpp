@@ -1,6 +1,19 @@
 #include "nvidia.hpp"
+// clang-format off
+#include <X11/Xlib.h>
+#include <NVCtrl/NVCtrl.h>
+#include <NVCtrl/NVCtrlLib.h>
+// clang-format on
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <utility>
+#include "nvml.hpp"
+#include "util.hpp"
 
 namespace nvidia_wrapper {
+
+Display* dpy;
 
 Nvidia::Nvidia() {
   dpy = XOpenDisplay(nullptr);
@@ -9,7 +22,8 @@ Nvidia::Nvidia() {
     util::warning("failed to open display");
   }
 
-  int major, minor;
+  int major = 0;
+  int minor = 0;
 
   if (!XNVCTRLQueryVersion(dpy, &major, &minor)) {
     util::warning("The NV-CONTROL X extension does not exist ");
@@ -28,12 +42,12 @@ Nvidia::Nvidia() {
   }
 }
 
-bool Nvidia::has_gpu() {
+auto Nvidia::has_gpu() const -> bool {
   return found_gpu;
 }
 
 void Nvidia::get_max_performance_mode(const int& gpu_index) {
-  char* result;
+  char* result = nullptr;
 
   bool r = XNVCTRLQueryTargetStringAttribute(dpy, NV_CTRL_TARGET_TYPE_GPU, gpu_index, 0,
                                              NV_CTRL_STRING_PERFORMANCE_MODES, &result);
@@ -75,7 +89,7 @@ void Nvidia::get_valid_clock_offset_values(const int& gpu_index) {
   }
 }
 
-void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const int& memory_offset) {
+void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const int& memory_offset) const {
   int val = 0;
 
   if (gpu_offset >= min_gpu_clock_offset && gpu_offset <= max_gpu_clock_offset) {
@@ -112,8 +126,8 @@ void Nvidia::set_clock_offset(const int& gpu_index, const int& gpu_offset, const
   }
 }
 
-void Nvidia::set_powermizer_mode(const int& gpu_index, const int& mode_id) {
-  int mode;
+void Nvidia::set_powermizer_mode(const int& gpu_index, const int& mode_id) const {
+  int mode = 0;
   std::string mode_name;
 
   switch (mode_id) {
@@ -158,11 +172,11 @@ void Nvidia::set_powermizer_mode(const int& gpu_index, const int& mode_id) {
 }
 
 auto Nvidia::get_gpu_clock_offset_range() -> std::pair<int, int> {
-  return std::pair(min_gpu_clock_offset, max_gpu_clock_offset);
+  return {min_gpu_clock_offset, max_gpu_clock_offset};
 }
 
 auto Nvidia::get_memory_clock_offset_range() -> std::pair<int, int> {
-  return std::pair(min_memory_clock_offset, max_memory_clock_offset);
+  return {min_memory_clock_offset, max_memory_clock_offset};
 }
 
 }  // namespace nvidia_wrapper

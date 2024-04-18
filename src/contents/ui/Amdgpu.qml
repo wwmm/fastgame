@@ -12,6 +12,8 @@ import org.kde.kirigamiaddons.formcard as FormCard
 Kirigami.ScrollablePage {
     id: amdgpu
 
+    property bool available: FGAmdgpuBackend.available
+
     title: i18n("AMD GPU")
 
     ColumnLayout {

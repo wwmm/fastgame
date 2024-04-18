@@ -37,6 +37,9 @@ Backend::Backend(QObject* parent) : QObject(parent) {
 
   util::debug("number of amdgpu cards: " + util::to_string(card_indices.size()));
 
+  _available = !card_indices.empty();
+  Q_EMIT availableChanged();
+
   for (auto n : card_indices) {
     auto* model = (n == card_indices.front()) ? &performanceLevel0Model : &performanceLevel1Model;
 

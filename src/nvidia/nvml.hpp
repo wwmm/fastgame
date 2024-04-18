@@ -1,9 +1,10 @@
 #ifndef NVML_HPP
 #define NVML_HPP
 
-#include <iostream>
+#include <sys/types.h>
+#include <string>
 
-typedef void* nvmlDevice_t;
+using nvmlDevice_t = void*;
 
 enum nvmlReturn_t {
   NVML_SUCCESS = 0,
@@ -43,7 +44,7 @@ class Nvml {
 
   void* handle;
 
-  nvmlReturn_t (*nvmlInit)(void);
+  nvmlReturn_t (*nvmlInit)();
   nvmlReturn_t (*nvmlDeviceGetHandleByIndex)(uint, nvmlDevice_t*);
   nvmlReturn_t (*nvmlDeviceSetPowerManagementLimit)(nvmlDevice_t, uint);
 };

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(fastgame VERSION 1.0.0 LANGUAGES CXX)
+project(fastgame VERSION 1.0.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,9 +41,23 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
 
 find_package(Threads REQUIRED)
 
-# find_package(PkgConfig REQUIRED)
-# pkg_check_modules(UDISKS2 REQUIRED udisks2 gio-2.0 gobject-2.0 glib-2.0)
-# include_directories(${UDISKS2_INCLUDE_DIRS})
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(LIBX11 x11)
+
+find_library(XNVCTRL libXNVCtrl.a libXNVCtrl.so)
+
+if(XNVCTRL AND LIBX11_FOUND)
+    message(STATUS "Found XNVCTRL = ${XNVCTRL}")
+    message(STATUS "Found LIBX11 = ${LIBX11_LIBRARIES}")
+    message(STATUS "Enabling Nvidia support")
+
+    add_compile_definitions(USE_NVIDIA)
+else()
+    message("Nvidia support won't be available!")
+endif()
+
+
 
 add_subdirectory(src)
 

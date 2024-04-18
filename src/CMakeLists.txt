@@ -4,6 +4,8 @@ add_subdirectory(nvidia)
 
 add_executable(fastgame)
 
+kde_target_enable_exceptions(fastgame PRIVATE)
+
 target_sources(fastgame PRIVATE
     amdgpu.cpp
     combobox_model.cpp
@@ -19,7 +21,7 @@ target_sources(fastgame PRIVATE
     resources.qrc
 )
 
-target_link_libraries(fastgame
+target_link_libraries(fastgame PRIVATE
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
@@ -28,10 +30,11 @@ target_link_libraries(fastgame
     Qt${QT_MAJOR_VERSION}::Widgets
     KF${QT_MAJOR_VERSION}::I18n
     KF${QT_MAJOR_VERSION}::CoreAddons
+    Boost::filesystem
 )
 
 if(XNVCTRL)
-    target_link_libraries(fastgame fastgame_nvidia)
+    target_link_libraries(fastgame PRIVATE fastgame_nvidia)
 endif()
 
 install(TARGETS fastgame ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

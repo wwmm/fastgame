@@ -71,6 +71,14 @@ bool Model::setData(const QModelIndex& index, const QVariant& value, int role) {
   return true;
 }
 
+void Model::reset() {
+  beginResetModel();
+
+  list.clear();
+
+  endResetModel();
+}
+
 void Model::append(const QString& name, const QString& value) {
   int pos = list.empty() ? 0 : list.size() - 1;
 

@@ -1,4 +1,4 @@
-import FGPresetsMenuBackend
+import FGPresetsBackend
 import FGPresetsMenuModel
 import QtCore
 import QtQuick
@@ -52,8 +52,11 @@ Kirigami.OverlaySheet {
             hoverEnabled: true
             width: parent ? parent.width : implicitWidth
             onClicked: {
-                showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded"));
-                presetsMenuFooter.lastUsedPreset = presetName;
+                let res = FGPresetsBackend.loadPreset(presetName);
+                if (res === true) {
+                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded"));
+                    presetsMenuFooter.lastUsedPreset = presetName;
+                }
             }
 
             contentItem: Kirigami.ActionToolBar {

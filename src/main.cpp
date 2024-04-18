@@ -11,14 +11,7 @@
 #include <KLocalizedString>
 #include <QApplication>
 #include <QtQml>
-#include "amdgpu.hpp"
-#include "command_line_arguments.hpp"
 #include "config.h"
-#include "cpu.hpp"
-#include "disk.hpp"
-#include "environment_variables.hpp"
-#include "memory.hpp"
-#include "nvidia.hpp"
 #include "presets_manager.hpp"
 
 void construct_about_window() {
@@ -59,14 +52,6 @@ int main(int argc, char* argv[]) {
 
   construct_about_window();
 
-  cmdargs::Model cmdArgsModel;
-  envvars::Model envVarsModel;
-
-  amdgpu::Backend amdgpuBackend;
-  cpu::Backend cpuBackend;
-  disk::Backend diskBackend;
-  memory::Backend memoryBackend;
-  nvidia::Backend nvidiaBackend;
   presets::Backend presetsBackend;
 
   QQmlApplicationEngine engine;

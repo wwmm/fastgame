@@ -10,8 +10,12 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #include <filesystem>
 #include <iterator>
+#include <string>
 #include <vector>
 #include "config.h"
 #include "util.hpp"
@@ -91,6 +95,18 @@ void MenuModel::remove(const int& rowIndex) {
 }
 
 Backend::Backend(QObject* parent) : QObject(parent) {
+  // creating the presets folder if it does not exist
+
+  if (!std::filesystem::is_directory(user_presets_dir)) {
+    if (std::filesystem::create_directories(user_presets_dir)) {
+      util::debug("user presets directory created: " + user_presets_dir.string());
+    } else {
+      util::warning("failed to create user presets directory: " + user_presets_dir.string());
+    }
+  } else {
+    util::debug("user presets directory already exists: " + user_presets_dir.string());
+  }
+
   auto* proxyModel = new QSortFilterProxyModel(this);
 
   proxyModel->setSourceModel(&menuModel);
@@ -102,17 +118,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   qmlRegisterSingletonInstance<QSortFilterProxyModel>("FGPresetsMenuModel", PROJECT_VERSION_MAJOR, 0,
                                                       "FGPresetsMenuModel", proxyModel);
 
-  qmlRegisterSingletonInstance<Backend>("FGPresetsMenuBackend", PROJECT_VERSION_MAJOR, 0, "FGPresetsMenuBackend", this);
-
-  if (!std::filesystem::is_directory(user_presets_dir)) {
-    if (std::filesystem::create_directories(user_presets_dir)) {
-      util::debug("user presets directory created: " + user_presets_dir.string());
-    } else {
-      util::warning("failed to create user presets directory: " + user_presets_dir.string());
-    }
-  } else {
-    util::debug("user presets directory already exists: " + user_presets_dir.string());
-  }
+  qmlRegisterSingletonInstance<Backend>("FGPresetsBackend", PROJECT_VERSION_MAJOR, 0, "FGPresetsBackend", this);
 
   for (const auto& name : get_presets_names()) {
     menuModel.append(name);
@@ -127,6 +133,52 @@ auto Backend::get_presets_names() -> std::vector<QString> {
   }
 
   return names;
+}
+
+bool Backend::loadPreset(const QString& name) {
+  auto input_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};
+
+  boost::property_tree::ptree root;
+
+  boost::property_tree::read_json(input_file.string(), root);
+
+  // game executable
+
+  _executableName = QString::fromStdString(root.get<std::string>("game-executable", ""));
+  Q_EMIT executableNameChanged();
+
+  // environmental variables
+
+  try {
+    envVarsModel.reset();
+
+    for (const auto& c : root.get_child("environment-variables")) {
+      auto key_and_value = c.second.data();
+
+      int delimiter_position = key_and_value.find('=');
+
+      auto key = key_and_value.substr(0, delimiter_position);
+      auto value = key_and_value.substr(delimiter_position + 1);
+
+      envVarsModel.append(QString::fromStdString(key), QString::fromStdString(value));
+    }
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("error when parsing the environmental variables list");
+  }
+
+  // command line arguments
+
+  try {
+    cmdArgsModel.reset();
+
+    for (const auto& c : root.get_child("command-line-arguments")) {
+      cmdArgsModel.append(QString::fromStdString(c.second.data()));
+    }
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("error when parsing the command line arguments list");
+  }
+
+  return true;
 }
 
 }  // namespace presets

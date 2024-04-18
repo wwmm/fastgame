@@ -11,6 +11,13 @@
 #include <qtmetamacros.h>
 #include <qvariant.h>
 #include <vector>
+#include "amdgpu.hpp"
+#include "command_line_arguments.hpp"
+#include "cpu.hpp"
+#include "disk.hpp"
+#include "environment_variables.hpp"
+#include "memory.hpp"
+#include "nvidia.hpp"
 
 namespace presets {
 
@@ -41,13 +48,29 @@ class MenuModel : public QAbstractListModel {
 class Backend : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(QString executableName MEMBER _executableName NOTIFY executableNameChanged)
+
  public:
   explicit Backend(QObject* parent = nullptr);
 
+  Q_INVOKABLE bool loadPreset(const QString& name);
+
  signals:
+  void executableNameChanged();
 
  private:
+  QString _executableName;
+
   MenuModel menuModel;
+
+  cmdargs::Model cmdArgsModel;
+  envvars::Model envVarsModel;
+
+  amdgpu::Backend amdgpuBackend;
+  cpu::Backend cpuBackend;
+  disk::Backend diskBackend;
+  memory::Backend memoryBackend;
+  nvidia::Backend nvidiaBackend;
 
   static auto get_presets_names() -> std::vector<QString>;
 };

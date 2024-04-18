@@ -1,4 +1,5 @@
 import AboutFG
+import FGPresetsBackend
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
@@ -165,6 +166,7 @@ Kirigami.ApplicationWindow {
                 icon.name: "show-gpu-effects-symbolic"
                 checked: amdgpu.visible
                 enabled: amdgpu.available
+                visible: amdgpu.available
                 onTriggered: {
                     if (!amdgpu.visible) {
                         while (pageStack.depth > 0)pageStack.pop()
@@ -177,7 +179,7 @@ Kirigami.ApplicationWindow {
                 icon.name: "show-gpu-effects-symbolic"
                 checked: nvidia.visible
                 enabled: nvidia.available
-                // visible: false
+                visible: nvidia.available
                 onTriggered: {
                     if (!nvidia.visible) {
                         while (pageStack.depth > 0)pageStack.pop()
@@ -242,6 +244,7 @@ Kirigami.ApplicationWindow {
                     visible: !globalDrawer.collapsed
                     Layout.fillWidth: true
                     placeholderText: i18n("Executable Name")
+                    text: FGPresetsBackend.executableName
                     rightActions: [
                         Kirigami.Action {
                             icon.name: "edit-clear"

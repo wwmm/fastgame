@@ -25,6 +25,8 @@ class Model : public QAbstractListModel {
 
   bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 
+  void reset();
+
   Q_INVOKABLE void append(const QString& name, const QString& value);
 
   Q_INVOKABLE void remove(const int& rowIndex);

@@ -368,6 +368,23 @@ bool Backend::save_preset(const QString& name) {
   root.put("cpu.game-cores", cpuBackend.gameAffinity().toStdString());
   root.put("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString());
 
+  // memory
+
+  root.put("memory.virtual-memory.swappiness", memoryBackend.swappiness());
+  root.put("memory.virtual-memory.cache-pressure", memoryBackend.cachePressure());
+  root.put("memory.virtual-memory.compaction-proactiveness", memoryBackend.compactionProactiveness());
+  root.put("memory.virtual-memory.min-free-kbytes", memoryBackend.minFreeKbytes());
+  root.put("memory.virtual-memory.page-lock-unfairness", memoryBackend.pageLockUnfairness());
+  root.put("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction());
+
+  root.put("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs());
+
+  root.put("memory.transparent-hugepages.enabled", memoryBackend.thpEnabled());
+  root.put("memory.transparent-hugepages.defrag", memoryBackend.thpDefrag());
+  root.put("memory.transparent-hugepages.shmem_enabled", memoryBackend.thpShmemEnabled());
+  root.put("memory.transparent-hugepages.scan-sleep", memoryBackend.scanSleep());
+  root.put("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep());
+
   // saving the properties to a file
 
   auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};

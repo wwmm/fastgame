@@ -11,9 +11,9 @@ namespace disk {
 class Backend : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(int mountingPath READ mountingPath WRITE setMountingPath NOTIFY mountingPathChanged)
+  Q_PROPERTY(int mountingPath MEMBER _mountingPath NOTIFY mountingPathChanged)
 
-  Q_PROPERTY(int scheduler READ scheduler WRITE setScheduler NOTIFY schedulerChanged)
+  Q_PROPERTY(int scheduler MEMBER _scheduler NOTIFY schedulerChanged)
 
   Q_PROPERTY(int readahead READ readahead WRITE setReadahead NOTIFY readaheadChanged)
 
@@ -33,8 +33,8 @@ class Backend : public QObject {
  public:
   explicit Backend(QObject* parent = nullptr);
 
-  [[nodiscard]] auto mountingPath() const -> int;
-  [[nodiscard]] auto scheduler() const -> int;
+  [[nodiscard]] auto mountingPath() -> std::string;
+  [[nodiscard]] auto scheduler() -> std::string;
   [[nodiscard]] auto readahead() const -> int;
   [[nodiscard]] auto enableRealtimePriority() const -> bool;
   [[nodiscard]] auto addRandom() const -> bool;
@@ -43,8 +43,8 @@ class Backend : public QObject {
   [[nodiscard]] auto noMerges() const -> int;
   [[nodiscard]] auto wbtLatUsec() const -> int;
 
-  void setMountingPath(const int& value);
-  void setScheduler(const int& value);
+  void setMountingPath(const std::string& value);
+  void setScheduler(const std::string& value);
   void setReadahead(const int& value);
   void setEnableRealtimePriority(const bool& value);
   void setAddRandom(const bool& value);

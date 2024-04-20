@@ -67,7 +67,8 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     }
   });
 
-  setMountingPath(0);
+  _mountingPath = 0;
+  Q_EMIT mountingPathChanged();
 }
 
 auto Backend::readahead() const -> int {
@@ -110,22 +111,32 @@ void Backend::setRqAffinity(const int& value) {
   Q_EMIT rqAffinityChanged();
 }
 
-auto Backend::mountingPath() const -> int {
-  return _mountingPath;
+auto Backend::mountingPath() -> std::string {
+  return mountingPathModel.getValue(_mountingPath).toStdString();
 }
 
-void Backend::setMountingPath(const int& value) {
-  _mountingPath = value;
+void Backend::setMountingPath(const std::string& value) {
+  auto id = mountingPathModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+  _mountingPath = id;
 
   Q_EMIT mountingPathChanged();
 }
 
-auto Backend::scheduler() const -> int {
-  return _scheduler;
+auto Backend::scheduler() -> std::string {
+  return schedulerModel.getValue(_scheduler).toStdString();
 }
 
-void Backend::setScheduler(const int& value) {
-  _scheduler = value;
+void Backend::setScheduler(const std::string& value) {
+  auto id = schedulerModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+  _scheduler = id;
 
   Q_EMIT schedulerChanged();
 }
@@ -183,7 +194,8 @@ void Backend::init_scheduler(const std::string& sys_class_path) {
     }
   }
 
-  setScheduler(selected_id);
+  _scheduler = selected_id;
+  Q_EMIT schedulerChanged();
 }
 
 }  // namespace disk

@@ -265,6 +265,29 @@ bool Backend::loadPreset(const QString& name) {
   memoryBackend.setPerCpuPagelistHighFraction(
       root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction()));
 
+  // disk
+
+  diskBackend.setMountingPath(root.get<std::string>("disk.mounting-path", diskBackend.mountingPath()));
+
+  diskBackend.setScheduler(root.get<std::string>("disk.scheduler", diskBackend.scheduler()));
+
+  diskBackend.setReadahead(root.get<int>("disk.readahead", diskBackend.readahead()));
+
+  diskBackend.setNrRequests(root.get<int>("disk.nr-requests", diskBackend.nrRequests()));
+
+  diskBackend.setRqAffinity(root.get<int>("disk.rq-affinity", diskBackend.rqAffinity()));
+
+  diskBackend.setNoMerges(root.get<int>("disk.nomerges", diskBackend.noMerges()));
+
+  diskBackend.setWbtLatUsec(root.get<int>("disk.wbt-lat-usec", diskBackend.wbtLatUsec()));
+
+  diskBackend.setEnableRealtimePriority(
+      root.get<bool>("disk.enable-realtime-priority", diskBackend.enableRealtimePriority()));
+
+  diskBackend.setAddRandom(root.get<bool>("disk.add_random", diskBackend.addRandom()));
+
+  // amdgpu
+
   return status;
 }
 

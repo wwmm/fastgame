@@ -122,10 +122,10 @@ Kirigami.ScrollablePage {
                 id: enableRealtimePriority
 
                 label: i18n("Realtime Priority")
-                checked: FGDiskBackend.enableRealtimePriority
+                isChecked: FGDiskBackend.enableRealtimePriority
                 onCheckedChanged: {
-                    if (checked !== FGDiskBackend.enableRealtimePriority)
-                        FGDiskBackend.enableRealtimePriority = checked;
+                    if (isChecked !== FGDiskBackend.enableRealtimePriority)
+                        FGDiskBackend.enableRealtimePriority = isChecked;
 
                 }
             }

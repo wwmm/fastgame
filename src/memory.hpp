@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
+#include <string>
 #include "combobox_model.hpp"
 
 namespace memory {
@@ -10,11 +11,11 @@ namespace memory {
 class Backend : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(int thpEnabled READ thpEnabled WRITE setThpEnabled NOTIFY thpEnabledChanged)
+  Q_PROPERTY(int thpEnabled MEMBER _thpEnabled NOTIFY thpEnabledChanged)
 
-  Q_PROPERTY(int thpDefrag READ thpDefrag WRITE setThpDefrag NOTIFY thpDefragChanged)
+  Q_PROPERTY(int thpDefrag MEMBER _thpDefrag NOTIFY thpDefragChanged)
 
-  Q_PROPERTY(int thpShmemEnabled READ thpShmemEnabled WRITE setThpShmemEnabled NOTIFY thpShmemEnabledChanged)
+  Q_PROPERTY(int thpShmemEnabled MEMBER _thpShmemEnabled NOTIFY thpShmemEnabledChanged)
 
   Q_PROPERTY(int scanSleep READ scanSleep WRITE setScanSleep NOTIFY scanSleepChanged)
 
@@ -40,9 +41,9 @@ class Backend : public QObject {
  public:
   explicit Backend(QObject* parent = nullptr);
 
-  [[nodiscard]] auto thpEnabled() const -> int;
-  [[nodiscard]] auto thpDefrag() const -> int;
-  [[nodiscard]] auto thpShmemEnabled() const -> int;
+  [[nodiscard]] auto thpEnabled() -> std::string;
+  [[nodiscard]] auto thpDefrag() -> std::string;
+  [[nodiscard]] auto thpShmemEnabled() -> std::string;
   [[nodiscard]] auto scanSleep() const -> int;
   [[nodiscard]] auto allocSleep() const -> int;
   [[nodiscard]] auto mglruMinTtlMs() const -> int;
@@ -53,9 +54,9 @@ class Backend : public QObject {
   [[nodiscard]] auto pageLockUnfairness() const -> int;
   [[nodiscard]] auto perCpuPagelistHighFraction() const -> int;
 
-  void setThpEnabled(const int& value);
-  void setThpDefrag(const int& value);
-  void setThpShmemEnabled(const int& value);
+  void setThpEnabled(const std::string& value);
+  void setThpDefrag(const std::string& value);
+  void setThpShmemEnabled(const std::string& value);
   void setScanSleep(const int& value);
   void setAllocSleep(const int& value);
   void setMglruMinTtlMs(const int& value);

@@ -234,6 +234,37 @@ bool Backend::loadPreset(const QString& name) {
     util::warning("error when parsing the cpu core list");
   }
 
+  // memory
+
+  memoryBackend.setThpEnabled(
+      root.get<std::string>("memory.transparent-hugepages.enabled", memoryBackend.thpEnabled()));
+
+  memoryBackend.setThpDefrag(root.get<std::string>("memory.transparent-hugepages.defrag", memoryBackend.thpDefrag()));
+
+  memoryBackend.setThpShmemEnabled(
+      root.get<std::string>("memory.transparent-hugepages.shmem_enabled", memoryBackend.thpShmemEnabled()));
+
+  memoryBackend.setScanSleep(root.get<int>("memory.transparent-hugepages.scan-sleep", memoryBackend.scanSleep()));
+
+  memoryBackend.setAllocSleep(root.get<int>("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep()));
+
+  memoryBackend.setMglruMinTtlMs(root.get<int>("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs()));
+
+  memoryBackend.setSwappiness(root.get<int>("memory.virtual-memory.swappiness", memoryBackend.swappiness()));
+
+  memoryBackend.setCachePressure(root.get<int>("memory.virtual-memory.cache-pressure", memoryBackend.cachePressure()));
+
+  memoryBackend.setCompactionProactiveness(
+      root.get<int>("memory.virtual-memory.compaction-proactiveness", memoryBackend.compactionProactiveness()));
+
+  memoryBackend.setMinFreeKbytes(root.get<int>("memory.virtual-memory.min-free-kbytes", memoryBackend.minFreeKbytes()));
+
+  memoryBackend.setPageLockUnfairness(
+      root.get<int>("memory.virtual-memory.page-lock-unfairness", memoryBackend.pageLockUnfairness()));
+
+  memoryBackend.setPerCpuPagelistHighFraction(
+      root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction()));
+
   return status;
 }
 

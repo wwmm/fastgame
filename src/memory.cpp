@@ -68,32 +68,50 @@ void Backend::setSwappiness(const int& value) {
   Q_EMIT swappinessChanged();
 }
 
-auto Backend::thpEnabled() const -> int {
-  return _thpEnabled;
+auto Backend::thpEnabled() -> std::string {
+  return thpEnabledModel.getValue(_thpEnabled).toStdString();
 }
 
-void Backend::setThpEnabled(const int& value) {
-  _thpEnabled = value;
+void Backend::setThpEnabled(const std::string& value) {
+  auto id = thpEnabledModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _thpEnabled = id;
 
   Q_EMIT thpEnabledChanged();
 }
 
-auto Backend::thpDefrag() const -> int {
-  return _thpDefrag;
+auto Backend::thpDefrag() -> std::string {
+  return thpDefragModel.getValue(_thpDefrag).toStdString();
 }
 
-void Backend::setThpDefrag(const int& value) {
-  _thpDefrag = value;
+void Backend::setThpDefrag(const std::string& value) {
+  auto id = thpDefragModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _thpDefrag = id;
 
   Q_EMIT thpDefragChanged();
 }
 
-auto Backend::thpShmemEnabled() const -> int {
-  return _thpShmemEnabled;
+auto Backend::thpShmemEnabled() -> std::string {
+  return thpShmemEnabledModel.getValue(_thpShmemEnabled).toStdString();
 }
 
-void Backend::setThpShmemEnabled(const int& value) {
-  _thpShmemEnabled = value;
+void Backend::setThpShmemEnabled(const std::string& value) {
+  auto id = thpShmemEnabledModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _thpShmemEnabled = id;
 
   Q_EMIT thpShmemEnabledChanged();
 }
@@ -186,7 +204,7 @@ void Backend::initThp() {
 
     auto enabled_value = util::get_selected_value(enabled_list);
 
-    util::debug("transparent huge pages state: "s + enabled_value);
+    util::debug("transparent huge pages state: " + enabled_value);
 
     int selected_id = 0;
 
@@ -208,7 +226,8 @@ void Backend::initThp() {
       }
     }
 
-    setThpEnabled(selected_id);
+    _thpEnabled = selected_id;
+    Q_EMIT thpEnabledChanged();
   }
 
   // parameter: defrag
@@ -218,7 +237,7 @@ void Backend::initThp() {
 
     auto defrag_value = util::get_selected_value(defrag_list);
 
-    util::debug("transparent huge pages defrag: "s + defrag_value);
+    util::debug("transparent huge pages defrag: " + defrag_value);
 
     int selected_id = 0;
 
@@ -240,7 +259,8 @@ void Backend::initThp() {
       }
     }
 
-    setThpDefrag(selected_id);
+    _thpDefrag = selected_id;
+    Q_EMIT thpDefragChanged();
   }
 
   // parameter: shmem_enabled
@@ -250,7 +270,7 @@ void Backend::initThp() {
 
     auto shmem_enabled_value = util::get_selected_value(shmem_enabled_list);
 
-    util::debug("transparent huge pages state: "s + shmem_enabled_value);
+    util::debug("transparent huge pages state: " + shmem_enabled_value);
 
     int selected_id = 0;
 
@@ -272,7 +292,8 @@ void Backend::initThp() {
       }
     }
 
-    setThpShmemEnabled(selected_id);
+    _thpShmemEnabled = selected_id;
+    Q_EMIT thpShmemEnabledChanged();
   }
 
   if (const auto list =

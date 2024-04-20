@@ -214,35 +214,11 @@ bool Backend::loadPreset(const QString& name) {
 
   cpuBackend.setUseCpuDmaLatency(root.get<bool>("cpu.use-cpu-dma-latency", cpuBackend.useCpuDmaLatency()));
 
-  try {
-    std::string joined_list;
+  cpuBackend.setGameAffinity(
+      QString::fromStdString(root.get<std::string>("cpu.game-cores", cpuBackend.gameAffinity().toStdString())));
 
-    for (const auto& c : root.get_child("cpu.game-cores")) {
-      joined_list.append(c.second.data() + ",");
-    }
-
-    if (!joined_list.empty()) {
-      joined_list.pop_back();  // removing the "," put at the end
-    }
-
-    cpuBackend.setGameAffinity(QString::fromStdString(joined_list));
-
-    joined_list.clear();
-
-    for (const auto& c : root.get_child("cpu.wineserver-cores")) {
-      joined_list.append(c.second.data() + ",");
-    }
-
-    if (!joined_list.empty()) {
-      joined_list.pop_back();  // removing the "," put at the end
-    }
-
-    cpuBackend.setWineServerAffinity(QString::fromStdString(joined_list));
-
-    joined_list.clear();
-  } catch (const boost::property_tree::ptree_error& e) {
-    util::warning("error when parsing the cpu core list");
-  }
+  cpuBackend.setWineServerAffinity(QString::fromStdString(
+      root.get<std::string>("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString())));
 
   // memory
 
@@ -377,6 +353,20 @@ bool Backend::save_preset(const QString& name) {
   }
 
   root.add_child("command-line-arguments", node);
+
+  // cpu
+
+  root.put("cpu.use-batch-scheduler", cpuBackend.useSchedBatch());
+  root.put("cpu.frequency-governor", cpuBackend.frequencyGovernor());
+  root.put("cpu.pcie-aspm-policy", cpuBackend.pcieAspmPolicy());
+  root.put("cpu.use-cpu-dma-latency", cpuBackend.useCpuDmaLatency());
+  root.put("cpu.use-realtime-wineserver", cpuBackend.realtimeWineserver());
+  root.put("cpu.enable-watchdog", cpuBackend.enableWatchdog());
+  root.put("cpu.niceness", cpuBackend.niceness());
+  root.put("cpu.autogroup-niceness", cpuBackend.autogroupNiceness());
+  root.put("cpu.timer-slack", cpuBackend.timerSlack());
+  root.put("cpu.game-cores", cpuBackend.gameAffinity().toStdString());
+  root.put("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString());
 
   // saving the properties to a file
 

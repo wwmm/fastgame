@@ -20,6 +20,9 @@ Kirigami.OverlaySheet {
     showCloseButton: false
     implicitWidth: Kirigami.Units.gridUnit * 30
     implicitHeight: root.height * 0.75
+    onClosed: {
+        presetsMenuStatus.visible = false;
+    }
 
     ListView {
         id: presetsListView
@@ -202,14 +205,6 @@ Kirigami.OverlaySheet {
             visible: false
             showCloseButton: true
             Layout.maximumWidth: parent.width
-
-            Timer {
-                interval: 3000
-                running: presetsMenuStatus.visible
-                repeat: false
-                onTriggered: presetsMenuStatus.visible = false
-            }
-
         }
 
         Controls.Label {

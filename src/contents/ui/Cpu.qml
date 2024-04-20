@@ -146,7 +146,7 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Game Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                onTextEdited: {
+                onTextChanged: {
                     if (text !== FGCpuBackend.gameAffinity)
                         FGCpuBackend.gameAffinity = text;
 
@@ -159,7 +159,7 @@ Kirigami.ScrollablePage {
                 }
 
                 validator: RegularExpressionValidator {
-                    regularExpression: /^[,0-9]+$/
+                    regularExpression: /^[1-9]+(,[1-9]+)+$/
                 }
 
             }
@@ -169,7 +169,7 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Wine Server Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                onTextEdited: {
+                onTextChanged: {
                     if (text !== FGCpuBackend.wineServerAffinity)
                         FGCpuBackend.wineServerAffinity = text;
 
@@ -182,7 +182,7 @@ Kirigami.ScrollablePage {
                 }
 
                 validator: RegularExpressionValidator {
-                    regularExpression: /^[,0-9]+$/
+                    regularExpression: /^[1-9]+(,[1-9]+)+$/
                 }
 
             }

@@ -397,6 +397,26 @@ bool Backend::save_preset(const QString& name) {
   root.put("disk.wbt-lat-usec", diskBackend.wbtLatUsec());
   root.put("disk.add_random", diskBackend.addRandom());
 
+  // amdgpu
+
+  if (amdgpuBackend.get_n_cards() > 0) {
+    auto card_indices = amdgpuBackend.get_card_indices();
+
+    auto card0 = card_indices[0];
+
+    root.put("amdgpu.performance-level", amdgpuBackend.get_performance_level(card0));
+    root.put("amdgpu.power-profile", amdgpuBackend.get_power_profile(card0));
+    root.put("amdgpu.power-cap", amdgpuBackend.get_power_cap(card0));
+
+    if (amdgpuBackend.get_n_cards() >= 2) {
+      auto card1 = card_indices[1];
+
+      root.put("amdgpu.card1.performance-level", amdgpuBackend.get_performance_level(card1));
+      root.put("amdgpu.card1.power-profile", amdgpuBackend.get_power_profile(card1));
+      root.put("amdgpu.card1.power-cap", amdgpuBackend.get_power_cap(card1));
+    }
+  }
+
   // saving the properties to a file
 
   auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};

@@ -7,7 +7,7 @@ pkgdesc='Optimize system performance for games'
 arch=(x86_64 i686)
 url='https://github.com/wwmm/fastgame'
 license=('GPL3')
-depends=('boost-libs' 'kirigami' 'kirigami-addons' 'qqc2-desktop-style' 'libxnvctrl' 'breeze-icons')
+depends=('boost-libs' 'kirigami' 'kirigami-addons' 'qqc2-desktop-style' 'libxnvctrl' 'breeze-icons' 'qt6-base')
 makedepends=('boost' 'cmake' 'extra-cmake-modules' 'git')
 source=("git+https://github.com/wwmm/fastgame.git#branch=fgqt")
 conflicts=(fastgame)
@@ -22,7 +22,7 @@ pkgver() {
 build() {
   cmake \
     -B build  \
-    -S "$pkgname-$pkgver" \
+    -S fastgame \
     -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
     -Wno-dev
 

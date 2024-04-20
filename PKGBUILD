@@ -1,15 +1,15 @@
 # Maintainer: Wellington <wellingtonwallace@gmail.com>
 
 pkgname=fastgame-git
-pkgver=0.2.0.r18.g5273f9c
+pkgver=0.3.0.r37.ga5943b6
 pkgrel=1
 pkgdesc='Optimize system performance for games'
 arch=(x86_64 i686)
 url='https://github.com/wwmm/fastgame'
 license=('GPL3')
-depends=('boost-libs' 'gtk4' 'glib2' 'fmt' 'libsigc++-3.0' 'libadwaita' 'udisks2' 'libxnvctrl')
-makedepends=('meson' 'boost' 'itstool' 'cmake' 'git')
-source=("git+https://github.com/wwmm/fastgame.git")
+depends=('boost-libs' 'kirigami' 'kirigami-addons' 'qqc2-desktop-style' 'libxnvctrl')
+makedepends=('boost' 'cmake' 'git')
+source=("git+https://github.com/wwmm/fastgame.git#branch=fgqt")
 conflicts=(fastgame)
 provides=(fastgame)
 sha512sums=('SKIP')
@@ -20,9 +20,10 @@ pkgver() {
 }
 
 build() {
-  arch-meson fastgame build
-
-  ninja -C build
+  mkdir build
+  cd build
+  cmake ..
+  cmake --build .
 }
 
 package() {

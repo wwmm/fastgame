@@ -385,6 +385,18 @@ bool Backend::save_preset(const QString& name) {
   root.put("memory.transparent-hugepages.scan-sleep", memoryBackend.scanSleep());
   root.put("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep());
 
+  // disk
+
+  root.put("disk.mounting-path", diskBackend.mountingPath());
+  root.put("disk.scheduler", diskBackend.scheduler());
+  root.put("disk.enable-realtime-priority", diskBackend.enableRealtimePriority());
+  root.put("disk.readahead", diskBackend.readahead());
+  root.put("disk.nr-requests", diskBackend.nrRequests());
+  root.put("disk.rq-affinity", diskBackend.rqAffinity());
+  root.put("disk.nomerges", diskBackend.noMerges());
+  root.put("disk.wbt-lat-usec", diskBackend.wbtLatUsec());
+  root.put("disk.add_random", diskBackend.addRandom());
+
   // saving the properties to a file
 
   auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};

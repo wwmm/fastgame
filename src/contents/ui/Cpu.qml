@@ -34,7 +34,7 @@ Kirigami.ScrollablePage {
 
                 text: i18n("PCIe ASPM")
                 displayMode: FormCard.FormComboBoxDelegate.ComboBox
-                currentIndex: 0
+                currentIndex: FGCpuBackend.pcieAspmPolicy
                 editable: false
                 model: FGModelPcieAspm
                 onActivated: (idx) => {
@@ -50,9 +50,12 @@ Kirigami.ScrollablePage {
                 label: i18n("Niceness")
                 from: -20
                 to: 19
-                value: 0
+                value: FGCpuBackend.niceness
                 decimals: 0
                 stepSize: 1
+                onValueModified: (v) => {
+                    FGCpuBackend.niceness = v;
+                }
             }
 
             FgSpinBox {
@@ -61,9 +64,12 @@ Kirigami.ScrollablePage {
                 label: i18n("Autogroup Niceness")
                 from: -20
                 to: 19
-                value: 0
+                value: FGCpuBackend.autogroupNiceness
                 decimals: 0
                 stepSize: 1
+                onValueModified: (v) => {
+                    FGCpuBackend.autogroupNiceness = v;
+                }
             }
 
             FgSpinBox {
@@ -140,7 +146,17 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Game Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                text: FGCpuBackend.gameAffinity
+                onTextEdited: {
+                    if (text !== FGCpuBackend.gameAffinity)
+                        FGCpuBackend.gameAffinity = text;
+
+                }
+
+                Binding {
+                    target: gameAffinity
+                    property: "text"
+                    value: FGCpuBackend.gameAffinity
+                }
 
                 validator: RegularExpressionValidator {
                     regularExpression: /^[,0-9]+$/
@@ -153,7 +169,17 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Wine Server Affinity")
                 placeholderText: i18n("List of Cores. Example: 2,9,13,15,3")
-                text: FGCpuBackend.wineServerAffinity
+                onTextEdited: {
+                    if (text !== FGCpuBackend.wineServerAffinity)
+                        FGCpuBackend.wineServerAffinity = text;
+
+                }
+
+                Binding {
+                    target: wineServerAffinity
+                    property: "text"
+                    value: FGCpuBackend.wineServerAffinity
+                }
 
                 validator: RegularExpressionValidator {
                     regularExpression: /^[,0-9]+$/

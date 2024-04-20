@@ -14,8 +14,6 @@
 
 namespace cpu {
 
-using namespace std::string_literals;
-
 Backend::Backend(QObject* parent) : QObject(parent) {
   qmlRegisterSingletonInstance<Backend>("FGCpuBackend", PROJECT_VERSION_MAJOR, 0, "FGCpuBackend", this);
 
@@ -75,22 +73,34 @@ void Backend::setUseCpuDmaLatency(const bool& value) {
   Q_EMIT useCpuDmaLatencyChanged();
 }
 
-auto Backend::frequencyGovernor() const -> int {
-  return _frequencyGovernor;
+auto Backend::frequencyGovernor() -> std::string {
+  return frequencyGovernorModel.getValue(_frequencyGovernor).toStdString();
 }
 
-void Backend::setFrequencyGovernor(const int& value) {
-  _frequencyGovernor = value;
+void Backend::setFrequencyGovernor(const std::string& value) {
+  auto id = frequencyGovernorModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _frequencyGovernor = id;
 
   Q_EMIT frequencyGovernorChanged();
 }
 
-auto Backend::pcieAspmPolicy() const -> int {
-  return _pcieAspmPolicy;
+auto Backend::pcieAspmPolicy() -> std::string {
+  return pciAspmPolicyModel.getValue(_pcieAspmPolicy).toStdString();
 }
 
-void Backend::setPcieAspmPolicy(const int& value) {
-  _pcieAspmPolicy = value;
+void Backend::setPcieAspmPolicy(const std::string& value) {
+  auto id = pciAspmPolicyModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _pcieAspmPolicy = id;
 
   Q_EMIT pcieAspmPolicyChanged();
 }
@@ -103,6 +113,26 @@ void Backend::setTimerSlack(const int& value) {
   _timerSlack = value;
 
   Q_EMIT timerSlackChanged();
+}
+
+auto Backend::niceness() const -> int {
+  return _niceness;
+}
+
+void Backend::setNiceness(const int& value) {
+  _niceness = value;
+
+  Q_EMIT nicenessChanged();
+}
+
+auto Backend::autogroupNiceness() const -> int {
+  return _autogroupNiceness;
+}
+
+void Backend::setAutogroupNiceness(const int& value) {
+  _autogroupNiceness = value;
+
+  Q_EMIT autogroupNicenessChanged();
 }
 
 auto Backend::gameAffinity() const -> QString {
@@ -150,11 +180,13 @@ void Backend::initFreqGovernor() {
     }
   }
 
-  setFrequencyGovernor(selected_id);
+  _frequencyGovernor = selected_id;
+
+  Q_EMIT frequencyGovernorChanged();
 
   auto n_cores = std::thread::hardware_concurrency();
 
-  util::debug("number of cores: "s + std::to_string(n_cores));
+  util::debug("number of cores: " + util::to_string(n_cores));
 }
 
 void Backend::initPcieAspm() {
@@ -162,7 +194,7 @@ void Backend::initPcieAspm() {
 
   auto selected_policy = util::get_selected_value(list_policies);
 
-  util::debug("The current pcie_aspm policy is: "s + selected_policy);
+  util::debug("The current pcie_aspm policy is: " + selected_policy);
 
   int selected_id = 0;
 
@@ -184,7 +216,8 @@ void Backend::initPcieAspm() {
     }
   }
 
-  setPcieAspmPolicy(selected_id);
+  _pcieAspmPolicy = selected_id;
+  Q_EMIT pcieAspmPolicyChanged();
 }
 
 }  // namespace cpu

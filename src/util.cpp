@@ -85,7 +85,7 @@ auto get_selected_value(const std::vector<std::string>& list) -> std::string {
 auto find_hwmon_index(const int& card_index) -> int {
   int index = 0;
 
-  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/");
+  auto path = std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/");
 
   if (!std::filesystem::is_directory(path)) {
     util::debug("The directory " + path.string() + " does not exist!");
@@ -118,7 +118,7 @@ void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
   }
 
   if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
-    util::warning("fastgame_apply: could not set cpu affinity for the process: " + std::to_string(pid));
+    util::warning("fastgame_apply: could not set cpu affinity for the process: " + util::to_string(pid));
   }
 }
 
@@ -146,7 +146,7 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
 
 auto card_is_amdgpu(const int& card_index) -> bool {
   auto path =
-      std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/driver/module/drivers/");
+      std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/driver/module/drivers/");
 
   if (std::filesystem::is_directory(path)) {
     for (const auto& entry : std::filesystem::directory_iterator(path)) {

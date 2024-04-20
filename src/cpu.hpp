@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
+#include <string>
 #include "combobox_model.hpp"
 
 namespace cpu {
@@ -19,11 +20,15 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool useCpuDmaLatency READ useCpuDmaLatency WRITE setUseCpuDmaLatency NOTIFY useCpuDmaLatencyChanged)
 
-  Q_PROPERTY(int frequencyGovernor READ frequencyGovernor WRITE setFrequencyGovernor NOTIFY frequencyGovernorChanged)
+  Q_PROPERTY(int frequencyGovernor MEMBER _frequencyGovernor NOTIFY frequencyGovernorChanged)
 
-  Q_PROPERTY(int pcieAspmPolicy READ pcieAspmPolicy WRITE setPcieAspmPolicy NOTIFY pcieAspmPolicyChanged)
+  Q_PROPERTY(int pcieAspmPolicy MEMBER _pcieAspmPolicy NOTIFY pcieAspmPolicyChanged)
 
   Q_PROPERTY(int timerSlack READ timerSlack WRITE setTimerSlack NOTIFY timerSlackChanged)
+
+  Q_PROPERTY(int niceness READ niceness WRITE setNiceness NOTIFY nicenessChanged)
+
+  Q_PROPERTY(int autogroupNiceness READ autogroupNiceness WRITE setAutogroupNiceness NOTIFY autogroupNicenessChanged)
 
   Q_PROPERTY(QString gameAffinity READ gameAffinity WRITE setGameAffinity NOTIFY gameAffinityChanged)
 
@@ -37,9 +42,11 @@ class Backend : public QObject {
   [[nodiscard]] auto realtimeWineserver() const -> bool;
   [[nodiscard]] auto enableWatchdog() const -> bool;
   [[nodiscard]] auto useCpuDmaLatency() const -> bool;
-  [[nodiscard]] auto frequencyGovernor() const -> int;
-  [[nodiscard]] auto pcieAspmPolicy() const -> int;
+  [[nodiscard]] auto frequencyGovernor() -> std::string;
+  [[nodiscard]] auto pcieAspmPolicy() -> std::string;
   [[nodiscard]] auto timerSlack() const -> int;
+  [[nodiscard]] auto niceness() const -> int;
+  [[nodiscard]] auto autogroupNiceness() const -> int;
   [[nodiscard]] auto gameAffinity() const -> QString;
   [[nodiscard]] auto wineServerAffinity() const -> QString;
 
@@ -47,9 +54,11 @@ class Backend : public QObject {
   void setRealtimeWineserver(const bool& value);
   void setEnableWatchdog(const bool& value);
   void setUseCpuDmaLatency(const bool& value);
-  void setFrequencyGovernor(const int& value);
-  void setPcieAspmPolicy(const int& value);
+  void setFrequencyGovernor(const std::string& value);
+  void setPcieAspmPolicy(const std::string& value);
   void setTimerSlack(const int& value);
+  void setNiceness(const int& value);
+  void setAutogroupNiceness(const int& value);
   void setGameAffinity(const QString& value);
   void setWineServerAffinity(const QString& value);
 
@@ -61,6 +70,8 @@ class Backend : public QObject {
   void frequencyGovernorChanged();
   void pcieAspmPolicyChanged();
   void timerSlackChanged();
+  void nicenessChanged();
+  void autogroupNicenessChanged();
   void gameAffinityChanged();
   void wineServerAffinityChanged();
 
@@ -73,6 +84,8 @@ class Backend : public QObject {
   int _frequencyGovernor;
   int _pcieAspmPolicy;
   int _timerSlack;
+  int _niceness;
+  int _autogroupNiceness;
 
   QString _gameAffinity;
   QString _wineServerAffinity;

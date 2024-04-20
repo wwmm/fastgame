@@ -136,6 +136,8 @@ auto Backend::get_presets_names() -> std::vector<QString> {
 }
 
 bool Backend::loadPreset(const QString& name) {
+  bool status = true;
+
   auto input_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};
 
   boost::property_tree::ptree root;
@@ -164,6 +166,8 @@ bool Backend::loadPreset(const QString& name) {
     }
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("error when parsing the environmental variables list");
+
+    status = false;
   }
 
   // command line arguments
@@ -176,9 +180,61 @@ bool Backend::loadPreset(const QString& name) {
     }
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("error when parsing the command line arguments list");
+
+    status = false;
   }
 
-  return true;
+  // cpu
+
+  cpuBackend.setFrequencyGovernor(root.get<std::string>("cpu.frequency-governor", cpuBackend.frequencyGovernor()));
+
+  cpuBackend.setPcieAspmPolicy(root.get<std::string>("cpu.pcie-aspm-policy", cpuBackend.pcieAspmPolicy()));
+
+  cpuBackend.setNiceness(root.get<int>("cpu.niceness", cpuBackend.niceness()));
+
+  cpuBackend.setAutogroupNiceness(root.get<int>("cpu.autogroup-niceness", cpuBackend.autogroupNiceness()));
+
+  cpuBackend.setTimerSlack(root.get<int>("cpu.timer-slack", cpuBackend.timerSlack()));
+
+  cpuBackend.setUseSchedBatch(root.get<bool>("cpu.use-batch-scheduler", cpuBackend.useSchedBatch()));
+
+  cpuBackend.setRealtimeWineserver(root.get<bool>("cpu.use-realtime-wineserver", cpuBackend.realtimeWineserver()));
+
+  cpuBackend.setEnableWatchdog(root.get<bool>("cpu.enable-watchdog", cpuBackend.enableWatchdog()));
+
+  cpuBackend.setUseCpuDmaLatency(root.get<bool>("cpu.use-cpu-dma-latency", cpuBackend.useCpuDmaLatency()));
+
+  try {
+    std::string joined_list;
+
+    for (const auto& c : root.get_child("cpu.game-cores")) {
+      joined_list.append(c.second.data() + ",");
+    }
+
+    if (!joined_list.empty()) {
+      joined_list.pop_back();  // removing the "," put at the end
+    }
+
+    cpuBackend.setGameAffinity(QString::fromStdString(joined_list));
+
+    joined_list.clear();
+
+    for (const auto& c : root.get_child("cpu.wineserver-cores")) {
+      joined_list.append(c.second.data() + ",");
+    }
+
+    if (!joined_list.empty()) {
+      joined_list.pop_back();  // removing the "," put at the end
+    }
+
+    cpuBackend.setWineServerAffinity(QString::fromStdString(joined_list));
+
+    joined_list.clear();
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("error when parsing the cpu core list");
+  }
+
+  return status;
 }
 
 }  // namespace presets

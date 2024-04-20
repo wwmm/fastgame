@@ -149,9 +149,17 @@ auto Backend::get_card_indices() -> std::vector<int> {
 
 void Backend::set_performance_level(const QString& name, const int& card_index) {
   if (card_index == card_indices.front()) {
-    setPerformanceLevel0(performanceLevel0Model.getId(name));
+    auto id = performanceLevel0Model.getId(name);
+
+    if (id != -1) {
+      setPerformanceLevel0(id);
+    }
   } else {
-    setPerformanceLevel1(performanceLevel1Model.getId(name));
+    auto id = performanceLevel1Model.getId(name);
+
+    if (id != -1) {
+      setPerformanceLevel1(id);
+    }
   }
 }
 
@@ -198,8 +206,8 @@ auto Backend::get_power_cap(const int& card_index) -> int {
 void Backend::read_power_cap_max(const int& card_index) {
   auto hwmon_index = util::find_hwmon_index(card_index);
 
-  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                                    std::to_string(hwmon_index) + "/power1_cap_max");
+  auto path = std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    util::to_string(hwmon_index) + "/power1_cap_max");
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug("file " + path.string() + " does not exist!");
@@ -224,15 +232,15 @@ void Backend::read_power_cap_max(const int& card_index) {
     }
 
     util::debug("card " + util::to_string(card_index) +
-                " maximum allowed power cap: " + std::to_string(power_cap_in_watts) + " W");
+                " maximum allowed power cap: " + util::to_string(power_cap_in_watts) + " W");
   }
 }
 
 void Backend::read_power_cap(const int& card_index) {
   auto hwmon_index = util::find_hwmon_index(card_index);
 
-  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/hwmon/hwmon" +
-                                    std::to_string(hwmon_index) + "/power1_cap");
+  auto path = std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    util::to_string(hwmon_index) + "/power1_cap");
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug("file " + path.string() + " does not exist!");
@@ -256,13 +264,13 @@ void Backend::read_power_cap(const int& card_index) {
       setPowerCap1(power_cap_in_watts);
     }
 
-    util::debug("card " + util::to_string(card_index) + " current power cap: " + std::to_string(power_cap_in_watts) +
+    util::debug("card " + util::to_string(card_index) + " current power cap: " + util::to_string(power_cap_in_watts) +
                 " W");
   }
 }
 
 void Backend::read_performance_level(const int& card_index) {
-  auto path = std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) +
+  auto path = std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) +
                                     "/device/power_dpm_force_performance_level");
 
   if (!std::filesystem::is_regular_file(path)) {
@@ -287,7 +295,7 @@ void Backend::read_performance_level(const int& card_index) {
 
 void Backend::read_power_profile(const int& card_index) {
   auto path =
-      std::filesystem::path("/sys/class/drm/card" + std::to_string(card_index) + "/device/pp_power_profile_mode");
+      std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/pp_power_profile_mode");
 
   if (!std::filesystem::is_regular_file(path)) {
     util::debug("file " + path.string() + " does not exist!");

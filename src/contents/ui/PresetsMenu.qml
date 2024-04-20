@@ -56,6 +56,8 @@ Kirigami.OverlaySheet {
                 if (res === true) {
                     showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded"));
                     presetsMenuFooter.lastUsedPreset = presetName;
+                } else {
+                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded with errors"));
                 }
             }
 

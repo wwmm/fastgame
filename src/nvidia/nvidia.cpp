@@ -30,7 +30,7 @@ Nvidia::Nvidia() {
 
     found_gpu = false;
   } else {
-    util::debug("Using NV-CONTROL extension " + std::to_string(major) + "." + std::to_string(minor) + " on display " +
+    util::debug("Using NV-CONTROL extension " + util::to_string(major) + "." + util::to_string(minor) + " on display " +
                 XDisplayName(nullptr));
 
     found_gpu = true;

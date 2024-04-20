@@ -57,4 +57,44 @@ auto Backend::has_gpu() -> bool {
   return found;
 }
 
+auto Backend::powermizeMode0() const -> int {
+  return _powermizeMode0;
+}
+
+void Backend::setPowermizeMode0(const int& value) {
+  _powermizeMode0 = value;
+
+  Q_EMIT powermizeMode0Changed();
+}
+
+auto Backend::powerLimit0() const -> int {
+  return _powerLimit0;
+}
+
+void Backend::setPowerLimit0(const int& value) {
+  _powerLimit0 = value;
+
+  Q_EMIT powerLimit0Changed();
+}
+
+auto Backend::gpuClockOffset0() const -> int {
+  return _gpuClockOffset0;
+}
+
+void Backend::setGpuClockOffset0(const int& value) {
+  _gpuClockOffset0 = value;
+
+  Q_EMIT gpuClockOffset0Changed();
+}
+
+auto Backend::memoryClockOffset0() const -> int {
+  return _memoryClockOffset0;
+}
+
+void Backend::setMemoryClockOffset0(const int& value) {
+  _memoryClockOffset0 = value;
+
+  Q_EMIT memoryClockOffset0Changed();
+}
+
 }  // namespace nvidia

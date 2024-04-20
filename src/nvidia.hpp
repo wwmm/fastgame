@@ -17,17 +17,18 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool available MEMBER _available NOTIFY availableChanged)
 
-  Q_PROPERTY(int powermizeMode0 MEMBER _powermizeMode0 NOTIFY powermizeMode0Changed)
+  Q_PROPERTY(int powermizeMode0 READ powermizeMode0 WRITE setPowermizeMode0 NOTIFY powermizeMode0Changed)
 
-  Q_PROPERTY(int powerLimit MEMBER _powerLimit NOTIFY powerLimitChanged)
+  Q_PROPERTY(int powerLimit0 READ powerLimit0 WRITE setPowerLimit0 NOTIFY powerLimit0Changed)
 
-  Q_PROPERTY(int gpuClockOffset0 MEMBER _gpuClockOffset0 NOTIFY gpuClockOffset0Changed)
+  Q_PROPERTY(int gpuClockOffset0 READ gpuClockOffset0 WRITE setGpuClockOffset0 NOTIFY gpuClockOffset0Changed)
 
   Q_PROPERTY(int gpuClockOffset0Max MEMBER _gpuClockOffset0Max NOTIFY gpuClockOffset0MaxChanged)
 
   Q_PROPERTY(int gpuClockOffset0Min MEMBER _gpuClockOffset0Min NOTIFY gpuClockOffset0MinChanged)
 
-  Q_PROPERTY(int memoryClockOffset0 MEMBER _memoryClockOffset0 NOTIFY memoryClockOffset0Changed)
+  Q_PROPERTY(
+      int memoryClockOffset0 READ memoryClockOffset0 WRITE setMemoryClockOffset0 NOTIFY memoryClockOffset0Changed)
 
   Q_PROPERTY(int memoryClockOffset0Min MEMBER _memoryClockOffset0Min NOTIFY memoryClockOffset0MinChanged)
 
@@ -36,10 +37,22 @@ class Backend : public QObject {
  public:
   explicit Backend(QObject* parent = nullptr);
 
+  [[nodiscard]] auto powermizeMode0() const -> int;
+  [[nodiscard]] auto powerLimit0() const -> int;
+  [[nodiscard]] auto gpuClockOffset0() const -> int;
+  [[nodiscard]] auto memoryClockOffset0() const -> int;
+
+  void setPowermizeMode0(const int& value);
+  void setPowerLimit0(const int& value);
+  void setGpuClockOffset0(const int& value);
+  void setMemoryClockOffset0(const int& value);
+
+  auto has_gpu() -> bool;
+
  signals:
   void availableChanged();
   void powermizeMode0Changed();
-  void powerLimitChanged();
+  void powerLimit0Changed();
   void gpuClockOffset0Changed();
   void gpuClockOffset0MaxChanged();
   void gpuClockOffset0MinChanged();
@@ -52,11 +65,11 @@ class Backend : public QObject {
 
   int _powermizeMode0 = -1;
   int _scheduler;
-  int _powerLimit;
-  int _gpuClockOffset0;
+  int _powerLimit0;
+  int _gpuClockOffset0 = 0;
   int _gpuClockOffset0Min;
   int _gpuClockOffset0Max;
-  int _memoryClockOffset0;
+  int _memoryClockOffset0 = 0;
   int _memoryClockOffset0Min;
   int _memoryClockOffset0Max;
 
@@ -65,8 +78,6 @@ class Backend : public QObject {
 #ifdef USE_NVIDIA
   std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper;
 #endif
-
-  auto has_gpu() -> bool;
 };
 
 }  // namespace nvidia

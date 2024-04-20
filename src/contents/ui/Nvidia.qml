@@ -35,17 +35,17 @@ Kirigami.ScrollablePage {
             }
 
             FgSpinBox {
-                id: powerLimit
+                id: powerLimit0
 
                 label: i18n("Power Limit")
                 from: 0
                 to: 1000
-                value: FGNvidiaBackend.powerLimit
+                value: FGNvidiaBackend.powerLimit0
                 decimals: 0
                 stepSize: 1
                 unit: "W"
                 onValueModified: (v) => {
-                    FGNvidiaBackend.powerLimit = v;
+                    FGNvidiaBackend.powerLimit0 = v;
                 }
             }
 

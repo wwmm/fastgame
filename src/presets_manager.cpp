@@ -314,6 +314,23 @@ bool Backend::loadPreset(const QString& name) {
     }
   }
 
+  // nvidia
+
+#ifdef USE_NVIDIA
+
+  if (nvidiaBackend.has_gpu()) {
+    nvidiaBackend.setPowermizeMode0(root.get<int>("nvidia.powermize-mode", nvidiaBackend.powermizeMode0()));
+
+    nvidiaBackend.setPowerLimit0(root.get<int>("nvidia.power-limit", nvidiaBackend.powerLimit0()));
+
+    nvidiaBackend.setGpuClockOffset0(root.get<int>("nvidia.clock-offset.gpu", nvidiaBackend.gpuClockOffset0()));
+
+    nvidiaBackend.setMemoryClockOffset0(
+        root.get<int>("nvidia.clock-offset.memory", nvidiaBackend.memoryClockOffset0()));
+  }
+
+#endif
+
   return status;
 }
 

@@ -417,6 +417,19 @@ bool Backend::save_preset(const QString& name) {
     }
   }
 
+  // nvidia
+
+#ifdef USE_NVIDIA
+
+  if (nvidiaBackend.has_gpu()) {
+    root.put("nvidia.powermize-mode", nvidiaBackend.powermizeMode0());
+    root.put("nvidia.clock-offset.gpu", nvidiaBackend.gpuClockOffset0());
+    root.put("nvidia.clock-offset.memory", nvidiaBackend.memoryClockOffset0());
+    root.put("nvidia.power-limit", nvidiaBackend.powerLimit0());
+  }
+
+#endif
+
   // saving the properties to a file
 
   auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};

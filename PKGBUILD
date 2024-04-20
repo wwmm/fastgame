@@ -8,7 +8,7 @@ arch=(x86_64 i686)
 url='https://github.com/wwmm/fastgame'
 license=('GPL3')
 depends=('boost-libs' 'kirigami' 'kirigami-addons' 'qqc2-desktop-style' 'libxnvctrl')
-makedepends=('boost' 'cmake' 'git')
+makedepends=('boost' 'cmake' 'extra-cmake-modules' 'git')
 source=("git+https://github.com/wwmm/fastgame.git#branch=fgqt")
 conflicts=(fastgame)
 provides=(fastgame)

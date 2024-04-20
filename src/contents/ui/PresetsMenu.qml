@@ -1,3 +1,4 @@
+import "Common.js" as Common
 import FGPresetsBackend
 import FGPresetsMenuModel
 import QtCore
@@ -73,7 +74,10 @@ Kirigami.OverlaySheet {
                         icon.name: "document-save-symbolic"
                         displayHint: Kirigami.DisplayHint.AlwaysHide
                         onTriggered: {
-                            showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
+                            if (FGPresetsBackend.save_preset(presetName))
+                                showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
+                            else
+                                showPresetsMenuStatus(i18n("Failed to Save Settings to: " + presetName));
                         }
                     },
                     Kirigami.Action {
@@ -141,9 +145,15 @@ Kirigami.OverlaySheet {
                     text: i18n("Create Preset")
                     icon.name: "list-add-symbolic"
                     onTriggered: {
-                        presetName.accepted();
-                        showPresetsMenuStatus(i18n("New Preset Created: " + presetName.text));
-                        presetName.text = "";
+                        if (!Common.isEmpty(presetName.text)) {
+                            if (FGPresetsBackend.createPreset(presetName.text) === true) {
+                                presetName.accepted();
+                                showPresetsMenuStatus(i18n("New Preset Created: " + presetName.text));
+                                presetName.text = "";
+                            } else {
+                                showPresetsMenuStatus(i18n("Failed to Create Preset: " + presetName.text));
+                            }
+                        }
                     }
                 }
             ]
@@ -160,6 +170,10 @@ Kirigami.OverlaySheet {
                 implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
                 color: presetName.placeholderTextColor
                 source: "bookmarks-symbolic"
+            }
+
+            validator: RegularExpressionValidator {
+                regularExpression: /[^\\/]{60}$/ //less than 60 characters and no / or \
             }
 
         }

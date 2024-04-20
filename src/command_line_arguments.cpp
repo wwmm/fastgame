@@ -2,6 +2,7 @@
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
 #include <qhash.h>
+#include <qlist.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qqml.h>
@@ -68,6 +69,10 @@ void Model::reset() {
   list.clear();
 
   endResetModel();
+}
+
+auto Model::getList() -> QList<QString> {
+  return list;
 }
 
 void Model::append(const QString& value) {

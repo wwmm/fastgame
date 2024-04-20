@@ -27,6 +27,8 @@ class Model : public QAbstractListModel {
 
   void reset();
 
+  auto getList() -> QList<QPair<QString, QString>>;
+
   Q_INVOKABLE void append(const QString& name, const QString& value);
 
   Q_INVOKABLE void remove(const int& rowIndex);

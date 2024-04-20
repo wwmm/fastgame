@@ -1,6 +1,7 @@
 #include "environment_variables.hpp"
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
+#include <qcontainerfwd.h>
 #include <qhash.h>
 #include <qnamespace.h>
 #include <qobject.h>
@@ -77,6 +78,10 @@ void Model::reset() {
   list.clear();
 
   endResetModel();
+}
+
+auto Model::getList() -> QList<QPair<QString, QString>> {
+  return list;
 }
 
 void Model::append(const QString& name, const QString& value) {

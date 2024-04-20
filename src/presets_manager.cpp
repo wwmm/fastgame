@@ -10,12 +10,14 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <algorithm>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <filesystem>
 #include <iterator>
 #include <string>
+#include <utility>
 #include <vector>
 #include "config.h"
 #include "util.hpp"
@@ -133,6 +135,14 @@ auto Backend::get_presets_names() -> std::vector<QString> {
   }
 
   return names;
+}
+
+bool Backend::createPreset(const QString& name) {
+  if (std::ranges::all_of(get_presets_names(), [=](auto v) { return v != name; })) {
+    return save_preset(name);
+  }
+
+  return false;
 }
 
 bool Backend::loadPreset(const QString& name) {
@@ -332,6 +342,51 @@ bool Backend::loadPreset(const QString& name) {
 #endif
 
   return status;
+}
+
+bool Backend::save_preset(const QString& name) {
+  boost::property_tree::ptree root;
+  boost::property_tree::ptree node;
+
+  // game executable
+
+  root.put("game-executable", _executableName.toStdString());
+
+  // environment variables
+
+  for (const auto& p : envVarsModel.getList()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", p.first.toStdString() + "=" + p.second.toStdString());
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("environment-variables", node);
+
+  // command line arguments
+
+  node.clear();
+
+  for (const auto& v : cmdArgsModel.getList()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v.toStdString());
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("command-line-arguments", node);
+
+  // saving the properties to a file
+
+  auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};
+
+  boost::property_tree::write_json(output_file, root);
+
+  util::debug("saved preset: " + output_file.string());
+
+  return true;
 }
 
 }  // namespace presets

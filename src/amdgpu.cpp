@@ -147,15 +147,15 @@ auto Backend::get_card_indices() -> std::vector<int> {
   return card_indices;
 }
 
-void Backend::set_performance_level(const QString& name, const int& card_index) {
+void Backend::set_performance_level(const std::string& name, const int& card_index) {
   if (card_index == card_indices.front()) {
-    auto id = performanceLevel0Model.getId(name);
+    auto id = performanceLevel0Model.getId(QString::fromStdString(name));
 
     if (id != -1) {
       setPerformanceLevel0(id);
     }
   } else {
-    auto id = performanceLevel1Model.getId(name);
+    auto id = performanceLevel1Model.getId(QString::fromStdString(name));
 
     if (id != -1) {
       setPerformanceLevel1(id);
@@ -163,11 +163,11 @@ void Backend::set_performance_level(const QString& name, const int& card_index) 
   }
 }
 
-auto Backend::get_performance_level(const int& card_index) -> QString {
+auto Backend::get_performance_level(const int& card_index) -> std::string {
   if (card_index == card_indices.front()) {
-    return performanceLevel0Model.getValue(_performanceLevel0);
+    return performanceLevel0Model.getValue(_performanceLevel0).toStdString();
   } else {
-    return performanceLevel1Model.getValue(_performanceLevel1);
+    return performanceLevel1Model.getValue(_performanceLevel1).toStdString();
   }
 }
 
@@ -287,7 +287,7 @@ void Backend::read_performance_level(const int& card_index) {
 
     f.close();
 
-    set_performance_level(QString::fromStdString(level), card_index);
+    set_performance_level(level, card_index);
 
     util::debug("card " + util::to_string(card_index) + " current performance level: " + level);
   }

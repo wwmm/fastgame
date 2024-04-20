@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
+#include <string>
 #include <vector>
 #include "combobox_model.hpp"
 
@@ -52,8 +53,8 @@ class Backend : public QObject {
 
   auto get_n_cards() -> int;
   auto get_card_indices() -> std::vector<int>;
-  void set_performance_level(const QString& name, const int& card_index);
-  auto get_performance_level(const int& card_index) -> QString;
+  void set_performance_level(const std::string& name, const int& card_index);
+  auto get_performance_level(const int& card_index) -> std::string;
   void set_power_profile(const int& id, const int& card_index);
   auto get_power_profile(const int& card_index) -> int;
   void set_power_cap(const int& value, const int& card_index);

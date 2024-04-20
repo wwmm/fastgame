@@ -288,6 +288,32 @@ bool Backend::loadPreset(const QString& name) {
 
   // amdgpu
 
+  if (amdgpuBackend.get_n_cards() > 0) {
+    auto card_indices = amdgpuBackend.get_card_indices();
+
+    auto card0 = card_indices[0];
+
+    amdgpuBackend.set_performance_level(
+        root.get<std::string>("amdgpu.performance-level", amdgpuBackend.get_performance_level(card0)), card0);
+
+    amdgpuBackend.set_power_profile(root.get<int>("amdgpu.power-profile", amdgpuBackend.get_power_profile(card0)),
+                                    card0);
+
+    amdgpuBackend.set_power_cap(root.get<int>("amdgpu.power-cap", amdgpuBackend.get_power_cap(card0)), card0);
+
+    if (amdgpuBackend.get_n_cards() >= 2) {
+      auto card1 = card_indices[1];
+
+      amdgpuBackend.set_performance_level(
+          root.get<std::string>("amdgpu.card1.performance-level", amdgpuBackend.get_performance_level(card1)), card1);
+
+      amdgpuBackend.set_power_profile(
+          root.get<int>("amdgpu.card1.power-profile", amdgpuBackend.get_power_profile(card1)), card1);
+
+      amdgpuBackend.set_power_cap(root.get<int>("amdgpu.card1.power-cap", amdgpuBackend.get_power_cap(card1)), card1);
+    }
+  }
+
   return status;
 }
 

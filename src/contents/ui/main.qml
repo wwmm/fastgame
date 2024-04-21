@@ -249,6 +249,14 @@ Kirigami.ApplicationWindow {
                         onTriggered: {
                             aboutDialog.open();
                         }
+                    },
+                    Kirigami.Action {
+                        text: i18n("Quit")
+                        icon.name: "gtk-quit"
+                        displayHint: Kirigami.DisplayHint.AlwaysHide
+                        onTriggered: {
+                            Qt.quit();
+                        }
                     }
                 ]
 

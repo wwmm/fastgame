@@ -77,7 +77,7 @@ Kirigami.OverlaySheet {
                         icon.name: "document-save-symbolic"
                         displayHint: Kirigami.DisplayHint.AlwaysHide
                         onTriggered: {
-                            if (FGPresetsBackend.save_preset(presetName))
+                            if (FGPresetsBackend.savePreset(presetName))
                                 showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
                             else
                                 showPresetsMenuStatus(i18n("Failed to Save Settings to: " + presetName));
@@ -88,7 +88,10 @@ Kirigami.OverlaySheet {
                         icon.name: "delete"
                         displayHint: Kirigami.DisplayHint.AlwaysHide
                         onTriggered: {
-                            showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
+                            if (FGPresetsBackend.removePreset(presetName))
+                                showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
+                            else
+                                showPresetsMenuStatus(i18n("The Preset " + presetName + " Coult Not Be Removed"));
                         }
                     }
                 ]
@@ -109,10 +112,15 @@ Kirigami.OverlaySheet {
     FileDialog {
         id: fileDialog
 
-        fileMode: FileDialog.OpenFile
+        fileMode: FileDialog.OpenFiles
         currentFolder: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
         nameFilters: ["JSON files (*.json)"]
-        onAccepted: showPresetsMenuStatus(i18n("Preset file imported!"))
+        onAccepted: {
+            if (FGPresetsBackend.importPresets(fileDialog.selectedFiles))
+                showPresetsMenuStatus(i18n("Preset files imported!"));
+            else
+                showPresetsMenuStatus(i18n("Failed to import the presets!"));
+        }
     }
 
     header: ColumnLayout {

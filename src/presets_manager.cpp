@@ -2,6 +2,7 @@
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
 #include <qhash.h>
+#include <qlist.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qqml.h>
@@ -149,7 +150,7 @@ auto Backend::get_presets_names() -> std::vector<QString> {
 
 bool Backend::createPreset(const QString& name) {
   if (std::ranges::all_of(get_presets_names(), [=](auto v) { return v != name; })) {
-    return save_preset(name);
+    return savePreset(name);
   }
 
   return false;
@@ -330,7 +331,7 @@ bool Backend::loadPreset(const QString& name) {
   return status;
 }
 
-bool Backend::save_preset(const QString& name) {
+bool Backend::savePreset(const QString& name) {
   boost::property_tree::ptree root;
   boost::property_tree::ptree node;
 
@@ -449,6 +450,46 @@ bool Backend::save_preset(const QString& name) {
   util::debug("saved preset: " + output_file.string());
 
   return true;
+}
+
+bool Backend::removePreset(const QString& name) {
+  auto file_path = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};
+
+  if (std::filesystem::remove(file_path)) {
+    util::debug("removed: " + file_path.string());
+
+    return true;
+  } else {
+    util::debug("could not remove: " + file_path.string());
+
+    return false;
+  }
+}
+
+bool Backend::importPresets(const QList<QString>& url_list) {
+  return std::ranges::any_of(url_list, [](auto u) {
+    auto url = QUrl(u);
+
+    if (url.isLocalFile()) {
+      auto input_path = std::filesystem::path{url.toLocalFile().toStdString()};
+
+      auto output_path = user_presets_dir / std::filesystem::path{input_path.filename()};
+
+      if (std::filesystem::copy_file(input_path, output_path, std::filesystem::copy_options::overwrite_existing)) {
+        util::debug("imported preset to: " + output_path.string());
+      } else {
+        util::warning("could not copy the file " + input_path.string() + " to our preset folder");
+
+        return false;
+      }
+
+      return true;
+    }
+
+    util::warning("could not copy " + u.toStdString() + " to our preset folder");
+
+    return false;
+  });
 }
 
 }  // namespace presets

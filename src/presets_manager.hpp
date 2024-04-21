@@ -57,7 +57,9 @@ class Backend : public QObject {
 
   Q_INVOKABLE bool createPreset(const QString& name);
   Q_INVOKABLE bool loadPreset(const QString& name);
-  Q_INVOKABLE bool save_preset(const QString& name);
+  Q_INVOKABLE bool savePreset(const QString& name);
+  Q_INVOKABLE static bool removePreset(const QString& name);
+  Q_INVOKABLE static bool importPresets(const QList<QString>& url_list);
 
  signals:
   void executableNameChanged();

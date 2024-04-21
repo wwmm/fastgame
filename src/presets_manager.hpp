@@ -53,6 +53,8 @@ class Backend : public QObject {
  public:
   explicit Backend(QObject* parent = nullptr);
 
+  ~Backend() override;
+
   Q_INVOKABLE bool createPreset(const QString& name);
   Q_INVOKABLE bool loadPreset(const QString& name);
   Q_INVOKABLE bool save_preset(const QString& name);

@@ -127,6 +127,16 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   }
 }
 
+Backend::~Backend() {
+  // We remove this file so that the fastgame_apply instance knows it is time to exit
+
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
+  std::filesystem::remove(file_path);
+
+  util::debug("removed the file: " + file_path.string());
+}
+
 auto Backend::get_presets_names() -> std::vector<QString> {
   std::vector<QString> names;
 

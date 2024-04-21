@@ -1,5 +1,6 @@
 import AboutFG
 import FGPresetsBackend
+import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
@@ -92,6 +93,33 @@ Kirigami.ApplicationWindow {
                 Layout.alignment: Qt.AlignRight
                 text: i18n("Close")
                 onClicked: progressBottomDrawer.close()
+            }
+
+        }
+
+    }
+
+    SystemTrayIcon {
+        id: tray
+
+        visible: true
+        icon.name: "fastgame"
+        onActivated: {
+            if (!root.visible) {
+                root.show();
+                root.raise();
+                root.requestActivate();
+            } else {
+                root.hide();
+            }
+        }
+
+        menu: Menu {
+            visible: false
+
+            MenuItem {
+                text: i18n("Quit")
+                onTriggered: Qt.quit()
             }
 
         }

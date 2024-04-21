@@ -5,6 +5,8 @@
 #include <sched.h>
 #include <sys/types.h>
 #include <algorithm>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <ext/string_conversions.h>
 #include <filesystem>
 #include <fstream>
@@ -109,6 +111,10 @@ auto find_hwmon_index(const int& card_index) -> int {
 }
 
 void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
+  if (cpu_affinity.empty()) {
+    return;
+  }
+
   cpu_set_t mask;
 
   CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
@@ -120,6 +126,24 @@ void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
   if (sched_setaffinity(pid, sizeof(cpu_set_t), &mask) < 0) {
     util::warning("fastgame_apply: could not set cpu affinity for the process: " + util::to_string(pid));
   }
+}
+
+auto parse_affinity_str(const std::string& list) -> std::vector<int> {
+  std::vector<int> output;
+
+  std::vector<std::string> cores;
+
+  boost::split(cores, list, boost::is_any_of(","));
+
+  for (const auto& v : cores) {
+    int i = 0;
+
+    util::str_to_num(v, i);
+
+    output.emplace_back(i);
+  }
+
+  return output;
 }
 
 void clear_cpu_affinity(const int& pid) {

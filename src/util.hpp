@@ -31,6 +31,8 @@ auto find_hwmon_index(const int& card_index) -> int;
 
 void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity);
 
+auto parse_affinity_str(const std::string& list) -> std::vector<int>;
+
 void clear_cpu_affinity(const int& pid);
 
 void set_process_scheduler(const int& pid, const int& policy_index, const int& priority);

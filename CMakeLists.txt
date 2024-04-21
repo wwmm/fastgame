@@ -47,7 +47,7 @@ find_package(Boost 1.65 REQUIRED COMPONENTS filesystem program_options)
 
 find_package(PkgConfig REQUIRED)
 
-pkg_check_modules(LIBX11 x11)
+pkg_check_modules(LIBX11 x11 xext)
 
 find_library(XNVCTRL libXNVCtrl.a libXNVCtrl.so)
 

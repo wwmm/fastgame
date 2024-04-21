@@ -143,8 +143,6 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   int niceness = root.get<int>("cpu.niceness", 0);
   int autogroup_niceness = root.get<int>("cpu.autogroup-niceness", 0);
 
-  update_system_setting("/proc/sys/kernel/sched_child_runs_first", root.get<bool>("cpu.child-runs-first", false));
-
   update_system_setting("/proc/sys/kernel/watchdog", root.get<bool>("cpu.enable-watchdog", true));
 
   update_system_setting("/sys/module/pcie_aspm/parameters/policy",

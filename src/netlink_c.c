@@ -5,6 +5,11 @@
 #include <linux/netlink.h>
 #include <unistd.h>
 
+/*
+  It was necessary to eparate the code using "<linux/cn_proc.h>" because one of its line can only be compiled in a
+  C compiler...
+*/
+
 void prepare_iovec(struct iovec* iov) {
   char buff[NLMSG_LENGTH(0)];
   struct cn_msg cnmsg;

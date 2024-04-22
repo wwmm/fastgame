@@ -1,6 +1,7 @@
 #include "presets_manager.hpp"
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
+#include <qfilesystemwatcher.h>
 #include <qhash.h>
 #include <qlist.h>
 #include <qnamespace.h>
@@ -97,6 +98,42 @@ void MenuModel::remove(const int& rowIndex) {
   emit dataChanged(index(0), index(list.size() - 1));
 }
 
+void MenuModel::remove(const QString& name) {
+  auto rowIndex = list.indexOf(name);
+
+  if (rowIndex == -1) {
+    return;
+  }
+
+  beginRemoveRows(QModelIndex(), rowIndex, rowIndex);
+
+  list.remove(rowIndex);
+
+  endRemoveRows();
+
+  emit dataChanged(index(0), index(list.size() - 1));
+}
+
+void MenuModel::reset() {
+  beginResetModel();
+
+  list.clear();
+
+  endResetModel();
+}
+
+void MenuModel::begin_reset() {
+  beginResetModel();
+}
+
+void MenuModel::end_reset() {
+  endResetModel();
+}
+
+auto MenuModel::getList() -> QList<QString> {
+  return list;
+}
+
 Backend::Backend(QObject* parent) : QObject(parent) {
   // creating the presets folder if it does not exist
 
@@ -126,6 +163,29 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   for (const auto& name : get_presets_names()) {
     menuModel.append(name);
   }
+
+  watcher.addPath(QString::fromStdString(user_presets_dir.string()));
+
+  connect(&watcher, &QFileSystemWatcher::directoryChanged, [&]() {
+    auto model_list = menuModel.getList();
+    auto folder_list = get_presets_names();
+
+    menuModel.begin_reset();
+
+    for (const auto& v : folder_list) {
+      if (!model_list.contains(v)) {
+        menuModel.append(v);
+      }
+    }
+
+    for (const auto& v : model_list) {
+      if (!folder_list.contains(v)) {
+        menuModel.remove(v);
+      }
+    }
+
+    menuModel.end_reset();
+  });
 }
 
 Backend::~Backend() {
@@ -138,8 +198,8 @@ Backend::~Backend() {
   util::debug("removed the file: " + file_path.string());
 }
 
-auto Backend::get_presets_names() -> std::vector<QString> {
-  std::vector<QString> names;
+auto Backend::get_presets_names() -> QList<QString> {
+  QList<QString> names;
 
   for (const auto& entry : std::filesystem::directory_iterator(user_presets_dir)) {
     names.emplace_back(QString::fromStdString(entry.path().stem().string()));
@@ -467,7 +527,7 @@ bool Backend::removePreset(const QString& name) {
 }
 
 bool Backend::importPresets(const QList<QString>& url_list) {
-  return std::ranges::any_of(url_list, [](auto u) {
+  return std::ranges::all_of(url_list, [](auto u) {
     auto url = QUrl(u);
 
     if (url.isLocalFile()) {

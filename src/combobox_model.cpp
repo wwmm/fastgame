@@ -84,8 +84,6 @@ void ComboBoxModel::reset() {
   list.clear();
 
   endResetModel();
-
-  // emit dataChanged(index(0), index(current_size - 1));
 }
 
 void ComboBoxModel::remove(const int& rowIndex) {

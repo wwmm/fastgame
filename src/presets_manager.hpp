@@ -3,6 +3,7 @@
 #include <qabstractitemmodel.h>
 #include <qbytearray.h>
 #include <qcontainerfwd.h>
+#include <qfilesystemwatcher.h>
 #include <qhash.h>
 #include <qlist.h>
 #include <qnamespace.h>
@@ -10,7 +11,6 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
-#include <vector>
 #include "amdgpu.hpp"
 #include "command_line_arguments.hpp"
 #include "cpu.hpp"
@@ -36,6 +36,16 @@ class MenuModel : public QAbstractListModel {
   [[nodiscard]] QVariant data(const QModelIndex& index, int role) const override;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+
+  void reset();
+
+  void begin_reset();
+
+  void end_reset();
+
+  auto getList() -> QList<QString>;
+
+  void remove(const QString& name);
 
   Q_INVOKABLE void append(const QString& name);
 
@@ -78,7 +88,9 @@ class Backend : public QObject {
   memory::Backend memoryBackend;
   nvidia::Backend nvidiaBackend;
 
-  static auto get_presets_names() -> std::vector<QString>;
+  QFileSystemWatcher watcher;
+
+  static auto get_presets_names() -> QList<QString>;
 };
 
 }  // namespace presets

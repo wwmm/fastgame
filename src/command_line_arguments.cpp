@@ -76,6 +76,10 @@ auto Model::getList() -> QList<QString> {
 }
 
 void Model::append(const QString& value) {
+  if (list.contains(value)) {
+    return;
+  }
+
   int pos = list.empty() ? 0 : list.size() - 1;
 
   beginInsertRows(QModelIndex(), pos, pos);

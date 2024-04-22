@@ -286,7 +286,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
       msg.append(exe_path + ", ");
       msg.append(cmdline + ")");
 
-      std::cout << "fastgame_apply: " << msg << '\n';
+      util::info(msg);
 
       setpriority(PRIO_PROCESS, game_pid, niceness);
 
@@ -300,12 +300,12 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   nl->new_fork.connect([&](int tgid, int child_pid, const std::string& child_comm) {
     if (child_comm == "wineserver") {
-      std::cout << "fastgame_apply: wine server pid: " << std::to_string(child_pid) << '\n';
+      util::info("fastgame_apply: wine server pid: " + util::to_string(child_pid));
 
       if (use_realtime_wineserver) {
         util::set_process_scheduler(child_pid, SCHED_RR, 1);
 
-        std::cout << "fastgame_apply: setting wineserver priority to realtime" << '\n';
+        util::info("fastgame_apply: setting wineserver priority to realtime");
       }
 
       util::apply_cpu_affinity(child_pid, wineserver_cpu_affinity);

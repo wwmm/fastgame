@@ -1,10 +1,6 @@
 - Icons I have made:
 
-fg-cpu-symbolic
-fg-memory-symbolic
+fastgame.svg
 
 - Icons that were made by other people and I have applied some modifications:
-
-fg-gpu-symbolic is the audio-card-symbolic from the Adwaita icon theme. I just modified 
-it a little.
 

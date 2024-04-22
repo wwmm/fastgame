@@ -13,10 +13,4 @@
         <file alias="PresetsMenu.qml">contents/ui/PresetsMenu.qml</file>
         <file alias="Common.js">contents/ui/Common.js</file>
     </qresource>
-
-    <qresource prefix="/icons">
-        <file alias="fg-cpu-symbolic">contents/icons/fg-cpu-symbolic.svg</file>
-        <file alias="fg-cpu-symbolic">contents/icons/fg-cpu-symbolic.svg</file>
-        <file alias="fg-memory-symbolic">contents/icons/fg-memory-symbolic.svg</file>
-    </qresource>
 </RCC>

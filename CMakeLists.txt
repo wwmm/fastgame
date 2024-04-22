@@ -25,7 +25,6 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-
 find_package(Qt${QT_MAJOR_VERSION} REQUIRED NO_MODULE COMPONENTS
     Core
     Quick
@@ -60,8 +59,6 @@ if(XNVCTRL AND LIBX11_FOUND)
 else()
     message("Nvidia support won't be available!")
 endif()
-
-
 
 add_subdirectory(src)
 

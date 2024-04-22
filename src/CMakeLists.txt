@@ -1,5 +1,6 @@
 configure_file(config.h.in config.h)
 
+add_subdirectory(contents)
 add_subdirectory(nvidia)
 
 add_executable(fastgame)
@@ -9,8 +10,6 @@ add_executable(fastgame_apply)
 kde_target_enable_exceptions(fastgame PRIVATE)
 kde_target_enable_exceptions(fastgame_launcher PRIVATE)
 kde_target_enable_exceptions(fastgame_apply PRIVATE)
-
-# target_compile_definitions(fastgame_apply PRIVATE -fpermissive)
 
 target_sources(fastgame PRIVATE
     amdgpu.cpp

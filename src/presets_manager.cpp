@@ -12,13 +12,20 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <QTimer>
 #include <algorithm>
+#include <boost/process.hpp>
+#include <boost/process/detail/child_decl.hpp>
+#include <boost/process/search_path.hpp>
+#include <boost/process/spawn.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <exception>
 #include <filesystem>
 #include <iterator>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 #include "config.h"
@@ -391,7 +398,7 @@ bool Backend::loadPreset(const QString& name) {
   return status;
 }
 
-bool Backend::savePreset(const QString& name) {
+bool Backend::save_preset(const QString& name, const std::filesystem::path& output_path) {
   boost::property_tree::ptree root;
   boost::property_tree::ptree node;
 
@@ -503,13 +510,17 @@ bool Backend::savePreset(const QString& name) {
 
   // saving the properties to a file
 
-  auto output_file = user_presets_dir / std::filesystem::path{name.toStdString() + ".json"};
+  auto output_file = output_path / std::filesystem::path{name.toStdString() + ".json"};
 
   boost::property_tree::write_json(output_file, root);
 
   util::debug("saved preset: " + output_file.string());
 
   return true;
+}
+
+bool Backend::savePreset(const QString& name) {
+  return save_preset(name, user_presets_dir);
 }
 
 bool Backend::removePreset(const QString& name) {
@@ -550,6 +561,44 @@ bool Backend::importPresets(const QList<QString>& url_list) {
 
     return false;
   });
+}
+
+bool Backend::applySettings() {
+  // First we remove the file in case a server instance is already running. This will make it exit.
+
+  auto file_path = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
+  std::filesystem::remove(file_path);
+
+  util::debug("removed the file: " + file_path.string());
+
+  /*
+    After a timout of 3 seconds we launch the new server. In case a server instance is already running this should
+    give it enough time to exit.
+  */
+
+  QTimer::singleShot(3000, this, [this]() {
+    save_preset("fastgame", std::filesystem::temp_directory_path());
+
+    try {
+      std::thread t([]() {
+        // std::system("pkexec fastgame_apply");
+        boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+
+        c.wait();
+      });
+
+      t.detach();
+
+      Q_EMIT settingsApplied();
+    } catch (std::exception& e) {
+      Q_EMIT settingsApplied();
+
+      util::warning(e.what());
+    }
+  });
+
+  return true;
 }
 
 }  // namespace presets

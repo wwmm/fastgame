@@ -89,12 +89,6 @@ Kirigami.ApplicationWindow {
                 Layout.fillWidth: true
             }
 
-            Controls.Button {
-                Layout.alignment: Qt.AlignRight
-                text: i18n("Close")
-                onClicked: progressBottomDrawer.close()
-            }
-
         }
 
     }
@@ -124,6 +118,14 @@ Kirigami.ApplicationWindow {
 
         }
 
+    }
+
+    Connections {
+        function onSettingsApplied() {
+            progressBottomDrawer.close();
+        }
+
+        target: FGPresetsBackend
     }
 
     globalDrawer: Kirigami.GlobalDrawer {
@@ -227,6 +229,7 @@ Kirigami.ApplicationWindow {
                         displayHint: Kirigami.DisplayHint.KeepVisible
                         onTriggered: {
                             progressBottomDrawer.open();
+                            FGPresetsBackend.applySettings();
                         }
                     },
                     Kirigami.Action {

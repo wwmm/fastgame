@@ -11,6 +11,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <filesystem>
 #include "amdgpu.hpp"
 #include "command_line_arguments.hpp"
 #include "cpu.hpp"
@@ -65,14 +66,18 @@ class Backend : public QObject {
 
   ~Backend() override;
 
+  bool save_preset(const QString& name, const std::filesystem::path& output_path);
+
   Q_INVOKABLE bool createPreset(const QString& name);
   Q_INVOKABLE bool loadPreset(const QString& name);
   Q_INVOKABLE bool savePreset(const QString& name);
   Q_INVOKABLE static bool removePreset(const QString& name);
   Q_INVOKABLE static bool importPresets(const QList<QString>& url_list);
+  Q_INVOKABLE bool applySettings();
 
  signals:
   void executableNameChanged();
+  void settingsApplied();
 
  private:
   QString _executableName;

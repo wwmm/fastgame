@@ -67,7 +67,7 @@ void Netlink::connect() {
 }
 
 void Netlink::subscribe() {
-  iovec iov[3];
+  struct iovec iov[3];
 
   prepare_iovec(iov);
 
@@ -79,12 +79,12 @@ void Netlink::subscribe() {
 }
 
 void Netlink::handle_events() {
-  std::vector<char> buffv(getpagesize() / sizeof(char));
+  std::vector<char> buff(getpagesize());
   sockaddr_nl addr{};
   iovec iov[1];
 
-  iov[0].iov_base = buffv.data();
-  iov[0].iov_len = sizeof(getpagesize());
+  iov[0].iov_base = buff.data();
+  iov[0].iov_len = sizeof(char) * buff.size();
 
   msghdr msg_hdr{.msg_name = &addr,
                  .msg_namelen = sizeof(addr),
@@ -105,7 +105,7 @@ void Netlink::handle_events() {
       continue;
     }
 
-    auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buffv.data());
+    auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
 
     while (NLMSG_OK(nlmsg_hdr, len)) {
       if (nlmsg_hdr->nlmsg_type == NLMSG_NOOP) {

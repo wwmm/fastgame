@@ -284,6 +284,11 @@ Kirigami.ApplicationWindow {
                     Layout.fillWidth: true
                     placeholderText: i18n("Executable Name")
                     text: FGPresetsBackend.executableName
+                    onTextChanged: {
+                        if (text !== FGPresetsBackend.executableName)
+                            FGPresetsBackend.executableName = text;
+
+                    }
                     rightActions: [
                         Kirigami.Action {
                             icon.name: "edit-clear"
@@ -293,6 +298,13 @@ Kirigami.ApplicationWindow {
                             }
                         }
                     ]
+
+                    Binding {
+                        target: executableName
+                        property: "text"
+                        value: FGPresetsBackend.executableName
+                    }
+
                 }
 
             }

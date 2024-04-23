@@ -6,16 +6,17 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
 "POT-Creation-Date: 2024-04-23 14:26-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2024-04-23 13:35-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: src/contents/ui/Amdgpu.qml:17
 msgid "AMD GPU"
@@ -327,7 +328,7 @@ msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:156
 msgid "Create Preset"
-msgstr ""
+msgstr "Criar Predefinição"
 
 #: src/contents/ui/PresetsMenu.qml:162
 msgid "New Preset Created: "
@@ -339,7 +340,7 @@ msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:196
 msgid "Search"
-msgstr ""
+msgstr "Busca"
 
 #: src/contents/ui/PresetsMenu.qml:220
 msgid "Last Used Preset:    "
@@ -361,16 +362,16 @@ msgstr ""
 #: src/main.cpp:59
 msgctxt "@info:credit"
 msgid "Developer"
-msgstr ""
+msgstr "Desenvolvedor"
 
 #: com.github.wwmm.fastgame.desktop.template.h:1
 msgid "FastGame"
-msgstr ""
+msgstr "FastGame"
 
 #: com.github.wwmm.fastgame.desktop.template.h:2
 msgid "System Settings Tweak"
-msgstr ""
+msgstr "Ajustador de Configurações do Sistema"
 
 #: com.github.wwmm.fastgame.desktop.template.h:3
 msgid "Tweak system performance for games"
-msgstr ""
+msgstr "Ajustar a Performance do Sistema para Jogos"

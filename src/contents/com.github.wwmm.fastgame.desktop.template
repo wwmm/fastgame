@@ -1,0 +1,12 @@
+[Desktop Entry]
+_Name=FastGame
+_GenericName=System Settings Tweak
+_Comment=Tweak system performance for games
+Keywords=system;tweak;game;
+Categories=GTK;System;
+Exec=fastgame
+# Translators: This is an icon name, don't translate!
+Icon=fastgame
+StartupNotify=true
+Terminal=false
+Type=Application

@@ -1,5 +1,4 @@
 configure_file(com.github.wwmm.fastgame.apply.policy.in com.github.wwmm.fastgame.apply.policy)
-configure_file(com.github.wwmm.fastgame.desktop.in com.github.wwmm.fastgame.desktop)
 
 install(FILES 
     icons/fastgame.svg 
@@ -12,6 +11,6 @@ install(FILES
 )
 
 install(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/com.github.wwmm.fastgame.desktop 
+    com.github.wwmm.fastgame.desktop 
     DESTINATION ${KDE_INSTALL_FULL_DATADIR}/applications
 )

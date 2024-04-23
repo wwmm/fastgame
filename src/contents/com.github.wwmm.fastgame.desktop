@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=FastGame
+Name[pt_BR]=FastGame
 GenericName=System Settings Tweak
+GenericName[nl]=Systeemaanpassingen
+GenericName[pt_BR]=Ajustador de Configurações do Sistema
 Comment=Tweak system performance for games
+Comment[pt_BR]=Ajustar a Performance do Sistema para Jogos
 Keywords=system;tweak;game;
 Categories=GTK;System;
 Exec=fastgame

@@ -24,15 +24,16 @@ echo "rc.cpp" >> ${WDIR}/infiles.list
 
 # preparing the desktop file
 echo "Preparing the desktop file"
-cp -v src/contents/com.github.wwmm.fastgame.desktop.in ${WDIR}/com.github.wwmm.fastgame.desktop
+cp src/contents/com.github.wwmm.fastgame.desktop.template ${WDIR}
 cd ${WDIR}
-msgfmt --desktop --template=com.github.wwmm.fastgame.desktop -d ${BASEDIR}/po -o /tmp/teste.desktop
-# echo "com.github.wwmm.fastgame.desktop" >> ${WDIR}/infiles.list
+intltool-extract --quiet --type=gettext/ini com.github.wwmm.fastgame.desktop.template
+echo "com.github.wwmm.fastgame.desktop.template.h" >> ${WDIR}/infiles.list
 
 # extracting messages on xgettext
 cd ${WDIR}
 xgettext --from-code=UTF-8 -C -kde -ci18n -ki18n:1 -ki18nc:1c,2 -ki18np:1,2 -ki18ncp:1c,2,3 -ktr2i18n:1 \
 	-kI18N_NOOP:1 -kI18N_NOOP2:1c,2 -kaliasLocale -kki18n:1 -kki18nc:1c,2 -kki18np:1,2 -kki18ncp:1c,2,3 \
+  -kN_:1 \
 	--msgid-bugs-address="${BUGADDR}" \
 	--files-from=infiles.list -D ${BASEDIR} -D ${WDIR} -o ${BASEDIR}/po/${PROJECT}.pot || { echo "error while calling xgettext. aborting."; exit 1; }
 
@@ -41,18 +42,25 @@ echo "Done extracting messages"
 echo "Merging translations"
 cd ${BASEDIR}/po
 catalogs=`find . -name '*.po'`
-for cat in $catalogs; do
-  echo $cat
-  msgmerge -o $cat.new $cat ${PROJECT}.pot
-  mv $cat.new $cat
+for catalog in $catalogs; do
+  echo $catalog
+  msgmerge -o $catalog.new $catalog ${PROJECT}.pot
+  mv $catalog.new $catalog
 done
+
+cd ${WDIR}
+intltool-merge --quiet --desktop-style ${BASEDIR}/po com.github.wwmm.fastgame.desktop.template ${BASEDIR}/src/contents/com.github.wwmm.fastgame.desktop
+
 echo "Done merging translations"
 
 echo "Cleaning up"
-cd ${WDIR}
-cp -v infiles.list /tmp
+
+#cp -v infiles.list /tmp
+
 rm rcfiles.list
 rm infiles.list
 rm rc.cpp
-rm com.github.wwmm.fastgame.desktop
+rm com.github.wwmm.fastgame.desktop.template
+rm com.github.wwmm.fastgame.desktop.template.h
+
 echo "Done"

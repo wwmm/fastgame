@@ -40,6 +40,10 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
     CoreAddons
 )
 
+find_package(KF6I18n NO_MODULE)
+
+ki18n_install(po)
+
 find_package(Threads REQUIRED)
 
 find_package(Boost 1.65 REQUIRED COMPONENTS filesystem program_options)

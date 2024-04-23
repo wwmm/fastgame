@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-04-23 14:26-0300\n"
-"PO-Revision-Date: 2024-04-23 13:35-0300\n"
+"POT-Creation-Date: 2024-04-23 14:43-0300\n"
+"PO-Revision-Date: 2024-04-23 14:42-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -110,7 +110,7 @@ msgstr ""
 
 #: src/contents/ui/Disk.qml:13
 msgid "Disk"
-msgstr ""
+msgstr "Disco"
 
 #: src/contents/ui/Disk.qml:20
 msgid "Mounting Path"
@@ -154,11 +154,11 @@ msgstr ""
 
 #: src/contents/ui/EnvironmentVariables.qml:46
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/contents/ui/EnvironmentVariables.qml:59
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: src/contents/ui/main.qml:15
 msgctxt "@title:window"
@@ -175,19 +175,19 @@ msgstr ""
 
 #: src/contents/ui/main.qml:115 src/contents/ui/main.qml:257
 msgid "Quit"
-msgstr ""
+msgstr "Sair"
 
 #: src/contents/ui/main.qml:227
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/contents/ui/main.qml:236
 msgid "Presets"
-msgstr ""
+msgstr "Predefinições"
 
 #: src/contents/ui/main.qml:244
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: src/contents/ui/main.qml:249
 msgid "About FastGame"
@@ -195,11 +195,11 @@ msgstr ""
 
 #: src/contents/ui/main.qml:285
 msgid "Executable Name"
-msgstr ""
+msgstr "Nome do Executável"
 
 #: src/contents/ui/Memory.qml:14 src/contents/ui/Nvidia.qml:77
 msgid "Memory"
-msgstr ""
+msgstr "Memória"
 
 #: src/contents/ui/Memory.qml:18
 msgid "Transparent HugePages"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: src/contents/ui/Memory.qml:25
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitado"
 
 #: src/contents/ui/Memory.qml:40
 msgid "Defrag"
@@ -235,7 +235,7 @@ msgstr ""
 
 #: src/contents/ui/Memory.qml:122
 msgid "Virtual"
-msgstr ""
+msgstr "Virtual"
 
 #: src/contents/ui/Memory.qml:129
 msgid "Swappiness"
@@ -271,7 +271,7 @@ msgstr ""
 
 #: src/contents/ui/Nvidia.qml:25
 msgid "Mode"
-msgstr ""
+msgstr "Modo"
 
 #: src/contents/ui/Nvidia.qml:40
 msgid "Power Limit"
@@ -344,7 +344,7 @@ msgstr "Busca"
 
 #: src/contents/ui/PresetsMenu.qml:220
 msgid "Last Used Preset:    "
-msgstr ""
+msgstr "Última Predefinição Utilizada: "
 
 #: src/main.cpp:56
 msgid "Optimize system performance for games"

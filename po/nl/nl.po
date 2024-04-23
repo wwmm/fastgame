@@ -1,22 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the fastgame package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-04-23 14:43-0300\n"
-"PO-Revision-Date: 2024-04-23 14:42-0300\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2024-04-23 15:03-0300\n"
+"PO-Revision-Date: 2021-03-14 19:28+0100\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
-"Language: pt_BR\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/contents/ui/Amdgpu.qml:17
 msgid "AMD GPU"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: src/contents/ui/Amdgpu.qml:28 src/contents/ui/Amdgpu.qml:82
 msgid "Performance Level"
-msgstr ""
+msgstr "Prestatieniveau"
 
 #: src/contents/ui/Amdgpu.qml:43 src/contents/ui/Amdgpu.qml:97
 msgid "Power Profile"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: src/contents/ui/Amdgpu.qml:59 src/contents/ui/Amdgpu.qml:113
 msgid "Power Cap"
-msgstr ""
+msgstr "Energieniveau begrenzen"
 
 #: src/contents/ui/Amdgpu.qml:75
 msgid "Second Card"
@@ -48,9 +48,10 @@ msgstr ""
 
 #: src/contents/ui/CommandLineArguments.qml:16
 #: src/contents/ui/EnvironmentVariables.qml:16
+#, fuzzy
 msgctxt "@action:button"
 msgid "Add Row"
-msgstr ""
+msgstr "Willekeurig"
 
 #: src/contents/ui/CommandLineArguments.qml:46
 msgid "Argument"
@@ -62,7 +63,7 @@ msgstr ""
 
 #: src/contents/ui/Cpu.qml:20
 msgid "Frequency Governor"
-msgstr ""
+msgstr "Frequentiegovernor"
 
 #: src/contents/ui/Cpu.qml:35
 msgid "PCIe ASPM"
@@ -70,11 +71,12 @@ msgstr ""
 
 #: src/contents/ui/Cpu.qml:50
 msgid "Niceness"
-msgstr ""
+msgstr "Niceness"
 
 #: src/contents/ui/Cpu.qml:64
+#, fuzzy
 msgid "Autogroup Niceness"
-msgstr ""
+msgstr "Niceness"
 
 #: src/contents/ui/Cpu.qml:78
 msgid "Timer Slack"
@@ -82,35 +84,38 @@ msgstr ""
 
 #: src/contents/ui/Cpu.qml:96
 msgid "Use the Batch Scheduler"
-msgstr ""
+msgstr "Reeksplanning gebruiken"
 
 #: src/contents/ui/Cpu.qml:108
 msgid "Realtime Wineserver"
-msgstr ""
+msgstr "Realtime-Wineserver"
 
 #: src/contents/ui/Cpu.qml:120
+#, fuzzy
 msgid "Enable Watchdog"
-msgstr ""
+msgstr "ingeschakeld"
 
 #: src/contents/ui/Cpu.qml:132
 msgid "Use /dev/cpu_dma_latency"
-msgstr ""
+msgstr "/dev/cpu_dma_latency gebruiken"
 
 #: src/contents/ui/Cpu.qml:147
+#, fuzzy
 msgid "Game Affinity"
-msgstr ""
+msgstr "Affiniteit"
 
 #: src/contents/ui/Cpu.qml:148 src/contents/ui/Cpu.qml:171
 msgid "List of Cores. Example: 2,9,13,15,3"
 msgstr ""
 
 #: src/contents/ui/Cpu.qml:170
+#, fuzzy
 msgid "Wine Server Affinity"
-msgstr ""
+msgstr "Wineserver"
 
 #: src/contents/ui/Disk.qml:13
 msgid "Disk"
-msgstr "Disco"
+msgstr ""
 
 #: src/contents/ui/Disk.qml:20
 msgid "Mounting Path"
@@ -118,19 +123,20 @@ msgstr ""
 
 #: src/contents/ui/Disk.qml:35
 msgid "Scheduler"
-msgstr ""
+msgstr "Schema"
 
 #: src/contents/ui/Disk.qml:50
 msgid "Readahead"
-msgstr ""
+msgstr "Vooruitlezen"
 
 #: src/contents/ui/Disk.qml:65
 msgid "Maximum Read/Write requests"
 msgstr ""
 
 #: src/contents/ui/Disk.qml:79
+#, fuzzy
 msgid "RQ Affinity"
-msgstr ""
+msgstr "IRQ-affiniteit"
 
 #: src/contents/ui/Disk.qml:93
 msgid "No Merges"
@@ -142,11 +148,11 @@ msgstr ""
 
 #: src/contents/ui/Disk.qml:124
 msgid "Realtime Priority"
-msgstr ""
+msgstr "Realtime-prioriteit"
 
 #: src/contents/ui/Disk.qml:136
 msgid "Add Random"
-msgstr ""
+msgstr "Willekeurig"
 
 #: src/contents/ui/EnvironmentVariables.qml:10
 msgid "Environment Variables"
@@ -154,16 +160,17 @@ msgstr ""
 
 #: src/contents/ui/EnvironmentVariables.qml:46
 msgid "Name"
-msgstr "Nome"
+msgstr "Naam"
 
 #: src/contents/ui/EnvironmentVariables.qml:59
 msgid "Value"
-msgstr "Valor"
+msgstr "Waarde"
 
 #: src/contents/ui/main.qml:15
+#, fuzzy
 msgctxt "@title:window"
 msgid "FastGame"
-msgstr ""
+msgstr "FastGame"
 
 #: src/contents/ui/main.qml:50
 msgid "AMDGPU"
@@ -175,43 +182,48 @@ msgstr ""
 
 #: src/contents/ui/main.qml:115 src/contents/ui/main.qml:257
 msgid "Quit"
-msgstr "Sair"
+msgstr ""
 
 #: src/contents/ui/main.qml:227
 msgid "Apply"
-msgstr "Aplicar"
+msgstr "Toepassen"
 
 #: src/contents/ui/main.qml:236
 msgid "Presets"
-msgstr "Predefinições"
+msgstr "Voorinstellingen"
 
 #: src/contents/ui/main.qml:244
 msgid "Preferences"
-msgstr "Preferências"
-
-#: src/contents/ui/main.qml:249
-msgid "About FastGame"
 msgstr ""
 
+#: src/contents/ui/main.qml:249
+#, fuzzy
+msgid "About FastGame"
+msgstr "FastGame"
+
 #: src/contents/ui/main.qml:285
+#, fuzzy
 msgid "Executable Name"
-msgstr "Nome do Executável"
+msgstr "Uitvoerbaar bestand"
 
 #: src/contents/ui/Memory.qml:14 src/contents/ui/Nvidia.qml:77
+#, fuzzy
 msgid "Memory"
-msgstr "Memória"
+msgstr "Virtueel geheugen"
 
 #: src/contents/ui/Memory.qml:18
 msgid "Transparent HugePages"
-msgstr ""
+msgstr "Transparante HugePages"
 
 #: src/contents/ui/Memory.qml:25
+#, fuzzy
 msgid "Enabled"
-msgstr "Habilitado"
+msgstr "ingeschakeld"
 
 #: src/contents/ui/Memory.qml:40
+#, fuzzy
 msgid "Defrag"
-msgstr ""
+msgstr "defragmenteren"
 
 #: src/contents/ui/Memory.qml:55
 msgid "Shared Memory Enabled"
@@ -234,8 +246,9 @@ msgid "min_ttl_ms"
 msgstr ""
 
 #: src/contents/ui/Memory.qml:122
+#, fuzzy
 msgid "Virtual"
-msgstr "Virtual"
+msgstr "Virtueel geheugen"
 
 #: src/contents/ui/Memory.qml:129
 msgid "Swappiness"
@@ -243,11 +256,11 @@ msgstr ""
 
 #: src/contents/ui/Memory.qml:143
 msgid "Cache Pressure"
-msgstr ""
+msgstr "Cachebelasting"
 
 #: src/contents/ui/Memory.qml:157
 msgid "Compaction Proactiveness"
-msgstr ""
+msgstr "Verkleiningsniveau"
 
 #: src/contents/ui/Memory.qml:171
 msgid "Minimum Free Kbytes"
@@ -271,11 +284,12 @@ msgstr ""
 
 #: src/contents/ui/Nvidia.qml:25
 msgid "Mode"
-msgstr "Modo"
+msgstr ""
 
 #: src/contents/ui/Nvidia.qml:40
+#, fuzzy
 msgid "Power Limit"
-msgstr ""
+msgstr "Energieniveau begrenzen"
 
 #: src/contents/ui/Nvidia.qml:55
 msgid "Clock Offset"
@@ -286,17 +300,20 @@ msgid "GPU"
 msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:39
+#, fuzzy
 msgid "No Preset"
-msgstr ""
+msgstr "Voorinstellingen"
 
 #: src/contents/ui/PresetsMenu.qml:61 src/contents/ui/PresetsMenu.qml:64
 #: src/contents/ui/PresetsMenu.qml:92 src/contents/ui/PresetsMenu.qml:94
+#, fuzzy
 msgid "The Preset "
-msgstr ""
+msgstr "Voorinstelling maken"
 
 #: src/contents/ui/PresetsMenu.qml:76
+#, fuzzy
 msgid "Save Settings to this Preset"
-msgstr ""
+msgstr "Sla de huidige instellingen op in dit voorinstellingsbestand"
 
 #: src/contents/ui/PresetsMenu.qml:81
 msgid "Settings Saved to: "
@@ -307,8 +324,9 @@ msgid "Failed to Save Settings to: "
 msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:87
+#, fuzzy
 msgid "Delete this Preset"
-msgstr ""
+msgstr "Voorinstelling maken"
 
 #: src/contents/ui/PresetsMenu.qml:120
 msgid "Preset files imported!"
@@ -323,32 +341,35 @@ msgid "New Preset Name"
 msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:147
+#, fuzzy
 msgid "Import Preset File"
-msgstr ""
+msgstr "Voorinstellingen importeren"
 
 #: src/contents/ui/PresetsMenu.qml:156
 msgid "Create Preset"
-msgstr "Criar Predefinição"
+msgstr "Voorinstelling maken"
 
 #: src/contents/ui/PresetsMenu.qml:162
 msgid "New Preset Created: "
 msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:165
+#, fuzzy
 msgid "Failed to Create Preset: "
-msgstr ""
+msgstr "Voorinstelling maken"
 
 #: src/contents/ui/PresetsMenu.qml:196
 msgid "Search"
-msgstr "Busca"
+msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:220
 msgid "Last Used Preset:    "
-msgstr "Última Predefinição Utilizada: "
+msgstr ""
 
 #: src/main.cpp:56
+#, fuzzy
 msgid "Optimize system performance for games"
-msgstr ""
+msgstr "Maak je systeem geschikt voor games"
 
 #: src/main.cpp:56
 msgid "(c) 2024"
@@ -362,16 +383,133 @@ msgstr ""
 #: src/main.cpp:59
 msgctxt "@info:credit"
 msgid "Developer"
-msgstr "Desenvolvedor"
+msgstr ""
 
 #: com.github.wwmm.fastgame.desktop.template.h:1
+#, fuzzy
 msgid "FastGame"
 msgstr "FastGame"
 
 #: com.github.wwmm.fastgame.desktop.template.h:2
 msgid "System Settings Tweak"
-msgstr "Ajustador de Configurações do Sistema"
+msgstr "Systeemaanpassingen"
 
 #: com.github.wwmm.fastgame.desktop.template.h:3
+#, fuzzy
 msgid "Tweak system performance for games"
-msgstr "Ajustar a Performance do Sistema para Jogos"
+msgstr "Maak je systeem geschikt voor games"
+
+#~ msgid "system;tweak;game;"
+#~ msgstr "systeem;tweak;aanpassen;aanpassing;game;spel;"
+
+#, fuzzy
+#~ msgid "Apply the current settings to the system"
+#~ msgstr "Sla de huidige instellingen op in dit voorinstellingsbestand"
+
+#, fuzzy
+#~ msgid "Presets Menu"
+#~ msgstr "Voorinstellingen"
+
+#, fuzzy
+#~ msgid "FastGame Window"
+#~ msgstr "FastGame"
+
+#~ msgid "Child Runs First"
+#~ msgstr "Eerst onderliggend proces"
+
+#~ msgid "Game"
+#~ msgstr "Game"
+
+#~ msgid "Add Line"
+#~ msgstr "Regel toevoegen"
+
+#~ msgid "Device"
+#~ msgstr "Apparaat"
+
+#, fuzzy
+#~ msgid "Remove this line"
+#~ msgstr "Verwijder dit voorinstellingsbestand"
+
+#~ msgid "Use Dark Theme"
+#~ msgstr "Donker thema"
+
+#~ msgid "Import Presets"
+#~ msgstr "Voorinstellingen importeren"
+
+#, fuzzy
+#~ msgid "Search Preset"
+#~ msgstr "Voorinstelling maken"
+
+#, fuzzy
+#~ msgid "Presets List"
+#~ msgstr "Voorinstellingen"
+
+#~ msgid "Load"
+#~ msgstr "Laden"
+
+#~ msgid "Remove this preset file"
+#~ msgstr "Verwijder dit voorinstellingsbestand"
+
+#, fuzzy
+#~ msgid "Quit FastGame"
+#~ msgstr "FastGame"
+
+#~ msgid "Tweak System Settings"
+#~ msgstr "Systeemaanpassingen"
+
+#~ msgid "Settings"
+#~ msgstr "Instellingen"
+
+#~ msgid "About"
+#~ msgstr "Over"
+
+#~ msgid "Remove Selection"
+#~ msgstr "Selectie verwijderen"
+
+#~ msgid "auto"
+#~ msgstr "automatisch"
+
+#~ msgid "low"
+#~ msgstr "laag"
+
+#~ msgid "high"
+#~ msgstr "hoog"
+
+#~ msgid "manual"
+#~ msgstr "handmatig"
+
+#~ msgid "profile_standard"
+#~ msgstr "profiel_standaard"
+
+#~ msgid "profile_min_sclk"
+#~ msgstr "profiel_min_sdk"
+
+#~ msgid "profile_min_mclk"
+#~ msgstr "profiel_min_mclk"
+
+#~ msgid "profile_peak"
+#~ msgstr "profiel_piek"
+
+#~ msgid "Cores"
+#~ msgstr "Aantal kernen"
+
+#~ msgid "shmem_enabled"
+#~ msgstr "shmem_inschakelen"
+
+#~ msgid "Kernel Workqueue"
+#~ msgstr "Kernel-werkvolgorde"
+
+#~ msgid "nr_requests"
+#~ msgstr "aantal_verzoeken"
+
+#~ msgid "TCP MTU Probing"
+#~ msgstr "TCP MTU aanspreken"
+
+#~ msgid "TCP Maximum Reordering"
+#~ msgstr "TCP: maximale herordening"
+
+#~ msgid "TCP Probe Interval"
+#~ msgstr "TCP: aanspreektussenpoos"
+
+#~ msgid "TCP Congestion Control"
+#~ msgstr "TCP: druktebeheer"

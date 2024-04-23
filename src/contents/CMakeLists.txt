@@ -10,7 +10,7 @@ install(FILES
     DESTINATION ${KDE_INSTALL_FULL_DATADIR}/polkit-1/actions
 )
 
-install(FILES 
+install(PROGRAMS 
     com.github.wwmm.fastgame.desktop 
-    DESTINATION ${KDE_INSTALL_FULL_DATADIR}/applications
+    DESTINATION ${KDE_INSTALL_APPDIR}
 )

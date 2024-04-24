@@ -1,4 +1,5 @@
 import AboutFG
+import CfgWindow
 import FGPresetsBackend
 import Qt.labs.platform
 import QtQuick
@@ -10,9 +11,17 @@ import org.kde.kirigamiaddons.formcard as FormCard
 Kirigami.ApplicationWindow {
     id: root
 
+    width: CfgWindow.width
+    height: CfgWindow.height
     pageStack.initialPage: environmentVariables
     pageStack.globalToolBar.style: Kirigami.Settings.isMobile ? Kirigami.ApplicationHeaderStyle.Titles : Kirigami.ApplicationHeaderStyle.Auto
     title: i18nc("@title:window", "FastGame")
+    onWidthChanged: {
+        CfgWindow.width = applicationWindow().width;
+    }
+    onHeightChanged: {
+        CfgWindow.height = applicationWindow().height;
+    }
 
     EnvironmentVariables {
         id: environmentVariables

@@ -38,9 +38,11 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
     Kirigami
     I18n
     CoreAddons
+    Config
+    ConfigWidgets
 )
 
-find_package(KF6I18n NO_MODULE)
+# find_package(KF6I18n NO_MODULE)
 
 ki18n_install(po)
 
@@ -63,6 +65,9 @@ if(XNVCTRL AND LIBX11_FOUND)
 else()
     message("Nvidia support won't be available!")
 endif()
+
+file(GLOB KCFG_FILES ${PROJECT_SOURCE_DIR}/src/contents/kcfg/*.kcfg)
+file(GLOB KCFGC_FILES ${PROJECT_SOURCE_DIR}/src/contents/kcfg/*.kcfgc)
 
 add_subdirectory(src)
 

@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QtQml>
 #include <memory>
+#include "cfg_window.h"
 #include "config.h"
 #include "presets_manager.hpp"
 #include "util.hpp"
@@ -94,6 +95,15 @@ int main(int argc, char* argv[]) {
 
   construct_about_window();
 
+  // Registering kcfg settings
+
+  auto cfgWindow = cfg::Window::self();
+
+  qmlRegisterSingletonInstance("CfgWindow", PROJECT_VERSION_MAJOR, 0, "CfgWindow", cfgWindow);
+
+  QObject::connect(cfgWindow, &cfg::Window::widthChanged,
+                   [=]() { util::warning(util::to_string(cfg::Window::width())); });
+
   presets::Backend presetsBackend;
 
   QQmlApplicationEngine engine;
@@ -104,6 +114,8 @@ int main(int argc, char* argv[]) {
   if (engine.rootObjects().isEmpty()) {
     return -1;
   }
+
+  QObject::connect(&app, &QApplication::aboutToQuit, [=]() { cfgWindow->save(); });
 
   return QApplication::exec();
 }

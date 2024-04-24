@@ -1,0 +1,8 @@
+File=cfg_window.kcfg
+NameSpace=cfg
+ClassName=Window
+Mutators=true
+Notifiers=true
+DefaultValueGetters=true
+Singleton=true
+GenerateProperties=true

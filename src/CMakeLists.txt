@@ -47,6 +47,8 @@ target_link_libraries(fastgame PRIVATE
     Qt${QT_MAJOR_VERSION}::Widgets
     KF${QT_MAJOR_VERSION}::I18n
     KF${QT_MAJOR_VERSION}::CoreAddons
+    KF${QT_MAJOR_VERSION}::ConfigCore
+    KF${QT_MAJOR_VERSION}::ConfigGui
     Boost::filesystem
 )
 
@@ -64,5 +66,10 @@ if(XNVCTRL)
     target_link_libraries(fastgame PRIVATE fastgame_nvidia)
     target_link_libraries(fastgame_apply PRIVATE fastgame_nvidia)
 endif()
+
+kconfig_add_kcfg_files(fastgame GENERATE_MOC ${KCFGC_FILES})
+
+# message(STATUS ${fastgame_SOURCES})
+install(FILES ${KCFG_FILES} DESTINATION ${KDE_INSTALL_KCFGDIR})
 
 install(TARGETS fastgame fastgame_launcher fastgame_apply ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

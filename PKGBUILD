@@ -1,7 +1,7 @@
 # Maintainer: Wellington <wellingtonwallace@gmail.com>
 
 pkgname=fastgame-git
-pkgver=0.3.0.r37.ga5943b6
+pkgver=1.0.0.r0.g33d7979
 pkgrel=1
 pkgdesc='Optimize system performance for games'
 arch=(x86_64 i686)
@@ -10,7 +10,7 @@ license=('GPL3')
 depends=('boost-libs' 'kirigami' 'kirigami-addons' 'qqc2-desktop-style' 'breeze-icons' 'qt6-base')
 makedepends=('boost' 'cmake' 'extra-cmake-modules' 'git' 'ninja' 'intltool' 'appstream-glib')
 optdepends=('libxnvctrl' 'libx11')
-source=("git+https://github.com/wwmm/fastgame.git#branch=fgqt")
+source=("git+https://github.com/wwmm/fastgame.git")
 conflicts=(fastgame)
 provides=(fastgame)
 sha512sums=('SKIP')

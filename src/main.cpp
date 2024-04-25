@@ -99,6 +99,8 @@ int main(int argc, char* argv[]) {
 
   auto cfgWindow = cfg::Window::self();
 
+  cfg::Window::setLastUsedPreset("");
+
   qmlRegisterSingletonInstance("CfgWindow", PROJECT_VERSION_MAJOR, 0, "CfgWindow", cfgWindow);
 
   // QObject::connect(cfgWindow, &cfg::Window::widthChanged,

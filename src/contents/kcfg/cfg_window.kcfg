@@ -12,9 +12,13 @@
             <label>Height of the main window.</label>
             <default>600</default>
         </entry>
-        <entry name="show_tray_icon" type="Bool">
+        <entry name="showTrayIcon" type="Bool">
             <label>Show the tray icon.</label>
             <default>true</default>
+        </entry>
+        <entry name="lastUsedPreset" type="String">
+            <label>Last used preset.</label>
+            <default>""</default>
         </entry>
     </group>
 </kcfg>

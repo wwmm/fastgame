@@ -110,7 +110,7 @@ Kirigami.ApplicationWindow {
     SystemTrayIcon {
         id: tray
 
-        visible: CfgWindow.show_tray_icon
+        visible: CfgWindow.showTrayIcon
         icon.name: "fastgame"
         onActivated: {
             if (!root.visible) {
@@ -124,6 +124,14 @@ Kirigami.ApplicationWindow {
 
         menu: Menu {
             visible: false
+
+            MenuItem {
+                text: i18n("Preset: " + CfgWindow.lastUsedPreset)
+                enabled: false
+            }
+
+            MenuSeparator {
+            }
 
             MenuItem {
                 text: i18n("Quit")

@@ -11,10 +11,10 @@ FormCard.FormCardPage {
             id: showTrayIcon
 
             label: i18n("Show Tray Icon")
-            isChecked: CfgWindow.show_tray_icon
+            isChecked: CfgWindow.showTrayIcon
             onCheckedChanged: {
-                if (isChecked !== CfgWindow.show_tray_icon)
-                    CfgWindow.show_tray_icon = isChecked;
+                if (isChecked !== CfgWindow.showTrayIcon)
+                    CfgWindow.showTrayIcon = isChecked;
 
             }
         }

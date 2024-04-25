@@ -1,3 +1,4 @@
+import CfgWindow
 import "Common.js" as Common
 import FGPresetsBackend
 import FGPresetsMenuModel
@@ -59,7 +60,7 @@ Kirigami.OverlaySheet {
                 let res = FGPresetsBackend.loadPreset(presetName);
                 if (res === true) {
                     showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded"));
-                    presetsMenuFooter.lastUsedPreset = presetName;
+                    CfgWindow.lastUsedPreset = presetName;
                 } else {
                     showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded with errors"));
                 }
@@ -202,10 +203,6 @@ Kirigami.OverlaySheet {
     }
 
     footer: ColumnLayout {
-        id: presetsMenuFooter
-
-        property string lastUsedPreset
-
         Kirigami.InlineMessage {
             id: presetsMenuStatus
 
@@ -217,7 +214,7 @@ Kirigami.OverlaySheet {
 
         Controls.Label {
             Layout.fillWidth: true
-            text: i18n("Last Used Preset:    ") + presetsMenuFooter.lastUsedPreset
+            text: i18n("Preset:    " + CfgWindow.lastUsedPreset)
             color: Kirigami.Theme.disabledTextColor
         }
 

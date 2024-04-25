@@ -1,10 +1,13 @@
+#include <fcntl.h>
 #include <sched.h>
 #include <sys/resource.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <chrono>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -124,7 +127,6 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
     util::fatal("fastgame_apply: could not read " + input_file.string());
   }
 
-  std::ofstream cpu_dma_ofstream;
   boost::property_tree::ptree root;
   boost::property_tree::read_json(input_file.string(), root);
 
@@ -150,10 +152,22 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor", "schedutil"));
 
-  if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {
-    cpu_dma_ofstream.open("/dev/cpu_dma_latency");
+  int cpu_dma_latency_fd = -1;
 
-    cpu_dma_ofstream << 0;
+  if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {
+    uint32_t target = 0;
+
+    cpu_dma_latency_fd = open("/dev/cpu_dma_latency", O_RDWR);
+
+    if (cpu_dma_latency_fd < 0) {
+      util::warning("failed to open /dev/cpu_dma_latency");
+    }
+
+    if (write(cpu_dma_latency_fd, &target, sizeof(target)) < 0) {
+      util::warning("failed to write zero to /dev/cpu_dma_latency");
+    } else {
+      util::info("writing zero to /dev/cpu_dma_latency");
+    }
   }
 
   // disk
@@ -352,8 +366,10 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
     util::info("Netlink event monitor finished.");
   }
 
-  if (cpu_dma_ofstream.is_open()) {
-    cpu_dma_ofstream.close();
+  if (cpu_dma_latency_fd != -1) {
+    util::info("closing /dev/cpu_dma_latency");
+
+    close(cpu_dma_latency_fd);
   }
 
   return 0;

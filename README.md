@@ -6,9 +6,9 @@ destruction of processes. When the kernel sends us the PID value of a recently c
 `/proc/PID/comm` and if the process name matches the game executable name provided in the user interface a few settings
 are applied to the game process.
 
+![](src/contents/images/preset_menu.png)
 ![](src/contents/images/environment_variables.png)
 ![](src/contents/images/cpu.png)
-![](src/contents/images/disk.png)
 
 # Application usage
 

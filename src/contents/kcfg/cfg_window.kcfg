@@ -12,8 +12,8 @@
             <label>Height of the main window.</label>
             <default>600</default>
         </entry>
-        <entry name="close_to_tray" type="Bool">
-            <label>Height of the main window.</label>
+        <entry name="show_tray_icon" type="Bool">
+            <label>Show the tray icon.</label>
             <default>true</default>
         </entry>
     </group>

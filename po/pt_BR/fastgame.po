@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-04-23 15:14-0300\n"
+"POT-Creation-Date: 2024-04-24 21:15-0300\n"
 "PO-Revision-Date: 2024-04-23 14:42-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -160,40 +160,40 @@ msgstr "Nome"
 msgid "Value"
 msgstr "Valor"
 
-#: src/contents/ui/main.qml:15
+#: src/contents/ui/main.qml:18
 msgctxt "@title:window"
 msgid "FastGame"
 msgstr ""
 
-#: src/contents/ui/main.qml:50
+#: src/contents/ui/main.qml:64
 msgid "AMDGPU"
 msgstr ""
 
-#: src/contents/ui/main.qml:57
+#: src/contents/ui/main.qml:71
 msgid "Nvidia"
 msgstr ""
 
-#: src/contents/ui/main.qml:115 src/contents/ui/main.qml:257
+#: src/contents/ui/main.qml:129 src/contents/ui/main.qml:282
 msgid "Quit"
 msgstr "Sair"
 
-#: src/contents/ui/main.qml:227
+#: src/contents/ui/main.qml:249
 msgid "Apply"
 msgstr "Aplicar"
 
-#: src/contents/ui/main.qml:236
+#: src/contents/ui/main.qml:258
 msgid "Presets"
 msgstr "Predefinições"
 
-#: src/contents/ui/main.qml:244
+#: src/contents/ui/main.qml:266
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/contents/ui/main.qml:249
+#: src/contents/ui/main.qml:274
 msgid "About FastGame"
 msgstr ""
 
-#: src/contents/ui/main.qml:285
+#: src/contents/ui/main.qml:310
 msgid "Executable Name"
 msgstr "Nome do Executável"
 
@@ -285,6 +285,14 @@ msgstr ""
 msgid "GPU"
 msgstr ""
 
+#: src/contents/ui/PreferencesPage.qml:6
+msgid "General"
+msgstr ""
+
+#: src/contents/ui/PreferencesPage.qml:13
+msgid "Show Tray Icon"
+msgstr ""
+
 #: src/contents/ui/PresetsMenu.qml:39
 msgid "No Preset"
 msgstr ""
@@ -346,23 +354,41 @@ msgstr "Busca"
 msgid "Last Used Preset:    "
 msgstr "Última Predefinição Utilizada: "
 
-#: src/main.cpp:56
+#: src/main.cpp:57
 msgid "Optimize system performance for games"
 msgstr ""
 
-#: src/main.cpp:56
+#: src/main.cpp:57
 msgid "(c) 2024"
 msgstr ""
 
-#: src/main.cpp:59
+#: src/main.cpp:60
 msgctxt "@info:credit"
 msgid "Wellington Wallace"
 msgstr ""
 
-#: src/main.cpp:59
+#: src/main.cpp:60
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Desenvolvedor"
+
+#. i18n: file: src/contents/kcfg/cfg_window.kcfg:8
+#. i18n: ectx: label, entry (width), group (Window)
+#: rc.cpp:3
+msgid "Width of the main window."
+msgstr ""
+
+#. i18n: file: src/contents/kcfg/cfg_window.kcfg:12
+#. i18n: ectx: label, entry (height), group (Window)
+#: rc.cpp:6
+msgid "Height of the main window."
+msgstr ""
+
+#. i18n: file: src/contents/kcfg/cfg_window.kcfg:16
+#. i18n: ectx: label, entry (show_tray_icon), group (Window)
+#: rc.cpp:9
+msgid "Show the tray icon."
+msgstr ""
 
 #: com.github.wwmm.fastgame.desktop.template.h:1
 msgid "FastGame"

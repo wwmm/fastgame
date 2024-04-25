@@ -22,6 +22,11 @@ Kirigami.ApplicationWindow {
     onHeightChanged: {
         CfgWindow.height = applicationWindow().height;
     }
+    onVisibleChanged: {
+        if (!root.visible)
+            CfgWindow.save();
+
+    }
 
     EnvironmentVariables {
         id: environmentVariables
@@ -105,7 +110,7 @@ Kirigami.ApplicationWindow {
     SystemTrayIcon {
         id: tray
 
-        visible: true
+        visible: CfgWindow.show_tray_icon
         icon.name: "fastgame"
         onActivated: {
             if (!root.visible) {
@@ -125,6 +130,14 @@ Kirigami.ApplicationWindow {
                 onTriggered: Qt.quit()
             }
 
+        }
+
+    }
+
+    Component {
+        id: preferencesPage
+
+        PreferencesPage {
         }
 
     }
@@ -253,6 +266,9 @@ Kirigami.ApplicationWindow {
                         text: i18n("Preferences")
                         icon.name: "gtk-preferences"
                         displayHint: Kirigami.DisplayHint.AlwaysHide
+                        onTriggered: {
+                            root.pageStack.layers.push(preferencesPage);
+                        }
                     },
                     Kirigami.Action {
                         text: i18n("About FastGame")

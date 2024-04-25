@@ -101,8 +101,8 @@ int main(int argc, char* argv[]) {
 
   qmlRegisterSingletonInstance("CfgWindow", PROJECT_VERSION_MAJOR, 0, "CfgWindow", cfgWindow);
 
-  QObject::connect(cfgWindow, &cfg::Window::widthChanged,
-                   [=]() { util::warning(util::to_string(cfg::Window::width())); });
+  // QObject::connect(cfgWindow, &cfg::Window::widthChanged,
+  //                  [=]() { util::warning(util::to_string(cfg::Window::width())); });
 
   presets::Backend presetsBackend;
 

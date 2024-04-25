@@ -69,7 +69,6 @@ endif()
 
 kconfig_add_kcfg_files(fastgame GENERATE_MOC ${KCFGC_FILES})
 
-# message(STATUS ${fastgame_SOURCES})
-install(FILES ${KCFG_FILES} DESTINATION ${KDE_INSTALL_KCFGDIR})
+# install(FILES ${KCFG_FILES} DESTINATION ${KDE_INSTALL_KCFGDIR})
 
 install(TARGETS fastgame fastgame_launcher fastgame_apply ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

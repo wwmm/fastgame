@@ -6,9 +6,9 @@ destruction of processes. When the kernel sends us the PID value of a recently c
 `/proc/PID/comm` and if the process name matches the game executable name provided in the user interface a few settings
 are applied to the game process.
 
-![](images/environment_variables.png)
-![](images/cpu.png)
-![](images/disk.png)
+![](src/contents/images/environment_variables.png)
+![](src/contents/images/cpu.png)
+![](src/contents/images/disk.png)
 
 # Application usage
 
@@ -44,7 +44,6 @@ settings that can be configured through FastGame:
 - Change the disk scheduler
 - Change the readahead and nr_requests values
 - Disable the disk `add_random`
-- Enable the disk write cache and disable APM
 - Apply the Realtime IO priority to the game process
 - Set amdgpu performance level, power cap and irq affinity
 - Set Nvidia powermize and clock offset state
@@ -57,7 +56,6 @@ settings that can be configured through FastGame:
 
 ```
 cd fastgame
-meson build
-cd build
-ninja
+cmake -B build
+cmake --build build
 ```

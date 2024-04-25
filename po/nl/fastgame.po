@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-04-24 21:15-0300\n"
+"POT-Creation-Date: 2024-04-24 21:52-0300\n"
 "PO-Revision-Date: 2021-03-14 19:28+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -180,28 +180,33 @@ msgstr ""
 msgid "Nvidia"
 msgstr ""
 
-#: src/contents/ui/main.qml:129 src/contents/ui/main.qml:282
+#: src/contents/ui/main.qml:129
+#, fuzzy
+msgid "Preset: "
+msgstr "Voorinstellingen"
+
+#: src/contents/ui/main.qml:137 src/contents/ui/main.qml:290
 msgid "Quit"
 msgstr ""
 
-#: src/contents/ui/main.qml:249
+#: src/contents/ui/main.qml:257
 msgid "Apply"
 msgstr "Toepassen"
 
-#: src/contents/ui/main.qml:258
+#: src/contents/ui/main.qml:266
 msgid "Presets"
 msgstr "Voorinstellingen"
 
-#: src/contents/ui/main.qml:266
+#: src/contents/ui/main.qml:274
 msgid "Preferences"
 msgstr ""
 
-#: src/contents/ui/main.qml:274
+#: src/contents/ui/main.qml:282
 #, fuzzy
 msgid "About FastGame"
 msgstr "FastGame"
 
-#: src/contents/ui/main.qml:310
+#: src/contents/ui/main.qml:318
 #, fuzzy
 msgid "Executable Name"
 msgstr "Uitvoerbaar bestand"
@@ -307,72 +312,73 @@ msgstr ""
 msgid "Show Tray Icon"
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:39
+#: src/contents/ui/PresetsMenu.qml:40
 #, fuzzy
 msgid "No Preset"
 msgstr "Voorinstellingen"
 
-#: src/contents/ui/PresetsMenu.qml:61 src/contents/ui/PresetsMenu.qml:64
-#: src/contents/ui/PresetsMenu.qml:92 src/contents/ui/PresetsMenu.qml:94
+#: src/contents/ui/PresetsMenu.qml:62 src/contents/ui/PresetsMenu.qml:65
+#: src/contents/ui/PresetsMenu.qml:93 src/contents/ui/PresetsMenu.qml:95
 #, fuzzy
 msgid "The Preset "
 msgstr "Voorinstelling maken"
 
-#: src/contents/ui/PresetsMenu.qml:76
+#: src/contents/ui/PresetsMenu.qml:77
 #, fuzzy
 msgid "Save Settings to this Preset"
 msgstr "Sla de huidige instellingen op in dit voorinstellingsbestand"
 
-#: src/contents/ui/PresetsMenu.qml:81
+#: src/contents/ui/PresetsMenu.qml:82
 msgid "Settings Saved to: "
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:83
+#: src/contents/ui/PresetsMenu.qml:84
 msgid "Failed to Save Settings to: "
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:87
+#: src/contents/ui/PresetsMenu.qml:88
 #, fuzzy
 msgid "Delete this Preset"
 msgstr "Voorinstelling maken"
 
-#: src/contents/ui/PresetsMenu.qml:120
+#: src/contents/ui/PresetsMenu.qml:121
 msgid "Preset files imported!"
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:122
+#: src/contents/ui/PresetsMenu.qml:123
 msgid "Failed to import the presets!"
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:131
+#: src/contents/ui/PresetsMenu.qml:132
 msgid "New Preset Name"
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:147
+#: src/contents/ui/PresetsMenu.qml:148
 #, fuzzy
 msgid "Import Preset File"
 msgstr "Voorinstellingen importeren"
 
-#: src/contents/ui/PresetsMenu.qml:156
+#: src/contents/ui/PresetsMenu.qml:157
 msgid "Create Preset"
 msgstr "Voorinstelling maken"
 
-#: src/contents/ui/PresetsMenu.qml:162
+#: src/contents/ui/PresetsMenu.qml:163
 msgid "New Preset Created: "
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:165
+#: src/contents/ui/PresetsMenu.qml:166
 #, fuzzy
 msgid "Failed to Create Preset: "
 msgstr "Voorinstelling maken"
 
-#: src/contents/ui/PresetsMenu.qml:196
+#: src/contents/ui/PresetsMenu.qml:197
 msgid "Search"
 msgstr ""
 
-#: src/contents/ui/PresetsMenu.qml:220
-msgid "Last Used Preset:    "
-msgstr ""
+#: src/contents/ui/PresetsMenu.qml:217
+#, fuzzy
+msgid "Preset:    "
+msgstr "Voorinstellingen"
 
 #: src/main.cpp:57
 #, fuzzy
@@ -406,10 +412,17 @@ msgid "Height of the main window."
 msgstr ""
 
 #. i18n: file: src/contents/kcfg/cfg_window.kcfg:16
-#. i18n: ectx: label, entry (show_tray_icon), group (Window)
+#. i18n: ectx: label, entry (showTrayIcon), group (Window)
 #: rc.cpp:9
 msgid "Show the tray icon."
 msgstr ""
+
+#. i18n: file: src/contents/kcfg/cfg_window.kcfg:20
+#. i18n: ectx: label, entry (lastUsedPreset), group (Window)
+#: rc.cpp:12
+#, fuzzy
+msgid "Last used preset."
+msgstr "Voorinstelling maken"
 
 #: com.github.wwmm.fastgame.desktop.template.h:1
 #, fuzzy

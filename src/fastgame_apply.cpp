@@ -10,7 +10,6 @@
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <thread>
@@ -151,6 +150,12 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
                         root.get<std::string>("cpu.pcie-aspm-policy", "default"));
 
   update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor", "schedutil"));
+
+  update_system_setting("/sys/module/workqueue/parameters/default_affinity_scope",
+                        root.get<std::string>("cpu.workqueue.affinity-scope", "cache"));
+
+  update_system_setting("/sys/module/workqueue/parameters/cpu_intensive_thresh_us",
+                        root.get<int>("cpu.workqueue.cpu-intensive-threshold", 10000));
 
   int cpu_dma_latency_fd = -1;
 

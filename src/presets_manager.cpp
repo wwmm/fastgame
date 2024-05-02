@@ -162,10 +162,10 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   proxyModel->setDynamicSortFilter(true);
   proxyModel->sort(0);
 
-  qmlRegisterSingletonInstance<QSortFilterProxyModel>("FGPresetsMenuModel", PROJECT_VERSION_MAJOR, 0,
+  qmlRegisterSingletonInstance<QSortFilterProxyModel>("FGPresetsMenuModel", VERSION_MAJOR, VERSION_MINOR,
                                                       "FGPresetsMenuModel", proxyModel);
 
-  qmlRegisterSingletonInstance<Backend>("FGPresetsBackend", PROJECT_VERSION_MAJOR, 0, "FGPresetsBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGPresetsBackend", VERSION_MAJOR, VERSION_MINOR, "FGPresetsBackend", this);
 
   for (const auto& name : get_presets_names()) {
     menuModel.append(name);
@@ -297,6 +297,12 @@ bool Backend::loadPreset(const QString& name) {
 
   cpuBackend.setWineServerAffinity(QString::fromStdString(
       root.get<std::string>("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString())));
+
+  cpuBackend.setWorkqueueAffinityScope(
+      root.get<std::string>("cpu.workqueue.affinity-scope", cpuBackend.workqueueAffinityScope()));
+
+  cpuBackend.setCpuIntensiveThreshold(
+      root.get<int>("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold()));
 
   // memory
 
@@ -445,6 +451,8 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("cpu.timer-slack", cpuBackend.timerSlack());
   root.put("cpu.game-cores", cpuBackend.gameAffinity().toStdString());
   root.put("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString());
+  root.put("cpu.workqueue.affinity-scope", cpuBackend.workqueueAffinityScope());
+  root.put("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold());
 
   // memory
 

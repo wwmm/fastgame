@@ -15,22 +15,31 @@
 namespace cpu {
 
 Backend::Backend(QObject* parent) : QObject(parent) {
-  qmlRegisterSingletonInstance<Backend>("FGCpuBackend", PROJECT_VERSION_MAJOR, 0, "FGCpuBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGCpuBackend", VERSION_MAJOR, VERSION_MINOR, "FGCpuBackend", this);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelFreqGovernor", PROJECT_VERSION_MAJOR, 0, "FGModelFreqGovernor",
-                                              &frequencyGovernorModel);
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelFreqGovernor", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelFreqGovernor", &frequencyGovernorModel);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPcieAspm", PROJECT_VERSION_MAJOR, 0, "FGModelPcieAspm",
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPcieAspm", VERSION_MAJOR, VERSION_MINOR, "FGModelPcieAspm",
                                               &pciAspmPolicyModel);
+
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelWorkqueueAffinityScope", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelWorkqueueAffinityScope", &workqueueAffinityScopeModel);
 
   if (const auto list = util::read_system_setting("/proc/sys/kernel/watchdog"); !list.empty()) {
     setEnableWatchdog(std::stoi(list[0]) != 0);
+  }
+
+  if (const auto list = util::read_system_setting("/sys/module/workqueue/parameters/cpu_intensive_thresh_us");
+      !list.empty()) {
+    setCpuIntensiveThreshold(std::stoi(list[0]));
   }
 
   setTimerSlack(prctl(PR_GET_TIMERSLACK));
 
   initFreqGovernor();
   initPcieAspm();
+  init_workqueue_affinity_scope();
 }
 
 auto Backend::useSchedBatch() const -> bool {
@@ -105,6 +114,22 @@ void Backend::setPcieAspmPolicy(const std::string& value) {
   Q_EMIT pcieAspmPolicyChanged();
 }
 
+auto Backend::workqueueAffinityScope() -> std::string {
+  return workqueueAffinityScopeModel.getValue(_workqueueAffinityScope).toStdString();
+}
+
+void Backend::setWorkqueueAffinityScope(const std::string& value) {
+  auto id = workqueueAffinityScopeModel.getId(QString::fromStdString(value));
+
+  if (id == -1) {
+    return;
+  }
+
+  _workqueueAffinityScope = id;
+
+  Q_EMIT workqueueAffinityScopeChanged();
+}
+
 auto Backend::timerSlack() const -> int {
   return _timerSlack;
 }
@@ -113,6 +138,16 @@ void Backend::setTimerSlack(const int& value) {
   _timerSlack = value;
 
   Q_EMIT timerSlackChanged();
+}
+
+auto Backend::cpuIntensiveThreshold() const -> int {
+  return _cpuIntensiveThreshold;
+}
+
+void Backend::setCpuIntensiveThreshold(const int& value) {
+  _cpuIntensiveThreshold = value;
+
+  Q_EMIT cpuIntensiveThresholdChanged();
 }
 
 auto Backend::niceness() const -> int {
@@ -218,6 +253,22 @@ void Backend::initPcieAspm() {
 
   _pcieAspmPolicy = selected_id;
   Q_EMIT pcieAspmPolicyChanged();
+}
+
+void Backend::init_workqueue_affinity_scope() {
+  // https://www.kernel.org/doc/html/latest/core-api/workqueue.html
+
+  if (const auto scope = util::read_system_setting("/sys/module/workqueue/parameters/default_affinity_scope");
+      !scope.empty()) {
+    workqueueAffinityScopeModel.append("cpu");
+    workqueueAffinityScopeModel.append("smt");
+    workqueueAffinityScopeModel.append("cache");
+    workqueueAffinityScopeModel.append("numa");
+    workqueueAffinityScopeModel.append("system");
+
+    _workqueueAffinityScope = workqueueAffinityScopeModel.getId(QString::fromStdString(scope[0]));
+    Q_EMIT workqueueAffinityScopeChanged();
+  }
 }
 
 }  // namespace cpu

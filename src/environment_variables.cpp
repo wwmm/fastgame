@@ -15,7 +15,8 @@
 namespace envvars {
 
 Model::Model(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<envvars::Model>("CppModelEnvVars", PROJECT_VERSION_MAJOR, 0, "CppModelEnvVars", this);
+  qmlRegisterSingletonInstance<envvars::Model>("CppModelEnvVars", VERSION_MAJOR, VERSION_MINOR, "CppModelEnvVars",
+                                               this);
 }
 
 int Model::rowCount(const QModelIndex& /*parent*/) const {

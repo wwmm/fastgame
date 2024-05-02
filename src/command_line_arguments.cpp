@@ -14,8 +14,8 @@
 namespace cmdargs {
 
 Model::Model(QObject* parent) : QAbstractListModel(parent) {
-  qmlRegisterSingletonInstance<cmdargs::Model>("CppModelCmdLineArgs", PROJECT_VERSION_MAJOR, 0, "CppModelCmdLineArgs",
-                                               this);
+  qmlRegisterSingletonInstance<cmdargs::Model>("CppModelCmdLineArgs", VERSION_MAJOR, VERSION_MINOR,
+                                               "CppModelCmdLineArgs", this);
 }
 
 int Model::rowCount(const QModelIndex& /*parent*/) const {

@@ -19,19 +19,19 @@
 namespace amdgpu {
 
 Backend::Backend(QObject* parent) : QObject(parent) {
-  qmlRegisterSingletonInstance<Backend>("FGAmdgpuBackend", PROJECT_VERSION_MAJOR, 0, "FGAmdgpuBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGAmdgpuBackend", VERSION_MAJOR, VERSION_MINOR, "FGAmdgpuBackend", this);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPerformanceLevel0", PROJECT_VERSION_MAJOR, 0,
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPerformanceLevel0", VERSION_MAJOR, VERSION_MINOR,
                                               "FGModelPerformanceLevel0", &performanceLevel0Model);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPerformanceLevel1", PROJECT_VERSION_MAJOR, 0,
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPerformanceLevel1", VERSION_MAJOR, VERSION_MINOR,
                                               "FGModelPerformanceLevel1", &performanceLevel1Model);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowerProfile0", PROJECT_VERSION_MAJOR, 0, "FGModelPowerProfile0",
-                                              &powerProfile0Model);
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowerProfile0", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelPowerProfile0", &powerProfile0Model);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowerProfile1", PROJECT_VERSION_MAJOR, 0, "FGModelPowerProfile1",
-                                              &powerProfile1Model);
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowerProfile1", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelPowerProfile1", &powerProfile1Model);
 
   card_indices = util::get_amdgpu_indices();
 

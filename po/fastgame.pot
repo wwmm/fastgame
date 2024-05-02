@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-04-24 21:52-0300\n"
+"POT-Creation-Date: 2024-05-02 11:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -293,7 +293,7 @@ msgid "General"
 msgstr ""
 
 #: src/contents/ui/PreferencesPage.qml:13
-msgid "Show Tray Icon"
+msgid "Show the Tray Icon"
 msgstr ""
 
 #: src/contents/ui/PresetsMenu.qml:40

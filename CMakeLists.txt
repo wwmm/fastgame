@@ -42,8 +42,6 @@ find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
     ConfigWidgets
 )
 
-# find_package(KF6I18n NO_MODULE)
-
 ki18n_install(po)
 
 find_package(Threads REQUIRED)

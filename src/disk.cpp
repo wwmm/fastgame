@@ -15,12 +15,12 @@
 namespace disk {
 
 Backend::Backend(QObject* parent) : QObject(parent) {
-  qmlRegisterSingletonInstance<Backend>("FGDiskBackend", PROJECT_VERSION_MAJOR, 0, "FGDiskBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGDiskBackend", VERSION_MAJOR, VERSION_MINOR, "FGDiskBackend", this);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelMountingPath", PROJECT_VERSION_MAJOR, 0, "FGModelMountingPath",
-                                              &mountingPathModel);
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelMountingPath", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelMountingPath", &mountingPathModel);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelScheduler", PROJECT_VERSION_MAJOR, 0, "FGModelScheduler",
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelScheduler", VERSION_MAJOR, VERSION_MINOR, "FGModelScheduler",
                                               &schedulerModel);
 
   std::ifstream infile("/proc/self/mounts");

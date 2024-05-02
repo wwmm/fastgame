@@ -16,15 +16,15 @@ namespace memory {
 using namespace std::string_literals;
 
 Backend::Backend(QObject* parent) : QObject(parent) {
-  qmlRegisterSingletonInstance<Backend>("FGMemoryBackend", PROJECT_VERSION_MAJOR, 0, "FGMemoryBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGMemoryBackend", VERSION_MAJOR, VERSION_MINOR, "FGMemoryBackend", this);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpEnabled", PROJECT_VERSION_MAJOR, 0, "FGModelThpEnabled",
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpEnabled", VERSION_MAJOR, VERSION_MINOR, "FGModelThpEnabled",
                                               &thpEnabledModel);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpDefrag", PROJECT_VERSION_MAJOR, 0, "FGModelThpDefrag",
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpDefrag", VERSION_MAJOR, VERSION_MINOR, "FGModelThpDefrag",
                                               &thpDefragModel);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpShmemEnabled", PROJECT_VERSION_MAJOR, 0,
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpShmemEnabled", VERSION_MAJOR, VERSION_MINOR,
                                               "FGModelThpShmemEnabled", &thpShmemEnabledModel);
 
   if (const auto list = util::read_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms"); !list.empty()) {

@@ -63,16 +63,10 @@ void construct_about_window() {
   // Set aboutData as information about the app
   KAboutData::setApplicationData(aboutData);
 
-  int VERSION_MINOR = 0;
-
-#ifdef PROJECT_VERSION_MINOR
-  VERSION_MINOR = PROJECT_VERSION_MINOR;
-#endif
-
-  qmlRegisterSingletonType(
-      "AboutFG",  // How the import statement should look like
-      PROJECT_VERSION_MAJOR, VERSION_MINOR, "AboutFG",
-      [](QQmlEngine* engine, QJSEngine*) -> QJSValue { return engine->toScriptValue(KAboutData::applicationData()); });
+  qmlRegisterSingletonType("AboutFG",  // How the import statement should look like
+                           VERSION_MAJOR, VERSION_MINOR, "AboutFG", [](QQmlEngine* engine, QJSEngine*) -> QJSValue {
+                             return engine->toScriptValue(KAboutData::applicationData());
+                           });
 }
 
 int main(int argc, char* argv[]) {
@@ -101,7 +95,7 @@ int main(int argc, char* argv[]) {
 
   cfg::Window::setLastUsedPreset("");
 
-  qmlRegisterSingletonInstance("CfgWindow", PROJECT_VERSION_MAJOR, 0, "CfgWindow", cfgWindow);
+  qmlRegisterSingletonInstance("CfgWindow", VERSION_MAJOR, VERSION_MINOR, "CfgWindow", cfgWindow);
 
   // QObject::connect(cfgWindow, &cfg::Window::widthChanged,
   //                  [=]() { util::warning(util::to_string(cfg::Window::width())); });

@@ -12,9 +12,9 @@
 namespace nvidia {
 
 Backend::Backend(QObject* parent) : QObject(parent) {
-  qmlRegisterSingletonInstance<Backend>("FGNvidiaBackend", PROJECT_VERSION_MAJOR, 0, "FGNvidiaBackend", this);
+  qmlRegisterSingletonInstance<Backend>("FGNvidiaBackend", VERSION_MAJOR, VERSION_MINOR, "FGNvidiaBackend", this);
 
-  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowermizeMode0", PROJECT_VERSION_MAJOR, 0,
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelPowermizeMode0", VERSION_MAJOR, VERSION_MINOR,
                                               "FGModelPowermizeMode0", &powermizeMode0Model);
 
 #ifdef USE_NVIDIA

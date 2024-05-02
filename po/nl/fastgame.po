@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-05-02 11:53-0300\n"
+"POT-Creation-Date: 2024-05-02 13:43-0300\n"
 "PO-Revision-Date: 2021-03-14 19:28+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -57,61 +57,86 @@ msgstr "Willekeurig"
 msgid "Argument"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:13
+#: src/contents/ui/Cpu.qml:14
 msgid "CPU"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:20
+#: src/contents/ui/Cpu.qml:18 src/contents/ui/Disk.qml:35
+msgid "Scheduler"
+msgstr "Schema"
+
+#: src/contents/ui/Cpu.qml:25
 msgid "Frequency Governor"
 msgstr "Frequentiegovernor"
 
-#: src/contents/ui/Cpu.qml:35
+#: src/contents/ui/Cpu.qml:40
 msgid "PCIe ASPM"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:50
+#: src/contents/ui/Cpu.qml:55
+msgid "Use the Batch Scheduler"
+msgstr "Reeksplanning gebruiken"
+
+#: src/contents/ui/Cpu.qml:67
+msgid "Use /dev/cpu_dma_latency"
+msgstr "/dev/cpu_dma_latency gebruiken"
+
+#: src/contents/ui/Cpu.qml:79
+#, fuzzy
+msgid "Priority"
+msgstr "Realtime-prioriteit"
+
+#: src/contents/ui/Cpu.qml:86
 msgid "Niceness"
 msgstr "Niceness"
 
-#: src/contents/ui/Cpu.qml:64
+#: src/contents/ui/Cpu.qml:100
 #, fuzzy
 msgid "Autogroup Niceness"
 msgstr "Niceness"
 
-#: src/contents/ui/Cpu.qml:78
-msgid "Timer Slack"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:96
-msgid "Use the Batch Scheduler"
-msgstr "Reeksplanning gebruiken"
-
-#: src/contents/ui/Cpu.qml:108
+#: src/contents/ui/Cpu.qml:114
 msgid "Realtime Wineserver"
 msgstr "Realtime-Wineserver"
 
-#: src/contents/ui/Cpu.qml:120
+#: src/contents/ui/Cpu.qml:126
 #, fuzzy
-msgid "Enable Watchdog"
-msgstr "ingeschakeld"
+msgid "Affinity"
+msgstr "IRQ-affiniteit"
 
-#: src/contents/ui/Cpu.qml:132
-msgid "Use /dev/cpu_dma_latency"
-msgstr "/dev/cpu_dma_latency gebruiken"
+#: src/contents/ui/Cpu.qml:133
+msgid "Game"
+msgstr "Game"
 
-#: src/contents/ui/Cpu.qml:147
-#, fuzzy
-msgid "Game Affinity"
-msgstr "Affiniteit"
-
-#: src/contents/ui/Cpu.qml:148 src/contents/ui/Cpu.qml:171
+#: src/contents/ui/Cpu.qml:134 src/contents/ui/Cpu.qml:157
 msgid "List of Cores. Example: 2,9,13,15,3"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:170
+#: src/contents/ui/Cpu.qml:156
 #, fuzzy
-msgid "Wine Server Affinity"
+msgid "Wine Server"
 msgstr "Wineserver"
+
+#: src/contents/ui/Cpu.qml:179
+msgid "Workqueue Scope"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:194 src/contents/ui/PreferencesPage.qml:6
+msgid "General"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:201
+msgid "Timer Slack"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:216
+msgid "CPU Intensive Threshold (Workqueue)"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:231
+#, fuzzy
+msgid "Enable Watchdog"
+msgstr "ingeschakeld"
 
 #: src/contents/ui/Disk.qml:13
 msgid "Disk"
@@ -120,10 +145,6 @@ msgstr ""
 #: src/contents/ui/Disk.qml:20
 msgid "Mounting Path"
 msgstr ""
-
-#: src/contents/ui/Disk.qml:35
-msgid "Scheduler"
-msgstr "Schema"
 
 #: src/contents/ui/Disk.qml:50
 msgid "Readahead"
@@ -304,10 +325,6 @@ msgstr ""
 msgid "GPU"
 msgstr ""
 
-#: src/contents/ui/PreferencesPage.qml:6
-msgid "General"
-msgstr ""
-
 #: src/contents/ui/PreferencesPage.qml:13
 msgid "Show the Tray Icon"
 msgstr ""
@@ -438,6 +455,10 @@ msgstr "Systeemaanpassingen"
 msgid "Tweak system performance for games"
 msgstr "Maak je systeem geschikt voor games"
 
+#, fuzzy
+#~ msgid "Game Affinity"
+#~ msgstr "Affiniteit"
+
 #~ msgid "system;tweak;game;"
 #~ msgstr "systeem;tweak;aanpassen;aanpassing;game;spel;"
 
@@ -455,9 +476,6 @@ msgstr "Maak je systeem geschikt voor games"
 
 #~ msgid "Child Runs First"
 #~ msgstr "Eerst onderliggend proces"
-
-#~ msgid "Game"
-#~ msgstr "Game"
 
 #~ msgid "Add Line"
 #~ msgstr "Regel toevoegen"

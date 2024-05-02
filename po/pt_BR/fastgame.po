@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-05-02 11:53-0300\n"
+"POT-Creation-Date: 2024-05-02 13:43-0300\n"
 "PO-Revision-Date: 2024-04-23 14:42-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,56 +56,81 @@ msgstr ""
 msgid "Argument"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:13
+#: src/contents/ui/Cpu.qml:14
 msgid "CPU"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:20
+#: src/contents/ui/Cpu.qml:18 src/contents/ui/Disk.qml:35
+msgid "Scheduler"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:25
 msgid "Frequency Governor"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:35
+#: src/contents/ui/Cpu.qml:40
 msgid "PCIe ASPM"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:50
-msgid "Niceness"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:64
-msgid "Autogroup Niceness"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:78
-msgid "Timer Slack"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:96
+#: src/contents/ui/Cpu.qml:55
 msgid "Use the Batch Scheduler"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:108
-msgid "Realtime Wineserver"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:120
-msgid "Enable Watchdog"
-msgstr ""
-
-#: src/contents/ui/Cpu.qml:132
+#: src/contents/ui/Cpu.qml:67
 msgid "Use /dev/cpu_dma_latency"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:147
-msgid "Game Affinity"
+#: src/contents/ui/Cpu.qml:79
+msgid "Priority"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:148 src/contents/ui/Cpu.qml:171
+#: src/contents/ui/Cpu.qml:86
+msgid "Niceness"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:100
+msgid "Autogroup Niceness"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:114
+msgid "Realtime Wineserver"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:126
+msgid "Affinity"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:133
+#, fuzzy
+msgid "Game"
+msgstr "FastGame"
+
+#: src/contents/ui/Cpu.qml:134 src/contents/ui/Cpu.qml:157
 msgid "List of Cores. Example: 2,9,13,15,3"
 msgstr ""
 
-#: src/contents/ui/Cpu.qml:170
-msgid "Wine Server Affinity"
+#: src/contents/ui/Cpu.qml:156
+msgid "Wine Server"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:179
+msgid "Workqueue Scope"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:194 src/contents/ui/PreferencesPage.qml:6
+msgid "General"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:201
+msgid "Timer Slack"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:216
+msgid "CPU Intensive Threshold (Workqueue)"
+msgstr ""
+
+#: src/contents/ui/Cpu.qml:231
+msgid "Enable Watchdog"
 msgstr ""
 
 #: src/contents/ui/Disk.qml:13
@@ -114,10 +139,6 @@ msgstr "Disco"
 
 #: src/contents/ui/Disk.qml:20
 msgid "Mounting Path"
-msgstr ""
-
-#: src/contents/ui/Disk.qml:35
-msgid "Scheduler"
 msgstr ""
 
 #: src/contents/ui/Disk.qml:50
@@ -288,10 +309,6 @@ msgstr ""
 
 #: src/contents/ui/Nvidia.qml:62
 msgid "GPU"
-msgstr ""
-
-#: src/contents/ui/PreferencesPage.qml:6
-msgid "General"
 msgstr ""
 
 #: src/contents/ui/PreferencesPage.qml:13

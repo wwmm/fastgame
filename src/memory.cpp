@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <sys/prctl.h>
+#include <KLocalizedString>
 #include <cstddef>
 #include <string>
 #include "combobox_model.hpp"
@@ -27,35 +28,15 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   qmlRegisterSingletonInstance<ComboBoxModel>("FGModelThpShmemEnabled", VERSION_MAJOR, VERSION_MINOR,
                                               "FGModelThpShmemEnabled", &thpShmemEnabledModel);
 
+  qmlRegisterSingletonInstance<ComboBoxModel>("FGModelZoneReclaimMode", VERSION_MAJOR, VERSION_MINOR,
+                                              "FGModelZoneReclaimMode", &zoneReclaimModeModel);
+
   if (const auto list = util::read_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms"); !list.empty()) {
     setMglruMinTtlMs(std::stoi(list[0]));
   }
 
-  if (const auto list = util::read_system_setting("/proc/sys/vm/swappiness"); !list.empty()) {
-    setSwappiness(std::stoi(list[0]));
-  }
-
-  if (const auto list = util::read_system_setting("/proc/sys/vm/vfs_cache_pressure"); !list.empty()) {
-    setCachePressure(std::stoi(list[0]));
-  }
-
-  if (const auto list = util::read_system_setting("/proc/sys/vm/compaction_proactiveness"); !list.empty()) {
-    setCompactionProactiveness(std::stoi(list[0]));
-  }
-
-  if (const auto list = util::read_system_setting("/proc/sys/vm/min_free_kbytes"); !list.empty()) {
-    setMinFreeKbytes(std::stoi(list[0]));
-  }
-
-  if (const auto list = util::read_system_setting("/proc/sys/vm/page_lock_unfairness"); !list.empty()) {
-    setPageLockUnfairness(std::stoi(list[0]));
-  }
-
-  if (const auto list = util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction"); !list.empty()) {
-    setPerCpuPagelistHighFraction(std::stoi(list[0]));
-  }
-
   initThp();
+  init_vm();
 }
 
 auto Backend::swappiness() const -> int {
@@ -196,6 +177,24 @@ void Backend::setPerCpuPagelistHighFraction(const int& value) {
   Q_EMIT perCpuPagelistHighFractionChanged();
 }
 
+auto Backend::zoneReclaimMode() const -> int {
+  if (_zoneReclaimMode == 3) {
+    return 4;  // Zone reclaim swaps pages
+  }
+
+  return _zoneReclaimMode;
+}
+
+void Backend::setZoneReclaimMode(const int& value) {
+  if (value == 4) {
+    _zoneReclaimMode = 3;
+  } else {
+    _zoneReclaimMode = value;
+  }
+
+  Q_EMIT zoneReclaimModeChanged();
+}
+
 void Backend::initThp() {
   // parameter: enabled
 
@@ -306,6 +305,41 @@ void Backend::initThp() {
           util::read_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs");
       !list.empty()) {
     setAllocSleep(std::stoi(list[0]));
+  }
+}
+
+void Backend::init_vm() {
+  zoneReclaimModeModel.append(i18n("Disabled"));
+  zoneReclaimModeModel.append(i18n("Enabled"));
+  zoneReclaimModeModel.append(i18n("Writes Dirty Pages Out"));
+  zoneReclaimModeModel.append(i18n("Swaps Pages"));
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/swappiness"); !list.empty()) {
+    setSwappiness(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/vfs_cache_pressure"); !list.empty()) {
+    setCachePressure(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/compaction_proactiveness"); !list.empty()) {
+    setCompactionProactiveness(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/min_free_kbytes"); !list.empty()) {
+    setMinFreeKbytes(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/page_lock_unfairness"); !list.empty()) {
+    setPageLockUnfairness(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction"); !list.empty()) {
+    setPerCpuPagelistHighFraction(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/zone_reclaim_mode"); !list.empty()) {
+    setZoneReclaimMode(std::stoi(list[0]));
   }
 }
 

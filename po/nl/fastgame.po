@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fastgame\n"
 "Report-Msgid-Bugs-To: https://github.com/wwmm/fastgame/issues\n"
-"POT-Creation-Date: 2024-05-02 13:43-0300\n"
+"POT-Creation-Date: 2024-05-03 21:36-0300\n"
 "PO-Revision-Date: 2021-03-14 19:28+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -232,72 +232,76 @@ msgstr "FastGame"
 msgid "Executable Name"
 msgstr "Uitvoerbaar bestand"
 
-#: src/contents/ui/Memory.qml:14 src/contents/ui/Nvidia.qml:77
+#: src/contents/ui/Memory.qml:15 src/contents/ui/Nvidia.qml:77
 #, fuzzy
 msgid "Memory"
 msgstr "Virtueel geheugen"
 
-#: src/contents/ui/Memory.qml:18
+#: src/contents/ui/Memory.qml:19
 msgid "Transparent HugePages"
 msgstr "Transparante HugePages"
 
-#: src/contents/ui/Memory.qml:25
+#: src/contents/ui/Memory.qml:26 src/memory.cpp:313
 #, fuzzy
 msgid "Enabled"
 msgstr "ingeschakeld"
 
-#: src/contents/ui/Memory.qml:40
+#: src/contents/ui/Memory.qml:41
 #, fuzzy
 msgid "Defrag"
 msgstr "defragmenteren"
 
-#: src/contents/ui/Memory.qml:55
+#: src/contents/ui/Memory.qml:56
 msgid "Shared Memory Enabled"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:70
+#: src/contents/ui/Memory.qml:71
 msgid "Scan Sleep"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:85
+#: src/contents/ui/Memory.qml:86
 msgid "Allocation Sleep"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:100
+#: src/contents/ui/Memory.qml:101
 msgid "Multi-Gen LRU"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:107
+#: src/contents/ui/Memory.qml:108
 msgid "min_ttl_ms"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:122
+#: src/contents/ui/Memory.qml:123
 #, fuzzy
 msgid "Virtual"
 msgstr "Virtueel geheugen"
 
-#: src/contents/ui/Memory.qml:129
+#: src/contents/ui/Memory.qml:130
 msgid "Swappiness"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:143
+#: src/contents/ui/Memory.qml:144
 msgid "Cache Pressure"
 msgstr "Cachebelasting"
 
-#: src/contents/ui/Memory.qml:157
+#: src/contents/ui/Memory.qml:158
 msgid "Compaction Proactiveness"
 msgstr "Verkleiningsniveau"
 
-#: src/contents/ui/Memory.qml:171
+#: src/contents/ui/Memory.qml:172
 msgid "Minimum Free Kbytes"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:186
+#: src/contents/ui/Memory.qml:187
 msgid "Page Lock Unfairness"
 msgstr ""
 
-#: src/contents/ui/Memory.qml:200
+#: src/contents/ui/Memory.qml:201
 msgid "Per-CPU Page List Fraction"
+msgstr ""
+
+#: src/contents/ui/Memory.qml:215
+msgid "Zone Reclaim Mode"
 msgstr ""
 
 #: src/contents/ui/Nvidia.qml:14
@@ -414,6 +418,19 @@ msgstr ""
 #: src/main.cpp:60
 msgctxt "@info:credit"
 msgid "Developer"
+msgstr ""
+
+#: src/memory.cpp:312
+#, fuzzy
+msgid "Disabled"
+msgstr "ingeschakeld"
+
+#: src/memory.cpp:314
+msgid "Writes Dirty Pages Out"
+msgstr ""
+
+#: src/memory.cpp:315
+msgid "Swaps Pages"
 msgstr ""
 
 #. i18n: file: src/contents/kcfg/cfg_window.kcfg:8

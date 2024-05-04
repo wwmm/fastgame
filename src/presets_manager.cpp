@@ -335,6 +335,9 @@ bool Backend::loadPreset(const QString& name) {
   memoryBackend.setPerCpuPagelistHighFraction(
       root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction()));
 
+  memoryBackend.setZoneReclaimMode(
+      root.get<int>("memory.virtual-memory.zone-reclaim-mode", memoryBackend.zoneReclaimMode()));
+
   // disk
 
   diskBackend.setMountingPath(root.get<std::string>("disk.mounting-path", diskBackend.mountingPath()));
@@ -462,6 +465,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("memory.virtual-memory.min-free-kbytes", memoryBackend.minFreeKbytes());
   root.put("memory.virtual-memory.page-lock-unfairness", memoryBackend.pageLockUnfairness());
   root.put("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction());
+  root.put("memory.virtual-memory.zone-reclaim-mode", memoryBackend.zoneReclaimMode());
 
   root.put("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs());
 

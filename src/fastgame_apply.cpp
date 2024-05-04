@@ -231,6 +231,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/percpu_pagelist_high_fraction",
                         root.get<int>("memory.virtual-memory.percpu-pagelist-high-fraction", 0));
 
+  update_system_setting("/proc/sys/vm/zone_reclaim_mode", root.get<int>("memory.virtual-memory.zone-reclaim-mode", 0));
+
   // mglru
 
   update_system_setting("/sys/kernel/mm/lru_gen/min_ttl_ms", root.get<int>("memory.mglru.min_ttl_ms", 0));

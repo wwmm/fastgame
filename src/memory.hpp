@@ -38,6 +38,8 @@ class Backend : public QObject {
   Q_PROPERTY(int perCpuPagelistHighFraction READ perCpuPagelistHighFraction WRITE setPerCpuPagelistHighFraction NOTIFY
                  perCpuPagelistHighFractionChanged)
 
+  Q_PROPERTY(int zoneReclaimMode MEMBER _zoneReclaimMode NOTIFY zoneReclaimModeChanged)
+
  public:
   explicit Backend(QObject* parent = nullptr);
 
@@ -53,6 +55,7 @@ class Backend : public QObject {
   [[nodiscard]] auto minFreeKbytes() const -> int;
   [[nodiscard]] auto pageLockUnfairness() const -> int;
   [[nodiscard]] auto perCpuPagelistHighFraction() const -> int;
+  [[nodiscard]] auto zoneReclaimMode() const -> int;
 
   void setThpEnabled(const std::string& value);
   void setThpDefrag(const std::string& value);
@@ -66,6 +69,7 @@ class Backend : public QObject {
   void setMinFreeKbytes(const int& value);
   void setPageLockUnfairness(const int& value);
   void setPerCpuPagelistHighFraction(const int& value);
+  void setZoneReclaimMode(const int& value);
 
  signals:
   void swappinessChanged();
@@ -80,6 +84,7 @@ class Backend : public QObject {
   void minFreeKbytesChanged();
   void pageLockUnfairnessChanged();
   void perCpuPagelistHighFractionChanged();
+  void zoneReclaimModeChanged();
 
  private:
   int _thpEnabled;
@@ -94,12 +99,15 @@ class Backend : public QObject {
   int _minFreeKbytes;
   int _pageLockUnfairness;
   int _perCpuPagelistHighFraction;
+  int _zoneReclaimMode;
 
   ComboBoxModel thpEnabledModel;
   ComboBoxModel thpDefragModel;
   ComboBoxModel thpShmemEnabledModel;
+  ComboBoxModel zoneReclaimModeModel;
 
   void initThp();
+  void init_vm();
 };
 
 }  // namespace memory

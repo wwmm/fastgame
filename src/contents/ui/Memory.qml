@@ -2,6 +2,7 @@ import FGMemoryBackend
 import FGModelThpDefrag
 import FGModelThpEnabled
 import FGModelThpShmemEnabled
+import FGModelZoneReclaimMode
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
@@ -205,6 +206,21 @@ Kirigami.ScrollablePage {
                 stepSize: 1
                 onValueModified: (v) => {
                     FGMemoryBackend.perCpuPagelistHighFraction = v;
+                }
+            }
+
+            FormCard.FormComboBoxDelegate {
+                id: zoneReclaimMode
+
+                text: i18n("Zone Reclaim Mode")
+                displayMode: FormCard.FormComboBoxDelegate.ComboBox
+                currentIndex: FGMemoryBackend.zoneReclaimMode
+                editable: false
+                model: FGModelZoneReclaimMode
+                onActivated: (idx) => {
+                    if (idx !== FGMemoryBackend.zoneReclaimMode)
+                        FGMemoryBackend.zoneReclaimMode = idx;
+
                 }
             }
 

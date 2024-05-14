@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <sys/prctl.h>
+#include <KLocalizedString>
 #include <memory>
 #include "combobox_model.hpp"
 #include "config.h"
@@ -19,6 +20,10 @@ Backend::Backend(QObject* parent) : QObject(parent) {
 
 #ifdef USE_NVIDIA
   nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();
+
+  powermizeMode0Model.append(i18n("Auto"));
+  powermizeMode0Model.append(i18n("Adaptive"));
+  powermizeMode0Model.append(i18n("Maximum Performance"));
 
   {
     auto [min, max] = nv_wrapper->get_gpu_clock_offset_range();

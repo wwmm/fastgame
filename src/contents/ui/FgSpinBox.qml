@@ -42,7 +42,7 @@ FormCard.AbstractFormDelegate {
     contentItem: ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
-            spacing: 0
+            spacing: Kirigami.Units.smallSpacing
 
             Label {
                 Layout.fillWidth: true

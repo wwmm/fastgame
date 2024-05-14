@@ -63,7 +63,7 @@ class Backend : public QObject {
  private:
   bool _available = true;
 
-  int _powermizeMode0 = -1;
+  int _powermizeMode0 = 0;
   int _scheduler;
   int _powerLimit0;
   int _gpuClockOffset0 = 0;

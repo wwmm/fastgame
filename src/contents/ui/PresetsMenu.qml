@@ -32,6 +32,7 @@ Kirigami.OverlaySheet {
         clip: true
         model: FGPresetsMenuModel
         delegate: listDelegate
+        reuseItems: true
 
         Kirigami.PlaceholderMessage {
             anchors.centerIn: parent

@@ -327,6 +327,9 @@ bool Backend::loadPreset(const QString& name) {
   memoryBackend.setCompactionProactiveness(
       root.get<int>("memory.virtual-memory.compaction-proactiveness", memoryBackend.compactionProactiveness()));
 
+  memoryBackend.setExtfragThreshold(
+      root.get<int>("memory.virtual-memory.extfrag-threshold", memoryBackend.extfragThreshold()));
+
   memoryBackend.setMinFreeKbytes(root.get<int>("memory.virtual-memory.min-free-kbytes", memoryBackend.minFreeKbytes()));
 
   memoryBackend.setPageLockUnfairness(
@@ -462,6 +465,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("memory.virtual-memory.swappiness", memoryBackend.swappiness());
   root.put("memory.virtual-memory.cache-pressure", memoryBackend.cachePressure());
   root.put("memory.virtual-memory.compaction-proactiveness", memoryBackend.compactionProactiveness());
+  root.put("memory.virtual-memory.extfrag-threshold", memoryBackend.extfragThreshold());
   root.put("memory.virtual-memory.min-free-kbytes", memoryBackend.minFreeKbytes());
   root.put("memory.virtual-memory.page-lock-unfairness", memoryBackend.pageLockUnfairness());
   root.put("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction());

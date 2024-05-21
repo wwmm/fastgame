@@ -147,6 +147,16 @@ void Backend::setCompactionProactiveness(const int& value) {
   Q_EMIT compactionProactivenessChanged();
 }
 
+auto Backend::extfragThreshold() const -> int {
+  return _extfragThreshold;
+}
+
+void Backend::setExtfragThreshold(const int& value) {
+  _extfragThreshold = value;
+
+  Q_EMIT extfragThresholdChanged();
+}
+
 auto Backend::minFreeKbytes() const -> int {
   return _minFreeKbytes;
 }
@@ -324,6 +334,10 @@ void Backend::init_vm() {
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/compaction_proactiveness"); !list.empty()) {
     setCompactionProactiveness(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/extfrag_threshold"); !list.empty()) {
+    setExtfragThreshold(std::stoi(list[0]));
   }
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/min_free_kbytes"); !list.empty()) {

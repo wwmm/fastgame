@@ -30,6 +30,8 @@ class Backend : public QObject {
   Q_PROPERTY(int compactionProactiveness READ compactionProactiveness WRITE setCompactionProactiveness NOTIFY
                  compactionProactivenessChanged)
 
+  Q_PROPERTY(int extfragThreshold READ extfragThreshold WRITE setExtfragThreshold NOTIFY extfragThresholdChanged)
+
   Q_PROPERTY(int minFreeKbytes READ minFreeKbytes WRITE setMinFreeKbytes NOTIFY minFreeKbytesChanged)
 
   Q_PROPERTY(
@@ -52,6 +54,7 @@ class Backend : public QObject {
   [[nodiscard]] auto swappiness() const -> int;
   [[nodiscard]] auto cachePressure() const -> int;
   [[nodiscard]] auto compactionProactiveness() const -> int;
+  [[nodiscard]] auto extfragThreshold() const -> int;
   [[nodiscard]] auto minFreeKbytes() const -> int;
   [[nodiscard]] auto pageLockUnfairness() const -> int;
   [[nodiscard]] auto perCpuPagelistHighFraction() const -> int;
@@ -66,6 +69,7 @@ class Backend : public QObject {
   void setSwappiness(const int& value);
   void setCachePressure(const int& value);
   void setCompactionProactiveness(const int& value);
+  void setExtfragThreshold(const int& value);
   void setMinFreeKbytes(const int& value);
   void setPageLockUnfairness(const int& value);
   void setPerCpuPagelistHighFraction(const int& value);
@@ -81,6 +85,7 @@ class Backend : public QObject {
   void mglruMinTtlMsChanged();
   void cachePressureChanged();
   void compactionProactivenessChanged();
+  void extfragThresholdChanged();
   void minFreeKbytesChanged();
   void pageLockUnfairnessChanged();
   void perCpuPagelistHighFractionChanged();
@@ -96,6 +101,7 @@ class Backend : public QObject {
   int _swappiness;
   int _cachePressure;
   int _compactionProactiveness;
+  int _extfragThreshold;
   int _minFreeKbytes;
   int _pageLockUnfairness;
   int _perCpuPagelistHighFraction;

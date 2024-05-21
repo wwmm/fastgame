@@ -223,6 +223,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/compaction_proactiveness",
                         root.get<int>("memory.virtual-memory.compaction-proactiveness", 20));
 
+  update_system_setting("/proc/sys/vm/extfrag_threshold",
+                        root.get<int>("memory.virtual-memory.extfrag-threshold", 500));
+
   update_system_setting("/proc/sys/vm/min_free_kbytes", root.get<int>("memory.virtual-memory.min-free-kbytes", 67584));
 
   update_system_setting("/proc/sys/vm/page_lock_unfairness",

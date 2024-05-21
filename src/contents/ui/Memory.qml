@@ -167,6 +167,20 @@ Kirigami.ScrollablePage {
             }
 
             FgSpinBox {
+                id: extfragThreshold
+
+                label: i18n("External Fragmentation Threshold")
+                from: 0
+                to: 1000
+                value: FGMemoryBackend.extfragThreshold
+                decimals: 0
+                stepSize: 1
+                onValueModified: (v) => {
+                    FGMemoryBackend.extfragThreshold = v;
+                }
+            }
+
+            FgSpinBox {
                 id: minFreeKbytes
 
                 label: i18n("Minimum Free Kbytes")

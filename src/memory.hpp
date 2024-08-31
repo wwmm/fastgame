@@ -11,6 +11,8 @@ namespace memory {
 class Backend : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(bool optimizeHugeTLB READ optimizeHugeTLB WRITE setOptimizeHugeTLB NOTIFY optimizeHugeTLBChanged)
+
   Q_PROPERTY(int thpEnabled MEMBER _thpEnabled NOTIFY thpEnabledChanged)
 
   Q_PROPERTY(int thpDefrag MEMBER _thpDefrag NOTIFY thpDefragChanged)
@@ -24,6 +26,8 @@ class Backend : public QObject {
   Q_PROPERTY(int mglruMinTtlMs READ mglruMinTtlMs WRITE setMglruMinTtlMs NOTIFY mglruMinTtlMsChanged)
 
   Q_PROPERTY(int swappiness READ swappiness WRITE setSwappiness NOTIFY swappinessChanged)
+
+  Q_PROPERTY(int pageCluster READ pageCluster WRITE setPageCluster NOTIFY pageClusterChanged)
 
   Q_PROPERTY(int cachePressure READ cachePressure WRITE setCachePressure NOTIFY cachePressureChanged)
 
@@ -45,6 +49,7 @@ class Backend : public QObject {
  public:
   explicit Backend(QObject* parent = nullptr);
 
+  [[nodiscard]] auto optimizeHugeTLB() const -> bool;
   [[nodiscard]] auto thpEnabled() -> std::string;
   [[nodiscard]] auto thpDefrag() -> std::string;
   [[nodiscard]] auto thpShmemEnabled() -> std::string;
@@ -52,6 +57,7 @@ class Backend : public QObject {
   [[nodiscard]] auto allocSleep() const -> int;
   [[nodiscard]] auto mglruMinTtlMs() const -> int;
   [[nodiscard]] auto swappiness() const -> int;
+  [[nodiscard]] auto pageCluster() const -> int;
   [[nodiscard]] auto cachePressure() const -> int;
   [[nodiscard]] auto compactionProactiveness() const -> int;
   [[nodiscard]] auto extfragThreshold() const -> int;
@@ -60,6 +66,7 @@ class Backend : public QObject {
   [[nodiscard]] auto perCpuPagelistHighFraction() const -> int;
   [[nodiscard]] auto zoneReclaimMode() const -> int;
 
+  void setOptimizeHugeTLB(const bool& value);
   void setThpEnabled(const std::string& value);
   void setThpDefrag(const std::string& value);
   void setThpShmemEnabled(const std::string& value);
@@ -67,6 +74,7 @@ class Backend : public QObject {
   void setAllocSleep(const int& value);
   void setMglruMinTtlMs(const int& value);
   void setSwappiness(const int& value);
+  void setPageCluster(const int& value);
   void setCachePressure(const int& value);
   void setCompactionProactiveness(const int& value);
   void setExtfragThreshold(const int& value);
@@ -76,7 +84,9 @@ class Backend : public QObject {
   void setZoneReclaimMode(const int& value);
 
  signals:
+  void optimizeHugeTLBChanged();
   void swappinessChanged();
+  void pageClusterChanged();
   void thpEnabledChanged();
   void thpDefragChanged();
   void thpShmemEnabledChanged();
@@ -92,6 +102,7 @@ class Backend : public QObject {
   void zoneReclaimModeChanged();
 
  private:
+  bool _optimizeHugeTLB;
   int _thpEnabled;
   int _thpDefrag;
   int _thpShmemEnabled;
@@ -99,6 +110,7 @@ class Backend : public QObject {
   int _allocSleep;
   int _mglruMinTtlMs;
   int _swappiness;
+  int _pageCluster;
   int _cachePressure;
   int _compactionProactiveness;
   int _extfragThreshold;

@@ -218,6 +218,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   update_system_setting("/proc/sys/vm/swappiness", root.get<int>("memory.virtual-memory.swappiness", 100));
 
+  update_system_setting("/proc/sys/vm/page-cluster", root.get<int>("memory.virtual-memory.page-cluster", 3));
+
   update_system_setting("/proc/sys/vm/vfs_cache_pressure", root.get<int>("memory.virtual-memory.cache-pressure", 100));
 
   update_system_setting("/proc/sys/vm/compaction_proactiveness",
@@ -256,6 +258,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   update_system_setting("/sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs",
                         root.get<int>("memory.transparent-hugepages.alloc-sleep", 60000));
+
+  update_system_setting("/proc/sys/vm/hugetlb_optimize_vmemmap",
+                        root.get<bool>("memory.virtual-memory.hugetlb_optimize_vmemmap", false));
 
   // starting the netlink server
 

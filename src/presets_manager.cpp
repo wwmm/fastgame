@@ -318,9 +318,14 @@ bool Backend::loadPreset(const QString& name) {
 
   memoryBackend.setAllocSleep(root.get<int>("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep()));
 
+  memoryBackend.setOptimizeHugeTLB(
+      root.get<bool>("memory.transparent-hugepages.optimizeHugeTLB", memoryBackend.optimizeHugeTLB()));
+
   memoryBackend.setMglruMinTtlMs(root.get<int>("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs()));
 
   memoryBackend.setSwappiness(root.get<int>("memory.virtual-memory.swappiness", memoryBackend.swappiness()));
+
+  memoryBackend.setPageCluster(root.get<int>("memory.virtual-memory.page-cluster", memoryBackend.pageCluster()));
 
   memoryBackend.setCachePressure(root.get<int>("memory.virtual-memory.cache-pressure", memoryBackend.cachePressure()));
 
@@ -463,6 +468,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   // memory
 
   root.put("memory.virtual-memory.swappiness", memoryBackend.swappiness());
+  root.put("memory.virtual-memory.page-cluster", memoryBackend.pageCluster());
   root.put("memory.virtual-memory.cache-pressure", memoryBackend.cachePressure());
   root.put("memory.virtual-memory.compaction-proactiveness", memoryBackend.compactionProactiveness());
   root.put("memory.virtual-memory.extfrag-threshold", memoryBackend.extfragThreshold());
@@ -478,6 +484,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("memory.transparent-hugepages.shmem_enabled", memoryBackend.thpShmemEnabled());
   root.put("memory.transparent-hugepages.scan-sleep", memoryBackend.scanSleep());
   root.put("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep());
+  root.put("memory.transparent-hugepages.optimizeHugeTLB", memoryBackend.optimizeHugeTLB());
 
   // disk
 

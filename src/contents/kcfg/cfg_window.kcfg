@@ -14,7 +14,7 @@
         </entry>
         <entry name="showTrayIcon" type="Bool">
             <label>Show the tray icon.</label>
-            <default>true</default>
+            <default>false</default>
         </entry>
         <entry name="lastUsedPreset" type="String">
             <label>Last used preset.</label>

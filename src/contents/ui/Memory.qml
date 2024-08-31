@@ -65,6 +65,18 @@ Kirigami.ScrollablePage {
                 }
             }
 
+            FgSwitch {
+                id: optimizeHugeTLB
+
+                label: i18n("Optimize HugeTLB Vmemmap")
+                isChecked: FGMemoryBackend.optimizeHugeTLB
+                onCheckedChanged: {
+                    if (isChecked !== FGMemoryBackend.optimizeHugeTLB)
+                        FGMemoryBackend.optimizeHugeTLB = isChecked;
+
+                }
+            }
+
             FgSpinBox {
                 id: scanSleep
 
@@ -135,6 +147,20 @@ Kirigami.ScrollablePage {
                 stepSize: 1
                 onValueModified: (v) => {
                     FGMemoryBackend.swappiness = v;
+                }
+            }
+
+            FgSpinBox {
+                id: pageCluster
+
+                label: i18n("Page-cluster")
+                from: 0
+                to: 100
+                value: FGMemoryBackend.pageCluster
+                decimals: 0
+                stepSize: 1
+                onValueModified: (v) => {
+                    FGMemoryBackend.pageCluster = v;
                 }
             }
 

@@ -39,6 +39,16 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   init_vm();
 }
 
+auto Backend::optimizeHugeTLB() const -> bool {
+  return _optimizeHugeTLB;
+}
+
+void Backend::setOptimizeHugeTLB(const bool& value) {
+  _optimizeHugeTLB = value;
+
+  Q_EMIT optimizeHugeTLBChanged();
+}
+
 auto Backend::swappiness() const -> int {
   return _swappiness;
 }
@@ -47,6 +57,16 @@ void Backend::setSwappiness(const int& value) {
   _swappiness = value;
 
   Q_EMIT swappinessChanged();
+}
+
+auto Backend::pageCluster() const -> int {
+  return _pageCluster;
+}
+
+void Backend::setPageCluster(const int& value) {
+  _pageCluster = value;
+
+  Q_EMIT pageClusterChanged();
 }
 
 auto Backend::thpEnabled() -> std::string {
@@ -316,6 +336,10 @@ void Backend::initThp() {
       !list.empty()) {
     setAllocSleep(std::stoi(list[0]));
   }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/hugetlb_optimize_vmemmap"); !list.empty()) {
+    setOptimizeHugeTLB(std::stoi(list[0]));
+  }
 }
 
 void Backend::init_vm() {
@@ -326,6 +350,10 @@ void Backend::init_vm() {
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/swappiness"); !list.empty()) {
     setSwappiness(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/page-cluster"); !list.empty()) {
+    setPageCluster(std::stoi(list[0]));
   }
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/vfs_cache_pressure"); !list.empty()) {

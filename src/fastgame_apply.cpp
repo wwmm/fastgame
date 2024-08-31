@@ -260,7 +260,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
                         root.get<int>("memory.transparent-hugepages.alloc-sleep", 60000));
 
   update_system_setting("/proc/sys/vm/hugetlb_optimize_vmemmap",
-                        root.get<bool>("memory.virtual-memory.hugetlb_optimize_vmemmap", false));
+                        root.get<bool>("memory.transparent-hugepages.hugetlb_optimize_vmemmap", false));
 
   // starting the netlink server
 

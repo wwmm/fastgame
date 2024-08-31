@@ -338,7 +338,7 @@ void Backend::initThp() {
   }
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/hugetlb_optimize_vmemmap"); !list.empty()) {
-    setOptimizeHugeTLB(std::stoi(list[0]));
+    setOptimizeHugeTLB(static_cast<bool>(std::stoi(list[0])));
   }
 }
 

@@ -319,7 +319,7 @@ bool Backend::loadPreset(const QString& name) {
   memoryBackend.setAllocSleep(root.get<int>("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep()));
 
   memoryBackend.setOptimizeHugeTLB(
-      root.get<bool>("memory.transparent-hugepages.optimizeHugeTLB", memoryBackend.optimizeHugeTLB()));
+      root.get<bool>("memory.transparent-hugepages.hugetlb-optimize-vmemmap", memoryBackend.optimizeHugeTLB()));
 
   memoryBackend.setMglruMinTtlMs(root.get<int>("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs()));
 
@@ -484,7 +484,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("memory.transparent-hugepages.shmem_enabled", memoryBackend.thpShmemEnabled());
   root.put("memory.transparent-hugepages.scan-sleep", memoryBackend.scanSleep());
   root.put("memory.transparent-hugepages.alloc-sleep", memoryBackend.allocSleep());
-  root.put("memory.transparent-hugepages.optimizeHugeTLB", memoryBackend.optimizeHugeTLB());
+  root.put("memory.transparent-hugepages.hugetlb-optimize-vmemmap", memoryBackend.optimizeHugeTLB());
 
   // disk
 

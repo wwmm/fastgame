@@ -46,7 +46,7 @@ ki18n_install(po)
 
 find_package(Threads REQUIRED)
 
-find_package(Boost 1.65 REQUIRED COMPONENTS filesystem program_options)
+find_package(Boost 1.86 REQUIRED COMPONENTS filesystem program_options)
 
 find_package(PkgConfig REQUIRED)
 

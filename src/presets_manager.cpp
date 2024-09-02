@@ -15,9 +15,8 @@
 #include <QTimer>
 #include <algorithm>
 #include <boost/process.hpp>
-#include <boost/process/detail/child_decl.hpp>
-#include <boost/process/search_path.hpp>
-#include <boost/process/spawn.hpp>
+#include <boost/process/v1/detail/child_decl.hpp>
+#include <boost/process/v1/search_path.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>

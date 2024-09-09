@@ -120,7 +120,6 @@ void apply_cpu_affinity(const int& pid, const std::vector<int>& cpu_affinity) {
   CPU_ZERO(&mask);  // Initialize it all to 0, i.e. no CPUs selected.
 
   for (const auto& core_index : cpu_affinity) {
-    util::warning(util::to_string(core_index));
     CPU_SET(core_index, &mask);
   }
 

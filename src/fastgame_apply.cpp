@@ -349,6 +349,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
         setpriority(PRIO_PROCESS, child_pid, niceness);
 
+        update_system_setting("/proc/" + util::to_string(child_pid) + "/autogroup", autogroup_niceness);
+
         if (enable_realtime_io_priority) {
           ioprio_set_realtime(child_pid, 7);
         }

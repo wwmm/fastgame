@@ -65,13 +65,12 @@ struct fg_cn_msg parse_cn_msg(struct cn_msg* msg) {
 
       break;
     case PROC_EVENT_COMM:
-      break;
       out.event = FG_PROC_EVENT_COMM;
 
       out.process_pid = event->event_data.exec.process_pid;
 
       break;
-    case PROC_EVENT_NONZERO_EXIT:
+    case PROC_EVENT_EXIT:
       out.event = FG_PROC_EVENT_EXIT;
 
       out.process_pid = event->event_data.exec.process_pid;

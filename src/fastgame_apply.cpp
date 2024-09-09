@@ -279,20 +279,6 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
     util::apply_cpu_affinity(pid, game_cpu_affinity);
 
-    if (comm.size() > 4) {
-      auto sub_comm = comm.substr(comm.size() - 4);
-
-      if (sub_comm == ":cs0") {  // dxvk or vkd3d ":cs0" thread can not be caught in the fork callback
-        setpriority(PRIO_PROCESS, pid, niceness);
-
-        if (enable_realtime_io_priority) {
-          ioprio_set_realtime(pid, 7);
-        }
-
-        return;
-      }
-    }
-
     auto apply = false;
     auto path_comm = std::filesystem::path(comm);
 

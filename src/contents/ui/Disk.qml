@@ -49,7 +49,7 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Readahead")
                 from: 0
-                to: 1e+06
+                to: 1e+07
                 value: FGDiskBackend.readahead
                 decimals: 0
                 stepSize: 1

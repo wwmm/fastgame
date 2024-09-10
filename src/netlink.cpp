@@ -109,17 +109,15 @@ void Netlink::handle_events() {
     auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
 
     while (NLMSG_OK(nlmsg_hdr, len) && listen) {
-      if (nlmsg_hdr->nlmsg_type == NLMSG_NOOP) {
+      if ((nlmsg_hdr->nlmsg_type == NLMSG_ERROR) || (nlmsg_hdr->nlmsg_type == NLMSG_NOOP)) {
         continue;
-      }
-
-      if ((nlmsg_hdr->nlmsg_type == NLMSG_ERROR) || (nlmsg_hdr->nlmsg_type == NLMSG_OVERRUN)) {
-        break;
       }
 
       auto* cnmsg = static_cast<cn_msg*>(NLMSG_DATA(nlmsg_hdr));
 
-      handle_msg(cnmsg);
+      if (!handle_msg(cnmsg)) {
+        continue;
+      }
 
       if (nlmsg_hdr->nlmsg_type == NLMSG_DONE) {
         break;
@@ -130,9 +128,9 @@ void Netlink::handle_events() {
   }
 }
 
-void Netlink::handle_msg(cn_msg* msg) {
+auto Netlink::handle_msg(cn_msg* msg) -> bool {
   if ((msg->id.idx != CN_IDX_PROC) || (msg->id.val != CN_VAL_PROC)) {
-    return;
+    return false;
   }
 
   struct fg_cn_msg parsed_msg = parse_cn_msg(msg);
@@ -183,6 +181,8 @@ void Netlink::handle_msg(cn_msg* msg) {
     default:
       break;
   }
+
+  return true;
 }
 
 auto Netlink::get_comm(const int& pid) -> std::string {

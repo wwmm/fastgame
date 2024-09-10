@@ -34,7 +34,7 @@ class Netlink {
 
   void connect();
   void subscribe() const;
-  void handle_msg(cn_msg* msg);
+  auto handle_msg(cn_msg* msg) -> bool;
 
   static auto get_cmdline(const int& pid) -> std::string;
   static auto get_exe_path(const int& pid) -> std::string;

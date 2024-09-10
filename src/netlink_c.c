@@ -3,6 +3,7 @@
 #include <linux/cn_proc.h>
 #include <linux/connector.h>
 #include <linux/netlink.h>
+#include <sys/uio.h>
 #include <unistd.h>
 
 /*
@@ -10,7 +11,9 @@
   C compiler...
 */
 
-void prepare_iovec(struct iovec iov[3]) {
+int nl_subscribe(int nl_socket) {
+  struct iovec iov[3];
+
   char buff[NLMSG_LENGTH(0)];
   struct cn_msg cnmsg;
   enum proc_cn_mcast_op mcast_op = PROC_CN_MCAST_LISTEN;
@@ -43,6 +46,8 @@ void prepare_iovec(struct iovec iov[3]) {
 
   iov[2].iov_base = &mcast_op;
   iov[2].iov_len = sizeof(mcast_op);
+
+  return writev(nl_socket, iov, 3);
 }
 
 struct fg_cn_msg parse_cn_msg(struct cn_msg* msg) {

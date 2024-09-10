@@ -68,11 +68,7 @@ void Netlink::connect() {
 }
 
 void Netlink::subscribe() const {
-  struct iovec iov[3];
-
-  prepare_iovec(iov);
-
-  if (writev(nl_socket, iov, 3) == -1) {
+  if (nl_subscribe(nl_socket) == -1) {
     util::debug("failed to send PROC_CN_MCAST_LISTEN!");
   } else {
     util::debug("sent PROC_CN_MCAST_LISTEN to kernel");

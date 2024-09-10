@@ -357,13 +357,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   if (nl->listen) {
     std::thread t(check_lock_file);
 
-    std::thread t_listen([&]() {
-      nl->handle_events();  // This is a blocking call. It has to be started at the end
-    });
+    t.detach();
 
-    t_listen.detach();
-
-    t.join();
+    nl->handle_events();  // This is a blocking call. It has to be started at the end
 
     util::info("Netlink event monitor finished.");
   }

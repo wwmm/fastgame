@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include "netlink_c.h"
+#include "util.hpp"
 
 /*
   based on https://gist.github.com/L-P/9487407 and
@@ -44,9 +45,9 @@ void Netlink::connect() {
   if (nl_socket == -1) {
     listen = false;
 
-    std::cout << log_tag + "socket creation failed!" << '\n';
+    util::debug("socket creation failed!");
   } else {
-    std::cout << log_tag + "socket created" << '\n';
+    util::debug("socket created");
 
     sockaddr_nl addr{};
 
@@ -59,22 +60,22 @@ void Netlink::connect() {
     if (rc == -1) {
       listen = false;
 
-      std::cout << log_tag + "socket binding failed!" << '\n';
+      util::debug("socket binding failed!");
     } else {
-      std::cout << log_tag + "socket binding succesful!" << '\n';
+      util::debug("socket binding succesful!");
     }
   }
 }
 
-void Netlink::subscribe() {
+void Netlink::subscribe() const {
   struct iovec iov[3];
 
   prepare_iovec(iov);
 
   if (writev(nl_socket, iov, 3) == -1) {
-    std::cout << log_tag + "failed to send PROC_CN_MCAST_LISTEN!" << '\n';
+    util::debug("failed to send PROC_CN_MCAST_LISTEN!");
   } else {
-    std::cout << log_tag + "sent PROC_CN_MCAST_LISTEN to kernel" << '\n';
+    util::debug("sent PROC_CN_MCAST_LISTEN to kernel");
   }
 }
 

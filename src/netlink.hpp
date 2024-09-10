@@ -33,7 +33,7 @@ class Netlink {
   int nl_socket = 0;
 
   void connect();
-  void subscribe();
+  void subscribe() const;
   void handle_msg(cn_msg* msg);
 
   static auto get_cmdline(const int& pid) -> std::string;

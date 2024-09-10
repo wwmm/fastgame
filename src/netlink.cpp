@@ -95,7 +95,13 @@ void Netlink::handle_events() {
                  .msg_controllen = 0,
                  .msg_flags = 0};
 
+  auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
+
   while (listen) {
+    if (!std::filesystem::is_regular_file(input_file)) {
+      return;
+    }
+
     auto len = recvmsg(nl_socket, &msg_hdr, 0);
 
     if (len == -1) {

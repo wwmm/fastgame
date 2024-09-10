@@ -344,20 +344,20 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   // nl->new_exit.connect([&](int pid) {});
 
-  auto check_lock_file = [&]() {
-    while (std::filesystem::is_regular_file(input_file)) {
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+  // auto check_lock_file = [&]() {
+  //   while (std::filesystem::is_regular_file(input_file)) {
+  //     std::this_thread::sleep_for(std::chrono::seconds(1));
+  //   }
 
-    util::info("The lock file has been removed. Exitting the lock thread.");
+  //   util::info("The lock file has been removed. Exitting the lock thread.");
 
-    nl->listen = false;
-  };
+  //   nl->listen = false;
+  // };
 
   if (nl->listen) {
-    std::thread t(check_lock_file);
+    // std::thread t(check_lock_file);
 
-    t.detach();
+    // t.detach();
 
     nl->handle_events();  // This is a blocking call. It has to be started at the end
 

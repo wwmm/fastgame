@@ -603,14 +603,9 @@ bool Backend::applySettings() {
     save_preset("fastgame", std::filesystem::temp_directory_path());
 
     try {
-      std::thread t([]() {
-        // std::system("pkexec fastgame_apply");
-        boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+      boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
 
-        c.wait();
-      });
-
-      t.detach();
+      c.detach();
 
       Q_EMIT settingsApplied();
     } catch (std::exception& e) {

@@ -40,7 +40,7 @@ Netlink::~Netlink() {
 }
 
 void Netlink::connect() {
-  nl_socket = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
+  nl_socket = socket(PF_NETLINK, SOCK_DGRAM | SOCK_NONBLOCK | SOCK_CLOEXEC, NETLINK_CONNECTOR);
 
   if (nl_socket == -1) {
     listen = false;

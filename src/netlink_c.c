@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 /*
-  It was necessary to eparate the code using "<linux/cn_proc.h>" because one of its line can only be compiled in a
+  It was necessary to separate the code using "<linux/cn_proc.h>" because one of its line can only be compiled in a
   C compiler...
 */
 

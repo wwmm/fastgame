@@ -108,7 +108,7 @@ void Netlink::handle_events() {
 
     auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
 
-    while (NLMSG_OK(nlmsg_hdr, len)) {
+    while (NLMSG_OK(nlmsg_hdr, len) && listen) {
       if (nlmsg_hdr->nlmsg_type == NLMSG_NOOP) {
         continue;
       }

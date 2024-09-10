@@ -80,12 +80,14 @@ void Netlink::subscribe() const {
 }
 
 void Netlink::handle_events() {
-  std::vector<char> buff(getpagesize());
+  // std::vector<char> buff(getpagesize());
+  char buff[4096];
   sockaddr_nl addr{};
   iovec iov[1];
 
-  iov[0].iov_base = buff.data();
-  iov[0].iov_len = sizeof(char) * buff.size();
+  iov[0].iov_base = buff;
+  // iov[0].iov_len = sizeof(char) * buff.size();
+  iov[0].iov_len = sizeof(buff);
 
   msghdr msg_hdr{.msg_name = &addr,
                  .msg_namelen = sizeof(addr),
@@ -112,7 +114,8 @@ void Netlink::handle_events() {
       continue;
     }
 
-    auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
+    // auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
+    auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff);
 
     while (NLMSG_OK(nlmsg_hdr, len)) {
       if (!std::filesystem::is_regular_file(input_file)) {

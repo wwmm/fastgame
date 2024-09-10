@@ -10,7 +10,7 @@
   C compiler...
 */
 
-void prepare_iovec(struct iovec* iov) {
+void prepare_iovec(struct iovec iov[3]) {
   char buff[NLMSG_LENGTH(0)];
   struct cn_msg cnmsg;
   enum proc_cn_mcast_op mcast_op = PROC_CN_MCAST_LISTEN;

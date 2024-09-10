@@ -33,7 +33,7 @@ struct fg_cn_msg {
   enum fg_proc_cn_event event;
 };
 
-void prepare_iovec(struct iovec* iov);
+void prepare_iovec(struct iovec iov[3]);
 
 struct fg_cn_msg parse_cn_msg(struct cn_msg* msg);
 

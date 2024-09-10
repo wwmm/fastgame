@@ -40,7 +40,9 @@ Netlink::~Netlink() {
 }
 
 void Netlink::connect() {
-  nl_socket = socket(PF_NETLINK, SOCK_DGRAM | SOCK_NONBLOCK | SOCK_CLOEXEC, NETLINK_CONNECTOR);
+  // SOCK_NONBLOCK makes the cpu cores usage to be very high because the loop iterates too often
+
+  nl_socket = socket(PF_NETLINK, SOCK_DGRAM | SOCK_CLOEXEC, NETLINK_CONNECTOR);
 
   if (nl_socket == -1) {
     listen = false;

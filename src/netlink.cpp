@@ -105,7 +105,6 @@ void Netlink::handle_events() {
     auto len = recvmsg(nl_socket, &msg_hdr, 0);
 
     if (len == -1) {
-      util::warning("len == -1");
       continue;
     }
 

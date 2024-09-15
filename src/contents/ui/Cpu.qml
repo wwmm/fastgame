@@ -168,7 +168,7 @@ Kirigami.ScrollablePage {
                 }
 
                 validator: RegularExpressionValidator {
-                    regularExpression: /^[1-9]+(,[1-9]+)+$/
+                    regularExpression: /^[0-9]+(,[0-9]+)+$/
                 }
 
             }

@@ -112,7 +112,7 @@ void Netlink::handle_events() {
 
     auto* nlmsg_hdr = reinterpret_cast<nlmsghdr*>(buff.data());
 
-    while (NLMSG_OK(nlmsg_hdr, len) && listen) {
+    while (NLMSG_OK(nlmsg_hdr, len)) {
       if (!std::filesystem::is_regular_file(input_file)) {
         return;
       }

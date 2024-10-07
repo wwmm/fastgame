@@ -6,7 +6,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
-#include <chrono>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -194,9 +193,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
       enable_realtime_io_priority = root.get<bool>("disk.enable-realtime-priority", false);
 
-      update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
       update_system_setting(disk_device + "/queue/add_random", enable_add_random);
       update_system_setting(disk_device + "/queue/scheduler", disk_scheduler);
+      update_system_setting(disk_device + "/queue/read_ahead_kb", disk_readahead);
       update_system_setting(disk_device + "/queue/nr_requests", disk_nr_requests);
       update_system_setting(disk_device + "/queue/nomerges", disk_nomerges);
       update_system_setting(disk_device + "/queue/wbt_lat_usec", disk_wbt_lat_usec);

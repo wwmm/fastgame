@@ -67,42 +67,37 @@ Kirigami.OverlaySheet {
                 }
             }
 
-            contentItem: Kirigami.ActionToolBar {
-                actions: [
-                    Kirigami.Action {
-                        text: presetName
-                        enabled: false
-                        displayHint: Kirigami.DisplayHint.KeepVisible
-                    },
-                    Kirigami.Action {
-                        text: i18n("Save Settings to this Preset")
-                        icon.name: "document-save-symbolic"
-                        displayHint: Kirigami.DisplayHint.AlwaysHide
-                        onTriggered: {
-                            if (FGPresetsBackend.savePreset(presetName))
-                                showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
-                            else
-                                showPresetsMenuStatus(i18n("Failed to Save Settings to: " + presetName));
-                        }
-                    },
-                    Kirigami.Action {
-                        text: i18n("Delete this Preset")
-                        icon.name: "delete"
-                        displayHint: Kirigami.DisplayHint.AlwaysHide
-                        onTriggered: {
-                            if (FGPresetsBackend.removePreset(presetName))
-                                showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
-                            else
-                                showPresetsMenuStatus(i18n("The Preset " + presetName + " Coult Not Be Removed"));
-                        }
-                    }
-                ]
+            contentItem: RowLayout {
+                Controls.Label {
+                    text: presetName
+                }
 
-                anchors {
-                    left: parent.left
-                    leftMargin: Kirigami.Units.smallSpacing
-                    right: parent.right
-                    rightMargin: Kirigami.Units.smallSpacing
+                Kirigami.ActionToolBar {
+                    alignment: Qt.AlignRight
+                    actions: [
+                        Kirigami.Action {
+                            text: i18n("Save Settings to this Preset")
+                            icon.name: "document-save-symbolic"
+                            displayHint: Kirigami.DisplayHint.AlwaysHide
+                            onTriggered: {
+                                if (FGPresetsBackend.savePreset(presetName))
+                                    showPresetsMenuStatus(i18n("Settings Saved to: " + presetName));
+                                else
+                                    showPresetsMenuStatus(i18n("Failed to Save Settings to: " + presetName));
+                            }
+                        },
+                        Kirigami.Action {
+                            text: i18n("Delete this Preset")
+                            icon.name: "delete"
+                            displayHint: Kirigami.DisplayHint.AlwaysHide
+                            onTriggered: {
+                                if (FGPresetsBackend.removePreset(presetName))
+                                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
+                                else
+                                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Coult Not Be Removed"));
+                            }
+                        }
+                    ]
                 }
 
             }

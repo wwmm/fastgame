@@ -142,6 +142,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   auto use_realtime_wineserver = root.get<bool>("cpu.use-realtime-wineserver", false);
   int niceness = root.get<int>("cpu.niceness", 0);
   int autogroup_niceness = root.get<int>("cpu.autogroup-niceness", 0);
+  int sched_runtime = root.get<int>("cpu.sched-runtime", util::get_sched_runtime(0, 0));
 
   update_system_setting("/proc/sys/kernel/watchdog", root.get<bool>("cpu.enable-watchdog", true));
 
@@ -306,6 +307,13 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
       update_system_setting("/proc/" + util::to_string(game_pid) + "/autogroup", autogroup_niceness);
 
+      if (use_batch_scheduler) {
+        util::set_sched_runtime(game_pid, sched_runtime, SCHED_BATCH, 0);
+
+      } else {
+        util::set_sched_runtime(game_pid, sched_runtime, SCHED_OTHER, 0);
+      }
+
       if (enable_realtime_io_priority) {
         ioprio_set_realtime(game_pid, 7);
       }
@@ -329,6 +337,10 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
         if (use_batch_scheduler) {
           util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
+
+          util::set_sched_runtime(child_pid, sched_runtime, SCHED_BATCH, 0);
+        } else {
+          util::set_sched_runtime(child_pid, sched_runtime, SCHED_OTHER, 0);
         }
 
         setpriority(PRIO_PROCESS, child_pid, niceness);

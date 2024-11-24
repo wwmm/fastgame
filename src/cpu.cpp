@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <sys/prctl.h>
+#include <unistd.h>
 #include <cstddef>
 #include <string>
 #include <thread>
@@ -40,6 +41,8 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   initFreqGovernor();
   initPcieAspm();
   init_workqueue_affinity_scope();
+
+  setSchedRuntime(util::get_sched_runtime(0, 0) * 0.000001);
 }
 
 auto Backend::useSchedBatch() const -> bool {
@@ -138,6 +141,16 @@ void Backend::setTimerSlack(const int& value) {
   _timerSlack = value;
 
   Q_EMIT timerSlackChanged();
+}
+
+auto Backend::schedRuntime() const -> int {
+  return _schedRuntime;
+}
+
+void Backend::setSchedRuntime(const int& value) {
+  _schedRuntime = value;
+
+  Q_EMIT schedRuntimeChanged();
 }
 
 auto Backend::cpuIntensiveThreshold() const -> int {

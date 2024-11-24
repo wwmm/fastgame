@@ -303,6 +303,8 @@ bool Backend::loadPreset(const QString& name) {
   cpuBackend.setCpuIntensiveThreshold(
       root.get<int>("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold()));
 
+  cpuBackend.setSchedRuntime(root.get<int>("cpu.sched-runtime", cpuBackend.schedRuntime()));
+
   // memory
 
   memoryBackend.setThpEnabled(
@@ -463,6 +465,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("cpu.wineserver-cores", cpuBackend.wineServerAffinity().toStdString());
   root.put("cpu.workqueue.affinity-scope", cpuBackend.workqueueAffinityScope());
   root.put("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold());
+  root.put("cpu.sched-runtime", cpuBackend.schedRuntime());
 
   // memory
 

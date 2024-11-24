@@ -35,6 +35,8 @@ class Backend : public QObject {
 
   Q_PROPERTY(int autogroupNiceness READ autogroupNiceness WRITE setAutogroupNiceness NOTIFY autogroupNicenessChanged)
 
+  Q_PROPERTY(int schedRuntime READ schedRuntime WRITE setSchedRuntime NOTIFY schedRuntimeChanged)
+
   Q_PROPERTY(QString gameAffinity READ gameAffinity WRITE setGameAffinity NOTIFY gameAffinityChanged)
 
   Q_PROPERTY(
@@ -51,6 +53,7 @@ class Backend : public QObject {
   [[nodiscard]] auto pcieAspmPolicy() -> std::string;
   [[nodiscard]] auto workqueueAffinityScope() -> std::string;
   [[nodiscard]] auto timerSlack() const -> int;
+  [[nodiscard]] auto schedRuntime() const -> int;
   [[nodiscard]] auto cpuIntensiveThreshold() const -> int;
   [[nodiscard]] auto niceness() const -> int;
   [[nodiscard]] auto autogroupNiceness() const -> int;
@@ -65,6 +68,7 @@ class Backend : public QObject {
   void setPcieAspmPolicy(const std::string& value);
   void setWorkqueueAffinityScope(const std::string& value);
   void setTimerSlack(const int& value);
+  void setSchedRuntime(const int& value);
   void setCpuIntensiveThreshold(const int& value);
   void setNiceness(const int& value);
   void setAutogroupNiceness(const int& value);
@@ -80,6 +84,7 @@ class Backend : public QObject {
   void pcieAspmPolicyChanged();
   void workqueueAffinityScopeChanged();
   void timerSlackChanged();
+  void schedRuntimeChanged();
   void cpuIntensiveThresholdChanged();
   void nicenessChanged();
   void autogroupNicenessChanged();
@@ -96,6 +101,7 @@ class Backend : public QObject {
   int _pcieAspmPolicy;
   int _workqueueAffinityScope;
   int _timerSlack;
+  int _schedRuntime;
   int _cpuIntensiveThreshold;
   int _niceness;
   int _autogroupNiceness;

@@ -73,6 +73,21 @@ Kirigami.ScrollablePage {
                 }
             }
 
+            FgSpinBox {
+                id: schedRuntime
+
+                label: i18n("Scheduler Runtime")
+                from: 0.1
+                to: 100
+                value: FGCpuBackend.schedRuntime
+                decimals: 1
+                stepSize: 0.1
+                unit: "ms"
+                onValueModified: (v) => {
+                    FGCpuBackend.schedRuntime = v;
+                }
+            }
+
         }
 
         FormCard.FormHeader {

@@ -143,11 +143,11 @@ void Backend::setTimerSlack(const int& value) {
   Q_EMIT timerSlackChanged();
 }
 
-auto Backend::schedRuntime() const -> int {
+auto Backend::schedRuntime() const -> double {
   return _schedRuntime;
 }
 
-void Backend::setSchedRuntime(const int& value) {
+void Backend::setSchedRuntime(const double& value) {
   _schedRuntime = value;
 
   Q_EMIT schedRuntimeChanged();

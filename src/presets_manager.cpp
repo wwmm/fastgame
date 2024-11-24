@@ -303,7 +303,7 @@ bool Backend::loadPreset(const QString& name) {
   cpuBackend.setCpuIntensiveThreshold(
       root.get<int>("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold()));
 
-  cpuBackend.setSchedRuntime(root.get<int>("cpu.sched-runtime", cpuBackend.schedRuntime()));
+  cpuBackend.setSchedRuntime(root.get<double>("cpu.sched-runtime", cpuBackend.schedRuntime()));
 
   // memory
 

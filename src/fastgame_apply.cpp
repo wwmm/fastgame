@@ -142,7 +142,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   auto use_realtime_wineserver = root.get<bool>("cpu.use-realtime-wineserver", false);
   int niceness = root.get<int>("cpu.niceness", 0);
   int autogroup_niceness = root.get<int>("cpu.autogroup-niceness", 0);
-  int sched_runtime = root.get<int>("cpu.sched-runtime", util::get_sched_runtime(0, 0));
+  double sched_runtime = root.get<double>("cpu.sched-runtime", util::get_sched_runtime(0, 0));
 
   update_system_setting("/proc/sys/kernel/watchdog", root.get<bool>("cpu.enable-watchdog", true));
 

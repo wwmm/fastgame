@@ -308,10 +308,10 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
       update_system_setting("/proc/" + util::to_string(game_pid) + "/autogroup", autogroup_niceness);
 
       if (use_batch_scheduler) {
-        util::set_sched_runtime(game_pid, sched_runtime, SCHED_BATCH, 0);
+        util::set_sched_runtime(game_pid, sched_runtime, SCHED_BATCH, niceness, 0);
 
       } else {
-        util::set_sched_runtime(game_pid, sched_runtime, SCHED_OTHER, 0);
+        util::set_sched_runtime(game_pid, sched_runtime, SCHED_OTHER, niceness, 0);
       }
 
       if (enable_realtime_io_priority) {
@@ -338,9 +338,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
         if (use_batch_scheduler) {
           util::set_process_scheduler(child_pid, SCHED_BATCH, 0);
 
-          util::set_sched_runtime(child_pid, sched_runtime, SCHED_BATCH, 0);
+          util::set_sched_runtime(child_pid, sched_runtime, SCHED_BATCH, niceness, 0);
         } else {
-          util::set_sched_runtime(child_pid, sched_runtime, SCHED_OTHER, 0);
+          util::set_sched_runtime(child_pid, sched_runtime, SCHED_OTHER, niceness, 0);
         }
 
         setpriority(PRIO_PROCESS, child_pid, niceness);

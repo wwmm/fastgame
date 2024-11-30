@@ -193,14 +193,19 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
   sched_setscheduler(pid, policy_index, &policy_params);
 }
 
-void set_sched_runtime(const int& pid, const double& value, const int& policy_index, const uint& flags) {
+void set_sched_runtime(const int& pid,
+                       const double& value,
+                       const int& policy_index,
+                       const int& priority,
+                       const uint& flags) {
   sched_attr attr = {};
 
   attr.size = sizeof(sched_attr);
   attr.sched_policy = policy_index;
   attr.sched_runtime = value * 1000 * 1000;  // ms in nanoseconds
+  attr.sched_priority = priority;
 
-  if (syscall(SYS_sched_setattr, pid, &attr, flags) < 0) {
+  if (syscall(SYS_sched_setattr, pid, &attr, flags) != 0) {
     perror("sched_setattr");
   }
 }

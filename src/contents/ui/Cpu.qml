@@ -74,6 +74,22 @@ Kirigami.ScrollablePage {
             }
 
             FgSpinBox {
+                id: cpuDmaLatency
+
+                label: i18n("CPU DMA Latency")
+                from: 0
+                to: 1e+06
+                value: FGCpuBackend.cpuDmaLatency
+                decimals: 0
+                stepSize: 1
+                unit: "us"
+                enabled: useCpuDmaLatency.isChecked
+                onValueModified: (v) => {
+                    FGCpuBackend.cpuDmaLatency = v;
+                }
+            }
+
+            FgSpinBox {
                 id: schedRuntime
 
                 label: i18n("Scheduler Runtime")

@@ -20,6 +20,8 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool useCpuDmaLatency READ useCpuDmaLatency WRITE setUseCpuDmaLatency NOTIFY useCpuDmaLatencyChanged)
 
+  Q_PROPERTY(int cpuDmaLatency READ cpuDmaLatency WRITE setCpuDmaLatency NOTIFY cpuDmaLatencyChanged)
+
   Q_PROPERTY(int frequencyGovernor MEMBER _frequencyGovernor NOTIFY frequencyGovernorChanged)
 
   Q_PROPERTY(int pcieAspmPolicy MEMBER _pcieAspmPolicy NOTIFY pcieAspmPolicyChanged)
@@ -52,11 +54,12 @@ class Backend : public QObject {
   [[nodiscard]] auto frequencyGovernor() -> std::string;
   [[nodiscard]] auto pcieAspmPolicy() -> std::string;
   [[nodiscard]] auto workqueueAffinityScope() -> std::string;
+  [[nodiscard]] auto cpuDmaLatency() const -> int;
   [[nodiscard]] auto timerSlack() const -> int;
-  [[nodiscard]] auto schedRuntime() const -> double;
   [[nodiscard]] auto cpuIntensiveThreshold() const -> int;
   [[nodiscard]] auto niceness() const -> int;
   [[nodiscard]] auto autogroupNiceness() const -> int;
+  [[nodiscard]] auto schedRuntime() const -> double;
   [[nodiscard]] auto gameAffinity() const -> QString;
   [[nodiscard]] auto wineServerAffinity() const -> QString;
 
@@ -67,11 +70,12 @@ class Backend : public QObject {
   void setFrequencyGovernor(const std::string& value);
   void setPcieAspmPolicy(const std::string& value);
   void setWorkqueueAffinityScope(const std::string& value);
-  void setSchedRuntime(const double& value);
+  void setCpuDmaLatency(const int& value);
   void setCpuIntensiveThreshold(const int& value);
   void setNiceness(const int& value);
   void setAutogroupNiceness(const int& value);
   void setTimerSlack(const int& value);
+  void setSchedRuntime(const double& value);
   void setGameAffinity(const QString& value);
   void setWineServerAffinity(const QString& value);
 
@@ -80,6 +84,7 @@ class Backend : public QObject {
   void realtimeWineserverChanged();
   void enableWatchdogChanged();
   void useCpuDmaLatencyChanged();
+  void cpuDmaLatencyChanged();
   void frequencyGovernorChanged();
   void pcieAspmPolicyChanged();
   void workqueueAffinityScopeChanged();
@@ -97,6 +102,7 @@ class Backend : public QObject {
   bool _enableWatchdog = false;
   bool _useCpuDmaLatency = false;
 
+  int _cpuDmaLatency = 0;
   int _frequencyGovernor;
   int _pcieAspmPolicy;
   int _workqueueAffinityScope;

@@ -160,7 +160,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   int cpu_dma_latency_fd = -1;
 
   if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {
-    uint32_t target = 0;
+    uint32_t target = root.get<uint32_t>("cpu.cpu-dma-latency", 0);
 
     cpu_dma_latency_fd = open("/dev/cpu_dma_latency", O_RDWR);
 

@@ -291,6 +291,8 @@ bool Backend::loadPreset(const QString& name) {
 
   cpuBackend.setUseCpuDmaLatency(root.get<bool>("cpu.use-cpu-dma-latency", cpuBackend.useCpuDmaLatency()));
 
+  cpuBackend.setCpuDmaLatency(root.get<int>("cpu.cpu-dma-latency", cpuBackend.cpuDmaLatency()));
+
   cpuBackend.setGameAffinity(
       QString::fromStdString(root.get<std::string>("cpu.game-cores", cpuBackend.gameAffinity().toStdString())));
 
@@ -456,6 +458,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("cpu.frequency-governor", cpuBackend.frequencyGovernor());
   root.put("cpu.pcie-aspm-policy", cpuBackend.pcieAspmPolicy());
   root.put("cpu.use-cpu-dma-latency", cpuBackend.useCpuDmaLatency());
+  root.put("cpu.cpu-dma-latency", cpuBackend.cpuDmaLatency());
   root.put("cpu.use-realtime-wineserver", cpuBackend.realtimeWineserver());
   root.put("cpu.enable-watchdog", cpuBackend.enableWatchdog());
   root.put("cpu.niceness", cpuBackend.niceness());

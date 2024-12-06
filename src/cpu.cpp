@@ -85,6 +85,16 @@ void Backend::setUseCpuDmaLatency(const bool& value) {
   Q_EMIT useCpuDmaLatencyChanged();
 }
 
+auto Backend::cpuDmaLatency() const -> int {
+  return _cpuDmaLatency;
+}
+
+void Backend::setCpuDmaLatency(const int& value) {
+  _cpuDmaLatency = value;
+
+  Q_EMIT cpuDmaLatencyChanged();
+}
+
 auto Backend::frequencyGovernor() -> std::string {
   return frequencyGovernorModel.getValue(_frequencyGovernor).toStdString();
 }

@@ -58,14 +58,13 @@ auto main(int argc, char* argv[]) -> int {
   util::apply_cpu_affinity(0, cpu_affinity);
 
   double sched_runtime = root.get<double>("cpu.sched-runtime", util::get_sched_runtime(0, 0));
-  int niceness = root.get<int>("cpu.niceness", 0);
 
   if (root.get<bool>("cpu.use-batch-scheduler")) {
     util::set_process_scheduler(0, SCHED_BATCH, 0);
 
-    util::set_sched_runtime(0, sched_runtime, SCHED_BATCH, niceness, 0);
+    util::set_sched_runtime(0, sched_runtime, SCHED_BATCH, 0, 0);
   } else {
-    util::set_sched_runtime(0, sched_runtime, SCHED_OTHER, niceness, 0);
+    util::set_sched_runtime(0, sched_runtime, SCHED_OTHER, 0, 0);
   }
 
   int timer_slack_ns = root.get<int>("cpu.timer-slack", 50000);

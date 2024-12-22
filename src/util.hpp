@@ -42,7 +42,7 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
 void set_sched_runtime(const int& pid,
                        const double& value,
                        const int& policy_index,
-                       const int& priority,
+                       const int& nice,
                        const uint& flags);
 
 auto get_sched_runtime(const int& pid, const uint& flags) -> uint64_t;

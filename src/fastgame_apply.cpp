@@ -25,7 +25,7 @@
 using namespace std::string_literals;
 
 template <typename T>
-static void update_system_setting(const std::string& parameter_path, const T& value) {
+void update_system_setting(const std::string& parameter_path, const T& value) {
   if (!std::filesystem::exists(parameter_path)) {
     util::debug("the file " + parameter_path + " does not exist!. Aborting the write to it.");
 
@@ -45,7 +45,7 @@ static void update_system_setting(const std::string& parameter_path, const T& va
   }
 }
 
-static void update_cpu_frequency_governor(const std::string& name) {
+void update_cpu_frequency_governor(const std::string& name) {
   bool failed = false;
   uint n_cores = std::thread::hardware_concurrency();
 
@@ -74,27 +74,10 @@ static void update_cpu_frequency_governor(const std::string& name) {
   }
 }
 
-static void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
+void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
   auto card_indices = util::get_amdgpu_indices();
 
   for (const auto& idx : card_indices) {
-    /*
-      Hybrid cards may be turned off at the moment we try to get information. So we open the corresponding dri
-       device just to make sure they are active
-    */
-
-    const std::string dri_path = "/dev/dri/card" + util::to_string(idx);
-
-    int fd = 0;
-
-    fd = open(dri_path.c_str(), O_RDWR | O_CLOEXEC);
-
-    if (fd < 0) {
-      util::warning("Failed to open DRM device: " + util::to_string(idx));
-
-      continue;
-    }
-
     std::string section = (idx == card_indices.front()) ? "amdgpu" : "amdgpu.card1";
 
     auto performance_level = root.get<std::string>(section + ".performance-level", "auto");
@@ -114,12 +97,10 @@ static void apply_amdgpu_configuration(const boost::property_tree::ptree& root) 
     update_system_setting("/sys/class/drm/card" + util::to_string(idx) + "/device/hwmon/hwmon" +
                               util::to_string(hwmon_index) + "/power1_cap",
                           power_cap);
-
-    close(fd);
   }
 }
 
-static void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
+void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
 #ifdef USE_NVIDIA
   std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();
 

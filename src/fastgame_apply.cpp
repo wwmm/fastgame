@@ -25,7 +25,7 @@
 using namespace std::string_literals;
 
 template <typename T>
-void update_system_setting(const std::string& parameter_path, const T& value) {
+static void update_system_setting(const std::string& parameter_path, const T& value) {
   if (!std::filesystem::exists(parameter_path)) {
     util::debug("the file " + parameter_path + " does not exist!. Aborting the write to it.");
 
@@ -45,7 +45,7 @@ void update_system_setting(const std::string& parameter_path, const T& value) {
   }
 }
 
-void update_cpu_frequency_governor(const std::string& name) {
+static void update_cpu_frequency_governor(const std::string& name) {
   bool failed = false;
   uint n_cores = std::thread::hardware_concurrency();
 
@@ -74,10 +74,20 @@ void update_cpu_frequency_governor(const std::string& name) {
   }
 }
 
-void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
+static void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
   auto card_indices = util::get_amdgpu_indices();
 
+  auto boot_vga_idx = util::find_boot_vga(card_indices);
+
   for (const auto& idx : card_indices) {
+    auto is_boot_vga = boot_vga_idx == idx;
+
+    int fd = -1;
+
+    if (!is_boot_vga) {
+      fd = util::open_dri_device(idx);
+    }
+
     std::string section = (idx == card_indices.front()) ? "amdgpu" : "amdgpu.card1";
 
     auto performance_level = root.get<std::string>(section + ".performance-level", "auto");
@@ -97,10 +107,12 @@ void apply_amdgpu_configuration(const boost::property_tree::ptree& root) {
     update_system_setting("/sys/class/drm/card" + util::to_string(idx) + "/device/hwmon/hwmon" +
                               util::to_string(hwmon_index) + "/power1_cap",
                           power_cap);
+
+    util::close_dri_device(fd);
   }
 }
 
-void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
+static void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
 #ifdef USE_NVIDIA
   std::unique_ptr<nvidia_wrapper::Nvidia> nv_wrapper = std::make_unique<nvidia_wrapper::Nvidia>();
 
@@ -116,6 +128,29 @@ void apply_nvidia_configuration(const boost::property_tree::ptree& root) {
   }
 
 #endif
+}
+
+static void update_pcie_aspm(const boost::property_tree::ptree& root) {
+  auto card_indices = util::get_amdgpu_indices();
+
+  auto boot_vga_idx = util::find_boot_vga(card_indices);
+
+  int fd = -1;
+
+  for (auto n : card_indices) {
+    auto is_boot_vga = boot_vga_idx == n;
+
+    if (!is_boot_vga) {
+      fd = util::open_dri_device(n);
+
+      break;
+    }
+  }
+
+  update_system_setting("/sys/module/pcie_aspm/parameters/policy",
+                        root.get<std::string>("cpu.pcie-aspm-policy", "default"));
+
+  util::close_dri_device(fd);
 }
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
@@ -146,8 +181,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
   update_system_setting("/proc/sys/kernel/watchdog", root.get<bool>("cpu.enable-watchdog", true));
 
-  update_system_setting("/sys/module/pcie_aspm/parameters/policy",
-                        root.get<std::string>("cpu.pcie-aspm-policy", "default"));
+  update_pcie_aspm(root);
 
   update_cpu_frequency_governor(root.get<std::string>("cpu.frequency-governor", "schedutil"));
 

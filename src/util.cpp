@@ -1,5 +1,6 @@
 #include "util.hpp"
 #include <bits/types/struct_sched_param.h>
+#include <fcntl.h>
 #include <qdebug.h>
 #include <qlogging.h>
 #include <sched.h>
@@ -37,7 +38,7 @@ struct sched_attr {
   uint32_t sched_util_max;
 };
 
-auto prepare_debug_message(const std::string& message, source_location location) -> std::string {
+static auto prepare_debug_message(const std::string& message, source_location location) -> std::string {
   auto file_path = std::filesystem::path{location.file_name()};
 
   std::string msg = file_path.filename().string() + ":" + to_string(location.line()) + "\t" + message;
@@ -80,7 +81,9 @@ auto read_system_setting(const std::string& path_str) -> std::vector<std::string
     std::string value;
 
     while (std::getline(f, value, ' ')) {
-      value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
+      auto it = std::ranges::remove(value, '\n');
+
+      value.erase(it.begin(), it.end());
 
       if (!value.empty()) {
         list.emplace_back(value);
@@ -315,6 +318,39 @@ auto mounting_path_to_sys_class_path(const std::string& mounting_path) -> std::s
   }
 
   return "";
+}
+
+auto find_boot_vga(const std::vector<int>& card_indices) -> int {
+  if (card_indices.size() == 1) {
+    return card_indices[0];
+  }
+
+  for (auto n : card_indices) {
+    if (const auto list = util::read_system_setting("/sys/class/drm/card" + util::to_string(n) + "/device/boot_vga");
+        !list.empty()) {
+      if (int boot_vga = std::stoi(list[0]); boot_vga == 1) {
+        return n;
+      }
+    }
+  }
+
+  return card_indices[0];
+}
+
+auto open_dri_device(const int& device_index) -> int {
+  int fd = -1;
+
+  const std::string dri_path = "/dev/dri/card" + util::to_string(device_index);
+
+  fd = open(dri_path.c_str(), O_RDWR | O_CLOEXEC);
+
+  return fd;
+}
+
+void close_dri_device(const int& fd) {
+  if (fd > 0) {
+    close(fd);
+  }
 }
 
 }  // namespace util

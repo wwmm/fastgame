@@ -1,5 +1,4 @@
 #include "amdgpu.hpp"
-#include <fcntl.h>
 #include <linux/prctl.h>
 #include <qobject.h>
 #include <qqml.h>
@@ -42,22 +41,20 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   _available = !card_indices.empty();
   Q_EMIT availableChanged();
 
+  /*
+    Hybrid cards may be turned off at the moment we try to get information. So we open the corresponding dri device
+    just to make sure they are active
+  */
+
+  auto boot_vga_idx = util::find_boot_vga(card_indices);
+
   for (auto n : card_indices) {
-    /*
-      Hybrid cards may be turned off at the moment we try to get information. So we open the corresponding dri device
-      just to make sure they are active
-    */
+    auto is_boot_vga = boot_vga_idx == n;
 
-    const std::string dri_path = "/dev/dri/card" + util::to_string(n);
+    int fd = -1;
 
-    int fd = 0;
-
-    fd = open(dri_path.c_str(), O_RDWR | O_CLOEXEC);
-
-    if (fd < 0) {
-      util::warning("Failed to open DRM device: " + util::to_string(n));
-
-      continue;
+    if (!is_boot_vga) {
+      fd = util::open_dri_device(n);
     }
 
     auto* model = (n == card_indices.front()) ? &performanceLevel0Model : &performanceLevel1Model;
@@ -76,7 +73,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     read_performance_level(n);
     read_power_profile(n);
 
-    close(fd);
+    util::close_dri_device(fd);
   }
 }
 

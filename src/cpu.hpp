@@ -20,6 +20,9 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool useCpuDmaLatency READ useCpuDmaLatency WRITE setUseCpuDmaLatency NOTIFY useCpuDmaLatencyChanged)
 
+  Q_PROPERTY(bool enableSplitLockMitigation READ enableSplitLockMitigation WRITE setEnableSplitLockMitigation NOTIFY
+                 enableSplitLockMitigationChanged)
+
   Q_PROPERTY(int cpuDmaLatency READ cpuDmaLatency WRITE setCpuDmaLatency NOTIFY cpuDmaLatencyChanged)
 
   Q_PROPERTY(int frequencyGovernor MEMBER _frequencyGovernor NOTIFY frequencyGovernorChanged)
@@ -51,6 +54,7 @@ class Backend : public QObject {
   [[nodiscard]] auto realtimeWineserver() const -> bool;
   [[nodiscard]] auto enableWatchdog() const -> bool;
   [[nodiscard]] auto useCpuDmaLatency() const -> bool;
+  [[nodiscard]] auto enableSplitLockMitigation() const -> bool;
   [[nodiscard]] auto frequencyGovernor() -> std::string;
   [[nodiscard]] auto pcieAspmPolicy() -> std::string;
   [[nodiscard]] auto workqueueAffinityScope() -> std::string;
@@ -67,6 +71,7 @@ class Backend : public QObject {
   void setRealtimeWineserver(const bool& value);
   void setEnableWatchdog(const bool& value);
   void setUseCpuDmaLatency(const bool& value);
+  void setEnableSplitLockMitigation(const bool& value);
   void setFrequencyGovernor(const std::string& value);
   void setPcieAspmPolicy(const std::string& value);
   void setWorkqueueAffinityScope(const std::string& value);
@@ -85,6 +90,7 @@ class Backend : public QObject {
   void enableWatchdogChanged();
   void useCpuDmaLatencyChanged();
   void cpuDmaLatencyChanged();
+  void enableSplitLockMitigationChanged();
   void frequencyGovernorChanged();
   void pcieAspmPolicyChanged();
   void workqueueAffinityScopeChanged();
@@ -101,6 +107,7 @@ class Backend : public QObject {
   bool _realtimeWineserver = false;
   bool _enableWatchdog = false;
   bool _useCpuDmaLatency = false;
+  bool _enableSplitLockMitigation = false;
 
   int _cpuDmaLatency = 0;
   int _frequencyGovernor;

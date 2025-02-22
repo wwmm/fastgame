@@ -307,6 +307,9 @@ bool Backend::loadPreset(const QString& name) {
 
   cpuBackend.setSchedRuntime(root.get<double>("cpu.sched-runtime", cpuBackend.schedRuntime()));
 
+  cpuBackend.setEnableSplitLockMitigation(
+      root.get<bool>("cpu.enable-split-lock-mitigation", cpuBackend.enableSplitLockMitigation()));
+
   // memory
 
   memoryBackend.setThpEnabled(
@@ -469,6 +472,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("cpu.workqueue.affinity-scope", cpuBackend.workqueueAffinityScope());
   root.put("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold());
   root.put("cpu.sched-runtime", cpuBackend.schedRuntime());
+  root.put("cpu.enable-split-lock-mitigation", cpuBackend.enableSplitLockMitigation());
 
   // memory
 

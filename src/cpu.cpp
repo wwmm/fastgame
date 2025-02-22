@@ -36,6 +36,10 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     setCpuIntensiveThreshold(std::stoi(list[0]));
   }
 
+  if (const auto list = util::read_system_setting("/proc/sys/kernel/split_lock_mitigate"); !list.empty()) {
+    setEnableSplitLockMitigation(std::stoi(list[0]));
+  }
+
   setTimerSlack(prctl(PR_GET_TIMERSLACK));
 
   initFreqGovernor();
@@ -83,6 +87,16 @@ void Backend::setUseCpuDmaLatency(const bool& value) {
   _useCpuDmaLatency = value;
 
   Q_EMIT useCpuDmaLatencyChanged();
+}
+
+auto Backend::enableSplitLockMitigation() const -> bool {
+  return _enableSplitLockMitigation;
+}
+
+void Backend::setEnableSplitLockMitigation(const bool& value) {
+  _enableSplitLockMitigation = value;
+
+  Q_EMIT enableSplitLockMitigationChanged();
 }
 
 auto Backend::cpuDmaLatency() const -> int {
@@ -225,7 +239,7 @@ void Backend::initFreqGovernor() {
   int selected_id = 0;
 
   for (size_t n = 0; n < list_governors.size(); n++) {
-    auto value = list_governors[n];
+    const auto& value = list_governors[n];
 
     if (value.empty()) {
       continue;

@@ -268,6 +268,18 @@ Kirigami.ScrollablePage {
                 }
             }
 
+            FgSwitch {
+                id: enableSplitLockMitigation
+
+                label: i18n("Enable Split Lock Mitigation")
+                isChecked: FGCpuBackend.enableSplitLockMitigation
+                onCheckedChanged: {
+                    if (isChecked !== FGCpuBackend.enableSplitLockMitigation)
+                        FGCpuBackend.enableSplitLockMitigation = isChecked;
+
+                }
+            }
+
         }
 
     }

@@ -191,6 +191,9 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   update_system_setting("/sys/module/workqueue/parameters/cpu_intensive_thresh_us",
                         root.get<int>("cpu.workqueue.cpu-intensive-threshold", 10000));
 
+  update_system_setting("/proc/sys/kernel/split_lock_mitigate",
+                        root.get<bool>("cpu.enable-split-lock-mitigation", true));
+
   int cpu_dma_latency_fd = -1;
 
   if (root.get<bool>("cpu.use-cpu-dma-latency", false)) {

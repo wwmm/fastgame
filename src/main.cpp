@@ -19,7 +19,7 @@
 #include "presets_manager.hpp"
 #include "util.hpp"
 
-auto get_lock_file() -> std::unique_ptr<QLockFile> {
+static auto get_lock_file() -> std::unique_ptr<QLockFile> {
   auto lockFile = std::make_unique<QLockFile>(QString::fromStdString(
       QStandardPaths::writableLocation(QStandardPaths::TempLocation).toStdString() + "/fastgame.lock"));
 
@@ -51,7 +51,7 @@ auto get_lock_file() -> std::unique_ptr<QLockFile> {
   return lockFile;
 }
 
-void construct_about_window() {
+static void construct_about_window() {
   KAboutData aboutData(
       QStringLiteral(COMPONENT_NAME), i18nc("@title", APPLICATION_NAME), QStringLiteral(PROJECT_VERSION),
       i18n("Optimize system performance for games"), KAboutLicense::GPL_V3, i18n("(c) 2024"), QStringLiteral(""),

@@ -334,7 +334,7 @@ auto find_boot_vga(const std::vector<int>& card_indices) -> int {
     }
   }
 
-  return card_indices[0];
+  return -1;
 }
 
 auto open_dri_device(const int& device_index) -> int {

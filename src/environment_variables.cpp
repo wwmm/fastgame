@@ -111,4 +111,16 @@ void Model::remove(const int& rowIndex) {
   emit dataChanged(index(0), index(list.size() - 1));
 }
 
+void Model::move(const int& from, const int& to) {
+  int destination = from < to ? (to + 1) : to;
+
+  beginMoveRows(QModelIndex(), from, from, QModelIndex(), destination);
+
+  list.move(from, to);
+
+  endMoveRows();
+
+  emit dataChanged(index(0), index(list.size() - 1));
+}
+
 }  // namespace envvars

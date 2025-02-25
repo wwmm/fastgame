@@ -18,16 +18,23 @@ Kirigami.ScrollablePage {
         }
     ]
 
-    Component {
-        id: listDelegate
+    Kirigami.CardsListView {
+        id: envVarListView
 
-        Kirigami.AbstractCard {
+        model: CppModelEnvVars
 
-            contentItem: Item {
-                implicitWidth: delegateLayout.implicitWidth
-                implicitHeight: delegateLayout.implicitHeight
+        delegate: Item {
+            id: delegateItem
 
-                GridLayout {
+            width: parent.width
+            height: card.height
+
+            Kirigami.AbstractCard {
+                id: card
+
+                width: parent.width
+
+                contentItem: GridLayout {
                     id: delegateLayout
 
                     rowSpacing: Kirigami.Units.largeSpacing
@@ -73,19 +80,23 @@ Kirigami.ScrollablePage {
 
                     }
 
+                    ColumnLayout {
+                        Kirigami.ListItemDragHandle {
+                            listItem: card
+                            listView: envVarListView
+                            onMoveRequested: (oldIndex, newIndex) => {
+                                CppModelEnvVars.move(oldIndex, newIndex);
+                            }
+                        }
+
+                    }
+
                 }
 
             }
 
         }
 
-    }
-
-    Kirigami.CardsListView {
-        id: envVarListView
-
-        model: CppModelEnvVars
-        delegate: listDelegate
     }
 
 }

@@ -33,6 +33,8 @@ class Model : public QAbstractListModel {
 
   Q_INVOKABLE void remove(const int& rowIndex);
 
+  Q_INVOKABLE void move(const int& from, const int& to);
+
  private:
   QList<QPair<QString, QString>> list;
 };

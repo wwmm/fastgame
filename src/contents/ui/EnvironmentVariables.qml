@@ -26,7 +26,7 @@ Kirigami.ScrollablePage {
         delegate: Item {
             id: delegateItem
 
-            width: parent.width
+            width: parent ? parent.width : card.implicitWidth
             height: card.height
 
             Kirigami.AbstractCard {

@@ -57,7 +57,7 @@ Kirigami.ScrollablePage {
                 id: powerCap0
 
                 label: i18n("Power Cap")
-                from: 0
+                from: FGAmdgpuBackend.minPowerCap0
                 to: FGAmdgpuBackend.maxPowerCap0
                 value: FGAmdgpuBackend.powerCap0
                 decimals: 0
@@ -111,7 +111,7 @@ Kirigami.ScrollablePage {
                 id: powerCap1
 
                 label: i18n("Power Cap")
-                from: 0
+                from: FGAmdgpuBackend.minPowerCap1
                 to: FGAmdgpuBackend.maxPowerCap1
                 value: FGAmdgpuBackend.powerCap1
                 decimals: 0

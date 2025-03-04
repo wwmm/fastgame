@@ -68,6 +68,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
     model->append("profile_min_mclk");
     model->append("profile_peak");
 
+    read_power_cap_min(n);
     read_power_cap_max(n);
     read_power_cap(n);
     read_performance_level(n);
@@ -105,6 +106,16 @@ void Backend::setPowerCap0(const int& value) {
   _powerCap0 = value;
 
   Q_EMIT powerCap0Changed();
+}
+
+auto Backend::minPowerCap0() const -> int {
+  return _minPowerCap0;
+}
+
+void Backend::setMinPowerCap0(const int& value) {
+  _minPowerCap0 = value;
+
+  Q_EMIT minPowerCap0Changed();
 }
 
 auto Backend::maxPowerCap0() const -> int {
@@ -145,6 +156,16 @@ void Backend::setPowerCap1(const int& value) {
   _powerCap1 = value;
 
   Q_EMIT powerCap1Changed();
+}
+
+auto Backend::minPowerCap1() const -> int {
+  return _minPowerCap1;
+}
+
+void Backend::setMinPowerCap1(const int& value) {
+  _minPowerCap1 = value;
+
+  Q_EMIT minPowerCap1Changed();
 }
 
 auto Backend::maxPowerCap1() const -> int {
@@ -218,6 +239,39 @@ auto Backend::get_power_cap(const int& card_index) -> int {
     return _powerCap0;
   } else {
     return _powerCap1;
+  }
+}
+
+void Backend::read_power_cap_min(const int& card_index) {
+  auto hwmon_index = util::find_hwmon_index(card_index);
+
+  auto path = std::filesystem::path("/sys/class/drm/card" + util::to_string(card_index) + "/device/hwmon/hwmon" +
+                                    util::to_string(hwmon_index) + "/power1_cap_min");
+
+  if (!std::filesystem::is_regular_file(path)) {
+    util::debug("file " + path.string() + " does not exist!");
+    util::debug("card " + util::to_string(card_index) + " could not read the minimum power cap!");
+  } else {
+    std::ifstream f;
+
+    f.open(path, std::ios::in);
+
+    int raw_value = 0;  // microWatts
+
+    f >> raw_value;
+
+    f.close();
+
+    int power_cap_in_watts = raw_value / 1000000;
+
+    if (card_index == card_indices.front()) {
+      setMinPowerCap0(power_cap_in_watts);
+    } else {
+      setMinPowerCap1(power_cap_in_watts);
+    }
+
+    util::debug("card " + util::to_string(card_index) +
+                " minimum allowed power cap: " + util::to_string(power_cap_in_watts) + " W");
   }
 }
 

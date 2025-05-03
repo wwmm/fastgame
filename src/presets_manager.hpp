@@ -11,6 +11,7 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <boost/process/v2/process.hpp>
 #include <filesystem>
 #include "amdgpu.hpp"
 #include "command_line_arguments.hpp"
@@ -94,6 +95,8 @@ class Backend : public QObject {
   nvidia::Backend nvidiaBackend;
 
   QFileSystemWatcher watcher;
+
+  boost::process::process* process_apply_settings = nullptr;
 
   static auto get_presets_names() -> QList<QString>;
 };

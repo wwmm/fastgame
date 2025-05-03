@@ -27,7 +27,6 @@
 #include <filesystem>
 #include <iterator>
 #include <string>
-#include <thread>
 #include <utility>
 #include <vector>
 #include "config.h"
@@ -35,7 +34,7 @@
 
 namespace presets {
 
-std::filesystem::path user_presets_dir =
+static std::filesystem::path user_presets_dir =
     (QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/fastgame").toStdString();
 
 MenuModel::MenuModel(QObject* parent) : QAbstractListModel(parent) {}
@@ -615,15 +614,20 @@ bool Backend::applySettings() {
   QTimer::singleShot(3000, this, [this]() {
     save_preset("fastgame", std::filesystem::temp_directory_path());
 
+    if (process_apply_settings != nullptr && process_apply_settings->running()) {
+      process_apply_settings->request_exit();
+
+      delete process_apply_settings;
+
+      process_apply_settings = nullptr;
+    }
+
     try {
       boost::asio::io_context ctx;
 
       auto exe = boost::process::environment::find_executable("pkexec");
 
-      // boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
-      boost::process::process proc(ctx, exe, {"fastgame_apply"});
-
-      proc.detach();
+      process_apply_settings = new boost::process::process(ctx, exe, {"fastgame_apply"});
 
       Q_EMIT settingsApplied();
     } catch (std::exception& e) {

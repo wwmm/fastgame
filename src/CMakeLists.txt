@@ -50,6 +50,7 @@ target_link_libraries(fastgame PRIVATE
     KF${QT_MAJOR_VERSION}::ConfigCore
     KF${QT_MAJOR_VERSION}::ConfigGui
     Boost::filesystem
+    Boost::process
 )
 
 target_link_libraries(fastgame_launcher PRIVATE

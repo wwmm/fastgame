@@ -14,9 +14,12 @@
 #include <qvariant.h>
 #include <QTimer>
 #include <algorithm>
+#include <boost/asio/io_context.hpp>
 #include <boost/process.hpp>
 #include <boost/process/v1/detail/child_decl.hpp>
 #include <boost/process/v1/search_path.hpp>
+#include <boost/process/v2/environment.hpp>
+#include <boost/process/v2/process.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -613,9 +616,14 @@ bool Backend::applySettings() {
     save_preset("fastgame", std::filesystem::temp_directory_path());
 
     try {
-      boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+      boost::asio::io_context ctx;
 
-      c.detach();
+      auto exe = boost::process::environment::find_executable("pkexec");
+
+      // boost::process::child c(boost::process::search_path("pkexec"), "fastgame_apply");
+      boost::process::process proc(ctx, exe, {"fastgame_apply"});
+
+      proc.detach();
 
       Q_EMIT settingsApplied();
     } catch (std::exception& e) {

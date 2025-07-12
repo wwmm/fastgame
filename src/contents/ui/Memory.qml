@@ -28,10 +28,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpEnabled
                 editable: false
                 model: FGModelThpEnabled
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGMemoryBackend.thpEnabled)
                         FGMemoryBackend.thpEnabled = idx;
-
                 }
             }
 
@@ -43,10 +42,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpDefrag
                 editable: false
                 model: FGModelThpDefrag
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGMemoryBackend.thpDefrag)
                         FGMemoryBackend.thpDefrag = idx;
-
                 }
             }
 
@@ -58,10 +56,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.thpShmemEnabled
                 editable: false
                 model: FGModelThpShmemEnabled
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGMemoryBackend.thpShmemEnabled)
                         FGMemoryBackend.thpShmemEnabled = idx;
-
                 }
             }
 
@@ -73,7 +70,6 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGMemoryBackend.optimizeHugeTLB)
                         FGMemoryBackend.optimizeHugeTLB = isChecked;
-
                 }
             }
 
@@ -87,7 +83,7 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "ms"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.scanSleep = v;
                 }
             }
@@ -102,11 +98,10 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "ms"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.allocSleep = v;
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -124,11 +119,10 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.mglruMinTtlMs
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.mglruMinTtlMs = v;
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -145,7 +139,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.swappiness
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.swappiness = v;
                 }
             }
@@ -159,7 +153,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.pageCluster
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.pageCluster = v;
                 }
             }
@@ -173,7 +167,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.cachePressure
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.cachePressure = v;
                 }
             }
@@ -187,7 +181,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.compactionProactiveness
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.compactionProactiveness = v;
                 }
             }
@@ -201,7 +195,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.extfragThreshold
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.extfragThreshold = v;
                 }
             }
@@ -216,8 +210,23 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "KB"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.minFreeKbytes = v;
+                }
+            }
+
+            FgSpinBox {
+                id: minUnmappedRatio
+
+                label: i18n("Minimum Unmapped Ratio")
+                from: 0
+                to: 100
+                value: FGMemoryBackend.minUnmappedRatio
+                decimals: 0
+                stepSize: 1
+                unit: "%"
+                onValueModified: v => {
+                    FGMemoryBackend.minUnmappedRatio = v;
                 }
             }
 
@@ -230,7 +239,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.pageLockUnfairness
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.pageLockUnfairness = v;
                 }
             }
@@ -244,7 +253,7 @@ Kirigami.ScrollablePage {
                 value: FGMemoryBackend.perCpuPagelistHighFraction
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGMemoryBackend.perCpuPagelistHighFraction = v;
                 }
             }
@@ -257,15 +266,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGMemoryBackend.zoneReclaimMode
                 editable: false
                 model: FGModelZoneReclaimMode
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGMemoryBackend.zoneReclaimMode)
                         FGMemoryBackend.zoneReclaimMode = idx;
-
                 }
             }
-
         }
-
     }
-
 }

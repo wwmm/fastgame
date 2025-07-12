@@ -187,6 +187,16 @@ void Backend::setMinFreeKbytes(const int& value) {
   Q_EMIT minFreeKbytesChanged();
 }
 
+auto Backend::minUnmappedRatio() const -> int {
+  return _minUnmappedRatio;
+}
+
+void Backend::setMinUnmappedRatio(const int& value) {
+  _minUnmappedRatio = value;
+
+  Q_EMIT minUnmappedRatioChanged();
+}
+
 auto Backend::pageLockUnfairness() const -> int {
   return _pageLockUnfairness;
 }
@@ -370,6 +380,10 @@ void Backend::init_vm() {
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/min_free_kbytes"); !list.empty()) {
     setMinFreeKbytes(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/min_unmapped_ratio"); !list.empty()) {
+    setMinUnmappedRatio(std::stoi(list[0]));
   }
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/page_lock_unfairness"); !list.empty()) {

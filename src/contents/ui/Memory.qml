@@ -231,6 +231,21 @@ Kirigami.ScrollablePage {
             }
 
             FgSpinBox {
+                id: minSlabRatio
+
+                label: i18n("Minimum Slab Ratio")
+                from: 0
+                to: 100
+                value: FGMemoryBackend.minSlabRatio
+                decimals: 0
+                stepSize: 1
+                unit: "%"
+                onValueModified: v => {
+                    FGMemoryBackend.minSlabRatio = v;
+                }
+            }
+
+            FgSpinBox {
                 id: pageLockUnfairness
 
                 label: i18n("Page Lock Unfairness")

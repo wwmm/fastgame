@@ -270,6 +270,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   update_system_setting("/proc/sys/vm/min_unmapped_ratio",
                         root.get<int>("memory.virtual-memory.min-unmapped-ratio", 1));
 
+  update_system_setting("/proc/sys/vm/min_slab_ratio", root.get<int>("memory.virtual-memory.min-slab-ratio", 5));
+
   update_system_setting("/proc/sys/vm/page_lock_unfairness",
                         root.get<int>("memory.virtual-memory.page-lock-unfairness", 5));
 

@@ -197,6 +197,16 @@ void Backend::setMinUnmappedRatio(const int& value) {
   Q_EMIT minUnmappedRatioChanged();
 }
 
+auto Backend::minSlabRatio() const -> int {
+  return _minSlabRatio;
+}
+
+void Backend::setMinSlabRatio(const int& value) {
+  _minSlabRatio = value;
+
+  Q_EMIT minSlabRatioChanged();
+}
+
 auto Backend::pageLockUnfairness() const -> int {
   return _pageLockUnfairness;
 }
@@ -384,6 +394,10 @@ void Backend::init_vm() {
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/min_unmapped_ratio"); !list.empty()) {
     setMinUnmappedRatio(std::stoi(list[0]));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/min_slab_ratio"); !list.empty()) {
+    setMinSlabRatio(std::stoi(list[0]));
   }
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/page_lock_unfairness"); !list.empty()) {

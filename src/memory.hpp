@@ -40,6 +40,8 @@ class Backend : public QObject {
 
   Q_PROPERTY(int minUnmappedRatio READ minUnmappedRatio WRITE setMinUnmappedRatio NOTIFY minUnmappedRatioChanged)
 
+  Q_PROPERTY(int minSlabRatio READ minSlabRatio WRITE setMinSlabRatio NOTIFY minSlabRatioChanged)
+
   Q_PROPERTY(
       int pageLockUnfairness READ pageLockUnfairness WRITE setPageLockUnfairness NOTIFY pageLockUnfairnessChanged)
 
@@ -65,6 +67,7 @@ class Backend : public QObject {
   [[nodiscard]] auto extfragThreshold() const -> int;
   [[nodiscard]] auto minFreeKbytes() const -> int;
   [[nodiscard]] auto minUnmappedRatio() const -> int;
+  [[nodiscard]] auto minSlabRatio() const -> int;
   [[nodiscard]] auto pageLockUnfairness() const -> int;
   [[nodiscard]] auto perCpuPagelistHighFraction() const -> int;
   [[nodiscard]] auto zoneReclaimMode() const -> int;
@@ -83,6 +86,7 @@ class Backend : public QObject {
   void setExtfragThreshold(const int& value);
   void setMinFreeKbytes(const int& value);
   void setMinUnmappedRatio(const int& value);
+  void setMinSlabRatio(const int& value);
   void setPageLockUnfairness(const int& value);
   void setPerCpuPagelistHighFraction(const int& value);
   void setZoneReclaimMode(const int& value);
@@ -102,6 +106,7 @@ class Backend : public QObject {
   void extfragThresholdChanged();
   void minFreeKbytesChanged();
   void minUnmappedRatioChanged();
+  void minSlabRatioChanged();
   void pageLockUnfairnessChanged();
   void perCpuPagelistHighFractionChanged();
   void zoneReclaimModeChanged();
@@ -121,6 +126,7 @@ class Backend : public QObject {
   int _extfragThreshold;
   int _minFreeKbytes;
   int _minUnmappedRatio;
+  int _minSlabRatio;
   int _pageLockUnfairness;
   int _perCpuPagelistHighFraction;
   int _zoneReclaimMode;

@@ -312,6 +312,23 @@ bool Backend::loadPreset(const QString& name) {
   cpuBackend.setEnableSplitLockMitigation(
       root.get<bool>("cpu.enable-split-lock-mitigation", cpuBackend.enableSplitLockMitigation()));
 
+  // scx_sched
+
+  scxSchedBackend.setScheduler(root.get<std::string>("scx_sched.scheduler", scxSchedBackend.scheduler()));
+  scxSchedBackend.setEnable(root.get<bool>("scx_sched.enable", scxSchedBackend.enable()));
+
+  try {
+    scxSchedModel.reset();
+
+    for (const auto& c : root.get_child("scx_sched.arguments")) {
+      scxSchedModel.append(QString::fromStdString(c.second.data()));
+    }
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("error when parsing the command line arguments list");
+
+    status = false;
+  }
+
   // memory
 
   memoryBackend.setThpEnabled(
@@ -480,6 +497,23 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("cpu.workqueue.cpu-intensive-threshold", cpuBackend.cpuIntensiveThreshold());
   root.put("cpu.sched-runtime", cpuBackend.schedRuntime());
   root.put("cpu.enable-split-lock-mitigation", cpuBackend.enableSplitLockMitigation());
+
+  // scx_sched
+
+  root.put("scx_sched.enable", scxSchedBackend.enable());
+  root.put("scx_sched.scheduler", scxSchedBackend.scheduler());
+
+  node.clear();
+
+  for (const auto& v : scxSchedModel.getList()) {
+    boost::property_tree::ptree local_node;
+
+    local_node.put("", v.toStdString());
+
+    node.push_back(std::make_pair("", local_node));
+  }
+
+  root.add_child("scx_sched.arguments", node);
 
   // memory
 

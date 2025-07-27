@@ -173,6 +173,10 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
       arguments.append(c.second.data());
       arguments.append(",");
     }
+
+    if (arguments.back() == ',') {
+      arguments.pop_back();
+    }
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("error when paring scx_sched arguments list");
   }

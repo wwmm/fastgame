@@ -3,6 +3,9 @@
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <boost/asio/io_context.hpp>
+#include <boost/process/v2/environment.hpp>
+#include <boost/process/v2/process.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -153,6 +156,53 @@ static void update_pcie_aspm(const boost::property_tree::ptree& root) {
   util::close_dri_device(fd);
 }
 
+static void apply_sched_ext(const boost::property_tree::ptree& root) {
+  auto enable = root.get<bool>("scx_sched.enable", false);
+  auto scheduler = root.get<std::string>("scx_sched.scheduler");
+
+  if (!enable || scheduler.empty()) {
+    return;
+  }
+
+  // arguments
+
+  std::string arguments;
+
+  try {
+    for (const auto& c : root.get_child("scx_sched.arguments")) {
+      arguments.append(c.second.data());
+    }
+  } catch (const boost::property_tree::ptree_error& e) {
+    util::warning("error when paring scx_sched arguments list");
+  }
+
+  boost::asio::io_context ctx;
+
+  auto exe = boost::process::environment::find_executable("scxctl");
+
+  if (exe.empty()) {
+    util::warning("Could not find the command scxctl");
+
+    return;
+  }
+
+  auto load_sched = boost::process::process(ctx, exe, {"start", "--sched " + scheduler, "--args=" + arguments});
+}
+
+static void disable_scx_sched() {
+  boost::asio::io_context ctx;
+
+  auto exe = boost::process::environment::find_executable("scxctl");
+
+  if (exe.empty()) {
+    util::warning("Could not find the command scxctl");
+
+    return;
+  }
+
+  auto load_sched = boost::process::process(ctx, exe, {"stop"});
+}
+
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
   auto input_file = std::filesystem::temp_directory_path() / std::filesystem::path{"fastgame.json"};
 
@@ -240,6 +290,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
       update_system_setting(disk_device + "/queue/rq_affinity", disk_rq_affinity);
     }
   }
+
+  apply_sched_ext(root);
 
   // amdgpu
 
@@ -407,6 +459,8 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
     close(cpu_dma_latency_fd);
   }
+
+  disable_scx_sched();
 
   return 0;
 }

@@ -62,6 +62,7 @@ target_link_libraries(fastgame_launcher PRIVATE
 target_link_libraries(fastgame_apply PRIVATE
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Qml
+    Boost::process
 )
 
 if(XNVCTRL)

@@ -187,6 +187,8 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
   }
 
   auto load_sched = boost::process::process(ctx, exe, {"start", "--sched " + scheduler, "--args=" + arguments});
+
+  load_sched.wait();
 }
 
 static void disable_scx_sched() {

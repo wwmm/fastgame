@@ -207,7 +207,9 @@ static void disable_scx_sched() {
     return;
   }
 
-  auto load_sched = boost::process::process(ctx, exe, {"stop"});
+  auto stop_sched = boost::process::process(ctx, exe, {"stop"});
+
+  stop_sched.wait();
 }
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {

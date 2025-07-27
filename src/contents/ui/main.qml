@@ -25,7 +25,6 @@ Kirigami.ApplicationWindow {
     onVisibleChanged: {
         if (!root.visible)
             CfgWindow.save();
-
     }
 
     EnvironmentVariables {
@@ -72,6 +71,12 @@ Kirigami.ApplicationWindow {
         visible: false
     }
 
+    ScxSched {
+        id: scxSched
+
+        visible: false
+    }
+
     Kirigami.Dialog {
         id: aboutDialog
 
@@ -80,7 +85,6 @@ Kirigami.ApplicationWindow {
             implicitHeight: Kirigami.Units.gridUnit * 21
             aboutData: AboutFG
         }
-
     }
 
     PresetsMenu {
@@ -102,9 +106,7 @@ Kirigami.ApplicationWindow {
                 indeterminate: true
                 Layout.fillWidth: true
             }
-
         }
-
     }
 
     SystemTrayIcon {
@@ -130,24 +132,19 @@ Kirigami.ApplicationWindow {
                 enabled: false
             }
 
-            MenuSeparator {
-            }
+            MenuSeparator {}
 
             MenuItem {
                 text: i18n("Quit")
                 onTriggered: Qt.quit()
             }
-
         }
-
     }
 
     Component {
         id: preferencesPage
 
-        PreferencesPage {
-        }
-
+        PreferencesPage {}
     }
 
     Connections {
@@ -172,7 +169,8 @@ Kirigami.ApplicationWindow {
                 checked: environmentVariables.visible
                 onTriggered: {
                     if (!environmentVariables.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(environmentVariables);
                     }
                 }
@@ -183,7 +181,8 @@ Kirigami.ApplicationWindow {
                 checked: cmdArguments.visible
                 onTriggered: {
                     if (!cmdArguments.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(cmdArguments);
                     }
                 }
@@ -194,7 +193,8 @@ Kirigami.ApplicationWindow {
                 checked: cpu.visible
                 onTriggered: {
                     if (!cpu.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(cpu);
                     }
                 }
@@ -205,7 +205,8 @@ Kirigami.ApplicationWindow {
                 checked: memory.visible
                 onTriggered: {
                     if (!memory.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(memory);
                     }
                 }
@@ -216,7 +217,8 @@ Kirigami.ApplicationWindow {
                 checked: disk.visible
                 onTriggered: {
                     if (!disk.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(disk);
                     }
                 }
@@ -229,7 +231,8 @@ Kirigami.ApplicationWindow {
                 visible: amdgpu.available
                 onTriggered: {
                     if (!amdgpu.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(amdgpu);
                     }
                 }
@@ -242,8 +245,21 @@ Kirigami.ApplicationWindow {
                 visible: nvidia.available
                 onTriggered: {
                     if (!nvidia.visible) {
-                        while (pageStack.depth > 0)pageStack.pop()
+                        while (pageStack.depth > 0)
+                            pageStack.pop();
                         pageStack.push(nvidia);
+                    }
+                }
+            },
+            Kirigami.Action {
+                text: scxSched.title
+                icon.name: "view-time-schedule-symbolic"
+                checked: scxSched.visible
+                onTriggered: {
+                    if (!scxSched.visible) {
+                        while (root.pageStack.depth > 0)
+                            root.pageStack.pop();
+                        root.pageStack.push(scxSched);
                     }
                 }
             }
@@ -302,9 +318,7 @@ Kirigami.ApplicationWindow {
                     right: parent.right
                     rightMargin: Kirigami.Units.smallSpacing
                 }
-
             }
-
         }
 
         footer: Controls.ToolBar {
@@ -320,7 +334,6 @@ Kirigami.ApplicationWindow {
                     onTextChanged: {
                         if (text !== FGPresetsBackend.executableName)
                             FGPresetsBackend.executableName = text;
-
                     }
                     rightActions: [
                         Kirigami.Action {
@@ -337,13 +350,8 @@ Kirigami.ApplicationWindow {
                         property: "text"
                         value: FGPresetsBackend.executableName
                     }
-
                 }
-
             }
-
         }
-
     }
-
 }

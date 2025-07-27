@@ -12,6 +12,7 @@
         <file alias="Nvidia.qml">contents/ui/Nvidia.qml</file>
         <file alias="PresetsMenu.qml">contents/ui/PresetsMenu.qml</file>
         <file alias="PreferencesPage.qml">contents/ui/PreferencesPage.qml</file>
+        <file alias="ScxSched.qml">contents/ui/ScxSched.qml</file>
         <file alias="Common.js">contents/ui/Common.js</file>
     </qresource>
 </RCC>

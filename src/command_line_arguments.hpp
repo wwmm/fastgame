@@ -13,7 +13,7 @@ class Model : public QAbstractListModel {
   Q_OBJECT;
 
  public:
-  explicit Model(QObject* parent = nullptr);
+  explicit Model(const QString& singleton_name = "CppModelCmdLineArgs", QObject* parent = nullptr);
 
   enum Roles { Value = Qt::UserRole };
 

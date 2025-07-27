@@ -20,6 +20,7 @@
 #include "environment_variables.hpp"
 #include "memory.hpp"
 #include "nvidia.hpp"
+#include "scx_sched.hpp"
 
 namespace presets {
 
@@ -87,12 +88,14 @@ class Backend : public QObject {
 
   cmdargs::Model cmdArgsModel;
   envvars::Model envVarsModel;
+  cmdargs::Model scxSchedModel = cmdargs::Model("CppModelScxArgs");
 
   amdgpu::Backend amdgpuBackend;
   cpu::Backend cpuBackend;
   disk::Backend diskBackend;
   memory::Backend memoryBackend;
   nvidia::Backend nvidiaBackend;
+  scx_sched::Backend scxSchedBackend;
 
   QFileSystemWatcher watcher;
 

@@ -19,7 +19,9 @@
     "C_Cpp.enhancedColorization": "Enabled",
     "C_Cpp.updateChannel": "Insiders",
     "editor.formatOnSave": true,
-    "editor.rulers": [120],
+    "editor.rulers": [
+      120
+    ],
     "files.associations": {
       "*.page": "xml",
       "*.tcc": "cpp",
@@ -97,6 +99,12 @@
       "--enable-config",
       "--clang-tidy"
     ],
-    "xml.format.maxLineWidth": 150
+    "xml.format.maxLineWidth": 150,
+    "cmake.options.statusBarVisibility": "visible",
+    "cmake.buildDirectory": "${workspaceFolder}/builds/${buildKit}/${buildType}",
+    "cmake.useCMakePresets": "never",
+    "qt-qml.qmlls.additionalImportPaths": [
+      "/usr/lib/qt6/qml"
+    ]
   }
 }

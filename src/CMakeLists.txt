@@ -22,6 +22,7 @@ target_sources(fastgame PRIVATE
     memory.cpp
     nvidia.cpp
     presets_manager.cpp
+    scx_sched.cpp
     util.cpp
     resources.qrc
 )

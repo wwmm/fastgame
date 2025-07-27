@@ -171,6 +171,7 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
   try {
     for (const auto& c : root.get_child("scx_sched.arguments")) {
       arguments.append(c.second.data());
+      arguments.append(",");
     }
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("error when paring scx_sched arguments list");

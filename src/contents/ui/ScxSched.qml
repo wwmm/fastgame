@@ -1,22 +1,16 @@
+import ScxSchedBackend
 import CppModelScxArgs
+import FGModelScxSched
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import org.kde.kirigamiaddons.formcard as FormCard
 
 Kirigami.ScrollablePage {
-    id: commandLineArguments
+    id: scxSched
 
     title: i18n("Scx Schedulers")
-    actions: [
-        Kirigami.Action {
-            id: addAction
-
-            icon.name: "list-add"
-            text: i18nc("@action:button", "Add Row")
-            onTriggered: CppModelScxArgs.append("")
-        }
-    ]
 
     Component {
         id: listDelegate
@@ -62,10 +56,62 @@ Kirigami.ScrollablePage {
         }
     }
 
-    Kirigami.CardsListView {
-        id: cmdArgListView
+    ColumnLayout {
 
-        model: CppModelScxArgs
-        delegate: listDelegate
+        anchors.fill: parent
+
+        FormCard.FormCard {
+            FgSwitch {
+                id: enable
+
+                label: i18n("Enable")
+                isChecked: ScxSchedBackend.enable
+                onCheckedChanged: {
+                    if (isChecked !== ScxSchedBackend.enable)
+                        ScxSchedBackend.enable = isChecked;
+                }
+            }
+
+            FormCard.FormComboBoxDelegate {
+                id: scheduler
+
+                text: i18n("Scheduler")
+                displayMode: FormCard.FormComboBoxDelegate.ComboBox
+                currentIndex: ScxSchedBackend.scheduler
+                editable: false
+                model: FGModelScxSched
+                enabled: enable.isChecked
+                onActivated: idx => {
+                    if (idx !== ScxSchedBackend.scheduler)
+                        ScxSchedBackend.scheduler = idx;
+                }
+            }
+        }
+
+        Kirigami.CardsListView {
+            id: cmdArgListView
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            model: CppModelScxArgs
+            delegate: listDelegate
+        }
+    }
+
+    footer: Kirigami.ActionToolBar {
+        Layout.margins: Kirigami.Units.smallSpacing
+        alignment: Qt.AlignRight
+        position: Controls.ToolBar.Footer
+        flat: true
+        actions: [
+            Kirigami.Action {
+                id: addAction
+
+                icon.name: "list-add"
+                text: i18n("Command Line Option")
+                onTriggered: CppModelScxArgs.append("")
+            }
+        ]
     }
 }

@@ -1,8 +1,6 @@
 import FGDiskBackend
 import FGModelMountingPath
 import FGModelScheduler
-import QtQuick
-import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FormCard
@@ -22,10 +20,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGDiskBackend.mountingPath
                 editable: false
                 model: FGModelMountingPath
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGDiskBackend.mountingPath)
                         FGDiskBackend.mountingPath = idx;
-
                 }
             }
 
@@ -37,10 +34,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGDiskBackend.scheduler
                 editable: false
                 model: FGModelScheduler
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGDiskBackend.scheduler)
                         FGDiskBackend.scheduler = idx;
-
                 }
             }
 
@@ -54,7 +50,7 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "KB"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGDiskBackend.readahead = v;
                 }
             }
@@ -68,7 +64,7 @@ Kirigami.ScrollablePage {
                 value: FGDiskBackend.nrRequests
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGDiskBackend.nrRequests = v;
                 }
             }
@@ -82,7 +78,7 @@ Kirigami.ScrollablePage {
                 value: FGDiskBackend.rqAffinity
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGDiskBackend.rqAffinity = v;
                 }
             }
@@ -96,7 +92,7 @@ Kirigami.ScrollablePage {
                 value: FGDiskBackend.noMerges
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGDiskBackend.noMerges = v;
                 }
             }
@@ -110,11 +106,10 @@ Kirigami.ScrollablePage {
                 value: FGDiskBackend.wbtLatUsec
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGDiskBackend.wbtLatUsec = v;
                 }
             }
-
         }
 
         FormCard.FormCard {
@@ -126,7 +121,6 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGDiskBackend.enableRealtimePriority)
                         FGDiskBackend.enableRealtimePriority = isChecked;
-
                 }
             }
 
@@ -138,12 +132,8 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGDiskBackend.addRandom)
                         FGDiskBackend.addRandom = isChecked;
-
                 }
             }
-
         }
-
     }
-
 }

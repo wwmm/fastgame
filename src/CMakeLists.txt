@@ -57,6 +57,7 @@ target_link_libraries(fastgame PRIVATE
 target_link_libraries(fastgame_launcher PRIVATE
     Qt${QT_MAJOR_VERSION}::Core
     Boost::program_options
+    Boost::process
 )
 
 target_link_libraries(fastgame_apply PRIVATE

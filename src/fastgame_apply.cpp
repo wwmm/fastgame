@@ -156,28 +156,12 @@ static void update_pcie_aspm(const boost::property_tree::ptree& root) {
   util::close_dri_device(fd);
 }
 
-static void disable_scx_sched() {
-  boost::asio::io_context ctx;
-
-  auto exe = boost::process::environment::find_executable("scxctl");
-
-  if (exe.empty()) {
-    util::warning("Could not find the command scxctl");
-
-    return;
-  }
-
-  auto stop_sched = boost::process::process(ctx, exe, {"stop"});
-
-  stop_sched.wait();
-}
-
 static void apply_sched_ext(const boost::property_tree::ptree& root) {
   auto enable = root.get<bool>("scx_sched.enable", false);
   auto scheduler = root.get<std::string>("scx_sched.scheduler");
 
   if (!enable) {
-    disable_scx_sched();
+    util::disable_scx_sched();
 
     return;
   }
@@ -213,7 +197,7 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
     return;
   }
 
-  disable_scx_sched();
+  util::disable_scx_sched();
 
   auto load_sched = boost::process::process(ctx, exe, {"start", "--sched=" + scheduler, "--args=" + arguments});
 
@@ -477,7 +461,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
     close(cpu_dma_latency_fd);
   }
 
-  disable_scx_sched();
+  util::disable_scx_sched();
 
   return 0;
 }

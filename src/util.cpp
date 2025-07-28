@@ -10,6 +10,9 @@
 #include <algorithm>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/asio/io_context.hpp>
+#include <boost/process/v2/environment.hpp>
+#include <boost/process/v2/process.hpp>
 #include <cstdint>
 #include <cstdio>
 #include <ext/string_conversions.h>
@@ -351,6 +354,22 @@ void close_dri_device(const int& fd) {
   if (fd > 0) {
     close(fd);
   }
+}
+
+void disable_scx_sched() {
+  boost::asio::io_context ctx;
+
+  auto exe = boost::process::environment::find_executable("scxctl");
+
+  if (exe.empty()) {
+    util::warning("Could not find the command scxctl");
+
+    return;
+  }
+
+  auto stop_sched = boost::process::process(ctx, exe, {"stop"});
+
+  stop_sched.wait();
 }
 
 }  // namespace util

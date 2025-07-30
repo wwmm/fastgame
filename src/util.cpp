@@ -359,6 +359,8 @@ void close_dri_device(const int& fd) {
 void disable_scx_sched() {
   boost::asio::io_context ctx;
 
+  util::warning("res = ");
+
   auto exe = boost::process::environment::find_executable("scxctl");
 
   if (exe.empty()) {

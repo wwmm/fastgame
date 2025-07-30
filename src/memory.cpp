@@ -70,7 +70,7 @@ void Backend::setPageCluster(const int& value) {
 }
 
 auto Backend::thpEnabled() -> std::string {
-  return thpEnabledModel.getValue(_thpEnabled).toStdString();
+  return !thpEnabledModel.getList().isEmpty() ? thpEnabledModel.getValue(_thpEnabled).toStdString() : "";
 }
 
 void Backend::setThpEnabled(const std::string& value) {
@@ -86,7 +86,7 @@ void Backend::setThpEnabled(const std::string& value) {
 }
 
 auto Backend::thpDefrag() -> std::string {
-  return thpDefragModel.getValue(_thpDefrag).toStdString();
+  return !thpDefragModel.getList().isEmpty() ? thpDefragModel.getValue(_thpDefrag).toStdString() : "";
 }
 
 void Backend::setThpDefrag(const std::string& value) {
@@ -102,7 +102,7 @@ void Backend::setThpDefrag(const std::string& value) {
 }
 
 auto Backend::thpShmemEnabled() -> std::string {
-  return thpShmemEnabledModel.getValue(_thpShmemEnabled).toStdString();
+  return !thpShmemEnabledModel.getList().isEmpty() ? thpShmemEnabledModel.getValue(_thpShmemEnabled).toStdString() : "";
 }
 
 void Backend::setThpShmemEnabled(const std::string& value) {

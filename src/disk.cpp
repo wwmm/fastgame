@@ -112,7 +112,7 @@ void Backend::setRqAffinity(const int& value) {
 }
 
 auto Backend::mountingPath() -> std::string {
-  return mountingPathModel.getValue(_mountingPath).toStdString();
+  return !mountingPathModel.getList().isEmpty() ? mountingPathModel.getValue(_mountingPath).toStdString() : "";
 }
 
 void Backend::setMountingPath(const std::string& value) {
@@ -127,7 +127,7 @@ void Backend::setMountingPath(const std::string& value) {
 }
 
 auto Backend::scheduler() -> std::string {
-  return schedulerModel.getValue(_scheduler).toStdString();
+  return !schedulerModel.getList().isEmpty() ? schedulerModel.getValue(_scheduler).toStdString() : "";
 }
 
 void Backend::setScheduler(const std::string& value) {

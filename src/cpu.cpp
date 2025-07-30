@@ -110,7 +110,8 @@ void Backend::setCpuDmaLatency(const int& value) {
 }
 
 auto Backend::frequencyGovernor() -> std::string {
-  return frequencyGovernorModel.getValue(_frequencyGovernor).toStdString();
+  return !frequencyGovernorModel.getList().isEmpty() ? frequencyGovernorModel.getValue(_frequencyGovernor).toStdString()
+                                                     : "";
 }
 
 void Backend::setFrequencyGovernor(const std::string& value) {
@@ -142,7 +143,9 @@ void Backend::setPcieAspmPolicy(const std::string& value) {
 }
 
 auto Backend::workqueueAffinityScope() -> std::string {
-  return workqueueAffinityScopeModel.getValue(_workqueueAffinityScope).toStdString();
+  return !workqueueAffinityScopeModel.getList().isEmpty()
+             ? workqueueAffinityScopeModel.getValue(_workqueueAffinityScope).toStdString()
+             : "";
 }
 
 void Backend::setWorkqueueAffinityScope(const std::string& value) {

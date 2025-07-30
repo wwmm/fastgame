@@ -204,9 +204,13 @@ void Backend::set_performance_level(const std::string& name, const int& card_ind
 
 auto Backend::get_performance_level(const int& card_index) -> std::string {
   if (card_index == card_indices.front()) {
-    return performanceLevel0Model.getValue(_performanceLevel0).toStdString();
+    return !performanceLevel0Model.getList().isEmpty()
+               ? performanceLevel0Model.getValue(_performanceLevel0).toStdString()
+               : "";
   } else {
-    return performanceLevel1Model.getValue(_performanceLevel1).toStdString();
+    return !performanceLevel1Model.getList().isEmpty()
+               ? performanceLevel1Model.getValue(_performanceLevel1).toStdString()
+               : "";
   }
 }
 

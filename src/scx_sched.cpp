@@ -49,7 +49,7 @@ void Backend::setEnable(const bool& value) {
 }
 
 auto Backend::scheduler() -> std::string {
-  return schedulerModel.getValue(_scheduler).toStdString();
+  return !schedulerModel.getList().isEmpty() ? schedulerModel.getValue(_scheduler).toStdString() : "";
 }
 
 void Backend::setScheduler(const std::string& value) {

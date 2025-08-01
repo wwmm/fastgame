@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
+#include <initializer_list>
 #include <memory>
 #include <string>
 #include <thread>
@@ -199,7 +200,13 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
 
   util::disable_scx_sched();
 
-  auto load_sched = boost::process::process(ctx, exe, {"start", "--sched=" + scheduler, "--args=" + arguments});
+  std::vector<std::string> args = {"start", "--sched=" + scheduler};
+
+  if (!arguments.empty()) {
+    args.push_back("--args=" + arguments);
+  }
+
+  auto load_sched = boost::process::process(ctx, exe, args);
 
   load_sched.wait();
 }

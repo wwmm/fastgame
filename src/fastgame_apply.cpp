@@ -180,7 +180,7 @@ static void apply_sched_ext(const boost::property_tree::ptree& root) {
       arguments.append(",");
     }
 
-    if (arguments.back() == ',') {
+    if (!arguments.empty() && arguments.back() == ',') {
       arguments.pop_back();
     }
   } catch (const boost::property_tree::ptree_error& e) {

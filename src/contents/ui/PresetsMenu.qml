@@ -40,7 +40,6 @@ Kirigami.OverlaySheet {
             visible: presetsListView.count === 0
             text: i18n("No Preset")
         }
-
     }
 
     Component {
@@ -64,6 +63,20 @@ Kirigami.OverlaySheet {
                     CfgWindow.lastUsedPreset = presetName;
                 } else {
                     showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Loaded with errors"));
+                }
+            }
+
+            Kirigami.PromptDialog {
+                id: deleteDialog
+
+                title: i18n("Remove Preset")
+                subtitle: i18n("Are you sure you want to remove this preset from the list?")
+                standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+                onAccepted: {
+                    if (FGPresetsBackend.removePreset(presetName))
+                        showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
+                    else
+                        showPresetsMenuStatus(i18n("The Preset " + presetName + " Coult Not Be Removed"));
                 }
             }
 
@@ -91,19 +104,13 @@ Kirigami.OverlaySheet {
                             icon.name: "delete"
                             displayHint: Kirigami.DisplayHint.AlwaysHide
                             onTriggered: {
-                                if (FGPresetsBackend.removePreset(presetName))
-                                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Has Been Removed"));
-                                else
-                                    showPresetsMenuStatus(i18n("The Preset " + presetName + " Coult Not Be Removed"));
+                                deleteDialog.open();
                             }
                         }
                     ]
                 }
-
             }
-
         }
-
     }
 
     FileDialog {
@@ -183,7 +190,6 @@ Kirigami.OverlaySheet {
             validator: RegularExpressionValidator {
                 regularExpression: /[^\\/]{60}$/ //less than 60 characters and no / or \
             }
-
         }
 
         Kirigami.SearchField {
@@ -195,7 +201,6 @@ Kirigami.OverlaySheet {
                 FGPresetsMenuModel.filterRegularExpression = RegExp(presetSearch.text, "i");
             }
         }
-
     }
 
     footer: ColumnLayout {
@@ -213,7 +218,5 @@ Kirigami.OverlaySheet {
             text: i18n("Preset:    " + CfgWindow.lastUsedPreset)
             color: Kirigami.Theme.disabledTextColor
         }
-
     }
-
 }

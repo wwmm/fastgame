@@ -122,9 +122,6 @@ void Backend::init_scheduler() {
   } catch (std::exception& e) {
     util::warning(e.what());
   }
-
-  // for some reason when scxctl is called for the first time it tries to load its default scheduler
-  util::disable_scx_sched();
 }
 
 }  // namespace scx_sched

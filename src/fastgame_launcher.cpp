@@ -39,9 +39,11 @@ auto main(int argc, char* argv[]) -> int {
         // 2. Only append if the new value isn't already a substring
 
         if (existing_value.find(value) == std::string::npos) {
+          std::string separator = util::detect_separator(existing_value);
+
           std::string combined_value = existing_value;
 
-          combined_value.append(":");
+          combined_value.append(separator);
           combined_value.append(value);
 
           setenv(key.c_str(), combined_value.c_str(), 1);

@@ -372,4 +372,30 @@ void disable_scx_sched() {
   stop_sched.wait();
 }
 
+auto detect_separator(const std::string& current) -> std::string {
+  if (current.empty()) {
+    return "";
+  }
+
+  // Check for common delimiters in order of likelihood
+  if (current.find(',') != std::string::npos) {
+    return ",";
+  }
+
+  if (current.find(':') != std::string::npos) {
+    return ":";
+  }
+
+  if (current.find(';') != std::string::npos) {
+    return ";";
+  }
+
+  if (current.find(' ') != std::string::npos) {
+    return " ";
+  }
+
+  // Default to colon if no delimiter is found
+  return ":";
+}
+
 }  // namespace util

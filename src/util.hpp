@@ -65,6 +65,8 @@ void close_dri_device(const int& fd);
 
 void disable_scx_sched();
 
+auto detect_separator(const std::string& current) -> std::string;
+
 template <typename T>
 auto to_string(const T& num, const std::string def = "0") -> std::string {
   // This is used to replace `std::to_string` as a locale independent

@@ -33,7 +33,22 @@ auto main(int argc, char* argv[]) -> int {
       auto key = key_and_value.substr(0, delimiter_position);
       auto value = key_and_value.substr(delimiter_position + 1);
 
-      setenv(key.c_str(), value.c_str(), 1);
+      if (auto* current_env_ptr = getenv(key.c_str()); current_env_ptr != nullptr) {
+        std::string existing_value(current_env_ptr);
+
+        // 2. Only append if the new value isn't already a substring
+
+        if (existing_value.find(value) == std::string::npos) {
+          std::string combined_value = existing_value;
+
+          combined_value.append(":");
+          combined_value.append(value);
+
+          setenv(key.c_str(), combined_value.c_str(), 1);
+        }
+      } else {
+        setenv(key.c_str(), value.c_str(), 1);
+      }
     }
   } catch (const boost::property_tree::ptree_error& e) {
     util::warning("fastgame_launcher: error when parsing the environmental variables list");

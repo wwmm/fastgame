@@ -39,7 +39,7 @@ auto main(int argc, char* argv[]) -> int {
         // 2. Only append if the new value isn't already a substring
 
         if (existing_value.find(value) == std::string::npos) {
-          std::string separator = util::detect_separator(existing_value);
+          std::string separator = key == "GLIBC_TUNABLES" ? ":" : util::detect_separator(existing_value);
 
           std::string combined_value = existing_value;
 

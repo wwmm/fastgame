@@ -1,5 +1,6 @@
 #include <linux/prctl.h>
 #include <sched.h>
+#include <stdlib.h>
 #include <sys/prctl.h>
 #include <unistd.h>
 #include <boost/property_tree/json_parser.hpp>

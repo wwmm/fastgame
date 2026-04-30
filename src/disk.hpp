@@ -69,7 +69,7 @@ class Backend : public QObject {
   bool _addRandom = false;
 
   int _mountingPath = -1;
-  int _scheduler;
+  int _scheduler = -1;
   int _readahead;
   int _nrRequests;
   int _rqAffinity;

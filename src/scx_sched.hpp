@@ -34,7 +34,7 @@ class Backend : public QObject {
  private:
   bool _enable = false;
 
-  int _scheduler;
+  int _scheduler = -1;
 
   ComboBoxModel schedulerModel;
 

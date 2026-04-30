@@ -7,7 +7,9 @@
 #include <qstring.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <format>
 #include <iterator>
+#include "util.hpp"
 
 int ComboBoxModel::rowCount(const QModelIndex& /*parent*/) const {
   return list.size();
@@ -55,6 +57,12 @@ bool ComboBoxModel::setData(const QModelIndex& index, const QVariant& value, int
 }
 
 auto ComboBoxModel::getValue(const int& id) -> QString {
+  if (id < 0 || id >= list.size()) {
+    util::warning(std::format("ComboBoxModel::getValue received invalid index {} for list size {}", id, list.size()));
+
+    return "";
+  }
+
   return list[id];
 }
 

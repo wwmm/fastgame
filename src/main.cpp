@@ -1,5 +1,6 @@
 #include <kaboutdata.h>
 #include <klocalizedcontext.h>
+#include <qhashfunctions.h>
 #include <qlockfile.h>
 #include <qobject.h>
 #include <qqml.h>
@@ -105,7 +106,7 @@ int main(int argc, char* argv[]) {
   QQmlApplicationEngine engine;
 
   engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
-  engine.load(QUrl(QStringLiteral("qrc:/ui/main.qml")));
+  engine.loadFromModule(QStringLiteral("fg.ui"), QStringLiteral("Main"));
 
   if (engine.rootObjects().isEmpty()) {
     return -1;

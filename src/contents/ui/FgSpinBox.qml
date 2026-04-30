@@ -11,6 +11,7 @@ https://bugreports.qt.io/browse/QTBUG-67349
  */
 
 import "Common.js" as Common
+import fg.ui
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

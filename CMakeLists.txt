@@ -35,6 +35,9 @@ find_package(Qt${QT_MAJOR_VERSION} REQUIRED NO_MODULE COMPONENTS
     Widgets
 )
 
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
+
 find_package(KF${QT_MAJOR_VERSION} REQUIRED COMPONENTS
     Kirigami
     I18n

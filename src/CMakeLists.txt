@@ -24,7 +24,26 @@ target_sources(fastgame PRIVATE
     presets_manager.cpp
     scx_sched.cpp
     util.cpp
-    resources.qrc
+)
+
+qt_add_qml_module(fastgame
+    URI fg.ui
+    VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    QML_FILES
+        contents/ui/Amdgpu.qml
+        contents/ui/CommandLineArguments.qml
+        contents/ui/Common.js
+        contents/ui/Cpu.qml
+        contents/ui/Disk.qml
+        contents/ui/EnvironmentVariables.qml
+        contents/ui/FgSpinBox.qml
+        contents/ui/FgSwitch.qml
+        contents/ui/Main.qml
+        contents/ui/Memory.qml
+        contents/ui/Nvidia.qml
+        contents/ui/PreferencesPage.qml
+        contents/ui/PresetsMenu.qml
+        contents/ui/ScxSched.qml
 )
 
 target_sources(fastgame_launcher PRIVATE

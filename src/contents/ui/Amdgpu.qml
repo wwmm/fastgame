@@ -3,8 +3,8 @@ import FGModelPerformanceLevel0
 import FGModelPerformanceLevel1
 import FGModelPowerProfile0
 import FGModelPowerProfile1
+import fg.ui
 import QtQuick
-import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FormCard
@@ -30,10 +30,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGAmdgpuBackend.performanceLevel0
                 editable: false
                 model: FGModelPerformanceLevel0
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGAmdgpuBackend.performanceLevel0)
                         FGAmdgpuBackend.performanceLevel0 = idx;
-
                 }
             }
 
@@ -46,10 +45,9 @@ Kirigami.ScrollablePage {
                 editable: false
                 model: FGModelPowerProfile0
                 enabled: FGModelPowerProfile0.rowCount() > 0 && performanceLevel0.currentIndex === 3 // manual
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGAmdgpuBackend.powerProfile0)
                         FGAmdgpuBackend.powerProfile0 = idx;
-
                 }
             }
 
@@ -64,11 +62,10 @@ Kirigami.ScrollablePage {
                 stepSize: 1
                 unit: "W"
                 enabled: (FGAmdgpuBackend.maxPowerCap0 == -1) ? false : true
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGAmdgpuBackend.powerCap0 = v;
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -84,10 +81,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGAmdgpuBackend.performanceLevel1
                 editable: false
                 model: FGModelPerformanceLevel1
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGAmdgpuBackend.performanceLevel1)
                         FGAmdgpuBackend.performanceLevel1 = idx;
-
                 }
             }
 
@@ -100,10 +96,9 @@ Kirigami.ScrollablePage {
                 editable: false
                 model: FGModelPowerProfile1
                 enabled: FGModelPowerProfile1.rowCount() > 0 && performanceLevel1.currentIndex === 3 // manual
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGAmdgpuBackend.powerProfile1)
                         FGAmdgpuBackend.powerProfile1 = idx;
-
                 }
             }
 
@@ -118,13 +113,10 @@ Kirigami.ScrollablePage {
                 stepSize: 1
                 unit: "W"
                 enabled: (FGAmdgpuBackend.maxPowerCap1 == -1) ? false : true
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGAmdgpuBackend.powerCap1 = v;
                 }
             }
-
         }
-
     }
-
 }

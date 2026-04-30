@@ -1,4 +1,5 @@
 import CfgWindow
+import fg.ui
 import org.kde.kirigamiaddons.formcard 1.0 as FormCard
 
 FormCard.FormCardPage {

@@ -1,12 +1,12 @@
 import AboutFG
 import CfgWindow
 import FGPresetsBackend
+import fg.ui
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import org.kde.kirigamiaddons.formcard as FormCard
 
 Kirigami.ApplicationWindow {
     id: root

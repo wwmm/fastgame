@@ -1,7 +1,7 @@
 import FGModelPowermizeMode0
 import FGNvidiaBackend
+import fg.ui
 import QtQuick
-import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FormCard
@@ -27,10 +27,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGNvidiaBackend.powermizeMode0
                 editable: false
                 model: FGModelPowermizeMode0
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGNvidiaBackend.powermizeMode0)
                         FGNvidiaBackend.powermizeMode0 = idx;
-
                 }
             }
 
@@ -44,11 +43,10 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "W"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGNvidiaBackend.powerLimit0 = v;
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -66,7 +64,7 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "MHz"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGNvidiaBackend.gpuClockOffset0 = v;
                 }
             }
@@ -81,13 +79,10 @@ Kirigami.ScrollablePage {
                 decimals: 0
                 stepSize: 1
                 unit: "MHz"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGNvidiaBackend.memoryClockOffset0 = v;
                 }
             }
-
         }
-
     }
-
 }

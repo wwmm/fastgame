@@ -2,6 +2,7 @@ import CfgWindow
 import "Common.js" as Common
 import FGPresetsBackend
 import FGPresetsMenuModel
+import fg.ui
 import QtCore
 import QtQuick
 import QtQuick.Controls as Controls

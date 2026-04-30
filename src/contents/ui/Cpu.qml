@@ -2,8 +2,8 @@ import FGCpuBackend
 import FGModelFreqGovernor
 import FGModelPcieAspm
 import FGModelWorkqueueAffinityScope
+import fg.ui
 import QtQuick
-import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FormCard
@@ -27,10 +27,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGCpuBackend.frequencyGovernor
                 editable: false
                 model: FGModelFreqGovernor
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGCpuBackend.frequencyGovernor)
                         FGCpuBackend.frequencyGovernor = idx;
-
                 }
             }
 
@@ -42,10 +41,9 @@ Kirigami.ScrollablePage {
                 currentIndex: FGCpuBackend.pcieAspmPolicy
                 editable: false
                 model: FGModelPcieAspm
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGCpuBackend.pcieAspmPolicy)
                         FGCpuBackend.pcieAspmPolicy = idx;
-
                 }
             }
 
@@ -57,7 +55,6 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGCpuBackend.useSchedBatch)
                         FGCpuBackend.useSchedBatch = isChecked;
-
                 }
             }
 
@@ -69,7 +66,6 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGCpuBackend.useCpuDmaLatency)
                         FGCpuBackend.useCpuDmaLatency = isChecked;
-
                 }
             }
 
@@ -84,7 +80,7 @@ Kirigami.ScrollablePage {
                 stepSize: 1
                 unit: "us"
                 enabled: useCpuDmaLatency.isChecked
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.cpuDmaLatency = v;
                 }
             }
@@ -99,11 +95,10 @@ Kirigami.ScrollablePage {
                 decimals: 1
                 stepSize: 0.1
                 unit: "ms"
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.schedRuntime = v;
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -120,7 +115,7 @@ Kirigami.ScrollablePage {
                 value: FGCpuBackend.niceness
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.niceness = v;
                 }
             }
@@ -134,7 +129,7 @@ Kirigami.ScrollablePage {
                 value: FGCpuBackend.autogroupNiceness
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.autogroupNiceness = v;
                 }
             }
@@ -147,10 +142,8 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGCpuBackend.realtimeWineserver)
                         FGCpuBackend.realtimeWineserver = isChecked;
-
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -166,7 +159,6 @@ Kirigami.ScrollablePage {
                 onTextChanged: {
                     if (text !== FGCpuBackend.gameAffinity)
                         FGCpuBackend.gameAffinity = text;
-
                 }
 
                 Binding {
@@ -178,7 +170,6 @@ Kirigami.ScrollablePage {
                 validator: RegularExpressionValidator {
                     regularExpression: /^[0-9]+(,[0-9]+)+$/
                 }
-
             }
 
             FormCard.FormTextFieldDelegate {
@@ -189,7 +180,6 @@ Kirigami.ScrollablePage {
                 onTextChanged: {
                     if (text !== FGCpuBackend.wineServerAffinity)
                         FGCpuBackend.wineServerAffinity = text;
-
                 }
 
                 Binding {
@@ -201,7 +191,6 @@ Kirigami.ScrollablePage {
                 validator: RegularExpressionValidator {
                     regularExpression: /^[0-9]+(,[0-9]+)+$/
                 }
-
             }
 
             FormCard.FormComboBoxDelegate {
@@ -212,13 +201,11 @@ Kirigami.ScrollablePage {
                 currentIndex: FGCpuBackend.workqueueAffinityScope
                 editable: false
                 model: FGModelWorkqueueAffinityScope
-                onActivated: (idx) => {
+                onActivated: idx => {
                     if (idx !== FGCpuBackend.workqueueAffinityScope)
                         FGCpuBackend.workqueueAffinityScope = idx;
-
                 }
             }
-
         }
 
         FormCard.FormHeader {
@@ -236,7 +223,7 @@ Kirigami.ScrollablePage {
                 value: FGCpuBackend.timerSlack
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.timerSlack = v;
                 }
             }
@@ -251,7 +238,7 @@ Kirigami.ScrollablePage {
                 value: FGCpuBackend.cpuIntensiveThreshold
                 decimals: 0
                 stepSize: 1
-                onValueModified: (v) => {
+                onValueModified: v => {
                     FGCpuBackend.cpuIntensiveThreshold = v;
                 }
             }
@@ -264,7 +251,6 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGCpuBackend.enableWatchdog)
                         FGCpuBackend.enableWatchdog = isChecked;
-
                 }
             }
 
@@ -276,12 +262,8 @@ Kirigami.ScrollablePage {
                 onCheckedChanged: {
                     if (isChecked !== FGCpuBackend.enableSplitLockMitigation)
                         FGCpuBackend.enableSplitLockMitigation = isChecked;
-
                 }
             }
-
         }
-
     }
-
 }

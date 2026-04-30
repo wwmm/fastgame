@@ -110,8 +110,11 @@ void Backend::setCpuDmaLatency(const int& value) {
 }
 
 auto Backend::frequencyGovernor() -> std::string {
-  return !frequencyGovernorModel.getList().isEmpty() ? frequencyGovernorModel.getValue(_frequencyGovernor).toStdString()
-                                                     : "";
+  const auto list = frequencyGovernorModel.getList();
+
+  return !list.isEmpty() && _frequencyGovernor >= 0 && _frequencyGovernor < list.size()
+             ? frequencyGovernorModel.getValue(_frequencyGovernor).toStdString()
+             : "";
 }
 
 void Backend::setFrequencyGovernor(const std::string& value) {
@@ -127,7 +130,11 @@ void Backend::setFrequencyGovernor(const std::string& value) {
 }
 
 auto Backend::pcieAspmPolicy() -> std::string {
-  return pciAspmPolicyModel.getValue(_pcieAspmPolicy).toStdString();
+  const auto list = pciAspmPolicyModel.getList();
+
+  return !list.isEmpty() && _pcieAspmPolicy >= 0 && _pcieAspmPolicy < list.size()
+             ? pciAspmPolicyModel.getValue(_pcieAspmPolicy).toStdString()
+             : "";
 }
 
 void Backend::setPcieAspmPolicy(const std::string& value) {
@@ -143,7 +150,9 @@ void Backend::setPcieAspmPolicy(const std::string& value) {
 }
 
 auto Backend::workqueueAffinityScope() -> std::string {
-  return !workqueueAffinityScopeModel.getList().isEmpty()
+  const auto list = workqueueAffinityScopeModel.getList();
+
+  return !list.isEmpty() && _workqueueAffinityScope >= 0 && _workqueueAffinityScope < list.size()
              ? workqueueAffinityScopeModel.getValue(_workqueueAffinityScope).toStdString()
              : "";
 }
@@ -237,7 +246,14 @@ void Backend::initFreqGovernor() {
 
   auto list_governors = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
 
-  auto selected_governor = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")[0];
+  if (list_governors.empty()) {
+    util::warning("could not read the list of available CPU frequency governors");
+
+    return;
+  }
+
+  auto selected_governor_list = util::read_system_setting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor");
+  auto selected_governor = !selected_governor_list.empty() ? selected_governor_list[0] : std::string{};
 
   int selected_id = 0;
 

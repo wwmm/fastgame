@@ -49,6 +49,16 @@ void Backend::setOptimizeHugeTLB(const bool& value) {
   Q_EMIT optimizeHugeTLBChanged();
 }
 
+auto Backend::unprivilegedUserfaultfd() const -> bool {
+  return _unprivilegedUserfaultfd;
+}
+
+void Backend::setUnprivilegedUserfaultfd(const bool& value) {
+  _unprivilegedUserfaultfd = value;
+
+  Q_EMIT unprivilegedUserfaultfdChanged();
+}
+
 auto Backend::swappiness() const -> int {
   return _swappiness;
 }
@@ -359,6 +369,10 @@ void Backend::initThp() {
 
   if (const auto list = util::read_system_setting("/proc/sys/vm/hugetlb_optimize_vmemmap"); !list.empty()) {
     setOptimizeHugeTLB(static_cast<bool>(std::stoi(list[0])));
+  }
+
+  if (const auto list = util::read_system_setting("/proc/sys/vm/unprivileged_userfaultfd"); !list.empty()) {
+    setUnprivilegedUserfaultfd(static_cast<bool>(std::stoi(list[0])));
   }
 }
 

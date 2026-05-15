@@ -273,6 +273,17 @@ Kirigami.ScrollablePage {
                 }
             }
 
+            FgSwitch {
+                id: unprivilegedUserfaultfd
+
+                label: i18n("Unprivileged Userfaultfd")
+                isChecked: FGMemoryBackend.unprivilegedUserfaultfd
+                onCheckedChanged: {
+                    if (isChecked !== FGMemoryBackend.unprivilegedUserfaultfd)
+                        FGMemoryBackend.unprivilegedUserfaultfd = isChecked;
+                }
+            }
+
             FormCard.FormComboBoxDelegate {
                 id: zoneReclaimMode
 

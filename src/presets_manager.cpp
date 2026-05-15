@@ -376,6 +376,9 @@ bool Backend::loadPreset(const QString& name) {
   memoryBackend.setZoneReclaimMode(
       root.get<int>("memory.virtual-memory.zone-reclaim-mode", memoryBackend.zoneReclaimMode()));
 
+  memoryBackend.setUnprivilegedUserfaultfd(
+      root.get<bool>("memory.virtual-memory.unprivileged-userfaultfd", memoryBackend.unprivilegedUserfaultfd()));
+
   // disk
 
   diskBackend.setMountingPath(root.get<std::string>("disk.mounting-path", diskBackend.mountingPath()));
@@ -528,6 +531,7 @@ bool Backend::save_preset(const QString& name, const std::filesystem::path& outp
   root.put("memory.virtual-memory.page-lock-unfairness", memoryBackend.pageLockUnfairness());
   root.put("memory.virtual-memory.percpu-pagelist-high-fraction", memoryBackend.perCpuPagelistHighFraction());
   root.put("memory.virtual-memory.zone-reclaim-mode", memoryBackend.zoneReclaimMode());
+  root.put("memory.virtual-memory.unprivileged-userfaultfd", memoryBackend.unprivilegedUserfaultfd());
 
   root.put("memory.mglru.min_ttl_ms", memoryBackend.mglruMinTtlMs());
 

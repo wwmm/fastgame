@@ -13,6 +13,9 @@ class Backend : public QObject {
 
   Q_PROPERTY(bool optimizeHugeTLB READ optimizeHugeTLB WRITE setOptimizeHugeTLB NOTIFY optimizeHugeTLBChanged)
 
+  Q_PROPERTY(bool unprivilegedUserfaultfd READ unprivilegedUserfaultfd WRITE setUnprivilegedUserfaultfd NOTIFY
+                 unprivilegedUserfaultfdChanged)
+
   Q_PROPERTY(int thpEnabled MEMBER _thpEnabled NOTIFY thpEnabledChanged)
 
   Q_PROPERTY(int thpDefrag MEMBER _thpDefrag NOTIFY thpDefragChanged)
@@ -54,6 +57,7 @@ class Backend : public QObject {
   explicit Backend(QObject* parent = nullptr);
 
   [[nodiscard]] auto optimizeHugeTLB() const -> bool;
+  [[nodiscard]] auto unprivilegedUserfaultfd() const -> bool;
   [[nodiscard]] auto thpEnabled() -> std::string;
   [[nodiscard]] auto thpDefrag() -> std::string;
   [[nodiscard]] auto thpShmemEnabled() -> std::string;
@@ -73,6 +77,7 @@ class Backend : public QObject {
   [[nodiscard]] auto zoneReclaimMode() const -> int;
 
   void setOptimizeHugeTLB(const bool& value);
+  void setUnprivilegedUserfaultfd(const bool& value);
   void setThpEnabled(const std::string& value);
   void setThpDefrag(const std::string& value);
   void setThpShmemEnabled(const std::string& value);
@@ -93,6 +98,7 @@ class Backend : public QObject {
 
  signals:
   void optimizeHugeTLBChanged();
+  void unprivilegedUserfaultfdChanged();
   void swappinessChanged();
   void pageClusterChanged();
   void thpEnabledChanged();
@@ -113,6 +119,7 @@ class Backend : public QObject {
 
  private:
   bool _optimizeHugeTLB;
+  bool _unprivilegedUserfaultfd{};
   int _thpEnabled;
   int _thpDefrag;
   int _thpShmemEnabled;

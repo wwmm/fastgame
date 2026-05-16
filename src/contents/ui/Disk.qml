@@ -46,13 +46,13 @@ Kirigami.ScrollablePage {
 
                 label: i18n("Readahead")
                 from: 0
-                to: 1e+07
-                value: FGDiskBackend.readahead
-                decimals: 0
-                stepSize: 1
-                unit: "KB"
+                to: 1e+08
+                value: FGDiskBackend.readahead / 1024
+                decimals: 3
+                stepSize: 0.001
+                unit: "MB"
                 onValueModified: v => {
-                    FGDiskBackend.readahead = v;
+                    FGDiskBackend.readahead = v * 1024;
                 }
             }
 

@@ -1,6 +1,7 @@
 #include "util.hpp"
 #include <bits/types/struct_sched_param.h>
 #include <fcntl.h>
+#include <linux/sched/types.h>
 #include <qdebug.h>
 #include <qlogging.h>
 #include <sched.h>
@@ -23,23 +24,6 @@
 #include <vector>
 
 namespace util {
-
-struct sched_attr {
-  uint32_t size;           /* Size of this structure */
-  uint32_t sched_policy;   /* Policy (SCHED_*) */
-  uint64_t sched_flags;    /* Flags */
-  int32_t sched_nice;      /* Nice value (SCHED_OTHER, SCHED_BATCH) */
-  uint32_t sched_priority; /* Static priority (SCHED_FIFO, SCHED_RR) */
-
-  /* For SCHED_DEADLINE */
-  uint64_t sched_runtime;
-  uint64_t sched_deadline;
-  uint64_t sched_period;
-
-  /* Utilization hints */
-  uint32_t sched_util_min;
-  uint32_t sched_util_max;
-};
 
 static auto prepare_debug_message(const std::string& message, source_location location) -> std::string {
   auto file_path = std::filesystem::path{location.file_name()};
@@ -199,29 +183,29 @@ void set_process_scheduler(const int& pid, const int& policy_index, const int& p
   sched_setscheduler(pid, policy_index, &policy_params);
 }
 
-void set_sched_runtime(const int& pid,
-                       const double& value,
-                       const int& policy_index,
-                       const int& nice,
-                       const uint& flags) {
-  sched_attr attr = {};
+void set_sched_runtime(const int& pid, const double& value, const int& policy_index, const int& nice) {
+  struct sched_attr attr = {};
 
   attr.size = sizeof(sched_attr);
   attr.sched_policy = policy_index;
   attr.sched_runtime = value * 1000 * 1000;  // ms in nanoseconds
   attr.sched_nice = nice;
 
-  if (syscall(SYS_sched_setattr, pid, &attr, flags) != 0) {
+  if (syscall(SYS_sched_setattr, pid, &attr, 0) != 0) {
     perror("sched_setattr");
   }
 }
 
-auto get_sched_runtime(const int& pid, const uint& flags) -> uint64_t {
-  sched_attr attr = {};
+auto get_sched_runtime(const int& pid) -> uint64_t {
+  struct sched_attr attr = {};
 
   attr.size = sizeof(sched_attr);
 
-  syscall(SYS_sched_getattr, pid, &attr, attr.size, flags);
+  if (syscall(SYS_sched_getattr, pid, &attr, attr.size, 0) != 0) {
+    perror("sched_getattr");
+
+    return 0;
+  }
 
   return attr.sched_runtime;
 }

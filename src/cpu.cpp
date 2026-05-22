@@ -46,7 +46,7 @@ Backend::Backend(QObject* parent) : QObject(parent) {
   initPcieAspm();
   init_workqueue_affinity_scope();
 
-  setSchedRuntime(util::get_sched_runtime(0, 0) * 0.000001);
+  setSchedRuntime(util::get_sched_runtime(0) * 0.000001);
 }
 
 auto Backend::useSchedBatch() const -> bool {

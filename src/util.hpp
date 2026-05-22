@@ -39,13 +39,9 @@ void clear_cpu_affinity(const int& pid);
 
 void set_process_scheduler(const int& pid, const int& policy_index, const int& priority);
 
-void set_sched_runtime(const int& pid,
-                       const double& value,
-                       const int& policy_index,
-                       const int& nice,
-                       const uint& flags);
+void set_sched_runtime(const int& pid, const double& value, const int& policy_index, const int& nice);
 
-auto get_sched_runtime(const int& pid, const uint& flags) -> uint64_t;
+auto get_sched_runtime(const int& pid) -> uint64_t;
 
 auto card_is_amdgpu(const int& card_index) -> bool;
 

@@ -261,12 +261,17 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
     if (cpu_dma_latency_fd < 0) {
       util::warning("failed to open /dev/cpu_dma_latency");
-    }
-
-    if (write(cpu_dma_latency_fd, &target, sizeof(target)) < 0) {
-      util::warning("failed to write zero to /dev/cpu_dma_latency");
     } else {
-      util::info("writing zero to /dev/cpu_dma_latency");
+      const auto bytes_written = write(cpu_dma_latency_fd, &target, sizeof(target));
+
+      if (bytes_written != static_cast<ssize_t>(sizeof(target))) {
+        util::warning("failed to write cpu_dma_latency=" + std::to_string(target) + " to /dev/cpu_dma_latency");
+
+        close(cpu_dma_latency_fd);
+        cpu_dma_latency_fd = -1;
+      } else {
+        util::info("writing cpu_dma_latency=" + std::to_string(target) + " to /dev/cpu_dma_latency");
+      }
     }
   }
 

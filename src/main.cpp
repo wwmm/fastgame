@@ -8,25 +8,50 @@
 #include <qquickstyle.h>
 #include <qstandardpaths.h>
 #include <qstringliteral.h>
+#include <qsysinfo.h>
 #include <qtenvironmentvariables.h>
+#include <qtypes.h>
 #include <qurl.h>
 #include <KAboutData>
 #include <KLocalizedString>
 #include <QApplication>
 #include <QtQml>
 #include <memory>
+#include <string>
 #include "cfg_window.h"
 #include "config.h"
 #include "presets_manager.hpp"
 #include "util.hpp"
 
 static auto get_lock_file() -> std::unique_ptr<QLockFile> {
-  auto lockFile = std::make_unique<QLockFile>(QString::fromStdString(
-      QStandardPaths::writableLocation(QStandardPaths::TempLocation).toStdString() + "/fastgame.lock"));
+  auto lockDir = QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation);
+
+  if (lockDir.isEmpty()) {
+    lockDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+  }
+
+  auto lockFile = std::make_unique<QLockFile>(lockDir + QStringLiteral("/fastgame.lock"));
 
   lockFile->setStaleLockTime(0);
 
   bool status = lockFile->tryLock(100);
+
+  if (!status && lockFile->error() == QLockFile::LockFailedError) {
+    qint64 pid = -1;
+    QString hostName;
+    QString appName;
+
+    lockFile->getLockInfo(&pid, &hostName, &appName);
+
+    if (lockFile->removeStaleLockFile()) {
+      util::warning("Removed stale lock file: " + lockFile->fileName().toStdString());
+      status = lockFile->tryLock(100);
+    } else {
+      util::critical("Active lock holder info - pid: " + std::to_string(pid) + ", host: " + hostName.toStdString() +
+                     ", app: " + appName.toStdString());
+      util::critical("Current host: " + QSysInfo::machineHostName().toStdString());
+    }
+  }
 
   if (!status) {
     util::critical("Could not lock the file: " + lockFile->fileName().toStdString());
@@ -39,7 +64,7 @@ static auto get_lock_file() -> std::unique_ptr<QLockFile> {
         break;
       }
       case QLockFile::PermissionError: {
-        util::critical("No permission to reate the lock file");
+        util::critical("No permission to create the lock file");
         break;
       }
       case QLockFile::UnknownError: {

@@ -162,6 +162,7 @@ Kirigami.ApplicationWindow {
         showHeaderWhenCollapsed: true
         collapsible: true
         modal: Kirigami.Settings.isMobile ? true : false
+        preferredSize: Kirigami.Settings.isMobile ? Kirigami.Units.gridUnit * 12 : Kirigami.Units.gridUnit * 18
         actions: [
             Kirigami.Action {
                 text: environmentVariables.title

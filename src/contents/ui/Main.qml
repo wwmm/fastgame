@@ -115,6 +115,10 @@ Kirigami.ApplicationWindow {
         visible: CfgWindow.showTrayIcon
         icon.name: "fastgame"
         onActivated: {
+            if (tray.visible !== true) {
+                return;
+            }
+
             if (!root.visible) {
                 root.show();
                 root.raise();

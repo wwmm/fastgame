@@ -319,6 +319,7 @@ void Backend::init_workqueue_affinity_scope() {
     workqueueAffinityScopeModel.append("cpu");
     workqueueAffinityScopeModel.append("smt");
     workqueueAffinityScopeModel.append("cache");
+    workqueueAffinityScopeModel.append("cache_shard");
     workqueueAffinityScopeModel.append("numa");
     workqueueAffinityScopeModel.append("system");
 
